@@ -1,0 +1,15 @@
+#--- Prologue routine
+before {
+}
+
+#--- 'when' clauses
+case . "gtl"
+message "a source text file with the .gtl extension"
+grammar gtl_grammar
+?sourceFilePath:@lstring inSourceFile {
+  grammar gtl_grammar in inSourceFile
+}
+
+#--- Epilogue routine
+after {
+}

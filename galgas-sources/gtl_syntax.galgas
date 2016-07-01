@@ -1,0 +1,9 @@
+syntax gtl_syntax (gtl_lexique) {
+
+rule <start_symbol> {
+  # ADD YOUR SYNTAX INSTRUCTIONS
+}
+
+# ADD OTHER RULES
+
+}

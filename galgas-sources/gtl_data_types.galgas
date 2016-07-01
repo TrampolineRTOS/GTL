@@ -1,0 +1,1078 @@
+#-----------------------------------------------------------------------------*
+#
+#  @file gtl_data_types.galgas
+#
+#  @section desc File description
+#
+#  datatypes of gtl GTL.
+#
+#  @section copyright Copyright
+#
+#  Goil OIL compiler, part of Trampoline RTOS
+#
+#  Trampoline is copyright (c) CNRS, University of Nantes,
+#  Ecole Centrale de Nantes
+#  Trampoline is protected by the French intellectual property law.
+#
+#  This software is distributed under the GNU Public Licence V2.
+#  Check the LICENSE file in the root directory of Trampoline
+#
+#  $Date$
+#  $Rev$
+#  $Author$
+#  $URL$
+#
+#-----------------------------------------------------------------------------*
+
+getter @type typeName
+  ->@string typeName
+{
+  if    self == `@gtlInt    then typeName = "int"
+  elsif self == `@gtlFloat  then typeName = "float"
+  elsif self == `@gtlString then typeName = "string"
+  elsif self == `@gtlBool   then typeName = "bool"
+  elsif self == `@gtlStruct then typeName = "struct"
+  elsif self == `@gtlList   then typeName = "list"
+  elsif self == `@gtlMap    then typeName = "map"
+  else typeName = "-unkown-" end
+}
+
+private func %once noArgument -> @gtlTypedArgumentList result
+{
+  result = .emptyList
+}
+
+private func %once intArgument -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlInt }
+}
+
+private func %once floatArgument -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlFloat }
+}
+
+private func %once stringArgument -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlString }
+}
+
+private func %once boolIntArguments -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlBool }
+  result += !`@gtlInt
+}
+
+private func %once intIntArguments -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlInt }
+  result += !`@gtlInt
+}
+
+private proc argumentsCheck
+  ?let @lstring methodName
+  ?@gtlTypedArgumentList abstractArgumentList
+  ?@gtlDataList         concreteArgumentList
+{
+  @uint concreteLength = [concreteArgumentList length]
+  @uint abstractLength = [abstractArgumentList length]
+  if [abstractArgumentList length] != [concreteArgumentList length] then
+    error methodName : [methodName string] + " expects " + abstractLength +
+                       " arguments. " + concreteLength + " arguments provided."
+  else
+    for () in concreteArgumentList, () in abstractArgumentList do (index)
+      if [data dynamicType] != type then
+        error data : [type typeName] + " expected for argument " + (index + 1)
+      end
+    end
+  end 
+}
+
+abstract class @gtlData { @location where %setter }
+
+getter @gtlData location -> @location result {
+  result = where
+}
+
+abstract getter @gtlData desc ?let @uint tab -> @string result
+abstract getter @gtlData string  -> @string result
+abstract getter @gtlData bool    -> @bool result
+abstract getter @gtlData plusOp  -> @gtlData result
+abstract getter @gtlData minusOp -> @gtlData result
+abstract getter @gtlData notOp   -> @gtlData result
+abstract getter @gtlData addOp ?let @gtlData right -> @gtlData result
+abstract getter @gtlData subOp ?let @gtlData right -> @gtlData result
+abstract getter @gtlData mulOp ?let @gtlData right -> @gtlData result
+abstract getter @gtlData divOp ?let @gtlData right -> @gtlData result
+abstract getter @gtlData modOp ?let @gtlData right -> @gtlData result
+abstract getter @gtlData andOp ?let @gtlData right -> @gtlData result
+abstract getter @gtlData orOp  ?let @gtlData right -> @gtlData result
+abstract getter @gtlData xorOp ?let @gtlData right -> @gtlData result
+abstract getter @gtlData slOp  ?let @gtlData right -> @gtlData result
+abstract getter @gtlData srOp  ?let @gtlData right -> @gtlData result
+abstract getter @gtlData neqOp ?let @gtlData right -> @gtlData result
+abstract getter @gtlData eqOp  ?let @gtlData right -> @gtlData result
+abstract getter @gtlData ltOp  ?let @gtlData right -> @gtlData result
+abstract getter @gtlData leOp  ?let @gtlData right -> @gtlData result
+abstract getter @gtlData gtOp  ?let @gtlData right -> @gtlData result
+abstract getter @gtlData geOp  ?let @gtlData right -> @gtlData result
+
+list @gtlTypedArgumentList {
+  @type type
+}
+
+abstract getter @gtlData performGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ->@gtlData        result
+
+abstract setter @gtlData performSetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+
+#-----------------------------------------------------------------------------*
+# Int type and operations on int
+#-----------------------------------------------------------------------------*
+class @gtlInt    : @gtlData { @bigint  value %setter }
+
+override getter @gtlInt desc
+  ?let @uint tab
+  -> @string result
+{
+  result = @string.stringWithSequenceOfCharacters{!' ' !tab} +
+    "integer: " + [value string] + "\n"
+}
+
+override getter @gtlInt string  -> @string result { result = [value string] }
+override getter @gtlInt bool    -> @bool result {
+  error where : "cannot cast an int to a bool" : result
+}
+override getter @gtlInt plusOp  -> @gtlData result { result = self }
+override getter @gtlInt minusOp -> @gtlData result { result = @gtlInt.new { !where !-value } }
+override getter @gtlInt notOp   -> @gtlData result { result = @gtlInt.new { !where !~value } }
+override getter @gtlInt addOp ?let @gtlData right -> @gtlData result {
+  result = @gtlInt.new { !where !value + [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt subOp ?let @gtlData right -> @gtlData result {
+  result = @gtlInt.new { !where !value - [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt mulOp ?let @gtlData right -> @gtlData result {
+  result = @gtlInt.new { !where !value * [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt divOp ?let @gtlData right -> @gtlData result {
+  result = @gtlInt.new { !where !value / [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt modOp ?let @gtlData right -> @gtlData result {
+  result = @gtlInt.new { !where !value mod [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt andOp ?let @gtlData right -> @gtlData result {
+  result = @gtlInt.new { !where !value & [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt orOp ?let @gtlData right -> @gtlData result {
+  result = @gtlInt.new { !where !value | [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt xorOp ?let @gtlData right -> @gtlData result {
+  result = @gtlInt.new { !where !value ^ [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt slOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlInt then
+    @bigint r = [right as @gtlInt value];
+    if r >= 0_G then 
+      result = @gtlInt.new { !where !value << [[right as @gtlInt value] uint] }
+    else
+      error [right where] : "positive int expected" : result
+    end
+  else
+    error [right where] : "int expected" : result
+  end
+}
+override getter @gtlInt srOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlInt then
+    @bigint r = [right as @gtlInt value];
+    if r >= 0_G then 
+      result = @gtlInt.new { !where !value >> [r uint] }
+    else
+      error [right where] : "positive int expected" : result
+    end
+  else
+    error [right where] : "int expected" : result
+  end
+}
+override getter @gtlInt neqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value != [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt eqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value == [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt gtOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value > [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt geOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value >= [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt ltOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value < [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+override getter @gtlInt leOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value <= [right as @gtlInt value] }
+    error [right where] : "int expected" : result
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a getter on a @gtlInt
+#-----------------------------------------------------------------------------*
+override getter @gtlInt performGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ->@gtlData        result
+{
+  if    [methodName string] == "string" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![value string]
+    }
+  elsif [methodName string] == "hexString" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![value hexString]
+    }
+  elsif [methodName string] == "numberOfBytes" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location]
+      !([[value bitCountForUnsignedRepresentation] bigint] - 1) / 8 + 1
+    }
+  elsif [methodName string] == "signedNumberOfBytes" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location]
+      !([[value bitCountForSignedRepresentation] bigint] - 1) / 8 + 1
+    }
+  elsif [methodName string] == "numberOfBits" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location]
+      ![[value bitCountForUnsignedRepresentation] bigint]
+    }
+  elsif [methodName string] == "signedNumberOfBits" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location]
+      ![[value bitCountForSignedRepresentation] bigint]
+    }
+  elsif [methodName string] == "sign" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location]
+      ![[value sign] bigint]
+    }
+  elsif [methodName string] == "fitsUnsignedInByte" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location]
+      ![value bitCountForUnsignedRepresentation] <= 8
+    }
+  elsif [methodName string] == "fitsSignedInByte" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location]
+      ![value bitCountForSignedRepresentation] <= 8
+    }
+  elsif [methodName string] == "fitsUnsignedInShort" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location]
+      ![value bitCountForUnsignedRepresentation] <= 16
+    }
+  elsif [methodName string] == "fitsSignedInShort" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location]
+      ![value bitCountForSignedRepresentation] <= 16
+    }
+  elsif [methodName string] == "fitsUnsignedInLong" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location]
+      ![value bitCountForUnsignedRepresentation] <= 32
+    }
+  elsif [methodName string] == "fitsSignedInLong" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location]
+      ![value bitCountForSignedRepresentation] <= 32
+    }
+  elsif [methodName string] == "fitsUnsignedInLongLong" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location]
+      ![value bitCountForUnsignedRepresentation] <= 64
+    }
+  elsif [methodName string] == "fitsSignedInLongLong" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location]
+      ![value bitCountForSignedRepresentation] <= 64
+    }
+  elsif [methodName string] == "abs" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location]
+      ![value abs]
+    }
+  elsif [methodName string] == "bitAtIndex" then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    result = @gtlBool.new {
+      ![methodName location]
+      ![value bitAtIndex !index]
+    }
+  else
+    error methodName : "unknown getter '" + methodName +"' for int target" : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a setter on a @gtlInt
+#-----------------------------------------------------------------------------*
+override setter @gtlInt performSetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+{
+  if    [methodName string] == "setBitAtIndex" then
+    argumentsCheck(!methodName !boolIntArguments() !arguments)
+    @bool bit = [[arguments dataAtIndex !0] as @gtlBool value]
+    @uint index = [[[arguments dataAtIndex !1] as @gtlInt value] uint]
+    [!?value setBitAtIndex !bit !index]
+  elsif [methodName string] == "complementBitAtIndex" then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    [!?value complementBitAtIndex !index]
+  else
+    error methodName : "unknown setter '" + methodName +"' for int target"
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Float type and operations on float
+#-----------------------------------------------------------------------------*
+class @gtlFloat  : @gtlData { @double value }
+
+override getter @gtlFloat desc
+  ?let @uint tab
+  -> @string result
+{
+  result = @string.stringWithSequenceOfCharacters{!' ' !tab} +
+    "float: " + [value string] + "\n"
+}
+
+override getter @gtlFloat string -> @string result { result = [value string] }
+override getter @gtlFloat bool   -> @bool result {
+  error where : "cannot cast a float to a bool" : result
+}
+override getter @gtlFloat plusOp  -> @gtlData result { result = self }
+override getter @gtlFloat minusOp -> @gtlData result { result = @gtlFloat.new { !where !-value } }
+override getter @gtlFloat notOp   -> @gtlData result {
+  error where : "float forbidden" : result
+}
+override getter @gtlFloat addOp ?let @gtlData right -> @gtlData result {
+  result = @gtlFloat.new { !where !value + [right as @gtlFloat value] }
+    error [right where] : "float expected" : result
+}
+override getter @gtlFloat subOp ?let @gtlData right -> @gtlData result {
+  result = @gtlFloat.new { !where !value - [right as @gtlFloat value] }
+    error [right where] : "float expected" : result
+}
+override getter @gtlFloat mulOp ?let @gtlData right -> @gtlData result {
+  result = @gtlFloat.new { !where !value * [right as @gtlFloat value] }
+    error [right where] : "float expected" : result
+}
+override getter @gtlFloat divOp ?let @gtlData right -> @gtlData result {
+  result = @gtlFloat.new { !where !value / [right as @gtlFloat value] }
+    error [right where] : "float expected" : result
+}
+override getter @gtlFloat modOp ?let @gtlData unused right -> @gtlData result {
+  error where : "float forbidden" : result
+}
+override getter @gtlFloat andOp ?let @gtlData unused right -> @gtlData result {
+  error where : "float forbidden" : result
+}
+override getter @gtlFloat orOp ?let @gtlData unused right -> @gtlData result {
+  error where : "float forbidden" : result
+}
+override getter @gtlFloat xorOp ?let @gtlData unused right -> @gtlData result {
+  error where : "float forbidden" : result
+}
+override getter @gtlFloat slOp ?let @gtlData unused right -> @gtlData result {
+  error where : "float forbidden" : result
+}
+override getter @gtlFloat srOp ?let @gtlData unused right -> @gtlData result {
+  error where : "float forbidden" : result
+}
+override getter @gtlFloat neqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value != [right as @gtlFloat value] }
+    error [right where] : "float expected" : result
+}
+override getter @gtlFloat eqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value == [right as @gtlFloat value] }
+    error [right where] : "float expected" : result
+}
+override getter @gtlFloat gtOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value > [right as @gtlFloat value] }
+    error [right where] : "float expected" : result
+}
+override getter @gtlFloat geOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value >= [right as @gtlFloat value] }
+    error [right where] : "float expected" : result
+}
+override getter @gtlFloat ltOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value < [right as @gtlFloat value] }
+    error [right where] : "float expected" : result
+}
+override getter @gtlFloat leOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value <= [right as @gtlFloat value] }
+    error [right where] : "float expected" : result
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a getter on a @gtlFloat
+#-----------------------------------------------------------------------------*
+override getter @gtlFloat performGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ->@gtlData        result
+{
+  if    [methodName string] == "string" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![value string]
+    }
+  elsif [methodName string] == "cos" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value cos]
+    }
+  elsif [methodName string] == "sin" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value sin]
+    }
+  elsif [methodName string] == "tan" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value tan]
+    }
+  elsif [methodName string] == "cosDegree" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value cosDegree]
+    }
+  elsif [methodName string] == "sinDegree" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value sinDegree]
+    }
+  elsif [methodName string] == "tanDegree" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value tanDegree]
+    }
+  elsif [methodName string] == "exp" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value exp]
+    }
+  elsif [methodName string] == "log2" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value log2]
+    }
+  elsif [methodName string] == "log10" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value log10]
+    }
+  elsif [methodName string] == "sqrt" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value sqrt]
+    }
+  elsif [methodName string] == "power" then
+    argumentsCheck(!methodName !floatArgument() !arguments)
+    @double power = [[arguments dataAtIndex !0] as @gtlFloat value]
+    result = @gtlFloat.new {
+      ![methodName location] ![value power !power]
+    }
+  else
+    error methodName : "unknown getter '" + methodName +"' for float target" : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a setter on a @gtlFloat
+#-----------------------------------------------------------------------------*
+override setter @gtlFloat performSetter
+  ?let @lstring     methodName
+  ?let @gtlDataList unused arguments
+{
+  error methodName : "unknown setter '" + methodName +"' for float target"
+}
+
+#-----------------------------------------------------------------------------*
+# String type and operations on string
+#-----------------------------------------------------------------------------*
+class @gtlString : @gtlData { @string  value }
+
+override getter @gtlString desc
+  ?let @uint tab
+  -> @string result
+{
+  result = @string.stringWithSequenceOfCharacters{!' ' !tab} +
+    "string: \"" + value + "\"\n"
+}
+
+getter @gtlString lstring -> @lstring result { result = .new{!value !where} }
+
+override getter @gtlString string -> @string result { result = value }
+
+override getter @gtlString bool   -> @bool result {
+  error where : "cannot cast a string to a bool" : result
+}
+
+override getter @gtlString plusOp  -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString minusOp -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString notOp   -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString addOp ?let @gtlData right -> @gtlData result {
+  result = @gtlString.new { !where !value + [right as @gtlString value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlString subOp ?let @gtlData unused right -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString mulOp ?let @gtlData unused right -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString divOp ?let @gtlData unused right -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString modOp ?let @gtlData unused right -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString andOp ?let @gtlData unused right -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString orOp ?let @gtlData unused right -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString xorOp ?let @gtlData unused right -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString slOp ?let @gtlData unused right -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString srOp ?let @gtlData unused right -> @gtlData result {
+  error where : "string forbidden" : result
+}
+override getter @gtlString neqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value != [right as @gtlString value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlString eqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value == [right as @gtlString value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlString gtOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value > [right as @gtlString value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlString geOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value >= [right as @gtlString value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlString ltOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value < [right as @gtlString value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlString leOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value <= [right as @gtlString value] }
+    error [right where] : "string expected" : result
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a getter on a @gtlString
+#-----------------------------------------------------------------------------*
+override getter @gtlString performGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ->@gtlData        result
+{
+  if    [methodName string] == "HTMLRepresentation" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![value HTMLRepresentation]
+    }
+  elsif [methodName string] == "identifierRepresentation" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![value identifierRepresentation]
+    }
+  elsif [methodName string] == "fileExists" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] ![value fileExists]
+    }
+  elsif [methodName string] == "lowercaseString" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![value lowercaseString]
+    }
+  elsif [methodName string] == "length" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location] ![[value length] bigint]
+    }
+  elsif [methodName string] == "stringByCapitalizingFirstCharacter" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![value stringByCapitalizingFirstCharacter]
+    }
+  elsif [methodName string] == "uppercaseString" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![value uppercaseString]
+    }
+  elsif [methodName string] == "unsigned" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location] ![[value decimalUnsignedNumber] bigint]
+    }
+  elsif [methodName string] == "leftSubString" then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    result = @gtlString.new {
+      ![methodName location] ![value leftSubString !index]
+    }
+  elsif [methodName string] == "rightSubString" then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    result = @gtlString.new {
+      ![methodName location] ![value rightSubString !index]
+    }
+  elsif [methodName string] == "subString" then
+    argumentsCheck(!methodName !intIntArguments() !arguments)
+    @uint start = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    @uint length = [[[arguments dataAtIndex !1] as @gtlInt value] uint]
+    result = @gtlString.new {
+      ![methodName location] ![value subString !start !length]
+    }
+  elsif [methodName string] == "reversedString" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![value reversedString]
+    }
+  elsif [methodName string] == "componentsSeparatedByString" then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @string separator = [[arguments dataAtIndex !0] as @gtlString value]
+    @stringlist stringlist = [value componentsSeparatedByString !separator]
+    @list components = .emptyList
+    for (str) in stringlist do
+      components += !@gtlString.new {
+        ![methodName location] !str
+      }
+    end
+    result = @gtlList.new {
+      ![methodName location] !components
+    }
+  else
+    error methodName : "unknown getter '" + methodName +"' for string target" : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a setter on a @gtlFloat
+#-----------------------------------------------------------------------------*
+override setter @gtlFloat performSetter
+  ?let @lstring     methodName
+  ?let @gtlDataList unused arguments
+{
+  error methodName : "unknown setter '" + methodName +"' for float target"
+}
+
+#-----------------------------------------------------------------------------*
+# Bool type and operations on bool
+#-----------------------------------------------------------------------------*
+class @gtlBool   : @gtlData { @bool    value }
+
+override getter @gtlBool desc
+  ?let @uint tab
+  -> @string result
+{
+  result = @string.stringWithSequenceOfCharacters{!' ' !tab} +
+    "boolean: " + [value cString] + "\n"
+}
+
+override getter @gtlBool string -> @string result { result = [value cString] }
+
+override getter @gtlBool bool   -> @bool result {
+  result = value
+}
+
+override getter @gtlBool plusOp  -> @gtlData result {
+  error where : "bool forbidden" : result
+}
+override getter @gtlBool minusOp -> @gtlData result {
+  error where : "bool forbidden" : result
+}
+override getter @gtlBool notOp   -> @gtlData result {
+  error where : "bool forbidden" : result
+}
+override getter @gtlBool addOp ?let @gtlData unused right -> @gtlData result {
+  error where : "bool forbidden" : result
+}
+override getter @gtlBool subOp ?let @gtlData unused right -> @gtlData result {
+  error where : "bool forbidden" : result
+}
+override getter @gtlBool mulOp ?let @gtlData unused right -> @gtlData result {
+  error where : "bool forbidden" : result
+}
+override getter @gtlBool divOp ?let @gtlData unused right -> @gtlData result {
+  error where : "bool forbidden" : result
+}
+override getter @gtlBool modOp ?let @gtlData unused right -> @gtlData result {
+  error where : "bool forbidden" : result
+}
+override getter @gtlBool andOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value & [right as @gtlBool value] }
+    error [right where] : "bool expected" : result
+}
+override getter @gtlBool orOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value | [right as @gtlBool value] }
+    error [right where] : "bool expected" : result
+}
+override getter @gtlBool xorOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value ^ [right as @gtlBool value] }
+    error [right where] : "bool expected" : result
+}
+override getter @gtlBool slOp ?let @gtlData unused right -> @gtlData result {
+  error where : "bool forbidden" : result
+}
+override getter @gtlBool srOp ?let @gtlData unused right -> @gtlData result {
+  error where : "bool forbidden" : result
+}
+override getter @gtlBool neqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value != [right as @gtlBool value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlBool eqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value == [right as @gtlBool value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlBool gtOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value > [right as @gtlBool value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlBool geOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value >= [right as @gtlBool value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlBool ltOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value < [right as @gtlBool value] }
+    error [right where] : "string expected" : result
+}
+override getter @gtlBool leOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !value <= [right as @gtlBool value] }
+    error [right where] : "string expected" : result
+}
+
+#-----------------------------------------------------------------------------*
+# foundation types for collections
+#-----------------------------------------------------------------------------*
+list @list { @gtlData value %setter}
+
+#-----------------------------------------------------------------------------*
+# Struct type and operations on struct
+#-----------------------------------------------------------------------------*
+class @gtlStruct : @gtlData { @gtlVarMap  value }
+
+override getter @gtlStruct desc
+  ?let @uint tab
+  -> @string result
+{
+  result =  @string.stringWithSequenceOfCharacters{!' ' !tab} +
+    "struct: [\n"
+  for () in value do
+    result += @string.stringWithSequenceOfCharacters{!' ' !tab+4} +
+      [lkey string] + " :>\n" + 
+      [value desc !tab+8]
+  end
+  result += "]\n"
+}
+
+override getter @gtlStruct string -> @string result {
+  error where : "struct forbidden" : result
+}
+
+override getter @gtlStruct bool   -> @bool result {
+  error where : "cannot cast a struct to a bool" : result
+}
+
+override getter @gtlStruct plusOp  -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct minusOp -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct notOp   -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct addOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct subOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct mulOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct divOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct modOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct andOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct orOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct xorOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct slOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct srOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct neqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !(value != [right as @gtlStruct value]) }
+    error [right where] : "struct expected" : result
+}
+override getter @gtlStruct eqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !(value == [right as @gtlStruct value]) }
+    error [right where] : "struct expected" : result
+}
+override getter @gtlStruct gtOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct geOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct ltOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+override getter @gtlStruct leOp ?let @gtlData unused right -> @gtlData result {
+  error where : "struct forbidden" : result
+}
+
+#-----------------------------------------------------------------------------*
+# List type and operations on lists
+#-----------------------------------------------------------------------------*
+class @gtlList   : @gtlData { @list value }
+
+override getter @gtlList desc
+  ?let @uint tab
+  -> @string result
+{
+  result =  @string.stringWithSequenceOfCharacters{!' ' !tab} +
+    "list: [\n"
+  for () in value do (i)
+    result += @string.stringWithSequenceOfCharacters{!' ' !tab+4} +
+      [i string] + " :>\n" + 
+      [value desc !tab+8]
+  end
+  result += "]\n"
+}
+
+override getter @gtlList string -> @string result {
+  error where : "list forbidden" : result
+}
+
+override getter @gtlList bool   -> @bool result {
+  error where : "cannot cast a list to a bool" : result
+}
+
+override getter @gtlList plusOp  -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList minusOp -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList notOp   -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList addOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlList then
+    result = @gtlList.new { !where !value + [right as @gtlList value] }
+  elsif right is == @gtlStruct then
+    @list res = value;
+    res += !right
+    result = @gtlList.new { !where !res  }
+  else
+    error [right where] : "list or struct expected" : result
+  end
+}
+override getter @gtlList subOp ?let @gtlData unused right -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList mulOp ?let @gtlData unused right -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList divOp ?let @gtlData unused right -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList modOp ?let @gtlData unused right -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList andOp ?let @gtlData unused right -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList orOp ?let @gtlData unused right -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList xorOp ?let @gtlData unused right -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList slOp ?let @gtlData unused right -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList srOp ?let @gtlData unused right -> @gtlData result {
+  error where : "list forbidden" : result
+}
+override getter @gtlList neqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !(value != [right as @gtlList value]) }
+    error [right where] : "list expected" : result
+}
+override getter @gtlList eqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !(value == [right as @gtlList value]) }
+    error [right where] : "list expected" : result
+}
+override getter @gtlList gtOp ?let @gtlData unused right -> @gtlData result {
+  error where : "a list does not support the > operator" : result
+}
+override getter @gtlList geOp ?let @gtlData unused right -> @gtlData result {
+  error where : "a list does not support the >= operator" : result
+}
+override getter @gtlList ltOp ?let @gtlData unused right -> @gtlData result {
+  error where : "a list does not support the < operator" : result
+}
+override getter @gtlList leOp ?let @gtlData unused right -> @gtlData result {
+  error where : "a list does not support the <= operator" : result
+}
+
+#-----------------------------------------------------------------------------*
+# Map type and operations on maps
+#-----------------------------------------------------------------------------*
+class @gtlMap    : @gtlData { @gtlVarMap  value %setter }
+
+override getter @gtlStruct desc
+  ?let @uint tab
+  -> @string result
+{
+  result =  @string.stringWithSequenceOfCharacters{!' ' !tab} +
+    "map: [\n"
+  for () in value do
+    result += @string.stringWithSequenceOfCharacters{!' ' !tab+4} +
+      "\""+ [lkey string] + "\" :>\n" + 
+      [value desc !tab+8]
+  end
+  result += "]\n"
+}
+
+override getter @gtlMap string -> @string result {
+  error where : "map forbidden" : result
+}
+
+override getter @gtlMap bool   -> @bool result {
+  error where : "cannot cast a map to a bool" : result
+}
+
+override getter @gtlMap plusOp  -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap minusOp -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap notOp   -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap addOp ?let @gtlData unused right -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap subOp ?let @gtlData unused right -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap mulOp ?let @gtlData unused right -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap divOp ?let @gtlData unused right -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap modOp ?let @gtlData unused right -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap andOp ?let @gtlData unused right -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap orOp ?let @gtlData unused right -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap xorOp ?let @gtlData unused right -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap slOp ?let @gtlData unused right -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap srOp ?let @gtlData unused right -> @gtlData result {
+  error where : "map forbidden" : result
+}
+override getter @gtlMap neqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !(value != [right as @gtlMap value]) }
+    error [right where] : "map expected" : result
+}
+override getter @gtlMap eqOp ?let @gtlData right -> @gtlData result {
+  result = @gtlBool.new { !where !(value == [right as @gtlMap value]) }
+    error [right where] : "map expected" : result
+}
+override getter @gtlMap gtOp ?let @gtlData unused right -> @gtlData result {
+  error where : "a map does not support the > operator" : result
+}
+override getter @gtlMap geOp ?let @gtlData unused right -> @gtlData result {
+  error where : "a map does not support the >= operator" : result
+}
+override getter @gtlMap ltOp ?let @gtlData unused right -> @gtlData result {
+  error where : "a map does not support the < operator" : result
+}
+override getter @gtlMap leOp ?let @gtlData unused right -> @gtlData result {
+  error where : "a map does not support the <= operator" : result
+}

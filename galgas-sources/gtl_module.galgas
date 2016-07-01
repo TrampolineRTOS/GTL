@@ -1,0 +1,125 @@
+#-----------------------------------------------------------------------------*
+#
+#  @file gtl_module.galgas
+#
+#  @section desc File description
+#
+#  GTL modules.
+#
+#  @section copyright Copyright
+#
+#  Goil OIL compiler, part of Trampoline RTOS
+#
+#  Trampoline is copyright (c) CNRS, University of Nantes,
+#  Ecole Centrale de Nantes
+#  Trampoline is protected by the French intellectual property law.
+#
+#  This software is distributed under the GNU Public Licence V2.
+#  Check the LICENSE file in the root directory of Trampoline
+#
+#  $Date$
+#  $Rev$
+#  $Author$
+#  $URL$
+#
+#-----------------------------------------------------------------------------*
+
+list @gtlArgumentList
+{
+  @bool    typed
+  @type    type
+  @lstring name
+}
+
+class @gtlProcedure
+{
+  @location           where
+  @lstring            name
+  @gtlArgumentList    arguments
+  @gtlInstructionList instructions
+}
+
+method @gtlProcedure checkArgumentsAndExecute
+  ?@gtlContext      context
+  ?!@gtlVarMap      variableMap
+  ?!@string         outputString
+  ?let @gtlDataList concreteArguments
+{
+  @bool argumentsOk = true
+  # Check the arguments have the good type
+  for () in arguments, concreteArguments
+    if [data dynamicType] != type then
+      if typed then
+        error data : [type name] + " expected" 
+        argumentsOk = false
+      end
+      [!?variableMap set !name !data]
+    end
+  end
+  if argumentsOk then
+    [instructions execute !context !?variableMap !?outputString]
+  end
+}  
+
+method @gtlProcedure callProcedure
+  ?@gtlContext      context
+  ?!@string         outputString
+  ?let @location    fromLocation
+  ?let @gtlDataList concreteArguments
+{
+  if [arguments length] != [concreteArguments length] then
+    error fromLocation :
+      "calling procedure '" + name + "' needs " + [arguments length] + " arguments"
+  else
+    @gtlVarMap variableMap = .emptyMap
+
+    [self checkArgumentsAndExecute
+      !context !?outputString !?variableMap !?outputString !concreteArguments
+    ]
+  end
+}
+
+class @gtlFunction : @gtlProcedure
+{
+  @lstring            returnVariable
+}
+
+method @gtlFunction callFunction
+  ?@gtlContext      context
+  ?!@string         outputString
+  ?let @location    fromLocation
+  ?let @gtlDataList concreteArguments
+  !@gtlData         result
+{
+  if [arguments length] != [concreteArguments length] then
+    error fromLocation :
+      "calling function '" + name + "' needs " + [arguments length] + " arguments"
+  else
+    @gtlVarMap variableMap = .emptyMap
+
+    [self checkArgumentsAndExecute
+      !context !?outputString !?variableMap !?outputString !concreteArguments
+    ]
+    
+    [variableMap get !returnVariable ?result]
+  end
+}
+
+
+
+map @gtlProcMap
+{
+  @gtlProcedure proc
+}
+
+map @gtlFuncMap
+{
+  @gtlFunction proc
+}
+
+class @gtlModule
+{
+  @lstring    name
+  @gtlProcMap procedures
+  @gtlFuncMap functions
+}

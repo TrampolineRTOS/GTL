@@ -1,0 +1,265 @@
+#---------------------------------------------------------------------------*
+#
+#  @file gtl_routines.galgas
+#
+#  @section desc File description
+#
+#  routines for gtl.
+#
+#  @section copyright Copyright
+#
+#  Goil OIL compiler, part of Trampoline RTOS
+#
+#  Trampoline is copyright (c) CNRS, University of Nantes,
+#  Ecole Centrale de Nantes
+#  Trampoline is protected by the French intellectual property law.
+#
+#  This software is distributed under the GNU Public Licence V2.
+#  Check the LICENSE file in the root directory of Trampoline
+#
+#  $Date$
+#  $Rev$
+#  $Author$
+#  $URL$
+#
+#---------------------------------------------------------------------------*
+
+func %once gtlAllowedFunctions -> @stringset outAllowedFunctionSet
+{
+  outAllowedFunctionSet = @stringset.emptySet
+  outAllowedFunctionSet += !"testFunction"
+  outAllowedFunctionSet += !"tasks"
+  outAllowedFunctionSet += !"trueFalse"
+  outAllowedFunctionSet += !"yesNo"
+}
+
+
+func gtlFullPrefix
+  ?let @gtlVarMap vars
+  ?let @string prefix
+  ->@string full
+{
+  @string stringPrefix = prefix
+  if stringPrefix == "compiler" then
+    [vars get !lstringWith(!"COMPILER") ?let @gtlData compiler]
+    stringPrefix += "/" + [compiler string]
+  elsif stringPrefix == "linker" then
+    [vars get !lstringWith(!"LINKER") ?let @gtlData linker]
+    stringPrefix += "/" + [linker string]
+  elsif stringPrefix == "assembler" then
+    [vars get !lstringWith(!"ASSEMBLER") ?let @gtlData assembler]
+    stringPrefix += "/" + [assembler string]
+  elsif stringPrefix == "ROOT" then
+    stringPrefix = ""
+  end
+  full = stringPrefix
+}
+
+
+#------------------------------------------------------------------------------*
+
+proc findFileInHierarchy
+  ?let @string file
+  ?let @string rootPath
+  ?let @string searchPath
+  ?!@stringlist searchedPathList
+  ?!@bool found
+  ?!@string fullPath {
+  @string partialPath = searchPath
+  loop( [searchPath length])
+  while ([partialPath length] > 0) & not found do
+    let @string fullFilePath = rootPath + "/" + partialPath + "/" + file
+    searchedPathList += !fullFilePath
+    found = [fullFilePath fileExists]
+    if found then
+      fullPath = fullFilePath
+    else
+      partialPath = [partialPath stringByDeletingLastPathComponent]
+    end
+  end
+  if not found then
+    let @string fullFilePath = rootPath + "/" + file
+    searchedPathList += !fullFilePath
+    found = [fullFilePath fileExists]
+    if found then
+      fullPath = fullFilePath
+    end
+  end
+}
+
+#------------------------------------------------------------------------------*
+
+proc findAllFilesInHierarchy
+  ?let @string file
+  ?let @string rootPath
+  ?let @string searchPath
+  ?!@stringlist searchedPathList
+  ?!@stringlist fullPaths {
+  @string partialPath = searchPath
+  loop( [searchPath length])
+  while ([partialPath length] > 0) do
+    let @string fullFilePath = rootPath + "/" + partialPath + "/" + file
+    searchedPathList += !fullFilePath
+    if [fullFilePath fileExists] then
+      fullPaths += !fullFilePath
+    end
+    @string newPartialPath = [partialPath stringByDeletingLastPathComponent]
+    if newPartialPath == partialPath then
+      partialPath = ""
+    else
+      partialPath = newPartialPath
+    end
+  end 
+  let @string fullFilePath = rootPath + "/" + file
+  searchedPathList += !fullFilePath
+  if [fullFilePath fileExists] then
+    fullPaths += !fullFilePath
+  end
+}
+
+#------------------------------------------------------------------------------*
+
+proc findFileInPathList
+  ?let @string file
+  ?let @stringlist rootPathList
+  ?let @string searchPath
+  !@stringlist searchedPathList
+  !@bool found
+  !@string fullPath {
+  searchedPathList = @stringlist. emptyList
+  found = false
+  fullPath = ""
+  
+  for (@string rootPath) in  rootPathList do
+    findFileInHierarchy (
+      !file
+      !rootPath
+      !searchPath
+      !?searchedPathList
+      !?found
+      !?fullPath
+    )
+  end  
+}
+
+#------------------------------------------------------------------------------*
+
+proc findAllFilesInPathList
+  ?let @string file
+  ?let @stringlist rootPathList
+  ?let @string searchPath
+  !@stringlist searchedPathList
+  !@stringlist fullPaths {
+  searchedPathList = @stringlist. emptyList
+  fullPaths = @stringlist. emptyList
+  
+  for (@string rootPath) in  rootPathList do
+    findAllFilesInHierarchy (
+      !file
+      !rootPath
+      !searchPath
+      !?searchedPathList
+      !?fullPaths
+    )
+  end  
+}
+
+#------------------------------------------------------------------------------*
+
+proc gtlInvocation
+  ?let @lstring    templateFileName
+  ?let @gtlContext context
+  ?let @bool       errorIfNotFound
+  ?let @bool       isRoot
+  ?let @gtlVarMap  gtlVariableMap
+  ?!@string        outputString
+  !@bool           noErrorOccured
+{
+  noErrorOccured = true
+  if @uint.errorCount == 0 then
+    let @string templateDir = [context templateDirectory]
+    if [templateDir length] == 0 then
+      error templateFileName :
+        "the '--goil-templates' option or the environment variable " +
+        "GOIL_TEMPLATES is required for generating code"
+    elsif not [templateDir directoryExists] then
+      error templateFileName :
+        "the template path '" + templateDir +
+        "' exists but is not a valid directory path"
+    else
+      let @string targetDir = [option goil_options.target_platform value]
+      @string fullTemplateDir
+      if [context prefix] == "" then
+        fullTemplateDir = templateDir
+      else
+        fullTemplateDir = templateDir + "/" + [context prefix]
+      end
+      if [targetDir length] == 0 then
+        error templateFileName : 
+          "the '--target' (or '-t') option is required for generating code"
+      elsif not [fullTemplateDir directoryExists] then
+        error templateFileName : 
+          "internal error. no '"+ fullTemplateDir + "' template found"
+      else
+        var pathList = @stringlist.emptyList
+        @bool found = false
+        if [context path] != "" then
+          @string userTemplateDir
+          if [context prefix] == "" then
+            userTemplateDir = [context path]
+          else
+            userTemplateDir = [context path] + "/" + [context prefix]
+          end
+          let @string fullTemplatePath = @string.stringWithCurrentDirectory +
+            "/" + userTemplateDir + "/" + templateFileName + ".goilTemplate"
+          pathList += !fullTemplatePath
+          found = [fullTemplatePath fileExists]
+          if found then
+            grammar gtl_grammar in
+              @lstring.new{!fullTemplatePath !@location.here}
+              !context
+              !gtlVariableMap
+              !?outputString
+              !isRoot
+          end
+        end
+        @string targetTemplatePartialPath = targetDir
+        loop( [targetDir length])
+        while ([targetTemplatePartialPath length] > 0) & not found
+        do
+          let @string fullTemplatePath = fullTemplateDir + "/" + targetTemplatePartialPath + "/" + inTemplateName + ".goilTemplate"
+          pathList += !fullTemplatePath
+          found = [fullTemplatePath fileExists]
+          if found then
+            #displayPathList !pathList;
+            grammar template_grammar in @lstring. new { !fullTemplatePath !@location.here} !inPrefix !inPath !inTemplateDirectory !inTemplateVariableMap !?ioResultingString !inIsRoot ?* ?*
+          else
+            targetTemplatePartialPath = [targetTemplatePartialPath stringByDeletingLastPathComponent]
+          end
+        end
+        if not found then
+          let @string fullTemplatePath = fullTemplateDir + "/" + inTemplateName + ".goilTemplate"
+          pathList += !fullTemplatePath
+          found = [fullTemplatePath fileExists]
+          if found then
+            #displayPathList !pathList;
+            grammar template_grammar in @lstring. new { !fullTemplatePath !@location.here} !inPrefix !inPath !inTemplateDirectory !inTemplateVariableMap !?ioResultingString !inIsRoot ?* ?*
+          end
+        end
+        if not found then
+          outNoErrorOccured = false
+          if inErrorIfNotFound then
+            @string m = "cannot find a valid path for the '" + inTemplateName + "' template; I have tried:"
+            for () in  pathList do
+              m += "\n  - '" + mValue + "';"
+            end
+            error inTemplateName :m
+          end
+        end
+      end
+    end
+  end
+}
+
+#------------------------------------------------------------------------------*
+

@@ -1,0 +1,10 @@
+gui cocoa {
+  with option gtl_options
+
+  with lexique gtl_lexique {
+    fileExtension: "goilTemplate"
+    title: "Template source"
+    blockComment : "#"
+  }
+
+}

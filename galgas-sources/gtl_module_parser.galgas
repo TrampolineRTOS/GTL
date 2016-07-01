@@ -1,0 +1,72 @@
+#-----------------------------------------------------------------------------*
+#
+#  @file gtl_module_parser.galgas
+#
+#  @section desc File description
+#
+#  Parsing of GTL modules.
+#
+#  @section copyright Copyright
+#
+#  Goil OIL compiler, part of Trampoline RTOS
+#
+#  Trampoline is copyright (c) CNRS, University of Nantes,
+#  Ecole Centrale de Nantes
+#  Trampoline is protected by the French intellectual property law.
+#
+#  This software is distributed under the GNU Public Licence V2.
+#  Check the LICENSE file in the root directory of Trampoline
+#
+#  $Date$
+#  $Rev$
+#  $Author$
+#  $URL$
+#
+#-----------------------------------------------------------------------------*
+
+syntax gtl_module_parser (gtl_scanner) {
+
+#-----------------------------------------------------------------------------*
+rule <gtl_module_start_symbol> !@gtlModule module !@lstring moduleName
+{
+  $module$ ?moduleName
+  repeat
+  while
+    <gtl_function> ?@gtlFunction function
+    [module addFunc !function]
+  while
+    <gtl_procedure> ?@gtlProcedure procedure
+    [module addProc !procedure]
+  end
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_procedure> !@gtlProcedure procedure
+{
+  $proc$ $identifier$ ?@lstring procedureName
+  @location where = .here
+  <gtl_argument_list> ?@gtlArgumentList arguments
+  <gtl_instruction_list> ?@gtlInstructionList instructionList
+  $end$ $proc$
+  
+  procedure = .new {
+    !where !procedureName !arguments !instructionList
+  }
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_function> !@gtlFunction function
+{
+  $func$  $identifier$ ?@lstring functionName
+  @location where = .here
+  <gtl_argument_list> ?@gtlArgumentList arguments
+  $:$ $identifier$ ?@lstring returnVariable
+  <gtl_instruction_list> ?@gtlInstructionList instructionList
+  $end$ $func$
+  
+  function = .new {
+    !where !functionName !arguments !instructionList !returnVariable
+  }
+}
+
+}

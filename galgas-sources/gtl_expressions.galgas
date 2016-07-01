@@ -1,0 +1,766 @@
+#-----------------------------------------------------------------------------*
+#
+#  @file gtl_expressions.galgas
+#
+#  @section desc File description
+#
+#  expressions in GTL.
+#
+#  @section copyright Copyright
+#
+#  Goil OIL compiler, part of Trampoline RTOS
+#
+#  Trampoline is copyright (c) CNRS, University of Nantes,
+#  Ecole Centrale de Nantes
+#  Trampoline is protected by the French intellectual property law.
+#
+#  This software is distributed under the GNU Public Licence V2.
+#  Check the LICENSE file in the root directory of Trampoline
+#
+#  $Date$
+#  $Rev$
+#  $Author$
+#  $URL$
+#
+#-----------------------------------------------------------------------------*
+
+#=============================================================================*
+# A @gtlVarItem is a part of a variable path.
+# For instance A::B["e"]::C::D[3] is a path. A is a struct, B is a field of
+# A and is a map, ["e"] is the element of the map with key "e". This element
+# is a struct with field C which is itself a struct with field D which is a
+# list and we reference the element at index 3.
+#-----------------------------------------------------------------------------*
+abstract class @gtlVarItem { @lstring field }
+
+#-----------------------------------------------------------------------------*
+# abstact method to set a field in a context
+#-----------------------------------------------------------------------------*
+abstract method @gtlVarItem set
+  ?!     @gtlVarMap  context
+  ?  let @gtlVarMap  vars
+  ?  let @gtlVarPath path
+  ?  let @gtlData    data
+
+#-----------------------------------------------------------------------------*
+# abstact getter to get a field in a context
+#-----------------------------------------------------------------------------*
+abstract getter @gtlVarItem get
+  ? let @gtlVarMap  context
+  ? let @gtlVarMap  vars
+  ? let @gtlVarPath path
+  -> @gtlData result
+  
+#=============================================================================*
+# Scalar struct field, ie A or C in the example above
+#-----------------------------------------------------------------------------*
+class @gtlVarItemField : @gtlVarItem { }
+
+#-----------------------------------------------------------------------------*
+# set a scalar field
+#-----------------------------------------------------------------------------*
+override method @gtlVarItemField set
+  ?!     @gtlVarMap  context
+  ?  let @gtlVarMap  vars
+  ?  let @gtlVarPath path
+  ?  let @gtlData    data
+{ 
+  if [path length] == 0 then
+    # at the end, set the variable in the context
+    if [context hasKey ![field string]] then
+      # A field with the same name exists, replace it
+      [!?context setValueForKey !data ![field string]]
+    else
+      # The field does not exist, add it
+      [!?context put !field !data]
+    end
+  else
+    @gtlVarMap subContext = .emptyMap{}
+    # not at the end, get and set the subcontext
+    if [context hasKey ![field string]] then
+      # The variable/field already exists
+      # get the variable
+      [context get !field ?var @gtlData variable]
+      cast variable
+        case == @gtlStruct structVar :
+          # it is a struct
+          subContext = [structVar value]
+      end
+      # set in the subcontext
+      [[path itemAtIndex !0] set
+        !?subContext
+        !vars
+        ![path subListFromIndex !1]
+        !data
+      ]
+      # update with the result
+      [!?context setValueForKey
+        !@gtlStruct.new{![field location] !subContext}
+        ![field string]
+      ]
+    else
+      # set in the subcontext
+      [[path itemAtIndex !0] set
+        !?subContext
+        !vars
+        ![path subListFromIndex !1]
+        !data
+      ]
+      # update with the result
+      [!?context put !field !@gtlStruct.new{![field location] !subContext}]
+    end
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# getter to get a field in a context
+#-----------------------------------------------------------------------------*
+override getter @gtlVarItemField get
+  ? let @gtlVarMap  context
+  ? let @gtlVarMap  vars
+  ? let @gtlVarPath path
+  -> @gtlData result
+{
+  if [path length] == 0 then
+    # at the end, get the variable in the context
+    [context get !field ?result]
+  else
+    # not at the end, get and set the subcontext
+    [context get !field ?let @gtlData subContextData]
+    cast subContextData
+    case == @gtlStruct structVar:
+      result = [[path itemAtIndex !0] get
+                 ![structVar value]
+                 !vars
+                 ![path subListFromIndex !1]
+               ]
+    else
+      error field : [field string]+"is not a struct" : result
+    end
+  end
+}
+
+
+#=============================================================================*
+# Collection field, ie B or D in the example above
+#-----------------------------------------------------------------------------*
+class @gtlVarItemCollection : @gtlVarItem { @gtlExpression key }
+
+#-----------------------------------------------------------------------------*
+# set a map item field
+#-----------------------------------------------------------------------------*
+override method @gtlVarItemCollection set
+  ?!     @gtlVarMap  context
+  ?  let @gtlVarMap  vars
+  ?  let @gtlVarPath path
+  ?  let @gtlData    data
+{
+  # evaluate the expression to a string
+  cast [key eval !vars]
+  
+  case == @gtlString keyValue :
+    if [path length] == 0 then
+      # at the end, set the variable in the context
+      # 2 cases :
+      # 1) the variable already exists and is a map, set or replace the element
+      # 2) the variable already exists and is not a map, replace it with a map
+      #    with the item set
+      # 3) the variable does not exist, create a map and add the item
+      if [context hasKey ![field string]] then
+        # A field with the same name exists, get it
+        [!?context del !field ?var @gtlData item]
+        cast item
+        case == @gtlMap mapItem :
+          @gtlVarMap mapToSet = [mapItem value]
+          if [mapToSet hasKey ![keyValue value]] then
+            # update it
+            [!?mapToSet setValueForKey !data ![keyValue value]]
+          else
+            # create it
+            [!?mapToSet put
+              !@lstring.new{![keyValue value] ![key where]}
+              !data
+            ]
+          end
+          # update the context
+          [!?context put !field !@gtlMap.new{![mapItem where] !mapToSet}]
+        else
+          # not a map, create one
+          @gtlVarMap mapToSet = .emptyMap{}
+          [!?mapToSet put
+            !@lstring.new{![keyValue value] ![key where]}
+            !data
+          ]
+          [!?context put !field !@gtlMap.new{![field location] !mapToSet}]
+        end  
+      else
+        # The field does not exist, add it
+        [!?context put !field !data]
+      end
+    else
+      @gtlVarMap subContext = .emptyMap{}
+      # not at the end, get and set the subcontext
+      if [context hasKey ![field string]] then
+        # get the variable
+        [!?context del !field ?var @gtlData variable]
+        cast variable
+        case == @gtlMap mapVar :
+          # it is a map, get the item corresponding to the key
+          @gtlVarMap theMap = [mapVar value]
+          if [theMap hasKey ![keyValue value]] then
+            [!?theMap del
+              !@lstring.new{![keyValue value] ![key where]}
+              ?let @gtlData subField
+            ]
+            cast subField
+              case == @gtlStruct subStruct:
+                subContext = [subStruct value]
+            end
+          end
+          [[path itemAtIndex !0] set
+            !?subContext
+            !vars
+            ![path subListFromIndex !1]
+            !data
+          ]
+          [!?context setValueForKey
+            !@gtlMap.new{![field location] !subContext}
+            ![field string]
+          ]
+        else
+          # set in the subcontext
+          [[path itemAtIndex !0] set
+            !?subContext
+            !vars
+            ![path subListFromIndex !1]
+            !data
+          ]
+          # update with the result
+          [!?context put !field !@gtlMap.new{![field location] !subContext}]
+        end
+      else
+        # set in the subcontext
+        [[path itemAtIndex !0] set
+          !?subContext
+          !vars
+          ![path subListFromIndex !1]
+          !data
+        ]
+        # update with the result
+        [!?context put !field !@gtlMap.new{![field location] !subContext}]
+      end
+    end
+    
+  case == @gtlInt idxValue:
+    if [path length] == 0 then
+      # at the end, set the variable in the context
+      # 2 cases :
+      # 1) the variable already exists and is a list, set or replace the element
+      # 2) the variable already exists and is not a list, replace it with a list
+      #    with the item set
+      # 3) the variable does not exist, create a list and add the item
+      if [context hasKey ![field string]] then
+        # A field with the same name exists, get it
+        [!?context del !field ?var @gtlData item]
+        cast item
+        case == @gtlList listItem :
+          @list listToSet = [listItem value]
+          if [listToSet length] > [[idxValue value] uint] then
+            # update it
+            [!?listToSet setValueAtIndex !data ![[idxValue value] uint]]
+          else
+            # element does not exist, emit an error
+            error [idxValue where] : "index "+[idxValue value]+" out of range"
+          end
+          # update the context
+          [!?context put
+            !field
+            !@gtlList.new{![data where] !listToSet}
+          ]
+        else
+          # not a list, it is an error since setting an element at index
+          # supposes the element exists
+          error field : "field/variable "+[field string]+" is not a list"
+        end
+      else
+        # The field does not exist, emit an error
+        error field : "list "+[field string]+" does not exists"
+      end
+    else
+      @gtlVarMap subContext = .emptyMap{}
+      # not at the end, get and set the subcontext
+      if [context hasKey ![field string]] then
+        # get the variable
+        [!?context del !field ?var @gtlData variable]
+        cast variable
+        case == @gtlList listVar :
+          # it is a map, get the item corresponding to the key
+          @list theList = [listVar value]
+          if [theList length] > [[idxValue value] uint] then
+            cast [theList valueAtIndex ![[idxValue value] uint]]
+            case == @gtlStruct subStruct:
+                subContext = [subStruct value]
+            end
+            [[path itemAtIndex !0] set
+              !?subContext
+              !vars
+              ![path subListFromIndex !1]
+              !data
+            ]
+            [!?context setValueForKey
+              !@gtlMap.new{![field location] !subContext}
+              ![field string]
+            ]
+          else
+            # out of range index, emit an error
+            error [idxValue where] : "index "+[idxValue value]+" out of range"
+          end
+        else
+          # not a list, it is an error since setting an element at index
+          # supposes the element exists
+          error field : "field/variable "+[field string]+" is not a list"
+        end
+      else
+        # The field does not exist, emit an error
+        error field : "list "+[field string]+" does not exists"
+      end
+    end
+    
+  else
+    # not a string, emit error
+    error [key where] : "Key does not evaluate to a string or an int"
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# getter to get a map field in a context
+#-----------------------------------------------------------------------------*
+override getter @gtlVarItemCollection get
+  ? let @gtlVarMap  context
+  ? let @gtlVarMap  vars
+  ? let @gtlVarPath path
+  -> @gtlData result
+{
+  cast [key eval !vars]
+  
+  case == @gtlString keyValue :
+    # get the map
+    [context get !field ?let @gtlData item]
+    cast item
+    case == @gtlMap mapItem :
+      [[mapItem value] get
+        !@lstring.new{![keyValue value] ![key where]}
+        ?let @gtlData mapItemField
+      ]
+      if [path length] == 0 then
+        # at the end, get the variable in the context
+        result = mapItemField
+      else
+        # not at the end, get and set the subcontext
+        cast mapItemField
+        case == @gtlStruct structVar:
+          result = [[path itemAtIndex !0] get
+                     ![structVar value]
+                     !vars
+                     ![path subListFromIndex !1]
+                   ]
+        else
+          error field : [field string]+" is not a struct" : result
+        end
+      end
+    else
+      error [item where] : "field "+[field string]+" is not a map" : result
+    end
+    
+  case == @gtlInt idxValue :
+    # get the list
+    [context get !field ?let @gtlData item]
+    cast item
+    case == @gtlList listItem :
+      @gtlData listItemElement = [[listItem value] valueAtIndex
+                                   ![[idxValue value] uint]]
+      if [path length] == 0 then
+        # at the end, get the variable in the context
+        result = listItemElement
+      else
+        # not at the end, get and set the subcontext
+        cast listItemElement
+        case == @gtlStruct structVar:
+          result = [[path itemAtIndex !0] get
+                     ![structVar value]
+                     !vars
+                     ![path subListFromIndex !1]
+                   ]
+        else
+          error field : [field string]+" is not a struct" : result
+        end
+      end
+    else
+      error [item where] : "field "+[field string]+" is not a list" : result
+    end
+    
+  else
+    # not a string, emit error
+    error [key where] : "Key does not evaluate to a string or an int" : result
+  end
+}
+
+#=============================================================================*
+# A variable path is a list of variable items
+#-----------------------------------------------------------------------------*
+list @gtlVarPath {
+  @gtlVarItem item
+}
+
+#-----------------------------------------------------------------------------*
+# Set a data in a path
+#-----------------------------------------------------------------------------*
+method @gtlVarPath setMe ?!@gtlVarMap context ?let @gtlData data
+{
+  if [self length] > 0 then
+    @gtlVarItem item = [self itemAtIndex !0]
+    [item set !?context !context ![self subListFromIndex !1] !data]
+  else
+    error @location.here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Get a data in a path
+#-----------------------------------------------------------------------------*
+getter @gtlVarPath get ?let @gtlVarMap context -> @gtlData variableValue
+{
+  if [self length] > 0 then
+    @gtlVarItem item = [self itemAtIndex !0]
+    variableValue = [item get !context !context ![self subListFromIndex !1]]
+  else
+    error @location.here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
+    : variableValue
+  end
+}
+
+#=============================================================================*
+# A variable map is a map of variables. Used for variables of a gtl program
+# and used in struct and map of the language itself.
+#-----------------------------------------------------------------------------*
+map @gtlVarMap {
+  @gtlData value
+  insert put error message "a variable or field named '%K' is already declared in %L"
+  search get error message "there is no variable or field named '%K'"
+  remove del error message "there is no variable or field named '%K' to delete"
+}
+
+setter @gtlVarMap replaceOrCreate
+  ?let @lstring key
+  ?let @gtlData data
+{
+  if [self hasKey ![key string]] then
+    [!?self del !key ?*]
+  end
+  [!?self put !key !data]
+}
+
+setter @gtlVarMap replaceOrCreateAtLevel
+  ?let @lstring key
+  ?let @gtlData data
+  ?let @uint    level
+{
+  if [self hasKeyAtLevel ![key string] !level] then
+    [!?self del !key ?*]
+  end
+  [!?self put !key !data]
+}
+
+#=============================================================================*
+# abstract classes for an expression
+#-----------------------------------------------------------------------------*
+abstract class @gtlExpression { @location where }
+
+getter @gtlExpression location -> @location result { result = where }
+
+abstract class @gtlUnaryExpression : @gtlExpression {
+  @gtlExpression son
+}
+abstract class @gtlBinaryExpression : @gtlExpression {
+  @gtlExpression lSon
+  @gtlExpression rSon
+}
+
+abstract getter @gtlExpression eval
+  ?let @gtlVarMap unused gtlVariableMap
+  -> @gtlData result
+
+#=============================================================================*
+# Expression list
+#-----------------------------------------------------------------------------*
+list @gtlExpressionList { @gtlExpression expression }
+
+#=============================================================================*
+# class for a literal terminal
+#-----------------------------------------------------------------------------*
+class @gtlTerminal : @gtlExpression { @gtlData value }
+
+override getter @gtlTerminal eval
+  ?let @gtlVarMap unused gtlVariableMap
+  -> @gtlData result
+{
+  result = value
+}
+
+#=============================================================================*
+# class for a variable reference
+#-----------------------------------------------------------------------------*
+class @gtlVarRef : @gtlExpression { @gtlVarPath variableName }
+
+override getter @gtlVarRef eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [variableName get !gtlVariableMap]
+}
+
+#=============================================================================*
+# classes for unary expressions
+#-----------------------------------------------------------------------------*
+# @gtlParenthesizedExpression : ( son )
+#-----------------------------------------------------------------------------*
+class @gtlParenthesizedExpression : @gtlUnaryExpression {}
+
+override getter @gtlParenthesizedExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [son eval !gtlVariableMap]
+  [!?result setWhere !where]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlMinusExpression : unary -. Does a - son
+#-----------------------------------------------------------------------------*
+class @gtlMinusExpression : @gtlUnaryExpression {}
+
+override getter @gtlMinusExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[son eval !gtlVariableMap] minusOp]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlPlusExpression : unary +. Does a + son 
+#-----------------------------------------------------------------------------*
+class @gtlPlusExpression : @gtlUnaryExpression {}
+
+override getter @gtlPlusExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[son eval !gtlVariableMap] plusOp]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlTildeExpression : unary bitwise not or boolean not. Does a ~ son 
+#-----------------------------------------------------------------------------*
+class @gtlNotExpression : @gtlUnaryExpression {}
+
+override getter @gtlNotExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[son eval !gtlVariableMap] notOp]
+}
+
+#=============================================================================*
+# classes for binary expressions
+#-----------------------------------------------------------------------------*
+# @gtlAddExpression : binary add. Does a lSon + rSon
+#-----------------------------------------------------------------------------*
+class @gtlAddExpression : @gtlBinaryExpression {}
+
+override getter @gtlAddExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] addOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlSubstractExpression : binary substract. Does a lSon - rSon
+#-----------------------------------------------------------------------------*
+class @gtlSubstractExpression : @gtlBinaryExpression {}
+
+override getter @gtlSubstractExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] subOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlMultiplyExpression : binary multiply. Does a lSon * rSon
+#-----------------------------------------------------------------------------*
+class @gtlMultiplyExpression : @gtlBinaryExpression {}
+
+override getter @gtlMultiplyExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] mulOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlDivideExpression : binary divide. Does a lSon / rSon
+#-----------------------------------------------------------------------------*
+class @gtlDivideExpression : @gtlBinaryExpression {}
+
+override getter @gtlDivideExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] divOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlModulusExpression : binary modulus. Does a lSon mod (or %) rSon
+#-----------------------------------------------------------------------------*
+class @gtlModulusExpression : @gtlBinaryExpression {}
+
+override getter @gtlModulusExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] modOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlAndExpression : binary and. Does a lSon & rSon
+#-----------------------------------------------------------------------------*
+class @gtlAndExpression : @gtlBinaryExpression {}
+
+override getter @gtlAndExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] andOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlOrExpression : binary or. Does a lSon | rSon
+#-----------------------------------------------------------------------------*
+class @gtlOrExpression : @gtlBinaryExpression {}
+
+override getter @gtlOrExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] orOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlXorExpression : binary or. Does a lSon ^ rSon
+#-----------------------------------------------------------------------------*
+class @gtlXorExpression : @gtlBinaryExpression {}
+
+override getter @gtlXorExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] xorOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlShiftLeftExpression : Does a lSon << rSon
+#-----------------------------------------------------------------------------*
+class @gtlShiftLeftExpression : @gtlBinaryExpression {}
+
+override getter @gtlShiftLeftExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] slOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlShiftRightExpression : Does a lSon >> rSon
+#-----------------------------------------------------------------------------*
+class @gtlShiftRightExpression : @gtlBinaryExpression {}
+
+override getter @gtlShiftRightExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] srOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlNotEqualExpression : Does a lSon != rSon
+#-----------------------------------------------------------------------------*
+class @gtlNotEqualExpression : @gtlBinaryExpression {}
+
+override getter @gtlNotEqualExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] neqOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlEqualExpression : Does a lSon == rSon
+#-----------------------------------------------------------------------------*
+class @gtlEqualExpression : @gtlBinaryExpression {}
+
+override getter @gtlEqualExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] eqOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlLowerThanExpression : Does a lSon < rSon
+#-----------------------------------------------------------------------------*
+class @gtlLowerThanExpression : @gtlBinaryExpression {}
+
+override getter @gtlLowerThanExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] ltOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlLowerOrEqualExpression : Does a lSon < rSon
+#-----------------------------------------------------------------------------*
+class @gtlLowerOrEqualExpression : @gtlBinaryExpression {}
+
+override getter @gtlLowerOrEqualExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] leOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlGreaterThanExpression : Does a lSon < rSon
+#-----------------------------------------------------------------------------*
+class @gtlGreaterThanExpression : @gtlBinaryExpression {}
+
+override getter @gtlGreaterThanExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] gtOp ![rSon eval !gtlVariableMap]]
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlGreaterOrEqualExpression : Does a lSon < rSon
+#-----------------------------------------------------------------------------*
+class @gtlGreaterOrEqualExpression : @gtlBinaryExpression {}
+
+override getter @gtlGreaterOrEqualExpression eval
+  ?let @gtlVarMap gtlVariableMap
+  -> @gtlData result
+{
+  result = [[lSon eval !gtlVariableMap] geOp ![rSon eval !gtlVariableMap]]
+}
+

@@ -1,0 +1,837 @@
+#-----------------------------------------------------------------------------*
+#
+#  @file gtl_instructions.galgas
+#
+#  @section desc File description
+#
+#  Instructions of GTL.
+#
+#  @section copyright Copyright
+#
+#  Goil OIL compiler, part of Trampoline RTOS
+#
+#  Trampoline is copyright (c) CNRS, University of Nantes,
+#  Ecole Centrale de Nantes
+#  Trampoline is protected by the French intellectual property law.
+#
+#  This software is distributed under the GNU Public Licence V2.
+#  Check the LICENSE file in the root directory of Trampoline
+#
+#  $Date$
+#  $Rev$
+#  $Author$
+#  $URL$
+#
+#-----------------------------------------------------------------------------*
+
+#=============================================================================*
+# abstract class for a template instruction
+#-----------------------------------------------------------------------------*
+abstract class @gtlInstruction {
+  @location where
+}
+
+abstract method @gtlInstruction execute
+  ?@gtlContext     context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        outputString
+
+#=============================================================================*
+# instruction list
+#-----------------------------------------------------------------------------*
+list @gtlInstructionList {
+  @gtlInstruction instruction
+}
+
+method @gtlInstructionList execute
+  ?let @gtlContext context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        outputString
+{
+  for () in self do
+    [instruction execute !context !?gtlVariableMap !?outputString]
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# let instructions
+#-----------------------------------------------------------------------------*
+abstract class @gtlAssignInstruction : @gtlInstruction {
+  @gtlVarPath    lValue
+  @gtlExpression rValue
+}
+
+#-----------------------------------------------------------------------------*
+# = assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetInstruction           : @gtlAssignInstruction {}
+
+override method @gtlLetInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  [lValue setMe !?gtlVariableMap ![rValue eval !gtlVariableMap]]
+}
+  
+#-----------------------------------------------------------------------------*
+# += assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetAddInstruction        : @gtlAssignInstruction {}
+
+override method @gtlLetAddInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  [lValue setMe
+    !?gtlVariableMap
+    ![[lValue get !gtlVariableMap] addOp ![rValue eval !gtlVariableMap]]
+  ]
+}
+  
+#-----------------------------------------------------------------------------*
+# -= assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetSubstractInstruction  : @gtlAssignInstruction {}
+
+override method @gtlLetSubstractInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  [lValue setMe
+    !?gtlVariableMap
+    ![[lValue get !gtlVariableMap] subOp ![rValue eval !gtlVariableMap]]
+  ]
+}
+
+#-----------------------------------------------------------------------------*
+# *= assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetMultiplyInstruction   : @gtlAssignInstruction {}   
+
+override method @gtlLetMultiplyInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  [lValue setMe
+    !?gtlVariableMap
+    ![[lValue get !gtlVariableMap] mulOp ![rValue eval !gtlVariableMap]]
+  ]
+}
+
+#-----------------------------------------------------------------------------*
+# /= assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetDivideInstruction     : @gtlAssignInstruction {}   
+
+override method @gtlLetDivideInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  [lValue setMe
+    !?gtlVariableMap
+    ![[lValue get !gtlVariableMap] divOp ![rValue eval !gtlVariableMap]]
+  ]
+}
+
+#-----------------------------------------------------------------------------*
+# %= assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetModuloInstruction     : @gtlAssignInstruction {}   
+
+override method @gtlLetModuloInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  [lValue setMe
+    !?gtlVariableMap
+    ![[lValue get !gtlVariableMap] divOp ![rValue eval !gtlVariableMap]]
+  ]
+}
+
+#-----------------------------------------------------------------------------*
+# <<= assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetShiftLeftInstruction  : @gtlAssignInstruction {}   
+
+override method @gtlLetShiftLeftInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  [lValue setMe
+    !?gtlVariableMap
+    ![[lValue get !gtlVariableMap] slOp ![rValue eval !gtlVariableMap]]
+  ]
+}
+
+#-----------------------------------------------------------------------------*
+# >>= assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetShiftRightInstruction : @gtlAssignInstruction {}   
+
+override method @gtlLetShiftRightInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  [lValue setMe
+    !?gtlVariableMap
+    ![[lValue get !gtlVariableMap] srOp ![rValue eval !gtlVariableMap]]
+  ]
+}
+
+#-----------------------------------------------------------------------------*
+# &= assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetAndInstruction        : @gtlAssignInstruction {}   
+
+override method @gtlLetAndInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  [lValue setMe
+    !?gtlVariableMap
+    ![[lValue get !gtlVariableMap] andOp ![rValue eval !gtlVariableMap]]
+  ]
+}
+
+#-----------------------------------------------------------------------------*
+# |= assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetOrInstruction         : @gtlAssignInstruction {}   
+
+override method @gtlLetOrInstruction execute 
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{  
+  [lValue setMe
+    !?gtlVariableMap
+    ![[lValue get !gtlVariableMap] orOp ![rValue eval !gtlVariableMap]]
+  ]
+}
+
+#-----------------------------------------------------------------------------*
+# ^= assignment
+#-----------------------------------------------------------------------------*
+class @gtlLetXorInstruction        : @gtlAssignInstruction {}   
+
+override method @gtlLetXorInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  [lValue setMe
+    !?gtlVariableMap
+    ![[lValue get !gtlVariableMap] xorOp ![rValue eval !gtlVariableMap]]
+  ]
+}
+
+#-----------------------------------------------------------------------------*
+# %...% : template string instruction
+#-----------------------------------------------------------------------------*
+class @gtlTemplateStringInstruction : @gtlInstruction {
+  @string value
+}
+
+override method @gtlTemplateStringInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap unused gtlVariableMap
+  ?!@string           outputString
+{
+  outputString += value
+}
+
+#-----------------------------------------------------------------------------*
+# ! : emit instruction
+#-----------------------------------------------------------------------------*
+class @gtlEmitInstruction : @gtlInstruction {
+  @gtlExpression rValue
+}
+
+override method @gtlEmitInstruction execute
+  ?@gtlContext unused context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string           outputString
+{ 
+  outputString += [[rValue eval !gtlVariableMap] string]
+}
+
+#-----------------------------------------------------------------------------*
+# write to : write the result of instruction execution to a file
+#-----------------------------------------------------------------------------*
+class @gtlWriteToInstruction : @gtlInstruction {
+  @gtlExpression      fileNameExpression
+  @bool               isExecutable
+  @gtlInstructionList instructions
+}
+
+override method @gtlWriteToInstruction execute
+  ?@gtlContext        context
+  ?!@gtlVarMap        gtlVariableMap
+  ?!@string    unused outputString
+{ 
+  @string fullFileName = [[fileNameExpression eval !gtlVariableMap] string]
+  @gtlString fileName = .new{!where ![fullFileName lastPathComponent]}
+  @gtlString filePath = .new{!where ![fullFileName nativePathWithUnixPath]}
+  @string result = ""
+  @gtlVarMap varsCopy = gtlVariableMap
+  # remove the current FILENAME and FILEPATH variable
+  # and replace them with 
+  [!?varsCopy replaceOrCreateAtLevel
+    !@lstring.new{!"FILENAME" !where}
+    !fileName
+    !0
+  ]
+  [!?varsCopy replaceOrCreateAtLevel
+    !@lstring.new{!"FILEPATH" !where}
+    !filePath
+    !0
+  ]
+  if (@uint.errorCount == 0) then
+    [instructions execute !context !?varsCopy !?result]
+    if (@uint.errorCount == 0) then
+      if isExecutable then
+        @string directory = [fullFileName stringByDeletingLastPathComponent]
+        if directory != "" then [directory makeDirectory] end
+        [result writeToExecutableFile !fullFileName]
+      else
+        [result makeDirectoryAndWriteToFile !fullFileName]
+      end
+    end
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : invoke a template
+#-----------------------------------------------------------------------------*
+class @gtlTemplateInstruction : @gtlInstruction {
+  @lstring            prefix
+  @gtlExpression      fileName
+  @bool               ifExists
+  @gtlInstructionList instructionsIfNotFound
+}
+
+override method @gtlTemplateInstruction execute
+  ?@gtlContext     context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        outputString
+{
+  if [prefix string] != "" then
+    [!?context setPrefix ![prefix string]]
+  end
+  @lstring templateFileName =
+    [[fileName eval !gtlVariableMap] as @gtlString lstring]
+  gtlInvocation(
+    !templateFileName
+    !context
+    !ifExists == false
+    !false
+    !gtlVariableMap
+    !?outputString
+    ?let @bool found
+  )
+  if not found & ifExists then
+    @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
+    [instructionsIfNotFound execute !context !?localMap !?outputString]
+    gtlVariableMap = [localMap overriddenMap]
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : set the destination variable with a number of spaces
+# equals to the current column number in the output string
+#-----------------------------------------------------------------------------*
+class @gtlGetColumnInstruction : @gtlInstruction {
+  @gtlVarPath    destVariable
+}
+
+override method @gtlGetColumnInstruction execute
+  ?@gtlContext     unused context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        outputString
+{
+  @string value = ""
+  @bool searchEndOfLine = true
+  @uint index = [outputString length]
+  loop ([outputString length]) while (index > 0) & searchEndOfLine do
+    searchEndOfLine = [outputString characterAtIndex !index - 1] != '\n'
+    index--
+    if searchEndOfLine then
+      value += " "
+    end
+  end
+  [destVariable setMe !?gtlVariableMap !@gtlString.new{!where !value}]
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : if statement
+#-----------------------------------------------------------------------------*
+list @gtlThenElsifStatementList
+{
+  @gtlExpression      condition
+  @gtlInstructionList instructionList
+}
+
+class @gtlIfStatementInstruction : @gtlInstruction {
+  @gtlThenElsifStatementList thenElsifList
+  @gtlInstructionList        elseList
+}
+
+override method @gtlIfStatementInstruction execute
+  ?@gtlContext     context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        outputString
+{
+  @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
+  
+  @bool noConditionMatching = true
+  for () in thenElsifList while noConditionMatching do
+    @gtlData dataCondition = [condition eval !localMap]
+    @bool boolCondition = [dataCondition as @gtlBool value]
+      error dataCondition : "bool expected"
+    if boolCondition then
+      [instructionList execute !context !?localMap !?outputString]
+      noConditionMatching = false
+    end
+  end
+  if noConditionMatching then
+    [elseList execute !context !?localMap !?outputString]
+  end
+
+  gtlVariableMap = [localMap overriddenMap]
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : foreach statement
+#-----------------------------------------------------------------------------*
+class @gtlForeachStatementInstruction : @gtlInstruction {
+  @lstring            identifier
+  @gtlExpression      iterable
+  @gtlInstructionList beforeList
+  @gtlInstructionList betweenList
+  @gtlInstructionList afterList
+  @gtlInstructionList doList
+}
+
+method @gtlForeachStatementInstruction iterateOnMap
+  ?@gtlContext     context
+  ?!@gtlVarMap     variableMap
+  ?!@string        outputString
+  ?let @gtlMap     iterableMap
+{
+  @lstring keyName = .new{!"KEY" !where}
+  @lstring indexName = .new{!"INDEX" !where}
+  for () in [iterableMap value]
+  before
+    [beforeList execute !context !?variableMap !?outputString]
+  do (index)
+    [!?variableMap replaceOrCreate !identifier !value]
+    [!?variableMap replaceOrCreate
+      !keyName !@gtlString.new{!where ![lkey string]}]
+    [!?variableMap replaceOrCreate
+      !indexName !@gtlInt.new{!where ![index sint64]}]
+    [doList execute !context !?variableMap !?outputString]
+  between
+    [betweenList execute !context !?variableMap !?outputString]
+  after
+    [afterList execute !context !?variableMap !?outputString]
+  end
+}
+
+method @gtlForeachStatementInstruction iterateOnList
+  ?@gtlContext     context
+  ?!@gtlVarMap     variableMap
+  ?!@string        outputString
+  ?let @gtlList    iterableList
+{
+  @lstring indexName = .new{!"INDEX" !where}
+  for () in [iterableList value]
+  before
+    [beforeList execute !context !?variableMap !?outputString]
+  do (index)
+    [!?variableMap replaceOrCreate !identifier !value]
+    [!?variableMap replaceOrCreate
+      !indexName !@gtlInt.new{!where ![index sint64]}]
+    [doList execute !context !?variableMap !?outputString]
+  between
+    [betweenList execute !context !?variableMap !?outputString]
+  after
+    [afterList execute !context !?variableMap !?outputString]
+  end
+}
+
+override method @gtlForeachStatementInstruction execute
+  ?@gtlContext     context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        outputString
+{
+  @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
+  @gtlData iterableData = [iterable eval !localMap]
+  cast iterableData
+  case == @gtlMap iterableMap:
+    [self iterateOnMap !context !?localMap !?outputString !iterableMap]
+  case == @gtlList iterableList:
+    [self iterateOnList !context !?localMap !?outputString !iterableList]
+  else
+    error iterable : "Map or List expected"
+  end 
+  gtlVariableMap = [localMap overriddenMap]
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : for statement
+#-----------------------------------------------------------------------------*
+class @gtlForStatementInstruction : @gtlInstruction {
+  @lstring            identifier
+  @gtlExpressionList  iterable
+  @gtlInstructionList betweenList
+  @gtlInstructionList doList
+}
+
+override method @gtlForStatementInstruction execute
+  ?@gtlContext     context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        outputString
+{
+  @lstring indexName = .new{!"INDEX" !where}
+  @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
+  for () in iterable
+  do (index)
+    @gtlData value = [expression eval !localMap]
+    [!?localMap replaceOrCreate !identifier !value]
+    [!?localMap replaceOrCreate !indexName !@gtlInt.new{!where ![index bigint]}]
+    [doList execute !context !?localMap !?outputString]
+  between
+    [betweenList execute !context !?localMap !?outputString]
+  end
+  gtlVariableMap = [localMap overriddenMap]
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : loop statement
+#-----------------------------------------------------------------------------*
+class @gtlLoopStatementInstruction : @gtlInstruction {
+  @lstring            identifier
+  @gtlExpression      start
+  @gtlExpression      stop
+  @gtlExpression      step
+  @sint64             upDown
+  @gtlInstructionList beforeList
+  @gtlInstructionList betweenList
+  @gtlInstructionList afterList
+  @gtlInstructionList doList
+}
+
+override method @gtlLoopStatementInstruction execute
+  ?@gtlContext     context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        outputString
+{
+  @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
+  @gtlData startData = [start eval !localMap]
+  @gtlData stopData  = [stop  eval !localMap]
+  @gtlData stepData  = [step  eval !localMap]
+  @bigint startVal = [startData as @gtlInt value]
+    error start : "int expected" : startVal
+  @bigint stopVal  = [stopData  as @gtlInt value]
+    error stop : "int expected" : stopVal
+  @bigint stepVal  = [stepData  as @gtlInt value] * upDown
+    error step : "int expected" : stopVal
+  @bigint direction = 1_G
+  if stepVal < 0_G then direction = -1_G end
+  if (stopVal - startVal) * direction >= 0_G then
+    [beforeList execute !context !?localMap !?outputString]
+    @uint count = [(stopVal - startVal) * direction + 1LS uint]
+    loop (count)
+      [!?localMap replaceOrCreate
+        !identifier !@gtlInt.new{![identifier location] !startVal}]
+      [doList execute !context !?localMap !?outputString]
+      startVal = startVal + stepVal
+    while (stopVal - startVal) * direction >= 0_G do
+      [betweenList execute !context !?localMap !?outputString]
+    end
+    [afterList execute !context !?localMap !?outputString]
+  end
+  gtlVariableMap = [localMap overriddenMap]
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : repeat statement
+#-----------------------------------------------------------------------------*
+class @gtlRepeatStatementInstruction : @gtlInstruction {
+  @gtlExpression      condition
+  @gtlInstructionList continueList
+  @gtlInstructionList doList
+}
+
+override method @gtlRepeatStatementInstruction execute
+  ?@gtlContext     context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        outputString
+{
+  @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
+  @bool boolCondition = false
+  loop (@uint.max{})
+    [continueList execute !context !?localMap !?outputString]
+    @bool boolCondition = [[condition eval !localMap] as @gtlBool value] 
+      error condition : "bool expected"
+  while boolCondition do
+    [doList execute !context !?localMap !?outputString]
+  end
+  gtlVariableMap = [localMap overriddenMap]
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : error statement
+#-----------------------------------------------------------------------------*
+class @gtlErrorStatementInstruction : @gtlInstruction {
+  @gtlVarPath    identifier
+  @bool          hereInstead
+  @gtlExpression errorMessage
+}
+
+override method @gtlErrorStatementInstruction execute
+  ?@gtlContext     unused context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        unused outputString
+{
+  @location errorLocation
+  if hereInstead then 
+    errorLocation = where
+  else
+    errorLocation = [[identifier get !gtlVariableMap] where]
+  end
+  @string errorMessageString =
+    [[errorMessage eval !gtlVariableMap] as @gtlString value]
+      error errorMessage : "string expected" : errorMessageString
+  error errorLocation : errorMessageString
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : warning statement
+#-----------------------------------------------------------------------------*
+class @gtlWarningStatementInstruction : @gtlInstruction {
+  @gtlVarPath    identifier
+  @bool          hereInstead
+  @gtlExpression warningMessage
+}
+
+override method @gtlWarningStatementInstruction execute
+  ?@gtlContext     unused context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        unused outputString
+{
+  @location warningLocation
+  if hereInstead then 
+    warningLocation = where
+  else
+    warningLocation = [[identifier get !gtlVariableMap] where]
+  end
+  @string warningMessageString = 
+    [[warningMessage eval !gtlVariableMap] as @gtlString value]
+      error warningMessage : "string expected" : warningMessageString
+  error warningLocation : warningMessageString
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : print statement
+#-----------------------------------------------------------------------------*
+class @gtlPrintStatementInstruction : @gtlInstruction {
+  @bool          carriageReturn
+  @gtlExpression messageToPrint
+}
+
+override method @gtlPrintStatementInstruction execute
+  ?@gtlContext     unused context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        unused outputString
+{
+  @string messageToPrintString = [[messageToPrint eval !gtlVariableMap] string]
+  message messageToPrintString
+  if carriageReturn then message "\n" end
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : display statement
+#-----------------------------------------------------------------------------*
+class @gtlDisplayStatementInstruction : @gtlInstruction {
+  @gtlVarPath variablePath
+}
+
+override method @gtlDisplayStatementInstruction execute
+  ?@gtlContext     unused context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        unused outputString
+{
+  @gtlData variable = [variablePath get !gtlVariableMap]
+  message [variable desc !0]
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : sort list of struct of list of scalars statement
+#-----------------------------------------------------------------------------*
+list @sortingKeyList {
+  @lstring key
+  @lsint   order
+}
+
+abstract class @gtlAbstractSortInstruction : @gtlInstruction {
+  @gtlVarPath     variablePath
+}
+
+abstract getter @gtlAbstractSortInstruction compare
+  ?let @gtlData    s1
+  ?let @gtlData    s2
+  ->@sint          result
+
+method @gtlAbstractSortInstruction swap
+  ?!@list    aList
+  ?let @uint index1
+  ?let @uint index2
+{
+  @gtlData temp = [aList valueAtIndex !index1]
+  [!?aList setValueAtIndex ![aList valueAtIndex !index2] !index1]
+  [!?aList setValueAtIndex !temp !index2]
+}
+
+method @gtlAbstractSortInstruction partition
+  ?!@list    aList
+  ?let @uint min
+  ?let @uint max
+  ?!@uint    pivotIndex
+{
+  @gtlData pivot = [aList valueAtIndex !pivotIndex]
+  [self swap !?aList !pivotIndex !max]
+  @uint storeIndex = min
+  @uint i = min
+  loop (max - min)
+  while i < max do
+    if [self compare ![aList valueAtIndex !i] !pivot] == -1s then
+      [self swap !?aList !i !storeIndex]
+      storeIndex++
+    end
+    i++
+  end
+  [self swap !?aList !storeIndex !max]
+  pivotIndex = storeIndex
+}
+
+method @gtlAbstractSortInstruction sort
+  ?!@list    aList
+  ?let @uint min
+  ?let @uint max
+{
+  if min < max then
+    @uint pivotIndex = (max + min) / 2
+    [self partition !?aList !min !max !?pivotIndex]
+    [self sort !?aList !min !pivotIndex]
+    [self sort !?aList !pivotIndex+1 !max]
+  end
+}
+
+override method @gtlAbstractSortInstruction execute
+  ?@gtlContext     unused context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        unused outputString
+{
+  @gtlData variable = [variablePath get !gtlVariableMap]
+  cast variable
+  case == @gtlList variableList:
+    @list listToSort = [variableList value]
+    @uint length = [listToSort length]    
+    if length > 0 then
+      [self sort !?listToSort !0 !length-1]
+    end
+  else
+    [variablePath last ?@gtlVarItem lastComponent]
+    error [lastComponent field] : "list expected"
+  end
+  [variablePath setMe !?gtlVariableMap !variable]
+}
+
+#-----------------------------------------------------------------------------*
+class @gtlSortStatementStructInstruction : @gtlAbstractSortInstruction {
+  @sortingKeyList sortingKey
+}
+
+override getter @gtlSortStatementStructInstruction compare
+  ?let @gtlData    s1
+  ?let @gtlData    s2
+  ->@sint          result
+{
+  result = [self compareElements !s1 !s2 !sortingKey]
+}
+
+getter @gtlSortStatementStructInstruction compareElements
+  ?let @gtlData    s1
+  ?let @gtlData    s2
+  ?@sortingKeyList keyList
+  ->@sint          result
+{
+  if [keyList length] > 0 then
+    @gtlStruct s1Struct = s1 as @gtlStruct
+      error s1 : "struct expected" : s1Struct
+    @gtlStruct s2Struct = s2 as @gtlStruct
+      error s2 : "struct expected" : s2Struct
+    [!?keyList popFirst ?@lstring field ?@lsint order]
+    [[s1Struct value] get !field ?@gtlData s1Field]
+    [[s2Struct value] get !field ?@gtlData s2Field]
+    if [s1Field ltOp !s2Field] then
+      result = -1S * order
+    else
+      if [s1Field gtOp !s2Field] then
+        result = 1S * order
+      else
+        result = [self compareElements !s1 !s2 !keyList]
+      end
+    end
+  else
+    result = 0S
+  end
+}
+
+#-----------------------------------------------------------------------------*
+class @gtlSortStatementInstruction : @gtlAbstractSortInstruction {
+  @lsint order
+}
+
+override getter @gtlSortStatementInstruction compare
+  ?let @gtlData    s1
+  ?let @gtlData    s2
+  ->@sint          result
+{
+  if [s1 ltOp !s2] then
+    result = -1S * order
+  else
+    if [s1 gtOp !s2] then
+      result = 1S * order
+    else
+      result = 0S
+    end
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : tab
+#-----------------------------------------------------------------------------*
+class @gtlTabStatementInstruction : @gtlInstruction {
+  @gtlExpression tabValue
+}
+
+override method @gtlTabStatementInstruction execute
+  ?@gtlContext     unused context
+  ?!@gtlVarMap     gtlVariableMap
+  ?!@string        outputString
+{
+  @gtlData tabValueData = [tabValue eval !gtlVariableMap]
+  @gtlInt tabValueInt = tabValueData as @gtlInt
+    error tabValueData : "int expected" : tabValueInt
+}

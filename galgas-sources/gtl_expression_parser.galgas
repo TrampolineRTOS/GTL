@@ -1,0 +1,492 @@
+#---------------------------------------------------------------------------*
+#
+#  @file gtl_expression_parser.galgas
+#
+#  @section desc File description
+#
+#  Expressions parser for GTL.
+#
+#  @section copyright Copyright
+#
+#  Goil OIL compiler, part of Trampoline RTOS
+#
+#  Trampoline is copyright (c) CNRS, University of Nantes,
+#  Ecole Centrale de Nantes
+#  Trampoline is protected by the French intellectual property law.
+#
+#  This software is distributed under the GNU Public Licence V2.
+#  Check the LICENSE file in the root directory of Trampoline
+#
+#  $Date$
+#  $Rev$
+#  $Author$
+#  $URL$
+#
+#---------------------------------------------------------------------------*
+
+syntax gtl_expression_parser (gtl_scanner) {
+
+#------------------------------------------------------------------------------*
+#   E X P R E S S I O N                                                        *
+#------------------------------------------------------------------------------*
+
+rule <gtl_expression>
+  !@gtlExpression expression
+{
+  <gtl_relation_term> ?expression
+  repeat
+  while
+    $|$ @location opLocation = .here
+    <gtl_relation_term> ?@gtlExpression rightSon
+    expression = @gtlOrExpression.new { !opLocation !expression !rightSon }
+  while
+    $^$ @location opLocation = .here
+    <gtl_relation_term> ?@gtlExpression rightSon
+    expression = @gtlXorExpression.new { !opLocation !expression !rightSon }
+  end
+}
+
+#------------------------------------------------------------------------------*
+#   R E L A T I O N    T E R M                                                 *
+#------------------------------------------------------------------------------*
+
+rule <gtl_relation_term>
+  !@gtlExpression expression
+{
+  <gtl_relation_factor> ?expression
+  repeat
+  while
+    $&$ @location opLocation = .here
+    <gtl_relation_factor> ?@gtlExpression rightSon
+    expression = @gtlAndExpression.new { !opLocation !expression !rightSon }
+  end
+}
+
+#------------------------------------------------------------------------------*
+#   R E L A T I O N    F A C T O R                                             *
+#------------------------------------------------------------------------------*
+
+rule <gtl_relation_factor>
+  !@gtlExpression expression
+{
+  <gtl_simple_expression> ?expression
+  select
+  or
+    $==$ @location opLocation = .here
+    <gtl_simple_expression> ?@gtlExpression rightSon
+    expression = @gtlEqualExpression.new {
+      !opLocation !expression !rightSon
+    }
+  or
+    $!=$ @location opLocation = .here
+    <gtl_simple_expression> ?@gtlExpression rightSon
+    expression = @gtlNotEqualExpression.new {
+      !opLocation !expression !rightSon
+    }
+  or
+    $<=$ @location opLocation = .here
+    <gtl_simple_expression> ?@gtlExpression rightSon
+    expression = @gtlLowerOrEqualExpression.new {
+      !opLocation !expression !rightSon
+    }
+  or
+    $>=$ @location opLocation = .here
+    <gtl_simple_expression> ?@gtlExpression rightSon
+    expression = @gtlGreaterOrEqualExpression.new {
+      !opLocation !expression !rightSon
+    }
+  or
+    $>$ @location opLocation = .here
+    <gtl_simple_expression> ?@gtlExpression rightSon
+    expression = @gtlGreaterThanExpression.new {
+      !opLocation !expression !rightSon
+    }
+  or
+    $<$ @location opLocation = .here
+    <gtl_simple_expression> ?@gtlExpression rightSon
+    expression = @gtlLowerThanExpression.new {
+      !opLocation !expression !rightSon
+    }
+  end
+}
+
+#------------------------------------------------------------------------------*
+#   S I M P L E    E X P R E S S I O N                                         *
+#------------------------------------------------------------------------------*
+
+rule <gtl_simple_expression>
+  !@gtlExpression expression
+{
+  <gtl_term> ?expression
+  repeat
+  while 
+    $<<$ @location opLocation = .here
+    <gtl_term> ?@gtlExpression rightSon
+    expression = @gtlShiftLeftExpression.new {
+      !opLocation !expression !rightSon
+    }
+  while 
+    $>>$ @location opLocation = .here
+    <gtl_term> ?@gtlExpression rightSon
+    expression = @gtlShiftRightExpression.new {
+      !opLocation !expression !rightSon
+    }
+  while 
+    $+$ @location opLocation = .here
+    <gtl_term> ?@gtlExpression rightSon
+    expression = @gtlAddExpression.new {
+      !opLocation !expression !rightSon
+    }
+  while 
+    $.$ @location opLocation = .here
+    <gtl_term> ?@gtlExpression rightSon
+    expression = @gtlAddExpression.new {
+      !opLocation !expression !rightSon
+    }
+  while 
+    $-$ @location opLocation = .here
+    <gtl_term> ?@gtlExpression rightSon
+    expression = @gtlSubstractExpression.new {
+      !opLocation !expression !rightSon
+    }
+  end
+}
+
+#------------------------------------------------------------------------------*
+#   T E R M                                                                    *
+#------------------------------------------------------------------------------*
+
+rule <gtl_term>
+  !@gtlExpression expression
+{
+  <gtl_factor> ?expression
+  repeat
+  while 
+    $*$ @location opLocation = .here
+    <gtl_factor> ?@gtlExpression rightSon
+    expression = @gtlMultiplyExpression.new {
+      !opLocation !expression !rightSon
+    }
+  while 
+    $/$ @location opLocation = .here
+    <gtl_factor> ?@gtlExpression rightSon
+    expression = @gtlDivideExpression.new {
+      !opLocation !expression !rightSon
+    }
+  while 
+    $mod$ @location opLocation = .here
+    <gtl_factor> ?@gtlExpression rightSon
+    expression = @gtlModulusExpression.new {
+      !opLocation !expression !rightSon
+    }
+  end
+}
+
+#------------------------------------------------------------------------------*
+#   F A C T O R    :    ( EXPRESSION )                                         *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $($ @location opLocation = .here
+  <gtl_expression> ?@gtlExpression factorExpression
+  expression = @gtlParenthesizedExpression.new {
+    !opLocation
+    !factorExpression
+  }
+  $)$
+}
+
+#------------------------------------------------------------------------------*
+#   F A C T O R    :    not FACTOR                                             *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $not$ @location opLocation = .here
+  <gtl_factor> ?@gtlExpression notExpression
+  expression = @gtlNotExpression.new { !opLocation !notExpression }
+}
+
+#------------------------------------------------------------------------------*
+#   F A C T O R    :    ~ FACTOR                                               *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $~$ @location opLocation = .here
+  <gtl_factor> ?@gtlExpression notExpression
+  expression = @gtlNotExpression.new { !opLocation !notExpression }
+}
+
+#------------------------------------------------------------------------------*
+#   F A C T O R    :    - FACTOR                                               *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $-$ @location opLocation = .here
+  <gtl_factor> ?@gtlExpression minusExpression
+  expression = @gtlMinusExpression.new { !opLocation !minusExpression }
+}
+
+#------------------------------------------------------------------------------*
+#   F A C T O R    :    + FACTOR                                               *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $+$ @location opLocation = .here
+  <gtl_factor> ?@gtlExpression plusExpression
+  expression = @gtlPlusExpression.new { !opLocation !plusExpression }
+}
+
+#------------------------------------------------------------------------------*
+#   F A C T O R    :    true                                                   *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $yes$ @location opLocation = .here
+  expression = @gtlTerminal.new{
+    !opLocation !@gtlBool.new { !opLocation !true }
+  }
+}
+
+#------------------------------------------------------------------------------*
+#   F A C T O R    :    false                                                  *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $no$
+  expression = @gtlTerminal.new{
+    !@location.here !@gtlBool.new { !@location.here !false }
+  }
+}
+
+#------------------------------------------------------------------------------*
+#   F A C T O R    :    an integer value                                       *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $signed_literal_integer_bigint$ ?let @lbigint literalInteger
+  expression = @gtlTerminal.new{
+    !@location.here !@gtlInt.new { !@location.here ![literalInteger bigint] }
+  }
+}
+
+#------------------------------------------------------------------------------*
+#   F A C T O R    :    a literal string value                                 *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $string$ ?let @lstring literalString
+  expression = @gtlTerminal.new{
+    !@location.here !@gtlString.new { !@location.here ![literalString string] }
+  }
+}
+
+#------------------------------------------------------------------------------*
+#                         F A C T O R                                          *
+#   template method call :   [expression method : ... ]                        *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $[$
+  <gtl_expression>
+  $identifier$ ?let @lstring templateMethodName
+  select
+  or
+    $:$
+    repeat
+      <gtl_expression>
+    while
+      $,$
+    end
+  end
+  $]$
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  <gtl_variable> ?let @gtlVarPath path
+  select
+  or
+    $($
+    repeat
+      <gtl_expression>
+    while
+      $,$
+    end
+    $)$
+  end
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $exists$ <gtl_variable> ?let @gtlVarPath path
+  select
+    $default$
+    $($
+    <gtl_expression>
+    $)$
+  or
+  end
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $typeof$ <gtl_variable> ?let @gtlVarPath path
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $true$
+}
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $false$
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $@$ $identifier$ ?let @lstring enumValue
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $emptylist$
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $emptymap$
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $mapof$
+  <gtl_expression>
+  select
+    $by$
+    $identifier$ ?var @lstring key
+  or 
+    $end$
+  end
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $listof$
+  <gtl_variable> ?let @gtlVarPath path
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_list_item>
+  !@gtlExpression expression
+{
+  $[$
+  repeat
+    $identifier$ ?let @lstring fieldName
+    $:$
+    <gtl_expression>
+  while $,$
+  end
+  $]$
+}
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $list$ $[$
+  select
+    repeat
+      <gtl_list_item>
+    while $,$
+    end
+  or
+  end
+  $]$
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_variable>
+  !@gtlVarPath path
+{
+  path = .emptyList
+  repeat
+    $identifier$ ?var @lstring variableName
+    select
+      $[$
+      <gtl_expression> ?let @gtlExpression expression
+      $]$
+      path += !@gtlVarItemCollection.new { !variableName !expression }
+    or
+      path += !@gtlVarItemField.new { !variableName }
+    end
+  while
+    $::$
+  end
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_variable_or_here>
+  !@gtlVarPath path
+  !@bool hereInstead
+{
+  select
+    $here$ path = .emptyList
+    hereInstead = true
+  or
+    <gtl_variable> ?path
+    hereInstead = false
+  end
+}
+
+}
