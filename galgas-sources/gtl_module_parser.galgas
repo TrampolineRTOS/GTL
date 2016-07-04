@@ -43,7 +43,8 @@ rule <gtl_module_start_symbol> !@gtlModule module !@lstring moduleName
 #-----------------------------------------------------------------------------*
 rule <gtl_procedure> !@gtlProcedure procedure
 {
-  $proc$ $identifier$ ?@lstring procedureName
+  $proc$
+  $identifier$ ?let @lstring procedureName
   @location where = .here
   <gtl_argument_list> ?@gtlArgumentList arguments
   <gtl_instruction_list> ?@gtlInstructionList instructionList
@@ -57,11 +58,11 @@ rule <gtl_procedure> !@gtlProcedure procedure
 #-----------------------------------------------------------------------------*
 rule <gtl_function> !@gtlFunction function
 {
-  $func$  $identifier$ ?@lstring functionName
+  $func$  $identifier$ ?let @lstring functionName
   @location where = .here
   <gtl_argument_list> ?@gtlArgumentList arguments
-  $:$ $identifier$ ?@lstring returnVariable
-  <gtl_instruction_list> ?@gtlInstructionList instructionList
+  $:$ $identifier$ ?let @lstring returnVariable
+  <gtl_instruction_list> ?let @gtlInstructionList instructionList
   $end$ $func$
   
   function = .new {

@@ -300,25 +300,33 @@ rule <gtl_factor>
 
 #------------------------------------------------------------------------------*
 #                         F A C T O R                                          *
-#   template method call :   [expression method : ... ]                        *
+#   template getter call :   [expression getter : ... ]                        *
 #------------------------------------------------------------------------------*
 
 rule <gtl_factor>
   !@gtlExpression expression
 {
   $[$
-  <gtl_expression>
-  $identifier$ ?let @lstring templateMethodName
+  <gtl_expression> ?@gtlExpression target
+  $identifier$ ?let @lstring getterName
+  @gtlExpressionList argumentList = .emptyList
   select
   or
     $:$
     repeat
-      <gtl_expression>
+      <gtl_expression> ?@gtlExpression argument
+      argumentList += !argument
     while
       $,$
     end
   end
   $]$
+  expression = @gtlGetterCallExpression.new {
+    !@location.here
+    !target
+    !getterName
+    !argumentList
+  }
 }
 
 #------------------------------------------------------------------------------*
@@ -328,14 +336,26 @@ rule <gtl_factor>
 {
   <gtl_variable> ?let @gtlVarPath path
   select
+    expression = @gtlVarRef.new { !@location.here !path }
   or
+    if [path length] > 1 then
+      error @location.here : "illegal function name"
+    end
+    @gtlExpressionList functionArguments = .emptyList
     $($
     repeat
-      <gtl_expression>
+      <gtl_expression> ?@gtlExpression expression
+      functionArguments += !expression
     while
       $,$
     end
     $)$
+    @lstring functionName = [[path itemAtIndex !0] field]
+    expression = @gtlFunctionCallExpression.new {
+      !@location.here
+      !functionName
+      !functionArguments
+    }
   end
 }
 

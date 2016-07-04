@@ -47,13 +47,13 @@ method @gtlProcedure checkArgumentsAndExecute
 {
   @bool argumentsOk = true
   # Check the arguments have the good type
-  for () in arguments, concreteArguments
+  for () in arguments, () in concreteArguments do
     if [data dynamicType] != type then
       if typed then
         error data : [type name] + " expected" 
         argumentsOk = false
       end
-      [!?variableMap set !name !data]
+      [!?variableMap put !name !data]
     end
   end
   if argumentsOk then
@@ -84,12 +84,10 @@ class @gtlFunction : @gtlProcedure
   @lstring            returnVariable
 }
 
-method @gtlFunction callFunction
-  ?@gtlContext      context
-  ?!@string         outputString
+getter @gtlFunction callFunction
   ?let @location    fromLocation
   ?let @gtlDataList concreteArguments
-  !@gtlData         result
+  ->@gtlData         result
 {
   if [arguments length] != [concreteArguments length] then
     error fromLocation :
@@ -109,12 +107,12 @@ method @gtlFunction callFunction
 
 map @gtlProcMap
 {
-  @gtlProcedure proc
+  @gtlProcedure procedure
 }
 
 map @gtlFuncMap
 {
-  @gtlFunction proc
+  @gtlFunction function
 }
 
 class @gtlModule

@@ -702,8 +702,64 @@ override getter @gtlString performGetter
     result = @gtlList.new {
       ![methodName location] !components
     }
+  elsif [methodName string] == "interpretEscape" then
+    warning methodName : "deprecated method"
+    result = self
+  elsif [methodName string] == "columnPrefixedBy" then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @string prefix = [[arguments dataAtIndex !0] as @gtlString value]
+    result = @gtlString.new {
+      ![methodName location]
+      ![prefix + value stringByReplacingStringByString !"\n" !"\n" + prefix]
+    }
+  elsif [methodName string] == "wrap" then
+    argumentsCheck(!methodName !intIntArguments() !arguments)
+    @uint width = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    @uint shift = [[[arguments dataAtIndex !1] as @gtlInt value] uint]
+    @string stringShift = .stringWithSequenceOfCharacters { !' ' !shift }
+    @stringlist paragraphs = [value componentsSeparatedByString !"\n"]
+    var @stringlist resultParagraphs = .emptyList{}
+    for (paragraph) in paragraphs do
+      @stringlist words = [paragraph componentsSeparatedByString !" "]
+      @uint lineWidth = 0
+      @string line = ""
+      for (word) in words do
+        if word != "" then
+          if lineWidth + [word length] > width then
+            line += "\n" + stringShift
+            lineWidth = shift
+          end
+          lineWidth += [word length] + 1
+          line += word + " "
+        end        
+      end
+      resultParagraphs += !line
+    end
+    result = @gtlString.new {
+      ![methodName location]
+      !@string.componentsJoinedByString { !resultParagraphs !"\n" }
+    }
+  elsif [methodName string] == "substringExists" then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @string subString = [[arguments dataAtIndex !0] as @gtlString string]
+    @uint subLength = [subString length]
+    @uint start = 0
+    @uint stop = [value length] - subLength
+    @bool exists = false
+    loop ([value length])
+    while start <= stop & not exists do
+      if [value subString !start !subLength] == subString then
+        exists = true
+      end
+      start++
+    end
+    result = @gtlBool.new {
+      ![methodName location]
+      !exists
+    }
   else
-    error methodName : "unknown getter '" + methodName +"' for string target" : result
+    error methodName : "unknown getter '" + methodName +"' for string target"
+      : result
   end
 }
 
@@ -714,13 +770,13 @@ override setter @gtlFloat performSetter
   ?let @lstring     methodName
   ?let @gtlDataList unused arguments
 {
-  error methodName : "unknown setter '" + methodName +"' for float target"
+  error methodName : "unknown setter '" + methodName +"' for string target"
 }
 
 #-----------------------------------------------------------------------------*
 # Bool type and operations on bool
 #-----------------------------------------------------------------------------*
-class @gtlBool   : @gtlData { @bool    value }
+class @gtlBool : @gtlData { @bool value }
 
 override getter @gtlBool desc
   ?let @uint tab
@@ -801,6 +857,60 @@ override getter @gtlBool ltOp ?let @gtlData right -> @gtlData result {
 override getter @gtlBool leOp ?let @gtlData right -> @gtlData result {
   result = @gtlBool.new { !where !value <= [right as @gtlBool value] }
     error [right where] : "string expected" : result
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a getter on a @gtlBool
+#-----------------------------------------------------------------------------*
+override getter @gtlBool performGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ->@gtlData        result
+{
+  if     [methodName string] == "trueOrFalse" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location]
+      !if value then "true" else "false" end
+    }
+  elsif [methodName string] == "yesOrNo" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location]
+      !if value then "yes" else "no" end
+    }
+  elsif [methodName string] == "TRUEOrFALSE" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location]
+      !if value then "TRUE" else "FALSE" end
+    }
+  elsif [methodName string] == "YESOrNO" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location]
+      !if value then "YES" else "NO" end
+    }
+  elsif [methodName string] == "int" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location]
+      !if value then 1_G else 0_G end
+    }
+  else
+    error methodName : "unknown getter '" + methodName +"' for boolean target"
+      : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a setter on a @@gtlBool
+#-----------------------------------------------------------------------------*
+override setter @gtlBool performSetter
+  ?let @lstring     methodName
+  ?let @gtlDataList unused arguments
+{
+  error methodName : "unknown setter '" + methodName +"' for boolean target"
 }
 
 #-----------------------------------------------------------------------------*
@@ -893,6 +1003,28 @@ override getter @gtlStruct ltOp ?let @gtlData unused right -> @gtlData result {
 }
 override getter @gtlStruct leOp ?let @gtlData unused right -> @gtlData result {
   error where : "struct forbidden" : result
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a getter on a @gtlStruct
+#-----------------------------------------------------------------------------*
+override getter @gtlStruct performGetter
+  ?let @lstring            methodName
+  ?let @gtlDataList unused arguments
+  ->@gtlData               result
+{
+  error methodName : "unknown getter '" + methodName +"' for struct target"
+    : result
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a setter on a @gtlStruct
+#-----------------------------------------------------------------------------*
+override setter @gtlStruct performSetter
+  ?let @lstring            methodName
+  ?let @gtlDataList unused arguments
+{
+  error methodName : "unknown setter '" + methodName +"' for struct target"
 }
 
 #-----------------------------------------------------------------------------*
@@ -991,6 +1123,42 @@ override getter @gtlList leOp ?let @gtlData unused right -> @gtlData result {
 }
 
 #-----------------------------------------------------------------------------*
+# Performs a getter on a @gtlList
+#-----------------------------------------------------------------------------*
+override getter @gtlList performGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ->@gtlData        result
+{
+  if    [methodName string] == "length" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location]
+      ![[value length] bigint]
+    }
+  elsif [methodName string] == "first" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    [value first ?result]     
+  elsif [methodName string] == "last" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    [value last ?result]     
+  else
+    error methodName : "unknown getter '" + methodName +"' for struct target"
+      : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a setter on a @gtlList
+#-----------------------------------------------------------------------------*
+override setter @gtlList performSetter
+  ?let @lstring            methodName
+  ?let @gtlDataList unused arguments
+{
+  error methodName : "unknown setter '" + methodName +"' for list target"
+}
+
+#-----------------------------------------------------------------------------*
 # Map type and operations on maps
 #-----------------------------------------------------------------------------*
 class @gtlMap    : @gtlData { @gtlVarMap  value %setter }
@@ -1075,4 +1243,34 @@ override getter @gtlMap ltOp ?let @gtlData unused right -> @gtlData result {
 }
 override getter @gtlMap leOp ?let @gtlData unused right -> @gtlData result {
   error where : "a map does not support the <= operator" : result
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a getter on a @gtlMap
+#-----------------------------------------------------------------------------*
+override getter @gtlMap performGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ->@gtlData        result
+{
+  if    [methodName string] == "length" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location]
+      ![[value count] bigint]
+    }
+  else
+    error methodName : "unknown getter '" + methodName +"' for struct target"
+      : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a setter on a @gtlMap
+#-----------------------------------------------------------------------------*
+override setter @gtlMap performSetter
+  ?let @lstring            methodName
+  ?let @gtlDataList unused arguments
+{
+  error methodName : "unknown setter '" + methodName +"' for list target"
 }

@@ -1,4 +1,4 @@
-project (0:0:1) -> "gtl" {
+project (3:0:0) -> "gtl" {
 #--- Targets
   %makefile-macosx
   %makefile-unix
@@ -6,7 +6,7 @@ project (0:0:1) -> "gtl" {
   %makefile-x86linux64-on-macosx
   %makefile-win32-on-macosx
   %LatestMacOS
-  %applicationBundleBase : "fr.what"
+  %applicationBundleBase : "fr.ls2n"
   %codeblocks-windows
   %codeblocks-linux32
   %codeblocks-linux64
@@ -18,6 +18,8 @@ project (0:0:1) -> "gtl" {
   "galgas-sources/gtl_data_types.galgas"
   "galgas-sources/gtl_scanner.galgas"
   "galgas-sources/gtl_parser.galgas"
+  "galgas-sources/gtl_module.galgas"
+  "galgas-sources/gtl_module_parser.galgas"
   "galgas-sources/gtl_expression_parser.galgas"
   "galgas-sources/gtl_options.galgas"
   "galgas-sources/gtl_instructions.galgas"

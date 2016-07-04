@@ -439,6 +439,16 @@ getter @gtlVarPath get ?let @gtlVarMap context -> @gtlData variableValue
   end
 }
 
+#-----------------------------------------------------------------------------*
+# location of a path is the location of the last element
+#-----------------------------------------------------------------------------*
+getter @gtlVarPath location -> @location where
+{
+  @gtlVarItem lastOne
+  [self last ?lastOne]
+  where = [[lastOne field] location]
+}
+
 #=============================================================================*
 # A variable map is a map of variables. Used for variables of a gtl program
 # and used in struct and map of the language itself.
@@ -487,7 +497,8 @@ abstract class @gtlBinaryExpression : @gtlExpression {
 }
 
 abstract getter @gtlExpression eval
-  ?let @gtlVarMap unused gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 
 #=============================================================================*
@@ -501,7 +512,8 @@ list @gtlExpressionList { @gtlExpression expression }
 class @gtlTerminal : @gtlExpression { @gtlData value }
 
 override getter @gtlTerminal eval
-  ?let @gtlVarMap unused gtlVariableMap
+  ?let @gtlVarMap  unused gtlVariableMap
+  ?let @gtlFuncMap unused functionMap
   -> @gtlData result
 {
   result = value
@@ -513,7 +525,8 @@ override getter @gtlTerminal eval
 class @gtlVarRef : @gtlExpression { @gtlVarPath variableName }
 
 override getter @gtlVarRef eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap unused functionMap
   -> @gtlData result
 {
   result = [variableName get !gtlVariableMap]
@@ -527,10 +540,11 @@ override getter @gtlVarRef eval
 class @gtlParenthesizedExpression : @gtlUnaryExpression {}
 
 override getter @gtlParenthesizedExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [son eval !gtlVariableMap]
+  result = [son eval !gtlVariableMap !functionMap]
   [!?result setWhere !where]
 }
 
@@ -540,10 +554,11 @@ override getter @gtlParenthesizedExpression eval
 class @gtlMinusExpression : @gtlUnaryExpression {}
 
 override getter @gtlMinusExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[son eval !gtlVariableMap] minusOp]
+  result = [[son eval !gtlVariableMap !functionMap] minusOp]
 }
 
 #-----------------------------------------------------------------------------*
@@ -552,10 +567,11 @@ override getter @gtlMinusExpression eval
 class @gtlPlusExpression : @gtlUnaryExpression {}
 
 override getter @gtlPlusExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[son eval !gtlVariableMap] plusOp]
+  result = [[son eval !gtlVariableMap !functionMap] plusOp]
 }
 
 #-----------------------------------------------------------------------------*
@@ -564,10 +580,11 @@ override getter @gtlPlusExpression eval
 class @gtlNotExpression : @gtlUnaryExpression {}
 
 override getter @gtlNotExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[son eval !gtlVariableMap] notOp]
+  result = [[son eval !gtlVariableMap !functionMap] notOp]
 }
 
 #=============================================================================*
@@ -578,10 +595,12 @@ override getter @gtlNotExpression eval
 class @gtlAddExpression : @gtlBinaryExpression {}
 
 override getter @gtlAddExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] addOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] addOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -590,10 +609,12 @@ override getter @gtlAddExpression eval
 class @gtlSubstractExpression : @gtlBinaryExpression {}
 
 override getter @gtlSubstractExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] subOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] subOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -602,10 +623,12 @@ override getter @gtlSubstractExpression eval
 class @gtlMultiplyExpression : @gtlBinaryExpression {}
 
 override getter @gtlMultiplyExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] mulOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] mulOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -614,10 +637,12 @@ override getter @gtlMultiplyExpression eval
 class @gtlDivideExpression : @gtlBinaryExpression {}
 
 override getter @gtlDivideExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] divOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] divOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -626,10 +651,12 @@ override getter @gtlDivideExpression eval
 class @gtlModulusExpression : @gtlBinaryExpression {}
 
 override getter @gtlModulusExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] modOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] modOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -638,10 +665,12 @@ override getter @gtlModulusExpression eval
 class @gtlAndExpression : @gtlBinaryExpression {}
 
 override getter @gtlAndExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] andOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] andOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -650,10 +679,12 @@ override getter @gtlAndExpression eval
 class @gtlOrExpression : @gtlBinaryExpression {}
 
 override getter @gtlOrExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] orOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] orOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -662,10 +693,12 @@ override getter @gtlOrExpression eval
 class @gtlXorExpression : @gtlBinaryExpression {}
 
 override getter @gtlXorExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] xorOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] xorOp
+            ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -674,10 +707,12 @@ override getter @gtlXorExpression eval
 class @gtlShiftLeftExpression : @gtlBinaryExpression {}
 
 override getter @gtlShiftLeftExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] slOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] slOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -686,10 +721,12 @@ override getter @gtlShiftLeftExpression eval
 class @gtlShiftRightExpression : @gtlBinaryExpression {}
 
 override getter @gtlShiftRightExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] srOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] srOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -698,10 +735,12 @@ override getter @gtlShiftRightExpression eval
 class @gtlNotEqualExpression : @gtlBinaryExpression {}
 
 override getter @gtlNotEqualExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] neqOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] neqOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -710,10 +749,12 @@ override getter @gtlNotEqualExpression eval
 class @gtlEqualExpression : @gtlBinaryExpression {}
 
 override getter @gtlEqualExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] eqOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] eqOp 
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -722,10 +763,12 @@ override getter @gtlEqualExpression eval
 class @gtlLowerThanExpression : @gtlBinaryExpression {}
 
 override getter @gtlLowerThanExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] ltOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] ltOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -734,10 +777,12 @@ override getter @gtlLowerThanExpression eval
 class @gtlLowerOrEqualExpression : @gtlBinaryExpression {}
 
 override getter @gtlLowerOrEqualExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] leOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] leOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -746,10 +791,12 @@ override getter @gtlLowerOrEqualExpression eval
 class @gtlGreaterThanExpression : @gtlBinaryExpression {}
 
 override getter @gtlGreaterThanExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] gtOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] gtOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -758,9 +805,110 @@ override getter @gtlGreaterThanExpression eval
 class @gtlGreaterOrEqualExpression : @gtlBinaryExpression {}
 
 override getter @gtlGreaterOrEqualExpression eval
-  ?let @gtlVarMap gtlVariableMap
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap] geOp ![rSon eval !gtlVariableMap]]
+  result = [[lSon eval !gtlVariableMap !functionMap] geOp
+           ![rSon eval !gtlVariableMap !functionMap]]
 }
 
+#-----------------------------------------------------------------------------*
+# @gtlGetterCallExpression : Does a getter call
+#-----------------------------------------------------------------------------*
+class @gtlGetterCallExpression : @gtlExpression {
+  @gtlExpression     target
+  @lstring           getterName
+  @gtlExpressionList arguments
+}
+
+override getter @gtlGetterCallExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  @gtlDataList dataArguments = .emptyList
+  for () in arguments do
+    dataArguments += ![expression eval !gtlVariableMap !functionMap]
+  end
+  @gtlData targetData = [target eval !gtlVariableMap !functionMap]
+  result = [targetData performGetter !getterName !dataArguments]
+}
+
+
+proc checkArgumentError
+  ?let @lstring name
+  ?let @type    formalType
+  ?let @object  actualArgument
+  ?let @uint    argumentNum
+{
+  if formalType != [actualArgument dynamicType] then
+    error name : [formalType typeName] + " expected for argument "
+      + argumentNum + ", " + [[actualArgument dynamicType] typeName]
+      + " provided"
+  end
+}
+
+func validateReturnValue
+  ?let @lstring functionName
+  ?let @object  returnedValue
+  ->@gtlData    result
+{
+  @type returnedType = [returnedValue dynamicType]
+  if    returnedType == `@gtlInt    then result = returnedValue as @gtlInt
+  elsif returnedType == `@gtlFloat  then result = returnedValue as @gtlFloat
+  elsif returnedType == `@gtlString then result = returnedValue as @gtlString
+  elsif returnedType == `@gtlBool   then result = returnedValue as @gtlBool
+  elsif returnedType == `@gtlStruct then result = returnedValue as @gtlStruct
+  elsif returnedType == `@gtlList   then result = returnedValue as @gtlList
+  elsif returnedType == `@gtlMap    then result = returnedValue as @gtlMap
+  else
+    error functionName
+      : "this function does not return a compatible type" : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlFunctionCallExpression : Does a function call
+#-----------------------------------------------------------------------------*
+class @gtlFunctionCallExpression : @gtlExpression {
+  @lstring           functionName
+  @gtlExpressionList functionArguments
+}
+
+override getter @gtlFunctionCallExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  if @function.isFunctionDefined { ![functionName string] } then
+    @objectlist arguments = .emptyList
+    for () in functionArguments do
+      arguments += ![[expression eval !gtlVariableMap !functionMap] object]
+    end
+    @function function = .functionWithName { ![functionName string]}
+    let @typelist formalParameterList = [function formalParameterTypeList]
+    if [formalParameterList length] != [arguments length] then
+      error functionName: "this function is invoked with "
+        + [arguments length] + " argument"
+        + if [arguments length] > 1 then "s" else "" end
+        + ", but requires " + [formalParameterList length] + " argument"
+        + if [formalParameterList length] > 1 then "s" else "" end
+        : result
+    else
+      for (formal) in formalParameterList, (actual) in arguments do (index)
+        checkArgumentError(!functionName !formal !actual !index)
+      end
+      if @uint.errorCount == 0 then
+        let @object returnedValue =
+          [function invoke !arguments ![functionName location]]
+        result = validateReturnValue(!functionName !returnedValue) 
+      else
+        result = @gtlBool.new { ![functionName location] !false}
+      end
+    end
+  else
+    [functionMap get !functionName ?@gtlFunction function]
+    result = [function call !functionArguments]
+  end
+}
