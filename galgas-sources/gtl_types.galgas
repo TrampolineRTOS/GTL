@@ -33,6 +33,11 @@ class @gtlContext {
   @string templateDirectory
 }
 
+func emptyContext
+  ->@gtlContext context
+{
+  context = .new { !"" !"" !"" }
+}
 
 #=============================================================================*
 # @gtlDataList is used to pass arguments to methods and functions

@@ -909,6 +909,10 @@ override getter @gtlFunctionCallExpression eval
     end
   else
     [functionMap get !functionName ?@gtlFunction function]
-    result = [function call !functionArguments]
+    @gtlDataList arguments = .emptyList
+    for () in functionArguments do
+      arguments += ![expression eval !gtlVariableMap !functionMap]
+    end
+    result = [function call ![functionName location] !arguments]
   end
 }

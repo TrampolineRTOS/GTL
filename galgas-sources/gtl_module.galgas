@@ -31,88 +31,95 @@ list @gtlArgumentList
   @lstring name
 }
 
-class @gtlProcedure
+class @gtlExecutableEntity
 {
   @location           where
   @lstring            name
-  @gtlArgumentList    arguments
+  @gtlArgumentList    formalArguments
   @gtlInstructionList instructions
 }
 
-method @gtlProcedure checkArgumentsAndExecute
-  ?@gtlContext      context
-  ?!@gtlVarMap      variableMap
-  ?!@string         outputString
-  ?let @gtlDataList concreteArguments
+method @gtlExecutableEntity checkArguments
+  ?let @location    fromLocation
+  ?let @gtlDataList actualArguments
+  !@gtlVarMap       entityVariableMap
+  !@bool            result
 {
-  @bool argumentsOk = true
-  # Check the arguments have the good type
-  for () in arguments, () in concreteArguments do
-    if [data dynamicType] != type then
-      if typed then
-        error data : [type name] + " expected" 
-        argumentsOk = false
+  result = true
+  entityVariableMap = .emptyMap
+  
+  if [formalArguments length] != [actualArguments length] then 
+    error fromLocation : "calling "
+      + if [self dynamicType] == `@gtlProcedure then
+        "procedure '"
+      else
+        "function '"
       end
-      [!?variableMap put !name !data]
+      + name + "' needs " + [formalArguments length] + " arguments"
+  else
+    # Check the arguments have the good type
+    for () in formalArguments, () in actualArguments do
+      if [data dynamicType] != type & typed then
+        error data : [type name] + " expected for " + name
+        result = false
+      else
+        [!?entityVariableMap put !name !data]
+      end
     end
-  end
-  if argumentsOk then
-    [instructions execute !context !?variableMap !?outputString]
   end
 }  
 
-method @gtlProcedure callProcedure
+class @gtlProcedure : @gtlExecutableEntity
+{
+}
+
+method @gtlProcedure call
   ?@gtlContext      context
   ?!@string         outputString
   ?let @location    fromLocation
-  ?let @gtlDataList concreteArguments
+  ?let @gtlDataList actualArguments
 {
-  if [arguments length] != [concreteArguments length] then
-    error fromLocation :
-      "calling procedure '" + name + "' needs " + [arguments length] + " arguments"
-  else
-    @gtlVarMap variableMap = .emptyMap
-
-    [self checkArgumentsAndExecute
-      !context !?outputString !?variableMap !?outputString !concreteArguments
-    ]
+  [self checkArguments
+    !fromLocation !actualArguments ?@gtlVarMap procVariableMap ?@bool ok]
+  if ok then
+    [instructions execute !context !?procVariableMap !?outputString]
   end
 }
 
-class @gtlFunction : @gtlProcedure
+class @gtlFunction : @gtlExecutableEntity
 {
   @lstring            returnVariable
 }
 
-getter @gtlFunction callFunction
+getter @gtlFunction call
   ?let @location    fromLocation
-  ?let @gtlDataList concreteArguments
-  ->@gtlData         result
+  ?let @gtlDataList actualArguments
+  ->@gtlData        result
 {
-  if [arguments length] != [concreteArguments length] then
-    error fromLocation :
-      "calling function '" + name + "' needs " + [arguments length] + " arguments"
+  [self checkArguments
+    !fromLocation !actualArguments ?@gtlVarMap funcVariableMap ?@bool ok]
+  if ok then
+    @gtlContext functionContext = emptyContext()
+    @string outputString = ""
+    [instructions execute !functionContext !?funcVariableMap !?outputString]
+    [funcVariableMap get !returnVariable ?result]
   else
-    @gtlVarMap variableMap = .emptyMap
-
-    [self checkArgumentsAndExecute
-      !context !?outputString !?variableMap !?outputString !concreteArguments
-    ]
-    
-    [variableMap get !returnVariable ?result]
+   error fromLocation : "function call failed" : result
   end
 }
-
-
 
 map @gtlProcMap
 {
   @gtlProcedure procedure
+  insert put error message "a procedure named '%K' is already declared in %L"
+  search get error message "there is no procedure named '%K'"
 }
 
 map @gtlFuncMap
 {
   @gtlFunction function
+  insert put error message "a function named '%K' is already declared in %L"
+  search get error message "there is no function named '%K'"
 }
 
 class @gtlModule
