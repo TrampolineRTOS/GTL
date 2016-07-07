@@ -268,7 +268,7 @@ rule <gtl_factor>
 {
   $no$
   expression = @gtlTerminal.new{
-    !@location.here !@gtlBool.new { !@location.here !false }
+    !.here !@gtlBool.new { !.here !false }
   }
 }
 
@@ -281,7 +281,7 @@ rule <gtl_factor>
 {
   $signed_literal_integer_bigint$ ?let @lbigint literalInteger
   expression = @gtlTerminal.new{
-    !@location.here !@gtlInt.new { !@location.here ![literalInteger bigint] }
+    !.here !@gtlInt.new { !.here ![literalInteger bigint] }
   }
 }
 
@@ -294,7 +294,7 @@ rule <gtl_factor>
 {
   $string$ ?let @lstring literalString
   expression = @gtlTerminal.new{
-    !@location.here !@gtlString.new { !@location.here ![literalString string] }
+    !.here !@gtlString.new { !.here ![literalString string] }
   }
 }
 
@@ -322,7 +322,7 @@ rule <gtl_factor>
   end
   $]$
   expression = @gtlGetterCallExpression.new {
-    !@location.here
+    !.here
     !target
     !getterName
     !argumentList
@@ -336,10 +336,10 @@ rule <gtl_factor>
 {
   <gtl_variable> ?let @gtlVarPath path
   select
-    expression = @gtlVarRef.new { !@location.here !path }
+    expression = @gtlVarRef.new { !.here !path }
   or
     if [path length] > 1 then
-      error @location.here : "illegal function name"
+      error .here : "illegal function name"
     end
     @gtlExpressionList functionArguments = .emptyList
     $($
@@ -352,7 +352,7 @@ rule <gtl_factor>
     $)$
     @lstring functionName = [[path itemAtIndex !0] field]
     expression = @gtlFunctionCallExpression.new {
-      !@location.here
+      !.here
       !functionName
       !functionArguments
     }
@@ -368,9 +368,13 @@ rule <gtl_factor>
   select
     $default$
     $($
-    <gtl_expression>
+    <gtl_expression> ?@gtlExpression defaultExpression
     $)$
+    expression = @gtlExistsDefaultExpression.new {
+      !.here !path !defaultExpression
+    }
   or
+    expression = @gtlExistsExpression.new { !.here !path }
   end
 }
 
@@ -380,6 +384,7 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $typeof$ <gtl_variable> ?let @gtlVarPath path
+  expression = @gtlTypeOfExpression.new { !.here !path }
 }
 
 #------------------------------------------------------------------------------*
@@ -388,12 +393,26 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $true$
+  expression = @gtlTerminal.new {
+    !.here
+    !@gtlBool.new { 
+      !.here
+      !true
+    }
+  }
 }
 
 rule <gtl_factor>
   !@gtlExpression expression
 {
   $false$
+  expression = @gtlTerminal.new {
+    !.here
+    !@gtlBool.new { 
+      !.here
+      !false
+    }
+  }
 }
 
 #------------------------------------------------------------------------------*
@@ -401,7 +420,20 @@ rule <gtl_factor>
 rule <gtl_factor>
   !@gtlExpression expression
 {
-  $@$ $identifier$ ?let @lstring enumValue
+  $@$ $identifier$ ?let @lstring typeName
+  @string name = [typeName string]
+  @gtlType type
+  if    name == "int"    then type = .new { ![typeName location] !`@gtlInt }
+  elsif name == "float"  then type = .new { ![typeName location] !`@gtlFloat }
+  elsif name == "string" then type = .new { ![typeName location] !`@gtlString }
+  elsif name == "bool"   then type = .new { ![typeName location] !`@gtlBool }
+  elsif name == "struct" then type = .new { ![typeName location] !`@gtlStruct }
+  elsif name == "list"   then type = .new { ![typeName location] !`@gtlList }
+  elsif name == "map"    then type = .new { ![typeName location] !`@gtlMap }
+  elsif name == "enum"   then type = .new { ![typeName location] !`@gtlEnum }
+  else error .here : name + " does not name a type" : type
+  end
+  expression = @gtlTerminal.new { ![typeName location] !type }
 }
 
 #------------------------------------------------------------------------------*
@@ -410,6 +442,13 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $emptylist$
+  expression = @gtlTerminal.new {
+    !.here
+    !@gtlList.new { 
+      !.here
+      !.emptyList
+    }
+  }
 }
 
 #------------------------------------------------------------------------------*
@@ -418,6 +457,13 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $emptymap$
+  expression = @gtlTerminal.new {
+    !.here
+    !@gtlMap.new { 
+      !.here
+      !.emptyMap
+    }
+  }
 }
 
 #------------------------------------------------------------------------------*
@@ -426,51 +472,68 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $mapof$
-  <gtl_expression>
+  <gtl_expression> ?@gtlExpression data
   select
     $by$
     $identifier$ ?var @lstring key
+    expression = @gtlMapOfListExpression.new {
+      !.here
+      !data
+      !key
+    }
   or 
     $end$
+    expression = @gtlMapOfStructExpression.new {
+      !.here
+      !data
+    }
   end
 }
 
 #------------------------------------------------------------------------------*
 
-rule <gtl_factor>
-  !@gtlExpression expression
-{
-  $listof$
-  <gtl_variable> ?let @gtlVarPath path
-}
+#rule <gtl_factor>
+#  !@gtlExpression expression
+#{
+#  $listof$
+#  <gtl_expression> ?let @gtlExpression data
+#  expression = @gtlListOfExpression.new { !.here !data }
+#}
 
 #------------------------------------------------------------------------------*
 
 rule <gtl_list_item>
   !@gtlExpression expression
 {
-  $[$
-  repeat
-    $identifier$ ?let @lstring fieldName
-    $:$
-    <gtl_expression>
-  while $,$
+  select
+    <gtl_expression> ?expression
+  or
+    ${$
+    @gtlExpressionMap fields = .emptyMap
+    repeat
+      $identifier$ ?let @lstring fieldName
+      $:$
+      <gtl_expression> ?@gtlExpression fieldExpression
+      [!?fields put !fieldName !fieldExpression]
+    while $,$
+    end
+    $}$
+    expression = @gtlLiteralStructExpression.new { !.here !fields }
   end
-  $]$
 }
 
 rule <gtl_factor>
   !@gtlExpression expression
 {
   $list$ $[$
-  select
-    repeat
-      <gtl_list_item>
-    while $,$
-    end
-  or
+  @gtlExpressionList expressionList = .emptyList
+  repeat
+    <gtl_list_item> ?@gtlExpression listItem
+    expressionList += !listItem
+  while $,$
   end
   $]$
+  expression = @gtlLiteralListExpression.new { !.here !expressionList }
 }
 
 #------------------------------------------------------------------------------*

@@ -47,3 +47,45 @@ list @gtlDataList
   @gtlData data
 }
 
+#=============================================================================*
+# A variable map is a map of variables. Used for variables of a gtl program
+# and used in struct and map of the language itself.
+#-----------------------------------------------------------------------------*
+map @gtlVarMap {
+  @gtlData value
+  insert put error message "a variable or field named '%K' is already declared in %L"
+  search get error message "there is no variable or field named '%K'"
+  remove del error message "there is no variable or field named '%K' to delete"
+}
+
+setter @gtlVarMap replaceOrCreate
+  ?let @lstring key
+  ?let @gtlData data
+{
+  if [self hasKey ![key string]] then
+    [!?self del !key ?*]
+  end
+  [!?self put !key !data]
+}
+
+setter @gtlVarMap replaceOrCreateAtLevel
+  ?let @lstring key
+  ?let @gtlData data
+  ?let @uint    level
+{
+  if [self hasKeyAtLevel ![key string] !level] then
+    [!?self del !key ?*]
+  end
+  [!?self put !key !data]
+}
+
+#=============================================================================*
+# An expression map is a map of expressions. Used for literal init of structs
+# and maps
+#-----------------------------------------------------------------------------*
+map @gtlExpressionMap {
+  @gtlExpression expression
+  insert put error message "a field named '%K' is already declared in %L"
+  search get error message "there is no or field named '%K'"
+  remove del error message "there is no field named '%K' to delete"
+}

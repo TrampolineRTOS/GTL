@@ -39,6 +39,7 @@ abstract class @gtlVarItem { @lstring field }
 abstract method @gtlVarItem set
   ?!     @gtlVarMap  context
   ?  let @gtlVarMap  vars
+  ?  let @gtlFuncMap funcs
   ?  let @gtlVarPath path
   ?  let @gtlData    data
 
@@ -48,8 +49,19 @@ abstract method @gtlVarItem set
 abstract getter @gtlVarItem get
   ? let @gtlVarMap  context
   ? let @gtlVarMap  vars
+  ? let @gtlFuncMap funcs
   ? let @gtlVarPath path
   -> @gtlData result
+  
+#-----------------------------------------------------------------------------*
+# abstact getter to test the existence of a field in a context
+#-----------------------------------------------------------------------------*
+abstract getter @gtlVarItem exists
+  ? let @gtlVarMap  context
+  ? let @gtlVarMap  vars
+  ? let @gtlFuncMap funcs
+  ? let @gtlVarPath path
+  -> @bool result
   
 #=============================================================================*
 # Scalar struct field, ie A or C in the example above
@@ -62,6 +74,7 @@ class @gtlVarItemField : @gtlVarItem { }
 override method @gtlVarItemField set
   ?!     @gtlVarMap  context
   ?  let @gtlVarMap  vars
+  ? let @gtlFuncMap  funcs
   ?  let @gtlVarPath path
   ?  let @gtlData    data
 { 
@@ -90,6 +103,7 @@ override method @gtlVarItemField set
       [[path itemAtIndex !0] set
         !?subContext
         !vars
+        !funcs
         ![path subListFromIndex !1]
         !data
       ]
@@ -103,6 +117,7 @@ override method @gtlVarItemField set
       [[path itemAtIndex !0] set
         !?subContext
         !vars
+        !funcs
         ![path subListFromIndex !1]
         !data
       ]
@@ -118,6 +133,7 @@ override method @gtlVarItemField set
 override getter @gtlVarItemField get
   ? let @gtlVarMap  context
   ? let @gtlVarMap  vars
+  ? let @gtlFuncMap funcs
   ? let @gtlVarPath path
   -> @gtlData result
 {
@@ -132,14 +148,48 @@ override getter @gtlVarItemField get
       result = [[path itemAtIndex !0] get
                  ![structVar value]
                  !vars
+                 !funcs
                  ![path subListFromIndex !1]
                ]
     else
-      error field : [field string]+"is not a struct" : result
+      error [field location] : [field string]+"is not a struct" : result
     end
   end
 }
 
+#-----------------------------------------------------------------------------*
+# getter to test the existence of a field in a context
+#-----------------------------------------------------------------------------*
+override getter @gtlVarItemField exists
+  ? let @gtlVarMap  context
+  ? let @gtlVarMap  vars
+  ? let @gtlFuncMap funcs
+  ? let @gtlVarPath path
+  -> @bool result
+{
+  if [path length] == 0 then
+    # at the end, get the variable in the context
+    result = if [context hasKey ![field string]] then true else false end
+  else
+    # not at the end
+    if [context hasKey ![field string]] then
+      [context get !field ?let @gtlData subContextData]
+      cast subContextData
+      case == @gtlStruct structVar:
+      result = [[path itemAtIndex !0] exists
+                 ![structVar value]
+                 !vars
+                 !funcs
+                 ![path subListFromIndex !1]
+               ]
+      else
+        result = false
+      end
+    else
+      result = false
+    end
+  end
+}
 
 #=============================================================================*
 # Collection field, ie B or D in the example above
@@ -150,13 +200,14 @@ class @gtlVarItemCollection : @gtlVarItem { @gtlExpression key }
 # set a map item field
 #-----------------------------------------------------------------------------*
 override method @gtlVarItemCollection set
-  ?!     @gtlVarMap  context
-  ?  let @gtlVarMap  vars
-  ?  let @gtlVarPath path
-  ?  let @gtlData    data
+  ?!    @gtlVarMap  context
+  ? let @gtlVarMap  vars
+  ? let @gtlFuncMap funcs
+  ? let @gtlVarPath path
+  ? let @gtlData    data
 {
   # evaluate the expression to a string
-  cast [key eval !vars]
+  cast [key eval !vars !funcs]
   
   case == @gtlString keyValue :
     if [path length] == 0 then
@@ -195,7 +246,12 @@ override method @gtlVarItemCollection set
         end  
       else
         # The field does not exist, add it
-        [!?context put !field !data]
+        @gtlVarMap mapToSet = .emptyMap{}
+        [!?mapToSet put
+          !@lstring.new{![keyValue value] ![key where]}
+          !data
+        ]
+        [!?context put !field !@gtlMap.new{![field location] !mapToSet}]
       end
     else
       @gtlVarMap subContext = .emptyMap{}
@@ -220,18 +276,18 @@ override method @gtlVarItemCollection set
           [[path itemAtIndex !0] set
             !?subContext
             !vars
+            !funcs
             ![path subListFromIndex !1]
             !data
           ]
-          [!?context setValueForKey
-            !@gtlMap.new{![field location] !subContext}
-            ![field string]
-          ]
+          [!?theMap put !keyValue !@gtlStruct.new{![field location] !subContext}]
+          [!?context put !field !@gtlMap.new{![field location] !theMap}]
         else
           # set in the subcontext
           [[path itemAtIndex !0] set
             !?subContext
             !vars
+            !funcs
             ![path subListFromIndex !1]
             !data
           ]
@@ -239,10 +295,12 @@ override method @gtlVarItemCollection set
           [!?context put !field !@gtlMap.new{![field location] !subContext}]
         end
       else
+        message "OK\n"
         # set in the subcontext
         [[path itemAtIndex !0] set
           !?subContext
           !vars
+          !funcs
           ![path subListFromIndex !1]
           !data
         ]
@@ -280,11 +338,11 @@ override method @gtlVarItemCollection set
         else
           # not a list, it is an error since setting an element at index
           # supposes the element exists
-          error field : "field/variable "+[field string]+" is not a list"
+          error [field location] : "field/variable "+[field string]+" is not a list"
         end
       else
         # The field does not exist, emit an error
-        error field : "list "+[field string]+" does not exists"
+        error [field location] : "list "+[field string]+" does not exists"
       end
     else
       @gtlVarMap subContext = .emptyMap{}
@@ -304,6 +362,7 @@ override method @gtlVarItemCollection set
             [[path itemAtIndex !0] set
               !?subContext
               !vars
+              !funcs
               ![path subListFromIndex !1]
               !data
             ]
@@ -318,11 +377,11 @@ override method @gtlVarItemCollection set
         else
           # not a list, it is an error since setting an element at index
           # supposes the element exists
-          error field : "field/variable "+[field string]+" is not a list"
+          error [field location] : "field/variable "+[field string]+" is not a list"
         end
       else
         # The field does not exist, emit an error
-        error field : "list "+[field string]+" does not exists"
+        error [field location] : "list "+[field string]+" does not exists"
       end
     end
     
@@ -338,10 +397,11 @@ override method @gtlVarItemCollection set
 override getter @gtlVarItemCollection get
   ? let @gtlVarMap  context
   ? let @gtlVarMap  vars
+  ? let @gtlFuncMap funcs
   ? let @gtlVarPath path
   -> @gtlData result
 {
-  cast [key eval !vars]
+  cast [key eval !vars !funcs]
   
   case == @gtlString keyValue :
     # get the map
@@ -362,10 +422,11 @@ override getter @gtlVarItemCollection get
           result = [[path itemAtIndex !0] get
                      ![structVar value]
                      !vars
+                     !funcs
                      ![path subListFromIndex !1]
                    ]
         else
-          error field : [field string]+" is not a struct" : result
+          error [field location] : [field string]+" is not a struct" : result
         end
       end
     else
@@ -389,10 +450,11 @@ override getter @gtlVarItemCollection get
           result = [[path itemAtIndex !0] get
                      ![structVar value]
                      !vars
+                     !funcs
                      ![path subListFromIndex !1]
                    ]
         else
-          error field : [field string]+" is not a struct" : result
+          error [field location] : [field string]+" is not a struct" : result
         end
       end
     else
@@ -402,6 +464,96 @@ override getter @gtlVarItemCollection get
   else
     # not a string, emit error
     error [key where] : "Key does not evaluate to a string or an int" : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# getter to test the existence of a collection field in a context
+#-----------------------------------------------------------------------------*
+override getter @gtlVarItemCollection exists
+  ? let @gtlVarMap  context
+  ? let @gtlVarMap  vars
+  ? let @gtlFuncMap funcs
+  ? let @gtlVarPath path
+  -> @bool result
+{
+  cast [key eval !vars !funcs]
+  
+  case == @gtlString keyValue :
+    if [context hasKey ![field string]] then
+      # get the map
+      [context get !field ?let @gtlData item]
+      cast item
+      case == @gtlMap mapItem :
+        if [[mapItem value] hasKey ![keyValue value]] then
+          if [path length] == 0 then
+            # at the end, get the variable in the context
+            result = true
+          else
+            [[mapItem value] get
+              !@lstring.new{![keyValue value] ![key where]}
+              ?let @gtlData mapItemField
+            ]
+            # not at the end, get and set the subcontext
+            cast mapItemField
+            case == @gtlStruct structVar:
+              result = [[path itemAtIndex !0] exists
+                         ![structVar value]
+                         !vars
+                         !funcs
+                         ![path subListFromIndex !1]
+                       ]
+            else
+              result = false
+            end
+          end
+        else
+          result = false
+        end
+      else
+        result = false
+      end
+    else
+      result = false
+    end
+  case == @gtlInt idxValue :
+    if [context hasKey ![field string]] then
+      # get the list
+      [context get !field ?let @gtlData item]
+      cast item
+      case == @gtlList listItem :
+        if [[listItem value] length] < [[idxValue value] uint] then
+          if [path length] == 0 then
+            # at the end, get the variable in the context
+            result = true
+          else
+            @gtlData listItemElement = [[listItem value] valueAtIndex
+                                         ![[idxValue value] uint]]
+            # not at the end, get and set the subcontext
+            cast listItemElement
+            case == @gtlStruct structVar:
+              result = [[path itemAtIndex !0] exists
+                         ![structVar value]
+                         !vars
+                         !funcs
+                         ![path subListFromIndex !1]
+                       ]
+            else
+              result = false
+            end
+          end
+        else
+          result = false
+        end
+      else
+        result = false
+      end
+    else
+      result = false
+    end
+  else
+    # not a string
+    result = false
   end
 }
 
@@ -415,27 +567,50 @@ list @gtlVarPath {
 #-----------------------------------------------------------------------------*
 # Set a data in a path
 #-----------------------------------------------------------------------------*
-method @gtlVarPath setMe ?!@gtlVarMap context ?let @gtlData data
+method @gtlVarPath setMe
+  ?!@gtlVarMap      context
+  ? let @gtlFuncMap funcs
+  ? let @gtlData    data
 {
   if [self length] > 0 then
     @gtlVarItem item = [self itemAtIndex !0]
-    [item set !?context !context ![self subListFromIndex !1] !data]
+    [item set !?context !context !funcs ![self subListFromIndex !1] !data]
   else
-    error @location.here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
+    error .here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
   end
 }
 
 #-----------------------------------------------------------------------------*
 # Get a data in a path
 #-----------------------------------------------------------------------------*
-getter @gtlVarPath get ?let @gtlVarMap context -> @gtlData variableValue
+getter @gtlVarPath get
+  ?let @gtlVarMap context
+  ?let @gtlFuncMap funcs
+  -> @gtlData variableValue
 {
   if [self length] > 0 then
     @gtlVarItem item = [self itemAtIndex !0]
-    variableValue = [item get !context !context ![self subListFromIndex !1]]
+    variableValue = [item get !context !context !funcs ![self subListFromIndex !1]]
   else
-    error @location.here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
+    error .here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
     : variableValue
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# test the existence of a path
+#-----------------------------------------------------------------------------*
+getter @gtlVarPath exists
+  ?let @gtlVarMap context
+  ?let @gtlFuncMap funcs
+  -> @bool result
+{
+  if [self length] > 0 then
+    @gtlVarItem item = [self itemAtIndex !0]
+    result = [item exists !context !context !funcs ![self subListFromIndex !1]]
+  else
+    error .here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
+    : result
   end
 }
 
@@ -447,38 +622,6 @@ getter @gtlVarPath location -> @location where
   @gtlVarItem lastOne
   [self last ?lastOne]
   where = [[lastOne field] location]
-}
-
-#=============================================================================*
-# A variable map is a map of variables. Used for variables of a gtl program
-# and used in struct and map of the language itself.
-#-----------------------------------------------------------------------------*
-map @gtlVarMap {
-  @gtlData value
-  insert put error message "a variable or field named '%K' is already declared in %L"
-  search get error message "there is no variable or field named '%K'"
-  remove del error message "there is no variable or field named '%K' to delete"
-}
-
-setter @gtlVarMap replaceOrCreate
-  ?let @lstring key
-  ?let @gtlData data
-{
-  if [self hasKey ![key string]] then
-    [!?self del !key ?*]
-  end
-  [!?self put !key !data]
-}
-
-setter @gtlVarMap replaceOrCreateAtLevel
-  ?let @lstring key
-  ?let @gtlData data
-  ?let @uint    level
-{
-  if [self hasKeyAtLevel ![key string] !level] then
-    [!?self del !key ?*]
-  end
-  [!?self put !key !data]
 }
 
 #=============================================================================*
@@ -526,10 +669,11 @@ class @gtlVarRef : @gtlExpression { @gtlVarPath variableName }
 
 override getter @gtlVarRef eval
   ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap unused functionMap
+  ?let @gtlFuncMap functionMap
   -> @gtlData result
 {
-  result = [variableName get !gtlVariableMap]
+  result = [variableName get !gtlVariableMap !functionMap]
+  [!?result setWhere !where]
 }
 
 #=============================================================================*
@@ -913,6 +1057,189 @@ override getter @gtlFunctionCallExpression eval
     for () in functionArguments do
       arguments += ![expression eval !gtlVariableMap !functionMap]
     end
-    result = [function call ![functionName location] !arguments]
+    result = [function call ![functionName location] !functionMap !arguments]
   end
 }
+
+#-----------------------------------------------------------------------------*
+# @gtlExistsExpression : returns true if the variable exists false otherwise
+#-----------------------------------------------------------------------------*
+class @gtlExistsExpression : @gtlExpression {
+  @gtlVarPath variable
+}
+
+override getter @gtlExistsExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  result = @gtlBool.new {
+    !where ![variable exists !gtlVariableMap !functionMap]
+  }
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlExistsDefaultExpression : returns the variable if it exists
+#                               or a default value if it does not exist
+#-----------------------------------------------------------------------------*
+class @gtlExistsDefaultExpression : @gtlExistsExpression {
+  @gtlExpression defaultValue
+}
+
+override getter @gtlExistsDefaultExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  if [variable exists !gtlVariableMap !functionMap] then
+    result = [variable get !gtlVariableMap !functionMap]
+  else
+    result = [defaultValue eval !gtlVariableMap !functionMap]
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlTypeOfExpression : the type of the variable
+#-----------------------------------------------------------------------------*
+class @gtlTypeOfExpression : @gtlExpression {
+  @gtlVarPath variable
+}
+
+override getter @gtlTypeOfExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  @gtlData variableValue = [variable get !gtlVariableMap !functionMap]
+  result = @gtlType.new { !where ![variableValue dynamicType] }
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlMapOfStructExpression : convert a struct to a map
+#-----------------------------------------------------------------------------*
+class @gtlMapOfStructExpression : @gtlExpression {
+  @gtlExpression expression
+}
+
+override getter @gtlMapOfStructExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  @gtlData expressionValue = [expression eval !gtlVariableMap !functionMap]
+  cast expressionValue
+  case == @gtlStruct expressionValueStruct:
+    result = @gtlMap.new { !where ![expressionValueStruct value] }
+  else
+    error where : "struct expected" : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlMapOfListExpression : convert a list of structs to a map
+#-----------------------------------------------------------------------------*
+class @gtlMapOfListExpression : @gtlMapOfStructExpression {
+  @lstring key
+}
+
+override getter @gtlMapOfListExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  @gtlData expressionValue = [expression eval !gtlVariableMap !functionMap]
+  cast expressionValue
+  case == @gtlList expressionValueList:
+    @gtlVarMap resultMap = .emptyMap
+    for (item) in [expressionValueList value] do (index)
+      cast item
+      case == @gtlStruct itemStruct:
+        if [[itemStruct value] hasKey ![key string]] then
+          [[itemStruct value] get !key ?@gtlData keyValue]
+          cast keyValue
+          case == @gtlString keyValueString:
+            [!?resultMap put
+              !@lstring.new { ![keyValueString value] ![keyValueString where] }
+              !item
+            ]
+          else
+            error [expressionValue where] : "field " + key
+              + " of item at index " + index + " is not a string"
+          end
+        else
+          error [expressionValue where] : "item at index " + index
+            + " does not have field named " + key
+        end
+      else
+        error [expressionValue where] : "list of struct expected"
+      end
+    end
+    result = @gtlMap.new { !where !resultMap }
+  else
+    error [expressionValue where] : "list expected" : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlListOfExpression : convert a map to struct
+#-----------------------------------------------------------------------------*
+class @gtlListOfExpression : @gtlExpression {
+  @gtlExpression expression
+}
+
+override getter @gtlListOfExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  @gtlData expressionValue = [expression eval !gtlVariableMap !functionMap]
+  cast expressionValue
+  case == @gtlMap expressionValueMap:
+    @list resultList = .emptyList
+    for (key item) in [expressionValueMap value] do
+      resultList += !item
+    end
+    result = @gtlList.new { !where !resultList }
+  else
+    error where : "map expected" : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlLiteralStructExpression
+#-----------------------------------------------------------------------------*
+class @gtlLiteralStructExpression : @gtlExpression {
+  @gtlExpressionMap value
+}
+
+override getter @gtlLiteralStructExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  @gtlVarMap resultStruct = .emptyMap
+  for (key item) in value do
+    [!?resultStruct put !key ![item eval !gtlVariableMap !functionMap]]
+  end
+  result = @gtlStruct.new { !where !resultStruct }
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlLiteralListExpression
+#-----------------------------------------------------------------------------*
+class @gtlLiteralListExpression : @gtlExpression {
+  @gtlExpressionList value
+}
+
+override getter @gtlLiteralListExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  @list resultList = .emptyList
+  for (item) in value do
+    resultList += ![item eval !gtlVariableMap !functionMap]
+  end
+  result = @gtlList.new { !where !resultList }
+}
+

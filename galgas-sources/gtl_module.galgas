@@ -60,7 +60,7 @@ method @gtlExecutableEntity checkArguments
     # Check the arguments have the good type
     for () in formalArguments, () in actualArguments do
       if [data dynamicType] != type & typed then
-        error data : [type name] + " expected for " + name
+        error [data location] : [type name] + " expected for " + name
         result = false
       else
         [!?entityVariableMap put !name !data]
@@ -74,15 +74,18 @@ class @gtlProcedure : @gtlExecutableEntity
 }
 
 method @gtlProcedure call
-  ?@gtlContext      context
-  ?!@string         outputString
-  ?let @location    fromLocation
-  ?let @gtlDataList actualArguments
+  ? let @gtlContext  context
+  ? let @gtlFuncMap  funcs
+  ?!@string          outputString
+  ? let @location    fromLocation
+  ? let @gtlDataList actualArguments
 {
   [self checkArguments
     !fromLocation !actualArguments ?@gtlVarMap procVariableMap ?@bool ok]
   if ok then
-    [instructions execute !context !?procVariableMap !?outputString]
+    [instructions execute !context !?procVariableMap !funcs !?outputString]
+  else
+    error fromLocation : "procedure call failed"
   end
 }
 
@@ -93,6 +96,7 @@ class @gtlFunction : @gtlExecutableEntity
 
 getter @gtlFunction call
   ?let @location    fromLocation
+  ?let @gtlFuncMap  funcs
   ?let @gtlDataList actualArguments
   ->@gtlData        result
 {
@@ -101,7 +105,7 @@ getter @gtlFunction call
   if ok then
     @gtlContext functionContext = emptyContext()
     @string outputString = ""
-    [instructions execute !functionContext !?funcVariableMap !?outputString]
+    [instructions execute !functionContext !?funcVariableMap !funcs !?outputString]
     [funcVariableMap get !returnVariable ?result]
   else
    error fromLocation : "function call failed" : result

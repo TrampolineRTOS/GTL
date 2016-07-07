@@ -9,7 +9,7 @@
  <key>CFBundleIconFile</key>
  <string>application_icns</string>
  <key>CFBundleIdentifier</key>
- <string>fr.what.gtl</string>
+ <string>fr.ls2n.gtl</string>
  <key>CFBundleInfoDictionaryVersion</key>
  <string>6.0</string>
  <key>CFBundleName</key>
@@ -21,7 +21,7 @@
  <key>LSMinimumSystemVersion</key>
  <string>10.6</string>
  <key>CFBundleShortVersionString</key>
- <string>0.0.1</string>
+ <string>3.0.0</string>
  <key>NSMainNibFile</key>
  <string>MainMenu</string>
  <key>NSPrincipalClass</key>

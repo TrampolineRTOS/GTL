@@ -1,7 +1,7 @@
 gui cocoa {
   with option gtl_options
 
-  with lexique gtl_lexique {
+  with lexique gtl_scanner {
     fileExtension: "goilTemplate"
     title: "Template source"
     blockComment : "#"

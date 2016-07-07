@@ -47,10 +47,20 @@ rule <gtl_instruction_list> !@gtlInstructionList instructionList
 {
   instructionList = .emptyList { }
 
+  @string templateString = @string.retrieveAndResetTemplateString
+  if templateString != "" then
+    instructionList +=
+      !@gtlTemplateStringInstruction.new{ !.here !templateString }
+  end
   repeat
   while
     <gtl_instruction> ?@gtlInstruction instruction
     instructionList += !instruction
+    @string templateString = @string.retrieveAndResetTemplateString
+    if templateString != "" then
+      instructionList +=
+        !@gtlTemplateStringInstruction.new{ !.here !templateString }
+    end
   end
 }
 

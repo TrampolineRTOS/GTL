@@ -26,17 +26,19 @@
 
 syntax gtl_module_parser (gtl_scanner) {
 
+rule <gtl_instruction_list>
+  !@gtlInstructionList instructionList
+ 
 #-----------------------------------------------------------------------------*
-rule <gtl_module_start_symbol> !@gtlModule module !@lstring moduleName
+rule <gtl_module_start_symbol> ?!@gtlFuncMap funcMap ?!@gtlProcMap procMap
 {
-  $module$ ?moduleName
   repeat
   while
     <gtl_function> ?@gtlFunction function
-    [module addFunc !function]
+    [!?funcMap put ![function name] !function]
   while
     <gtl_procedure> ?@gtlProcedure procedure
-    [module addProc !procedure]
+    [!?procMap put ![procedure name] !procedure]
   end
 }
 
@@ -58,7 +60,8 @@ rule <gtl_procedure> !@gtlProcedure procedure
 #-----------------------------------------------------------------------------*
 rule <gtl_function> !@gtlFunction function
 {
-  $func$  $identifier$ ?let @lstring functionName
+  $func$
+  $identifier$ ?let @lstring functionName
   @location where = .here
   <gtl_argument_list> ?@gtlArgumentList arguments
   $:$ $identifier$ ?let @lstring returnVariable
@@ -68,6 +71,24 @@ rule <gtl_function> !@gtlFunction function
   function = .new {
     !where !functionName !arguments !instructionList !returnVariable
   }
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_argument_list> !@gtlArgumentList arguments
+{
+  arguments = .emptyList
+  $($
+  repeat
+    $identifier$ ?let @lstring argumentName
+    select
+      $:$ $@$ $identifier$ ?let @lstring typeName
+      arguments += !true ![typeName gtlType] !argumentName
+    or
+      arguments += !false !`@gtlData !argumentName
+    end
+  while $,$ 
+  end
+  $)$
 }
 
 }

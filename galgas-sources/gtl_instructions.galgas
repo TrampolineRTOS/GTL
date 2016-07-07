@@ -32,9 +32,10 @@ abstract class @gtlInstruction {
 }
 
 abstract method @gtlInstruction execute
-  ?@gtlContext     context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        outputString
+  ? let @gtlContext context
+  ?!@gtlVarMap      gtlVariableMap
+  ? let @gtlFuncMap funcs
+  ?!@string         outputString
 
 #=============================================================================*
 # instruction list
@@ -46,10 +47,11 @@ list @gtlInstructionList {
 method @gtlInstructionList execute
   ?let @gtlContext context
   ?!@gtlVarMap     gtlVariableMap
+  ?let @gtlFuncMap funcs
   ?!@string        outputString
 {
   for () in self do
-    [instruction execute !context !?gtlVariableMap !?outputString]
+    [instruction execute !context !?gtlVariableMap !funcs !?outputString]
   end
 }
 
@@ -67,11 +69,12 @@ abstract class @gtlAssignInstruction : @gtlInstruction {
 class @gtlLetInstruction           : @gtlAssignInstruction {}
 
 override method @gtlLetInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ?let @gtlContext unused context
+  ?!@gtlVarMap            gtlVariableMap
+  ? let @gtlFuncMap       funcs
+  ?!@string        unused outputString
 { 
-  [lValue setMe !?gtlVariableMap ![rValue eval !gtlVariableMap]]
+  [lValue setMe !?gtlVariableMap !funcs ![rValue eval !gtlVariableMap !funcs]]
 }
   
 #-----------------------------------------------------------------------------*
@@ -80,13 +83,16 @@ override method @gtlLetInstruction execute
 class @gtlLetAddInstruction        : @gtlAssignInstruction {}
 
 override method @gtlLetAddInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 { 
   [lValue setMe
     !?gtlVariableMap
-    ![[lValue get !gtlVariableMap] addOp ![rValue eval !gtlVariableMap]]
+    !funcs
+    ![[lValue get  !gtlVariableMap !funcs] addOp
+     ![rValue eval !gtlVariableMap !funcs]]
   ]
 }
   
@@ -96,13 +102,16 @@ override method @gtlLetAddInstruction execute
 class @gtlLetSubstractInstruction  : @gtlAssignInstruction {}
 
 override method @gtlLetSubstractInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 { 
   [lValue setMe
     !?gtlVariableMap
-    ![[lValue get !gtlVariableMap] subOp ![rValue eval !gtlVariableMap]]
+    !funcs
+    ![[lValue get  !gtlVariableMap !funcs] subOp
+     ![rValue eval !gtlVariableMap !funcs]]
   ]
 }
 
@@ -112,13 +121,16 @@ override method @gtlLetSubstractInstruction execute
 class @gtlLetMultiplyInstruction   : @gtlAssignInstruction {}   
 
 override method @gtlLetMultiplyInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let@gtlContext unused context
+  ?!@gtlVarMap            gtlVariableMap
+  ? let @gtlFuncMap       funcs
+  ?!@string        unused outputString
 { 
   [lValue setMe
     !?gtlVariableMap
-    ![[lValue get !gtlVariableMap] mulOp ![rValue eval !gtlVariableMap]]
+    !funcs
+    ![[lValue get  !gtlVariableMap !funcs] mulOp
+     ![rValue eval !gtlVariableMap !funcs]]
   ]
 }
 
@@ -128,13 +140,16 @@ override method @gtlLetMultiplyInstruction execute
 class @gtlLetDivideInstruction     : @gtlAssignInstruction {}   
 
 override method @gtlLetDivideInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 { 
   [lValue setMe
     !?gtlVariableMap
-    ![[lValue get !gtlVariableMap] divOp ![rValue eval !gtlVariableMap]]
+    !funcs
+    ![[lValue get  !gtlVariableMap !funcs] divOp
+     ![rValue eval !gtlVariableMap !funcs]]
   ]
 }
 
@@ -144,13 +159,16 @@ override method @gtlLetDivideInstruction execute
 class @gtlLetModuloInstruction     : @gtlAssignInstruction {}   
 
 override method @gtlLetModuloInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 { 
   [lValue setMe
     !?gtlVariableMap
-    ![[lValue get !gtlVariableMap] divOp ![rValue eval !gtlVariableMap]]
+    !funcs
+    ![[lValue get  !gtlVariableMap !funcs] divOp
+     ![rValue eval !gtlVariableMap !funcs]]
   ]
 }
 
@@ -160,13 +178,16 @@ override method @gtlLetModuloInstruction execute
 class @gtlLetShiftLeftInstruction  : @gtlAssignInstruction {}   
 
 override method @gtlLetShiftLeftInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 { 
   [lValue setMe
     !?gtlVariableMap
-    ![[lValue get !gtlVariableMap] slOp ![rValue eval !gtlVariableMap]]
+    !funcs
+    ![[lValue get  !gtlVariableMap !funcs] slOp
+     ![rValue eval !gtlVariableMap !funcs]]
   ]
 }
 
@@ -176,13 +197,16 @@ override method @gtlLetShiftLeftInstruction execute
 class @gtlLetShiftRightInstruction : @gtlAssignInstruction {}   
 
 override method @gtlLetShiftRightInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 { 
   [lValue setMe
     !?gtlVariableMap
-    ![[lValue get !gtlVariableMap] srOp ![rValue eval !gtlVariableMap]]
+    !funcs
+    ![[lValue get  !gtlVariableMap !funcs] srOp
+     ![rValue eval !gtlVariableMap !funcs]]
   ]
 }
 
@@ -192,13 +216,16 @@ override method @gtlLetShiftRightInstruction execute
 class @gtlLetAndInstruction        : @gtlAssignInstruction {}   
 
 override method @gtlLetAndInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 { 
   [lValue setMe
     !?gtlVariableMap
-    ![[lValue get !gtlVariableMap] andOp ![rValue eval !gtlVariableMap]]
+    !funcs
+    ![[lValue get  !gtlVariableMap !funcs] andOp
+     ![rValue eval !gtlVariableMap !funcs]]
   ]
 }
 
@@ -208,13 +235,16 @@ override method @gtlLetAndInstruction execute
 class @gtlLetOrInstruction         : @gtlAssignInstruction {}   
 
 override method @gtlLetOrInstruction execute 
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 {  
   [lValue setMe
     !?gtlVariableMap
-    ![[lValue get !gtlVariableMap] orOp ![rValue eval !gtlVariableMap]]
+    !funcs
+    ![[lValue get  !gtlVariableMap !funcs] orOp
+     ![rValue eval !gtlVariableMap !funcs]]
   ]
 }
 
@@ -224,13 +254,16 @@ override method @gtlLetOrInstruction execute
 class @gtlLetXorInstruction        : @gtlAssignInstruction {}   
 
 override method @gtlLetXorInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 { 
   [lValue setMe
     !?gtlVariableMap
-    ![[lValue get !gtlVariableMap] xorOp ![rValue eval !gtlVariableMap]]
+    !funcs
+    ![[lValue get  !gtlVariableMap !funcs] xorOp
+     ![rValue eval !gtlVariableMap !funcs]]
   ]
 }
 
@@ -242,9 +275,10 @@ class @gtlTemplateStringInstruction : @gtlInstruction {
 }
 
 override method @gtlTemplateStringInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap unused gtlVariableMap
-  ?!@string           outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap      unused gtlVariableMap
+  ? let @gtlFuncMap unused funcs
+  ?!@string                outputString
 {
   outputString += value
 }
@@ -257,11 +291,12 @@ class @gtlEmitInstruction : @gtlInstruction {
 }
 
 override method @gtlEmitInstruction execute
-  ?@gtlContext unused context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string           outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string                outputString
 { 
-  outputString += [[rValue eval !gtlVariableMap] string]
+  outputString += [[rValue eval !gtlVariableMap !funcs] string]
 }
 
 #-----------------------------------------------------------------------------*
@@ -274,11 +309,12 @@ class @gtlWriteToInstruction : @gtlInstruction {
 }
 
 override method @gtlWriteToInstruction execute
-  ?@gtlContext        context
-  ?!@gtlVarMap        gtlVariableMap
-  ?!@string    unused outputString
+  ? let @gtlContext        context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 { 
-  @string fullFileName = [[fileNameExpression eval !gtlVariableMap] string]
+  @string fullFileName = [[fileNameExpression eval !gtlVariableMap !funcs] string]
   @gtlString fileName = .new{!where ![fullFileName lastPathComponent]}
   @gtlString filePath = .new{!where ![fullFileName nativePathWithUnixPath]}
   @string result = ""
@@ -296,7 +332,7 @@ override method @gtlWriteToInstruction execute
     !0
   ]
   if (@uint.errorCount == 0) then
-    [instructions execute !context !?varsCopy !?result]
+    [instructions execute !context !?varsCopy !funcs !?result]
     if (@uint.errorCount == 0) then
       if isExecutable then
         @string directory = [fullFileName stringByDeletingLastPathComponent]
@@ -320,29 +356,31 @@ class @gtlTemplateInstruction : @gtlInstruction {
 }
 
 override method @gtlTemplateInstruction execute
-  ?@gtlContext     context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        outputString
+  ? let @gtlContext     context
+  ?!@gtlVarMap          gtlVariableMap
+  ? let @gtlFuncMap     funcs
+  ?!@string    unused   outputString
 {
+  @gtlContext newContext = context
   if [prefix string] != "" then
-    [!?context setPrefix ![prefix string]]
+    [!?newContext setPrefix ![prefix string]]
   end
   @lstring templateFileName =
-    [[fileName eval !gtlVariableMap] as @gtlString lstring]
-  gtlInvocation(
-    !templateFileName
-    !context
-    !ifExists == false
-    !false
-    !gtlVariableMap
-    !?outputString
-    ?let @bool found
-  )
-  if not found & ifExists then
-    @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
-    [instructionsIfNotFound execute !context !?localMap !?outputString]
-    gtlVariableMap = [localMap overriddenMap]
-  end
+    [[fileName eval !gtlVariableMap !funcs] as @gtlString lstring]
+#  gtlInvocation(
+#    !templateFileName
+#    !newContext
+#    !ifExists == false
+#    !false
+#    !gtlVariableMap
+#    !?outputString
+#    ?let @bool found
+#  )
+#  if not found & ifExists then
+#    @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
+#    [instructionsIfNotFound execute !context !?localMap !funcs !?outputString]
+#    gtlVariableMap = [localMap overriddenMap]
+#  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -354,9 +392,10 @@ class @gtlGetColumnInstruction : @gtlInstruction {
 }
 
 override method @gtlGetColumnInstruction execute
-  ?@gtlContext     unused context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        outputString
+  ? let @gtlContext     unused context
+  ?!@gtlVarMap                 gtlVariableMap
+  ? let @gtlFuncMap            funcs
+  ?!@string                    outputString
 {
   @string value = ""
   @bool searchEndOfLine = true
@@ -368,7 +407,7 @@ override method @gtlGetColumnInstruction execute
       value += " "
     end
   end
-  [destVariable setMe !?gtlVariableMap !@gtlString.new{!where !value}]
+  [destVariable setMe !?gtlVariableMap !funcs !@gtlString.new{!where !value}]
 }
 
 #-----------------------------------------------------------------------------*
@@ -386,24 +425,28 @@ class @gtlIfStatementInstruction : @gtlInstruction {
 }
 
 override method @gtlIfStatementInstruction execute
-  ?@gtlContext     context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        outputString
+  ? let @gtlContext     context
+  ?!@gtlVarMap          gtlVariableMap
+  ? let @gtlFuncMap     funcs
+  ?!@string             outputString
 {
   @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
   
   @bool noConditionMatching = true
   for () in thenElsifList while noConditionMatching do
-    @gtlData dataCondition = [condition eval !localMap]
-    @bool boolCondition = [dataCondition as @gtlBool value]
-      error dataCondition : "bool expected"
-    if boolCondition then
-      [instructionList execute !context !?localMap !?outputString]
-      noConditionMatching = false
+    @gtlData dataCondition = [condition eval !localMap !funcs]
+    if dataCondition is == @gtlBool then
+      @bool boolCondition = [dataCondition as @gtlBool value]
+      if boolCondition then
+        [instructionList execute !context !?localMap !funcs !?outputString]
+        noConditionMatching = false
+      end
+    else
+      error dataCondition : "bool expected" 
     end
   end
   if noConditionMatching then
-    [elseList execute !context !?localMap !?outputString]
+    [elseList execute !context !?localMap !funcs !?outputString]
   end
 
   gtlVariableMap = [localMap overriddenMap]
@@ -422,66 +465,69 @@ class @gtlForeachStatementInstruction : @gtlInstruction {
 }
 
 method @gtlForeachStatementInstruction iterateOnMap
-  ?@gtlContext     context
-  ?!@gtlVarMap     variableMap
-  ?!@string        outputString
-  ?let @gtlMap     iterableMap
+  ? let @gtlContext     context
+  ?!@gtlVarMap          variableMap
+  ? let @gtlFuncMap     funcs
+  ?!@string             outputString
+  ? let @gtlMap         iterableMap
 {
   @lstring keyName = .new{!"KEY" !where}
   @lstring indexName = .new{!"INDEX" !where}
   for () in [iterableMap value]
   before
-    [beforeList execute !context !?variableMap !?outputString]
+    [beforeList execute !context !?variableMap !funcs !?outputString]
   do (index)
     [!?variableMap replaceOrCreate !identifier !value]
     [!?variableMap replaceOrCreate
       !keyName !@gtlString.new{!where ![lkey string]}]
     [!?variableMap replaceOrCreate
-      !indexName !@gtlInt.new{!where ![index sint64]}]
-    [doList execute !context !?variableMap !?outputString]
+      !indexName !@gtlInt.new{!where ![index bigint]}]
+    [doList execute !context !?variableMap !funcs !?outputString]
   between
-    [betweenList execute !context !?variableMap !?outputString]
+    [betweenList execute !context !?variableMap !funcs !?outputString]
   after
-    [afterList execute !context !?variableMap !?outputString]
+    [afterList execute !context !?variableMap !funcs !?outputString]
   end
 }
 
 method @gtlForeachStatementInstruction iterateOnList
-  ?@gtlContext     context
-  ?!@gtlVarMap     variableMap
-  ?!@string        outputString
-  ?let @gtlList    iterableList
+  ? let @gtlContext     context
+  ?!@gtlVarMap          variableMap
+  ? let @gtlFuncMap     funcs
+  ?!@string             outputString
+  ? let @gtlList        iterableList
 {
   @lstring indexName = .new{!"INDEX" !where}
   for () in [iterableList value]
   before
-    [beforeList execute !context !?variableMap !?outputString]
+    [beforeList execute !context !?variableMap !funcs !?outputString]
   do (index)
     [!?variableMap replaceOrCreate !identifier !value]
     [!?variableMap replaceOrCreate
-      !indexName !@gtlInt.new{!where ![index sint64]}]
-    [doList execute !context !?variableMap !?outputString]
+      !indexName !@gtlInt.new{!where ![index bigint]}]
+    [doList execute !context !?variableMap !funcs !?outputString]
   between
-    [betweenList execute !context !?variableMap !?outputString]
+    [betweenList execute !context !?variableMap !funcs !?outputString]
   after
-    [afterList execute !context !?variableMap !?outputString]
+    [afterList execute !context !?variableMap !funcs !?outputString]
   end
 }
 
 override method @gtlForeachStatementInstruction execute
-  ?@gtlContext     context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        outputString
+  ? let @gtlContext    context
+  ?!@gtlVarMap         gtlVariableMap
+  ? let @gtlFuncMap    funcs
+  ?!@string            outputString
 {
   @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
-  @gtlData iterableData = [iterable eval !localMap]
+  @gtlData iterableData = [iterable eval !localMap !funcs]
   cast iterableData
   case == @gtlMap iterableMap:
-    [self iterateOnMap !context !?localMap !?outputString !iterableMap]
+    [self iterateOnMap !context !?localMap !funcs !?outputString !iterableMap]
   case == @gtlList iterableList:
-    [self iterateOnList !context !?localMap !?outputString !iterableList]
+    [self iterateOnList !context !?localMap !funcs !?outputString !iterableList]
   else
-    error iterable : "Map or List expected"
+    error [iterable location] : "Map or List expected"
   end 
   gtlVariableMap = [localMap overriddenMap]
 }
@@ -497,20 +543,21 @@ class @gtlForStatementInstruction : @gtlInstruction {
 }
 
 override method @gtlForStatementInstruction execute
-  ?@gtlContext     context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        outputString
+  ? let @gtlContext     context
+  ?!@gtlVarMap          gtlVariableMap
+  ? let @gtlFuncMap     funcs
+  ?!@string             outputString
 {
   @lstring indexName = .new{!"INDEX" !where}
   @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
   for () in iterable
   do (index)
-    @gtlData value = [expression eval !localMap]
+    @gtlData value = [expression eval !localMap !funcs]
     [!?localMap replaceOrCreate !identifier !value]
     [!?localMap replaceOrCreate !indexName !@gtlInt.new{!where ![index bigint]}]
-    [doList execute !context !?localMap !?outputString]
+    [doList execute !context !?localMap !funcs !?outputString]
   between
-    [betweenList execute !context !?localMap !?outputString]
+    [betweenList execute !context !?localMap !funcs !?outputString]
   end
   gtlVariableMap = [localMap overriddenMap]
 }
@@ -531,34 +578,35 @@ class @gtlLoopStatementInstruction : @gtlInstruction {
 }
 
 override method @gtlLoopStatementInstruction execute
-  ?@gtlContext     context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        outputString
+  ? let @gtlContext     context
+  ?!@gtlVarMap          gtlVariableMap
+  ? let @gtlFuncMap     funcs
+  ?!@string             outputString
 {
   @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
-  @gtlData startData = [start eval !localMap]
-  @gtlData stopData  = [stop  eval !localMap]
-  @gtlData stepData  = [step  eval !localMap]
+  @gtlData startData = [start eval !localMap !funcs]
+  @gtlData stopData  = [stop  eval !localMap !funcs]
+  @gtlData stepData  = [step  eval !localMap !funcs]
   @bigint startVal = [startData as @gtlInt value]
-    error start : "int expected" : startVal
+    error [start location] : "int expected" : startVal
   @bigint stopVal  = [stopData  as @gtlInt value]
-    error stop : "int expected" : stopVal
+    error [stop location] : "int expected" : stopVal
   @bigint stepVal  = [stepData  as @gtlInt value] * upDown
-    error step : "int expected" : stopVal
+    error [step location] : "int expected" : stopVal
   @bigint direction = 1_G
   if stepVal < 0_G then direction = -1_G end
   if (stopVal - startVal) * direction >= 0_G then
-    [beforeList execute !context !?localMap !?outputString]
+    [beforeList execute !context !?localMap !funcs !?outputString]
     @uint count = [(stopVal - startVal) * direction + 1LS uint]
     loop (count)
       [!?localMap replaceOrCreate
         !identifier !@gtlInt.new{![identifier location] !startVal}]
-      [doList execute !context !?localMap !?outputString]
+      [doList execute !context !?localMap !funcs !?outputString]
       startVal = startVal + stepVal
     while (stopVal - startVal) * direction >= 0_G do
-      [betweenList execute !context !?localMap !?outputString]
+      [betweenList execute !context !?localMap !funcs !?outputString]
     end
-    [afterList execute !context !?localMap !?outputString]
+    [afterList execute !context !?localMap !funcs !?outputString]
   end
   gtlVariableMap = [localMap overriddenMap]
 }
@@ -573,18 +621,19 @@ class @gtlRepeatStatementInstruction : @gtlInstruction {
 }
 
 override method @gtlRepeatStatementInstruction execute
-  ?@gtlContext     context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        outputString
+  ? let @gtlContext     context
+  ?!@gtlVarMap          gtlVariableMap
+  ? let @gtlFuncMap     funcs
+  ?!@string             outputString
 {
   @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
   @bool boolCondition = false
   loop (@uint.max{})
-    [continueList execute !context !?localMap !?outputString]
-    @bool boolCondition = [[condition eval !localMap] as @gtlBool value] 
-      error condition : "bool expected"
+    [continueList execute !context !?localMap !funcs !?outputString]
+    @bool boolCondition = [[condition eval !localMap !funcs] as @gtlBool value] 
+      error [condition location] : "bool expected"
   while boolCondition do
-    [doList execute !context !?localMap !?outputString]
+    [doList execute !context !?localMap !funcs !?outputString]
   end
   gtlVariableMap = [localMap overriddenMap]
 }
@@ -599,19 +648,20 @@ class @gtlErrorStatementInstruction : @gtlInstruction {
 }
 
 override method @gtlErrorStatementInstruction execute
-  ?@gtlContext     unused context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        unused outputString
+  ? let@gtlContext  unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 {
   @location errorLocation
   if hereInstead then 
     errorLocation = where
   else
-    errorLocation = [[identifier get !gtlVariableMap] where]
+    errorLocation = [[identifier get !gtlVariableMap !funcs] where]
   end
   @string errorMessageString =
-    [[errorMessage eval !gtlVariableMap] as @gtlString value]
-      error errorMessage : "string expected" : errorMessageString
+    [[errorMessage eval !gtlVariableMap !funcs] as @gtlString value]
+      error [errorMessage location] : "string expected" : errorMessageString
   error errorLocation : errorMessageString
 }
 
@@ -625,19 +675,20 @@ class @gtlWarningStatementInstruction : @gtlInstruction {
 }
 
 override method @gtlWarningStatementInstruction execute
-  ?@gtlContext     unused context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 {
   @location warningLocation
   if hereInstead then 
     warningLocation = where
   else
-    warningLocation = [[identifier get !gtlVariableMap] where]
+    warningLocation = [[identifier get !gtlVariableMap !funcs] where]
   end
   @string warningMessageString = 
-    [[warningMessage eval !gtlVariableMap] as @gtlString value]
-      error warningMessage : "string expected" : warningMessageString
+    [[warningMessage eval !gtlVariableMap !funcs] as @gtlString value]
+      error [warningMessage location] : "string expected" : warningMessageString
   error warningLocation : warningMessageString
 }
 
@@ -650,11 +701,13 @@ class @gtlPrintStatementInstruction : @gtlInstruction {
 }
 
 override method @gtlPrintStatementInstruction execute
-  ?@gtlContext     unused context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 {
-  @string messageToPrintString = [[messageToPrint eval !gtlVariableMap] string]
+  @string messageToPrintString =
+    [[messageToPrint eval !gtlVariableMap !funcs] string]
   message messageToPrintString
   if carriageReturn then message "\n" end
 }
@@ -667,11 +720,12 @@ class @gtlDisplayStatementInstruction : @gtlInstruction {
 }
 
 override method @gtlDisplayStatementInstruction execute
-  ?@gtlContext     unused context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 {
-  @gtlData variable = [variablePath get !gtlVariableMap]
+  @gtlData variable = [variablePath get !gtlVariableMap !funcs]
   message [variable desc !0]
 }
 
@@ -738,11 +792,12 @@ method @gtlAbstractSortInstruction sort
 }
 
 override method @gtlAbstractSortInstruction execute
-  ?@gtlContext     unused context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 {
-  @gtlData variable = [variablePath get !gtlVariableMap]
+  @gtlData variable = [variablePath get !gtlVariableMap !funcs]
   cast variable
   case == @gtlList variableList:
     @list listToSort = [variableList value]
@@ -754,7 +809,7 @@ override method @gtlAbstractSortInstruction execute
     [variablePath last ?@gtlVarItem lastComponent]
     error [lastComponent field] : "list expected"
   end
-  [variablePath setMe !?gtlVariableMap !variable]
+  [variablePath setMe !?gtlVariableMap !funcs !variable]
 }
 
 #-----------------------------------------------------------------------------*
@@ -778,9 +833,9 @@ getter @gtlSortStatementStructInstruction compareElements
 {
   if [keyList length] > 0 then
     @gtlStruct s1Struct = s1 as @gtlStruct
-      error s1 : "struct expected" : s1Struct
+      error [s1 location] : "struct expected" : s1Struct
     @gtlStruct s2Struct = s2 as @gtlStruct
-      error s2 : "struct expected" : s2Struct
+      error [s2 location] : "struct expected" : s2Struct
     [!?keyList popFirst ?@lstring field ?@lsint order]
     [[s1Struct value] get !field ?@gtlData s1Field]
     [[s2Struct value] get !field ?@gtlData s2Field]
@@ -827,11 +882,12 @@ class @gtlTabStatementInstruction : @gtlInstruction {
 }
 
 override method @gtlTabStatementInstruction execute
-  ?@gtlContext     unused context
-  ?!@gtlVarMap     gtlVariableMap
-  ?!@string        outputString
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        funcs
+  ?!@string         unused outputString
 {
-  @gtlData tabValueData = [tabValue eval !gtlVariableMap]
+  @gtlData tabValueData = [tabValue eval !gtlVariableMap !funcs]
   @gtlInt tabValueInt = tabValueData as @gtlInt
-    error tabValueData : "int expected" : tabValueInt
+    error [tabValueData location] : "int expected" : tabValueInt
 }
