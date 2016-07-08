@@ -587,12 +587,24 @@ override method @gtlLoopStatementInstruction execute
   @gtlData startData = [start eval !localMap !funcs]
   @gtlData stopData  = [stop  eval !localMap !funcs]
   @gtlData stepData  = [step  eval !localMap !funcs]
-  @bigint startVal = [startData as @gtlInt value]
+  @bigint startVal
+  @bigint stopVal
+  @bigint stepVal
+  if startData is == @gtlInt then 
+    startVal = [startData as @gtlInt value]
+  else
     error [start location] : "int expected" : startVal
-  @bigint stopVal  = [stopData  as @gtlInt value]
+  end
+  if stopData is == @gtlInt then
+    stopVal  = [stopData  as @gtlInt value]
+  else
     error [stop location] : "int expected" : stopVal
-  @bigint stepVal  = [stepData  as @gtlInt value] * upDown
-    error [step location] : "int expected" : stopVal
+  end
+  if stepData is == @gtlInt then
+    stepVal  = [stepData  as @gtlInt value] * upDown
+  else
+    error [step location] : "int expected" : stepVal
+  end
   @bigint direction = 1_G
   if stepVal < 0_G then direction = -1_G end
   if (stopVal - startVal) * direction >= 0_G then
@@ -805,11 +817,15 @@ override method @gtlAbstractSortInstruction execute
     if length > 0 then
       [self sort !?listToSort !0 !length-1]
     end
+    [variablePath setMe
+      !?gtlVariableMap
+      !funcs
+      !@gtlList.new { !where !listToSort }
+    ]
   else
     [variablePath last ?@gtlVarItem lastComponent]
     error [lastComponent field] : "list expected"
   end
-  [variablePath setMe !?gtlVariableMap !funcs !variable]
 }
 
 #-----------------------------------------------------------------------------*
@@ -890,4 +906,56 @@ override method @gtlTabStatementInstruction execute
   @gtlData tabValueData = [tabValue eval !gtlVariableMap !funcs]
   @gtlInt tabValueInt = tabValueData as @gtlInt
     error [tabValueData location] : "int expected" : tabValueInt
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : variables
+#-----------------------------------------------------------------------------*
+class @gtlVariablesInstruction : @gtlInstruction {}
+
+override method @gtlVariablesInstruction execute
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap unused funcs
+  ?!@string         unused outputString
+{
+  @string delimitor = @string.stringWithSequenceOfCharacters{!'=' !79 } + "\n"
+  @string varDelim  = @string.stringWithSequenceOfCharacters{!'-' !79 } + "\n"
+  @string separator = @string.stringWithSequenceOfCharacters{!'=' !17 }
+  message separator + " Variables "
+        + separator + "= Displayed from "
+        + separator + "\n"
+  message [where locationString] + "\n"
+  message delimitor
+  for (name variable) in gtlVariableMap do
+  message varDelim
+  message [name string] + "\n"
+  message varDelim
+  message [variable desc !0]
+  end
+  message delimitor
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : [target setter : <argument list>]
+#-----------------------------------------------------------------------------*
+class @gtlSetterCallInstruction : @gtlInstruction {
+  @gtlVarPath        target
+  @lstring           setterName
+  @gtlExpressionList arguments
+}
+
+override method @gtlSetterCallInstruction execute
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @gtlFuncMap        functionMap
+  ?!@string         unused outputString
+{
+  @gtlDataList dataArguments = .emptyList
+  for () in arguments do
+    dataArguments += ![expression eval !gtlVariableMap !functionMap]
+  end
+  @gtlData targetData = [target get !gtlVariableMap !functionMap]
+  [!?targetData performSetter !setterName !dataArguments]
+  [target setMe !?gtlVariableMap !functionMap !targetData]
 }

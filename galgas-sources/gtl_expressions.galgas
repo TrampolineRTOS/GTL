@@ -1156,16 +1156,10 @@ override getter @gtlMapOfListExpression eval
       case == @gtlStruct itemStruct:
         if [[itemStruct value] hasKey ![key string]] then
           [[itemStruct value] get !key ?@gtlData keyValue]
-          cast keyValue
-          case == @gtlString keyValueString:
-            [!?resultMap put
-              !@lstring.new { ![keyValueString value] ![keyValueString where] }
-              !item
-            ]
-          else
-            error [expressionValue where] : "field " + key
-              + " of item at index " + index + " is not a string"
-          end
+          [!?resultMap put
+            ![keyValue lstring]
+            !item
+          ]
         else
           error [expressionValue where] : "item at index " + index
             + " does not have field named " + key

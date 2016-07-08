@@ -124,6 +124,7 @@ getter @gtlData location -> @location result {
 
 abstract getter @gtlData desc ?let @uint tab -> @string result
 abstract getter @gtlData string  -> @string result
+abstract getter @gtlData lstring -> @lstring result
 abstract getter @gtlData bool    -> @bool result
 abstract getter @gtlData plusOp  -> @gtlData result
 abstract getter @gtlData minusOp -> @gtlData result
@@ -172,6 +173,11 @@ override getter @gtlType desc
 }
 
 override getter @gtlType string  -> @string result { result = [type typeName] }
+
+override getter @gtlType lstring -> @lstring result {
+  result = .new { ![type typeName] !where }
+}
+
 override getter @gtlType bool    -> @bool result {
   error where : "cannot cast a type to a bool" : result
 }
@@ -250,10 +256,15 @@ override getter @gtlType performGetter
   ?let @gtlDataList arguments
   ->@gtlData        result
 {
-  if    [methodName string] == "string" then
+   if   "string" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] ![self string]
+    }
+  elsif "type"   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
     }
   else
     error methodName : "unknown getter '" + methodName +"' for type target" : result
@@ -284,6 +295,11 @@ override getter @gtlEnum desc
 }
 
 override getter @gtlEnum string  -> @string result { result = value }
+
+override getter @gtlEnum lstring -> @lstring result {
+  result = .new { !value !where }
+}
+
 override getter @gtlEnum bool    -> @bool result {
   error where : "cannot cast an enum to a bool" : result
 }
@@ -362,10 +378,15 @@ override getter @gtlEnum performGetter
   ?let @gtlDataList arguments
   ->@gtlData        result
 {
-  if    [methodName string] == "string" then
+  if    "string" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] ![self string]
+    }
+  elsif "type"   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
     }
   else
     error methodName : "unknown getter '" + methodName +"' for enum target" : result
@@ -373,7 +394,7 @@ override getter @gtlEnum performGetter
 }
 
 #-----------------------------------------------------------------------------*
-# Performs a setter on a @gtlInt
+# Performs a setter on a @gtlEnum
 #-----------------------------------------------------------------------------*
 override setter @gtlEnum performSetter
   ?let @lstring            methodName
@@ -396,6 +417,10 @@ override getter @gtlInt desc
 }
 
 override getter @gtlInt string  -> @string result { result = [value string] }
+
+override getter @gtlInt lstring -> @lstring result {
+  result = .new { ![value string] !where }
+}
 
 override getter @gtlInt bool    -> @bool result {
   error where : "cannot cast an int to a bool" : result
@@ -553,106 +578,116 @@ override getter @gtlInt performGetter
   ?let @gtlDataList arguments
   ->@gtlData        result
 {
-  if    [methodName string] == "string" then
+  if    "string"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![value string]
+      ![methodName location] ![self string]
     }
-  elsif [methodName string] == "hexString" then
+  elsif "hexString"              == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] ![value hexString]
     }
-  elsif [methodName string] == "numberOfBytes" then
+  elsif "xString"                == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![value xString]
+    }
+  elsif "numberOfBytes"          == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
       !([[value bitCountForUnsignedRepresentation] bigint] - 1) / 8 + 1
     }
-  elsif [methodName string] == "signedNumberOfBytes" then
+  elsif "signedNumberOfBytes"    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
       !([[value bitCountForSignedRepresentation] bigint] - 1) / 8 + 1
     }
-  elsif [methodName string] == "numberOfBits" then
+  elsif "numberOfBits"           == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
       ![[value bitCountForUnsignedRepresentation] bigint]
     }
-  elsif [methodName string] == "signedNumberOfBits" then
+  elsif "signedNumberOfBits"     == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
       ![[value bitCountForSignedRepresentation] bigint]
     }
-  elsif [methodName string] == "sign" then
+  elsif "sign"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
       ![[value sign] bigint]
     }
-  elsif [methodName string] == "fitsUnsignedInByte" then
+  elsif "fitsUnsignedInByte"     == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
       ![value bitCountForUnsignedRepresentation] <= 8
     }
-  elsif [methodName string] == "fitsSignedInByte" then
+  elsif "fitsSignedInByte"       == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
       ![value bitCountForSignedRepresentation] <= 8
     }
-  elsif [methodName string] == "fitsUnsignedInShort" then
+  elsif "fitsUnsignedInShort"    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
       ![value bitCountForUnsignedRepresentation] <= 16
     }
-  elsif [methodName string] == "fitsSignedInShort" then
+  elsif "fitsSignedInShort"      == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
       ![value bitCountForSignedRepresentation] <= 16
     }
-  elsif [methodName string] == "fitsUnsignedInLong" then
+  elsif "fitsUnsignedInLong"     == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
       ![value bitCountForUnsignedRepresentation] <= 32
     }
-  elsif [methodName string] == "fitsSignedInLong" then
+  elsif "fitsSignedInLong"       == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
       ![value bitCountForSignedRepresentation] <= 32
     }
-  elsif [methodName string] == "fitsUnsignedInLongLong" then
+  elsif "fitsUnsignedInLongLong" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
       ![value bitCountForUnsignedRepresentation] <= 64
     }
-  elsif [methodName string] == "fitsSignedInLongLong" then
+  elsif "fitsSignedInLongLong"   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
       ![value bitCountForSignedRepresentation] <= 64
     }
-  elsif [methodName string] == "abs" then
+  elsif "abs"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
       ![value abs]
     }
-  elsif [methodName string] == "bitAtIndex" then
+  elsif "bitAtIndex"             == methodName then
     argumentsCheck(!methodName !intArgument() !arguments)
     @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     result = @gtlBool.new {
       ![methodName location]
       ![value bitAtIndex !index]
+    }
+  elsif "type"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
     }
   else
     error methodName : "unknown getter '" + methodName +"' for int target" : result
@@ -694,6 +729,10 @@ override getter @gtlFloat desc
 }
 
 override getter @gtlFloat string -> @string result { result = [value string] }
+
+override getter @gtlFloat lstring -> @lstring result {
+  result = .new { ![value string] !where }
+}
 
 override getter @gtlFloat bool   -> @bool result {
   error where : "cannot cast a float to a bool" : result
@@ -819,66 +858,71 @@ override getter @gtlFloat performGetter
   ?let @gtlDataList arguments
   ->@gtlData        result
 {
-  if    [methodName string] == "string" then
+  if    "string"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![value string]
+      ![methodName location] ![self string]
     }
-  elsif [methodName string] == "cos" then
+  elsif "cos"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
       ![methodName location] ![value cos]
     }
-  elsif [methodName string] == "sin" then
+  elsif "sin"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
       ![methodName location] ![value sin]
     }
-  elsif [methodName string] == "tan" then
+  elsif "tan"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
       ![methodName location] ![value tan]
     }
-  elsif [methodName string] == "cosDegree" then
+  elsif "cosDegree"              == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
       ![methodName location] ![value cosDegree]
     }
-  elsif [methodName string] == "sinDegree" then
+  elsif "sinDegree"              == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
       ![methodName location] ![value sinDegree]
     }
-  elsif [methodName string] == "tanDegree" then
+  elsif "tanDegree"              == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
       ![methodName location] ![value tanDegree]
     }
-  elsif [methodName string] == "exp" then
+  elsif "exp"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
       ![methodName location] ![value exp]
     }
-  elsif [methodName string] == "log2" then
+  elsif "log2"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
       ![methodName location] ![value log2]
     }
-  elsif [methodName string] == "log10" then
+  elsif "log10"                  == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
       ![methodName location] ![value log10]
     }
-  elsif [methodName string] == "sqrt" then
+  elsif "sqrt"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
       ![methodName location] ![value sqrt]
     }
-  elsif [methodName string] == "power" then
+  elsif "power"                  == methodName then
     argumentsCheck(!methodName !floatArgument() !arguments)
     @double power = [[arguments dataAtIndex !0] as @gtlFloat value]
     result = @gtlFloat.new {
       ![methodName location] ![value power !power]
+    }
+  elsif "type"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
     }
   else
     error methodName : "unknown getter '" + methodName +"' for float target" : result
@@ -908,9 +952,9 @@ override getter @gtlString desc
     "string: \"" + value + "\"\n"
 }
 
-getter @gtlString lstring -> @lstring result { result = .new{!value !where} }
-
 override getter @gtlString string -> @string result { result = value }
+
+override getter @gtlString lstring -> @lstring result { result = .new{!value !where} }
 
 override getter @gtlString bool   -> @bool result {
   error where : "cannot cast a string to a bool" : result
@@ -1025,7 +1069,12 @@ override getter @gtlString performGetter
   ?let @gtlDataList arguments
   ->@gtlData        result
 {
-  if    [methodName string] == "HTMLRepresentation" then
+  if    [methodName string] == "string" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] !value
+    }
+  elsif [methodName string] == "HTMLRepresentation" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] ![value HTMLRepresentation]
@@ -1157,6 +1206,11 @@ override getter @gtlString performGetter
       ![methodName location]
       !exists
     }
+  elsif "type"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
+    }
   else
     error methodName : "unknown getter '" + methodName +"' for string target"
       : result
@@ -1187,6 +1241,10 @@ override getter @gtlBool desc
 }
 
 override getter @gtlBool string -> @string result { result = [value cString] }
+
+override getter @gtlBool lstring -> @lstring result {
+  result = .new { ![value cString] !where }
+}
 
 override getter @gtlBool bool   -> @bool result {
   result = value
@@ -1318,6 +1376,12 @@ override getter @gtlBool performGetter
       ![methodName location]
       !if value then "true" else "false" end
     }
+  elsif  [methodName string] == "string" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location]
+      ![self string]
+    }
   elsif [methodName string] == "yesOrNo" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
@@ -1341,6 +1405,11 @@ override getter @gtlBool performGetter
     result = @gtlInt.new {
       ![methodName location]
       !if value then 1_G else 0_G end
+    }
+  elsif "type"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
     }
   else
     error methodName : "unknown getter '" + methodName +"' for boolean target"
@@ -1383,6 +1452,10 @@ override getter @gtlStruct desc
 }
 
 override getter @gtlStruct string -> @string result {
+  error where : "struct forbidden" : result
+}
+
+override getter @gtlStruct lstring -> @lstring result {
   error where : "struct forbidden" : result
 }
 
@@ -1476,11 +1549,24 @@ override getter @gtlStruct leOp ?let @gtlData unused right -> @gtlData result {
 #-----------------------------------------------------------------------------*
 override getter @gtlStruct performGetter
   ?let @lstring            methodName
-  ?let @gtlDataList unused arguments
+  ?let @gtlDataList        arguments
   ->@gtlData               result
 {
-  error methodName : "unknown getter '" + methodName +"' for struct target"
-    : result
+  if    "map"                    == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlMap.new {
+      ![methodName location]
+      !value
+    }
+  elsif "type"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
+    }
+  else
+    error methodName : "unknown getter '" + methodName +"' for struct target"
+      : result
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -1513,6 +1599,10 @@ override getter @gtlList desc
 }
 
 override getter @gtlList string -> @string result {
+  error where : "list forbidden" : result
+}
+
+override getter @gtlList lstring -> @lstring result {
   error where : "list forbidden" : result
 }
 
@@ -1618,18 +1708,45 @@ override getter @gtlList performGetter
   ?let @gtlDataList arguments
   ->@gtlData        result
 {
-  if    [methodName string] == "length" then
+  if    "length"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
       ![[value length] bigint]
     }
-  elsif [methodName string] == "first" then
+  elsif "first"                  == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     [value first ?result]     
-  elsif [methodName string] == "last" then
+  elsif "last"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     [value last ?result]     
+  elsif "mapBy"                  == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @lstring key = [[arguments dataAtIndex !0] lstring]
+    @gtlVarMap resultMap = .emptyMap
+    for (item) in [self value] do (index)
+      cast item
+      case == @gtlStruct itemStruct:
+        if [[itemStruct value] hasKey ![key string]] then
+          [[itemStruct value] get !key ?@gtlData keyValue]
+          [!?resultMap put
+            ![keyValue lstring]
+            !item
+          ]
+        else
+          error methodName : "item at index " + index
+            + " does not have field named " + key
+        end
+      else
+        error methodName : "list of struct expected"
+      end
+    end
+    result = @gtlMap.new { !where !resultMap }
+  elsif "type"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
+    }
   else
     error methodName : "unknown getter '" + methodName +"' for list target"
       : result
@@ -1666,6 +1783,10 @@ override getter @gtlMap desc
 }
 
 override getter @gtlMap string -> @string result {
+  error where : "map forbidden" : result
+}
+
+override getter @gtlMap lstring -> @lstring result {
   error where : "map forbidden" : result
 }
 
@@ -1765,12 +1886,24 @@ override getter @gtlMap performGetter
   ?let @gtlDataList arguments
   ->@gtlData        result
 {
-  if    [methodName string] == "length" then
+  if    "length"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
       ![[value count] bigint]
     }
+  elsif "type"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
+    }
+  elsif "list"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    @list resultList = .emptyList
+    for (key item) in [self value] do
+      resultList += !item
+    end
+    result = @gtlList.new { !where !resultList }
   else
     error methodName : "unknown getter '" + methodName +"' for map target"
       : result

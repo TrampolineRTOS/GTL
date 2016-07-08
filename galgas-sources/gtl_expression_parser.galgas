@@ -492,13 +492,14 @@ rule <gtl_factor>
 
 #------------------------------------------------------------------------------*
 
-#rule <gtl_factor>
-#  !@gtlExpression expression
-#{
-#  $listof$
-#  <gtl_expression> ?let @gtlExpression data
-#  expression = @gtlListOfExpression.new { !.here !data }
-#}
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $listof$
+  <gtl_expression> ?let @gtlExpression data
+  expression = @gtlListOfExpression.new { !.here !data }
+  $end$
+}
 
 #------------------------------------------------------------------------------*
 
@@ -525,7 +526,7 @@ rule <gtl_list_item>
 rule <gtl_factor>
   !@gtlExpression expression
 {
-  $list$ $[$
+  $@[$
   @gtlExpressionList expressionList = .emptyList
   repeat
     <gtl_list_item> ?@gtlExpression listItem

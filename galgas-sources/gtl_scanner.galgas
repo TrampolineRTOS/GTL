@@ -58,10 +58,10 @@ list goilTemplateKeyWordList style keywordsStyle error message "the '%K' keyword
   "after", "before", "between", "block", "by", "call", "default", "display",
   "do", "down", "else", "elsif", "emptylist", "emptymap", "end", "error",
   "exists", "false", "for", "foreach", "from", "func", "here", "if", "in",
-  "list", "listof", "let", "loop", "mapof", "mod", "module", "no", "not", "or",
+  "listof", "let", "loop", "mapof", "mod", "module", "no", "not", "or",
   "print", "println", "proc", "repeat", "sort", "step", "tab", "template", 
   "then", "to", "true", "typeof", "up", "yes", "warning", "while", "write",
-  "executable"
+  "executable", "variables"
 }
 
 rule 'a'->'z' |  'A'->'Z' {
@@ -172,7 +172,7 @@ list galgasDelimitorsList style delimitersStyle error message "the '%K' delimito
     "!",    ":=",   "++",      "[",      "]",     "+=",    "?!",   "!?",
     "/",    "!=",   ">=",      "&",     "<=",      "{",     "}",   "-=",
     "<",     "^",   ">>",      "~",     "<-",     "<<",     "@",   "*=",
-    "/=",   "&=",   "|=",    "<<=",    ">>=",   "mod=",     "^="
+    "/=",   "&=",   "|=",    "<<=",    ">>=",   "mod=",     "^=",  "@["
 }
 
 rule list galgasDelimitorsList
