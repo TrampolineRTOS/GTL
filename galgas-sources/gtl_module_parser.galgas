@@ -30,31 +30,18 @@ rule <gtl_instruction_list>
   !@gtlInstructionList instructionList
  
 #-----------------------------------------------------------------------------*
-rule <gtl_module_start_symbol> ?!@gtlFuncMap funcMap ?!@gtlProcMap procMap
+rule <gtl_module_start_symbol> ?!@gtlFuncMap funcMap
 {
+  repeat
+  while
+    <gtl_import> !?funcMap
+  end
+
   repeat
   while
     <gtl_function> ?@gtlFunction function
     [!?funcMap put ![function name] !function]
-  while
-    <gtl_procedure> ?@gtlProcedure procedure
-    [!?procMap put ![procedure name] !procedure]
   end
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_procedure> !@gtlProcedure procedure
-{
-  $proc$
-  $identifier$ ?let @lstring procedureName
-  @location where = .here
-  <gtl_argument_list> ?@gtlArgumentList arguments
-  <gtl_instruction_list> ?@gtlInstructionList instructionList
-  $end$ $proc$
-  
-  procedure = .new {
-    !where !procedureName !arguments !instructionList
-  }
 }
 
 #-----------------------------------------------------------------------------*
@@ -89,6 +76,13 @@ rule <gtl_argument_list> !@gtlArgumentList arguments
   while $,$ 
   end
   $)$
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_import> ?!@gtlFuncMap funcMap 
+{
+  $import$ $string$ ?let @lstring fileName
+  grammar gtl_module_grammar in fileName !?funcMap
 }
 
 }
