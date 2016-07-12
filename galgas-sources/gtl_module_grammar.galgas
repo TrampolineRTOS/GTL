@@ -1,6 +1,6 @@
 #---------------------------------------------------------------------------*
 #
-#  @file gtl_grammar.galgas
+#  @file gtl_module_grammar.galgas
 #
 #  @section desc File description
 #
@@ -25,14 +25,13 @@
 #---------------------------------------------------------------------------*
 
 
-grammar gtl_grammar "LL1" {
+grammar gtl_module_grammar "LL1" {
+  syntax gtl_module_parser
   syntax gtl_parser
   syntax gtl_expression_parser
-  syntax gtl_module_parser
 
-   <gtl_start_symbol>
-     !@gtlFuncMap         functions
-     !@gtlInstructionList program
+   <gtl_module_start_symbol>
+     ?!@gtlFuncMap functionMap
 }
 
 #---------------------------------------------------------------------------*

@@ -7,11 +7,13 @@ case . "gtl"
 message "a source text file with the .gtl extension"
 grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
 {
-  grammar gtl_grammar in inSourceFile ?@gtlInstructionList program
+  grammar gtl_grammar in inSourceFile
+    ?@gtlFuncMap functions
+    ?@gtlInstructionList program
   
   @gtlContext context = emptyContext()
   @gtlVarMap variables = .emptyMap
-  @gtlFuncMap functions = .emptyMap
+
   @string result = ""
   
   [program execute !context !?variables !functions !?result]

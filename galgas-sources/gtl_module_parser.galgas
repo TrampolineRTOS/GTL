@@ -61,6 +61,12 @@ rule <gtl_function> !@gtlFunction function
 }
 
 #-----------------------------------------------------------------------------*
+rule <gtl_function_instruction_list>
+  !@gtlInstructionList instructionList
+{
+}
+
+#-----------------------------------------------------------------------------*
 rule <gtl_argument_list> !@gtlArgumentList arguments
 {
   arguments = .emptyList

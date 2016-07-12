@@ -35,17 +35,27 @@ rule <gtl_variable>
 rule <gtl_variable_or_here>
   !@gtlVarPath variable
   !@bool hereInstead
-  
+
+rule <gtl_import>
+  ?!@gtlFuncMap funcMap 
+
 #-----------------------------------------------------------------------------*
-rule <gtl_start_symbol> !@gtlInstructionList program
+rule <gtl_start_symbol>
+  !@gtlFuncMap functions
+  !@gtlInstructionList program
 {
+  functions = .emptyMap
+  repeat 
+  while
+    <gtl_import> !?functions
+  end
   <gtl_instruction_list> ?program
 }
 
 #-----------------------------------------------------------------------------*
 rule <gtl_instruction_list> !@gtlInstructionList instructionList
 {
-  instructionList = .emptyList { }
+  instructionList = .emptyList
 
   @string templateString = @string.retrieveAndResetTemplateString
   if templateString != "" then
@@ -55,6 +65,14 @@ rule <gtl_instruction_list> !@gtlInstructionList instructionList
   repeat
   while
     <gtl_instruction> ?@gtlInstruction instruction
+    instructionList += !instruction
+    @string templateString = @string.retrieveAndResetTemplateString
+    if templateString != "" then
+      instructionList +=
+        !@gtlTemplateStringInstruction.new{ !.here !templateString }
+    end
+  while
+    <gtl_template_instruction>  ?@gtlInstruction instruction
     instructionList += !instruction
     @string templateString = @string.retrieveAndResetTemplateString
     if templateString != "" then
@@ -98,7 +116,7 @@ rule <gtl_instruction> !@gtlInstruction instruction
 }
 
 #-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
+rule <gtl_template_instruction> !@gtlInstruction instruction
 {
   @lstring prefix
   @bool ifExists = false
