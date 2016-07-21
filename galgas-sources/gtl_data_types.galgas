@@ -27,13 +27,14 @@
 getter @type typeName
   ->@string typeName
 {
-  if    self == `@gtlInt    then typeName = "int"
-  elsif self == `@gtlFloat  then typeName = "float"
-  elsif self == `@gtlString then typeName = "string"
-  elsif self == `@gtlBool   then typeName = "bool"
-  elsif self == `@gtlStruct then typeName = "struct"
-  elsif self == `@gtlList   then typeName = "list"
-  elsif self == `@gtlMap    then typeName = "map"
+  if    self == `@gtlInt           then typeName = "int"
+  elsif self == `@gtlFloat         then typeName = "float"
+  elsif self == `@gtlString        then typeName = "string"
+  elsif self == `@gtlBool          then typeName = "bool"
+  elsif self == `@gtlStruct        then typeName = "struct"
+  elsif self == `@gtlList          then typeName = "list"
+  elsif self == `@gtlMap           then typeName = "map"
+  elsif self == `@gtlUnconstructed then typeName = "unconstructed"
   else typeName = "-unkown-" end
 }
 
@@ -41,13 +42,14 @@ getter @string gtlType
   ?let @location location
   ->@type type
 {
-  if    self == "int"    then type = `@gtlInt
-  elsif self == "float"  then type = `@gtlFloat
-  elsif self == "string" then type = `@gtlString
-  elsif self == "bool"   then type = `@gtlBool
-  elsif self == "struct" then type = `@gtlStruct
-  elsif self == "list"   then type = `@gtlList
-  elsif self == "map"    then type = `@gtlMap
+  if    self == "int"           then type = `@gtlInt
+  elsif self == "float"         then type = `@gtlFloat
+  elsif self == "string"        then type = `@gtlString
+  elsif self == "bool"          then type = `@gtlBool
+  elsif self == "struct"        then type = `@gtlStruct
+  elsif self == "list"          then type = `@gtlList
+  elsif self == "map"           then type = `@gtlMap
+  elsif self == "unconstructed" then type = `@gtlUnconstructed
   else error location : "unknown type" : type end
 }
 
@@ -55,13 +57,14 @@ getter @lstring gtlType
   ->@type type
 {
   @string typeName = [self string]
-  if    typeName == "int"    then type = `@gtlInt
-  elsif typeName == "float"  then type = `@gtlFloat
-  elsif typeName == "string" then type = `@gtlString
-  elsif typeName == "bool"   then type = `@gtlBool
-  elsif typeName == "struct" then type = `@gtlStruct
-  elsif typeName == "list"   then type = `@gtlList
-  elsif typeName == "map"    then type = `@gtlMap
+  if    typeName == "int"           then type = `@gtlInt
+  elsif typeName == "float"         then type = `@gtlFloat
+  elsif typeName == "string"        then type = `@gtlString
+  elsif typeName == "bool"          then type = `@gtlBool
+  elsif typeName == "struct"        then type = `@gtlStruct
+  elsif typeName == "list"          then type = `@gtlList
+  elsif typeName == "map"           then type = `@gtlMap
+  elsif typeName == "unconstructed" then type = `@gtlUnconstructed
   else error location : "unknown type" : type end
 }
 
@@ -126,6 +129,8 @@ abstract getter @gtlData desc ?let @uint tab -> @string result
 abstract getter @gtlData string  -> @string result
 abstract getter @gtlData lstring -> @lstring result
 abstract getter @gtlData bool    -> @bool result
+abstract getter @gtlData int     -> @bigint result
+abstract getter @gtlData float   -> @double result
 abstract getter @gtlData plusOp  -> @gtlData result
 abstract getter @gtlData minusOp -> @gtlData result
 abstract getter @gtlData notOp   -> @gtlData result
@@ -160,6 +165,126 @@ abstract setter @gtlData performSetter
   ?let @gtlDataList arguments
 
 #-----------------------------------------------------------------------------*
+# unconstructed type and operations on unconstructed
+#-----------------------------------------------------------------------------*
+class @gtlUnconstructed : @gtlData {}
+
+override getter @gtlUnconstructed desc
+  ?let @uint tab
+  -> @string result
+{
+  result = @string.stringWithSequenceOfCharacters{!' ' !tab} +
+    "unconstructed\n"
+}
+
+override getter @gtlUnconstructed string  -> @string result {
+  error where : "cannot cast an unconstructed to a string" : result
+}
+
+override getter @gtlUnconstructed lstring -> @lstring result {
+  error where : "cannot cast an unconstructed to a lstring" : result
+}
+
+override getter @gtlUnconstructed bool    -> @bool result {
+  error where : "cannot cast an unconstructed to a bool" : result
+}
+
+override getter @gtlUnconstructed int     -> @bigint result {
+  error where : "cannot cast an unconstructed to an int" : result
+}
+
+override getter @gtlUnconstructed float   -> @double result {
+  error where : "cannot cast an unconstructed to a float" : result
+}
+
+override getter @gtlUnconstructed plusOp  -> @gtlData result {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed minusOp -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed notOp   -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed addOp ?let @gtlData unused right -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed subOp ?let @gtlData unused right -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed mulOp ?let @gtlData unused right -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed divOp ?let @gtlData unused right -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed modOp ?let @gtlData unused right -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed andOp ?let @gtlData unused right -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed orOp ?let @gtlData unused right -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed xorOp ?let @gtlData unused right -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed slOp ?let @gtlData unused right -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed srOp ?let @gtlData unused right -> @gtlData result  {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed neqOp ?let @gtlData unused right -> @gtlData result {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed eqOp ?let @gtlData unused right -> @gtlData result {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed gtOp ?let @gtlData unused right -> @gtlData result {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed geOp ?let @gtlData unused right -> @gtlData result {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed ltOp ?let @gtlData unused right -> @gtlData result {
+  error where : "unconstructed forbidden" : result
+}
+override getter @gtlUnconstructed leOp ?let @gtlData unused right -> @gtlData result {
+  error where : "unconstructed forbidden" : result
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a getter on a @gtlUnconstructed
+#-----------------------------------------------------------------------------*
+override getter @gtlUnconstructed performGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ->@gtlData        result
+{
+  if "type"      == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
+    }
+  else
+    error methodName : "unknown getter '" + methodName +"' for unconstructed target" : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a setter on a @gtlUnconstructed
+#-----------------------------------------------------------------------------*
+override setter @gtlUnconstructed performSetter
+  ?let @lstring            methodName
+  ?let @gtlDataList unused arguments
+{
+  error methodName : "unknown setter '" + methodName +"' for unconstructed target"
+}
+
+
+#-----------------------------------------------------------------------------*
 # type type and operations on type
 #-----------------------------------------------------------------------------*
 class @gtlType   : @gtlData { @type type }
@@ -180,6 +305,14 @@ override getter @gtlType lstring -> @lstring result {
 
 override getter @gtlType bool    -> @bool result {
   error where : "cannot cast a type to a bool" : result
+}
+
+override getter @gtlType int     -> @bigint result {
+  error where : "cannot cast a type to an int" : result
+}
+
+override getter @gtlType float   -> @double result {
+  error where : "cannot cast a type to a float" : result
 }
 
 override getter @gtlType plusOp  -> @gtlData result {
@@ -256,15 +389,20 @@ override getter @gtlType performGetter
   ?let @gtlDataList arguments
   ->@gtlData        result
 {
-   if   "string" == methodName then
+   if   "string"    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] ![self string]
     }
-  elsif "type"   == methodName then
+  elsif "type"      == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
+    }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !false
     }
   else
     error methodName : "unknown getter '" + methodName +"' for type target" : result
@@ -272,7 +410,7 @@ override getter @gtlType performGetter
 }
 
 #-----------------------------------------------------------------------------*
-# Performs a setter on a @gtlInt
+# Performs a setter on a @gtlType
 #-----------------------------------------------------------------------------*
 override setter @gtlType performSetter
   ?let @lstring            methodName
@@ -302,6 +440,14 @@ override getter @gtlEnum lstring -> @lstring result {
 
 override getter @gtlEnum bool    -> @bool result {
   error where : "cannot cast an enum to a bool" : result
+}
+
+override getter @gtlEnum int     -> @bigint result {
+  error where : "cannot cast an enum to an int" : result
+}
+
+override getter @gtlEnum float   -> @double result {
+  error where : "cannot cast an enum to a float" : result
 }
 
 override getter @gtlEnum plusOp  -> @gtlData result {
@@ -378,15 +524,20 @@ override getter @gtlEnum performGetter
   ?let @gtlDataList arguments
   ->@gtlData        result
 {
-  if    "string" == methodName then
+  if    "string"    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] ![self string]
     }
-  elsif "type"   == methodName then
+  elsif "type"      == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
+    }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !false
     }
   else
     error methodName : "unknown getter '" + methodName +"' for enum target" : result
@@ -424,6 +575,14 @@ override getter @gtlInt lstring -> @lstring result {
 
 override getter @gtlInt bool    -> @bool result {
   error where : "cannot cast an int to a bool" : result
+}
+
+override getter @gtlInt int     -> @bigint result {
+  result = value
+}
+
+override getter @gtlInt float   -> @double result {
+  result = [[value sint64] double]
 }
 
 override getter @gtlInt plusOp  -> @gtlData result { result = self }
@@ -689,6 +848,11 @@ override getter @gtlInt performGetter
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
     }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !true
+    }
   else
     error methodName : "unknown getter '" + methodName +"' for int target" : result
   end
@@ -734,8 +898,16 @@ override getter @gtlFloat lstring -> @lstring result {
   result = .new { ![value string] !where }
 }
 
-override getter @gtlFloat bool   -> @bool result {
+override getter @gtlFloat bool    -> @bool result {
   error where : "cannot cast a float to a bool" : result
+}
+
+override getter @gtlFloat int     -> @bigint result {
+  result = [[value sint64] bigint]
+}
+
+override getter @gtlFloat float   -> @double result {
+  result = value
 }
 
 override getter @gtlFloat plusOp  -> @gtlData result { result = self }
@@ -924,6 +1096,11 @@ override getter @gtlFloat performGetter
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
     }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !true
+    }
   else
     error methodName : "unknown getter '" + methodName +"' for float target" : result
   end
@@ -958,6 +1135,14 @@ override getter @gtlString lstring -> @lstring result { result = .new{!value !wh
 
 override getter @gtlString bool   -> @bool result {
   error where : "cannot cast a string to a bool" : result
+}
+
+override getter @gtlString int    -> @bigint result {
+  result = [[value decimalUnsignedNumber] bigint]
+}
+
+override getter @gtlString float  -> @double result {
+  result = [[value decimalUnsignedNumber] double]
 }
 
 override getter @gtlString plusOp  -> @gtlData result {
@@ -1211,6 +1396,11 @@ override getter @gtlString performGetter
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
     }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !false
+    }
   else
     error methodName : "unknown getter '" + methodName +"' for string target"
       : result
@@ -1248,6 +1438,14 @@ override getter @gtlBool lstring -> @lstring result {
 
 override getter @gtlBool bool   -> @bool result {
   result = value
+}
+
+override getter @gtlBool int    -> @bigint result {
+  result = if value then 1_G else 0_G end
+}
+
+override getter @gtlBool float  -> @double result {
+  result = if value then 1.0 else 0.0 end
 }
 
 override getter @gtlBool plusOp  -> @gtlData result {
@@ -1411,6 +1609,11 @@ override getter @gtlBool performGetter
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
     }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !false
+    }
   else
     error methodName : "unknown getter '" + methodName +"' for boolean target"
       : result
@@ -1461,6 +1664,14 @@ override getter @gtlStruct lstring -> @lstring result {
 
 override getter @gtlStruct bool   -> @bool result {
   error where : "cannot cast a struct to a bool" : result
+}
+
+override getter @gtlStruct int    -> @bigint result {
+  error where : "cannot cast a struct to an int" : result
+}
+
+override getter @gtlStruct float  -> @double result {
+  error where : "cannot cast a struct to a float" : result
 }
 
 override getter @gtlStruct plusOp  -> @gtlData result {
@@ -1563,6 +1774,11 @@ override getter @gtlStruct performGetter
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
     }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !false
+    }
   else
     error methodName : "unknown getter '" + methodName +"' for struct target"
       : result
@@ -1608,6 +1824,14 @@ override getter @gtlList lstring -> @lstring result {
 
 override getter @gtlList bool   -> @bool result {
   error where : "cannot cast a list to a bool" : result
+}
+
+override getter @gtlList int    -> @bigint result {
+  error where : "cannot cast a list to an int" : result
+}
+
+override getter @gtlList float  -> @double result {
+  error where : "cannot cast a list to a float" : result
 }
 
 override getter @gtlList plusOp  -> @gtlData result {
@@ -1747,6 +1971,11 @@ override getter @gtlList performGetter
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
     }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !false
+    }
   else
     error methodName : "unknown getter '" + methodName +"' for list target"
       : result
@@ -1790,8 +2019,16 @@ override getter @gtlMap lstring -> @lstring result {
   error where : "map forbidden" : result
 }
 
-override getter @gtlMap bool   -> @bool result {
+override getter @gtlMap bool    -> @bool result {
   error where : "cannot cast a map to a bool" : result
+}
+
+override getter @gtlMap int     -> @bigint result {
+  error where : "cannot cast a map to an int" : result
+}
+
+override getter @gtlMap float   -> @double result {
+  error where : "cannot cast a map to a float" : result
 }
 
 override getter @gtlMap plusOp  -> @gtlData result {
@@ -1896,6 +2133,11 @@ override getter @gtlMap performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
+    }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !false
     }
   elsif "list"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)

@@ -1,0 +1,45 @@
+%#
+# Assignment tests
+#
+
+# integer
+let a := 3
+display a
+
+# boolean
+let a := true
+display a
+let a := false
+display a
+
+# string
+let a := "Hello !"
+display a
+
+# struct
+let a::i := 3
+let a::s := "Hello !"
+display a
+
+# list 
+let a := emptylist
+let a += 3
+let a += "Hello !"
+display a
+let a[0] := 4
+display a
+let a[1] := "Bye !"
+display a
+let a[0] += 1
+display a
+
+# map
+let a := emptymap
+let a["name"] := "Bob"
+let a["age"] := 18
+let a["friends"] := 5
+display a
+
+# type
+let a := @int
+display a

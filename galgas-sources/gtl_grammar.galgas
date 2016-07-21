@@ -28,11 +28,12 @@
 grammar gtl_grammar "LL1" {
   syntax gtl_parser
   syntax gtl_expression_parser
-  syntax gtl_module_parser
+  syntax gtl_instruction_parser
 
    <gtl_start_symbol>
      !@gtlFuncMap         functions
      !@gtlInstructionList program
+
 }
 
 #---------------------------------------------------------------------------*

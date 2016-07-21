@@ -1,0 +1,97 @@
+%
+#----------------------------------------------------------------
+# loop test
+#----------------------------------------------------------------
+
+# create a list of integers
+let x := 3
+let myList := @( 1, 2, x + 10, 4 )
+display myList
+
+foreach element in myList do
+  print INDEX
+  print " : "
+  println element
+end foreach
+
+# create a list of structs
+let myList := @(
+  @{ name : "Lucius", age  : 10 },
+  @{ name : "Ragnar", age  : 31 },
+  @{ name : "Steve",  age  : 45 }
+)
+display myList
+
+foreach element in myList do
+  println [INDEX string]
+    + ": "
+    + element::name
+    + " is "
+    + [element::age string]
+    + " years old"
+end foreach
+
+# create a list of map
+let myList := @(
+  @[ "name" : "Lucius", "age"  : 10 ],
+  @[ "name" : "Ragnar", "age"  : 31 ],
+  @[ "name" : "Steve",  "age"  : 45 ]
+)
+
+foreach element in myList do
+  println [INDEX string]
+    + ": "
+    + element["name"]
+    + " is "
+    + [element["age"] string]
+    + " years old"
+end foreach
+
+# create a map
+let myMap := @[
+  "city" : "Nantes",
+  "code" : "44000",
+  "size" : "medium"
+]
+display myMap
+
+let aSecondList := listof myMap end
+display aSecondList
+
+# for loop test
+for a in "Paris", "New-York", "Nantes" do
+  display a
+end for
+
+# loop tests
+loop a from 1 to 10 do
+  display a
+end loop
+
+loop a from 1 to 10 step 2 do
+  display a
+end loop
+
+loop a from 20 to 10 step -2 do
+  display a
+end loop
+
+loop a from 20 down to 10 do
+  display a
+end loop
+
+loop a from 20 down to 10 step 3 do
+  display a
+end loop
+
+# repeat test
+let x := 10
+
+repeat
+  println "repeat x = " + [x string]
+while x > 0 do
+  println "while  x = " + [x string]
+  let x -= 1
+end repeat
+
+variables

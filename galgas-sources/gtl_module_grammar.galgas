@@ -27,7 +27,7 @@
 
 grammar gtl_module_grammar "LL1" {
   syntax gtl_module_parser
-  syntax gtl_parser
+  syntax gtl_instruction_parser
   syntax gtl_expression_parser
 
    <gtl_module_start_symbol>

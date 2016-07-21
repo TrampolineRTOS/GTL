@@ -60,7 +60,7 @@ method @gtlExecutableEntity checkArguments
     # Check the arguments have the good type
     for () in formalArguments, () in actualArguments do
       if [data dynamicType] != type & typed then
-        error [data location] : [type name] + " expected for " + name
+        error [data location] : [type typeName] + " expected for " + name
         result = false
       else
         [!?entityVariableMap put !name !data]
@@ -102,11 +102,15 @@ getter @gtlFunction call
 {
   [self checkArguments
     !fromLocation !actualArguments ?@gtlVarMap funcVariableMap ?@bool ok]
+  [!?funcVariableMap put
+    !returnVariable
+    !@gtlUnconstructed.new{ ![returnVariable location] }
+  ]
   if ok then
     @gtlContext functionContext = emptyContext()
     @string outputString = ""
     [instructions execute !functionContext !?funcVariableMap !funcs !?outputString]
-    [funcVariableMap get !returnVariable ?result]
+    [funcVariableMap getResult !returnVariable ?result]
   else
    error fromLocation : "function call failed" : result
   end

@@ -73,10 +73,25 @@ rule 'a'->'z' |  'A'->'Z' {
   send search identifierString in goilTemplateKeyWordList default $identifier$
 }
 
+# ----------------------------- Delimitors ---------------------------------------
+list galgasDelimitorsList style delimitersStyle error message "the '%K' delimitor"{
+    "*",    "|",     ",",      "+",     "::",     ">",
+    ":",     "(",    ")",     "->",      "?",    "==",
+    "!",    ":=",    "[",      "]",     "+=",    "-=",
+    "/",    "!=",   ">=",      "&",     "<=",      "{",     "}",
+    "<",     "^",   ">>",      "~",     "<-",     "<<",     "@",   "*=",
+    "/=",   "&=",   "|=",    "<<=",    ">>=",   "mod=",     "^=",  "@[",
+    "@(",   "@{"
+}
+
+rule list galgasDelimitorsList
+
 #------------------------------- Integer, floating Point Constant ------------------
 @double floatValue
-$literal_double$ !floatValue !tokenString  style floatCsts error message "a float number"
-$signed_literal_integer_bigint$ !intValue  style integerStyle error message "a bigint decimal number"
+$literal_double$ !floatValue style floatCsts error message "a float number"
+$signed_literal_integer_bigint$ !intValue style integerStyle error message "a bigint decimal number"
+
+$-$ style delimitersStyle error message "the - delimitor"
 
 message floatNumberConversionError : "invalid float number"
 message internalError : "internal error"
@@ -164,19 +179,6 @@ rule '.' {
     end
   end
 }
-
-# ----------------------------- Delimitors ---------------------------------------
-list galgasDelimitorsList style delimitersStyle error message "the '%K' delimitor"{
-    "*",     "|",    ",",      "+",     "--",     "::",     ">",    ";",
-    ":",     "-",    "(",      ")",     "->",      "?",    "==",   "??",
-    "!",    ":=",   "++",      "[",      "]",     "+=",    "?!",   "!?",
-    "/",    "!=",   ">=",      "&",     "<=",      "{",     "}",   "-=",
-    "<",     "^",   ">>",      "~",     "<-",     "<<",     "@",   "*=",
-    "/=",   "&=",   "|=",    "<<=",    ">>=",   "mod=",     "^=",  "@["
-}
-
-rule list galgasDelimitorsList
-
 
 # ------------------------------------ String ----------------------------
 

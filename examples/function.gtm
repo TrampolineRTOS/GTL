@@ -1,0 +1,34 @@
+%
+
+#----------------------------------------------------------------
+# function with no argument
+#----------------------------------------------------------------
+func pi() result
+  let result := 3.14159
+end func
+
+#----------------------------------------------------------------
+# function with one argument
+#----------------------------------------------------------------
+func square(x) result
+  let result := x * x
+end func
+
+#----------------------------------------------------------------
+# function with one typed argument
+#----------------------------------------------------------------
+func csquare(x : @int) result
+  let result := x * x
+end func
+
+#----------------------------------------------------------------
+# function with one argument and error management
+#----------------------------------------------------------------
+func psquare(x) result
+  if [x isANumber] then
+    let result := x * x
+  else
+    error x : "int or float expected"
+  end if
+end func
+

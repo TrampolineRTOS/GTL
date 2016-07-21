@@ -1175,7 +1175,7 @@ override getter @gtlMapOfListExpression eval
 }
 
 #-----------------------------------------------------------------------------*
-# @gtlListOfExpression : convert a map to struct
+# @gtlListOfExpression : convert a map to a list
 #-----------------------------------------------------------------------------*
 class @gtlListOfExpression : @gtlExpression {
   @gtlExpression expression
@@ -1216,6 +1216,25 @@ override getter @gtlLiteralStructExpression eval
     [!?resultStruct put !key ![item eval !gtlVariableMap !functionMap]]
   end
   result = @gtlStruct.new { !where !resultStruct }
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlLiteralMapExpression
+#-----------------------------------------------------------------------------*
+class @gtlLiteralMapExpression : @gtlExpression {
+  @gtlExpressionMap value
+}
+
+override getter @gtlLiteralMapExpression eval
+  ?let @gtlVarMap  gtlVariableMap
+  ?let @gtlFuncMap functionMap
+  -> @gtlData result
+{
+  @gtlVarMap resultStruct = .emptyMap
+  for (key item) in value do
+    [!?resultStruct put !key ![item eval !gtlVariableMap !functionMap]]
+  end
+  result = @gtlMap.new { !where !resultStruct }
 }
 
 #-----------------------------------------------------------------------------*

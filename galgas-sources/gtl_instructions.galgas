@@ -640,10 +640,15 @@ override method @gtlRepeatStatementInstruction execute
 {
   @gtlVarMap localMap = .mapWithMapToOverride{!gtlVariableMap}
   @bool boolCondition = false
+  
   loop (@uint.max{})
     [continueList execute !context !?localMap !funcs !?outputString]
-    @bool boolCondition = [[condition eval !localMap !funcs] as @gtlBool value] 
-      error [condition location] : "bool expected"
+    @gtlData conditionData = [condition eval !localMap !funcs]
+    if [conditionData dynamicType] == `@gtlBool then
+      boolCondition = [conditionData as @gtlBool value] 
+    else
+      error conditionData : "bool expected"
+    end
   while boolCondition do
     [doList execute !context !?localMap !funcs !?outputString]
   end
@@ -671,10 +676,12 @@ override method @gtlErrorStatementInstruction execute
   else
     errorLocation = [[identifier get !gtlVariableMap !funcs] where]
   end
-  @string errorMessageString =
-    [[errorMessage eval !gtlVariableMap !funcs] as @gtlString value]
-      error [errorMessage location] : "string expected" : errorMessageString
-  error errorLocation : errorMessageString
+  @gtlData errorMessageData = [errorMessage eval !gtlVariableMap !funcs] 
+  if [errorMessageData dynamicType] == `@gtlString then
+    error errorLocation : [errorMessageData as @gtlString value]
+  else
+    error [errorMessage location] : "string expected"
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -698,10 +705,12 @@ override method @gtlWarningStatementInstruction execute
   else
     warningLocation = [[identifier get !gtlVariableMap !funcs] where]
   end
-  @string warningMessageString = 
-    [[warningMessage eval !gtlVariableMap !funcs] as @gtlString value]
-      error [warningMessage location] : "string expected" : warningMessageString
-  error warningLocation : warningMessageString
+  @gtlData warningMessageData = [warningMessage eval !gtlVariableMap !funcs]
+  if [warningMessageData dynamicType] == `@gtlString then
+    error warningLocation : [warningMessageData as @gtlString value]
+  else
+    error [warningMessage location] : "string expected"
+  end
 }
 
 #-----------------------------------------------------------------------------*

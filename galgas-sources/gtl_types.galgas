@@ -55,6 +55,7 @@ map @gtlVarMap {
   @gtlData value
   insert put error message "a variable or field named '%K' is already declared in %L"
   search get error message "there is no variable or field named '%K'"
+  search getResult error message "function did not return a value in '%K'"
   remove del error message "there is no variable or field named '%K' to delete"
 }
 

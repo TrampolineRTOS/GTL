@@ -286,6 +286,19 @@ rule <gtl_factor>
 }
 
 #------------------------------------------------------------------------------*
+#   F A C T O R    :    a float value                                          *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $literal_double$ ?let @ldouble literalFloat
+  expression = @gtlTerminal.new{
+    !.here !@gtlFloat.new { !.here ![literalFloat double] }
+  }
+}
+
+#------------------------------------------------------------------------------*
 #   F A C T O R    :    a literal string value                                 *
 #------------------------------------------------------------------------------*
 
@@ -343,12 +356,14 @@ rule <gtl_factor>
     end
     @gtlExpressionList functionArguments = .emptyList
     $($
-    repeat
-      <gtl_expression> ?@gtlExpression expression
-      functionArguments += !expression
-    while
-      $,$
-    end
+    select
+      repeat
+        <gtl_expression> ?@gtlExpression expression
+        functionArguments += !expression
+      while
+        $,$
+      end
+    or end
     $)$
     @lstring functionName = [[path itemAtIndex !0] field]
     expression = @gtlFunctionCallExpression.new {
@@ -503,38 +518,54 @@ rule <gtl_factor>
 
 #------------------------------------------------------------------------------*
 
-rule <gtl_list_item>
+rule <gtl_factor>
   !@gtlExpression expression
 {
-  select
-    <gtl_expression> ?expression
-  or
-    ${$
-    @gtlExpressionMap fields = .emptyMap
-    repeat
-      $identifier$ ?let @lstring fieldName
-      $:$
-      <gtl_expression> ?@gtlExpression fieldExpression
-      [!?fields put !fieldName !fieldExpression]
-    while $,$
-    end
-    $}$
-    expression = @gtlLiteralStructExpression.new { !.here !fields }
+  $@($
+  @gtlExpressionList expressionList = .emptyList
+  repeat
+    <gtl_expression> ?@gtlExpression listItem
+    expressionList += !listItem
+  while $,$
   end
+  $)$
+  expression = @gtlLiteralListExpression.new { !.here !expressionList }
 }
+
+#------------------------------------------------------------------------------*
 
 rule <gtl_factor>
   !@gtlExpression expression
 {
   $@[$
-  @gtlExpressionList expressionList = .emptyList
+  @gtlExpressionMap expressionMap = .emptyMap
   repeat
-    <gtl_list_item> ?@gtlExpression listItem
-    expressionList += !listItem
+    $string$ ?let @lstring key
+    $:$
+    <gtl_expression> ?@gtlExpression mapItem
+    [!?expressionMap put !key !mapItem]
   while $,$
   end
   $]$
-  expression = @gtlLiteralListExpression.new { !.here !expressionList }
+  expression = @gtlLiteralMapExpression.new { !.here !expressionMap }
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $@{$
+  @gtlExpressionMap expressionMap = .emptyMap
+  repeat
+    $identifier$ ?let @lstring fieldName
+    $:$
+    <gtl_expression> ?@gtlExpression structField
+    [!?expressionMap put !fieldName !structField]
+  while $,$
+  end
+  $}$
+  expression = @gtlLiteralStructExpression.new { !.here !expressionMap }
 }
 
 #------------------------------------------------------------------------------*

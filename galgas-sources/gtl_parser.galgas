@@ -39,6 +39,9 @@ rule <gtl_variable_or_here>
 rule <gtl_import>
   ?!@gtlFuncMap funcMap 
 
+rule <gtl_simple_instruction>
+  !@gtlInstruction instruction
+
 #-----------------------------------------------------------------------------*
 rule <gtl_start_symbol>
   !@gtlFuncMap functions
@@ -49,11 +52,11 @@ rule <gtl_start_symbol>
   while
     <gtl_import> !?functions
   end
-  <gtl_instruction_list> ?program
+  <gtl_template_instruction_list> ?program
 }
 
 #-----------------------------------------------------------------------------*
-rule <gtl_instruction_list> !@gtlInstructionList instructionList
+rule <gtl_template_instruction_list> !@gtlInstructionList instructionList
 {
   instructionList = .emptyList
 
@@ -64,7 +67,7 @@ rule <gtl_instruction_list> !@gtlInstructionList instructionList
   end
   repeat
   while
-    <gtl_instruction> ?@gtlInstruction instruction
+    <gtl_template_instruction> ?@gtlInstruction instruction
     instructionList += !instruction
     @string templateString = @string.retrieveAndResetTemplateString
     if templateString != "" then
@@ -72,7 +75,7 @@ rule <gtl_instruction_list> !@gtlInstructionList instructionList
         !@gtlTemplateStringInstruction.new{ !.here !templateString }
     end
   while
-    <gtl_template_instruction>  ?@gtlInstruction instruction
+    <gtl_simple_instruction> ?@gtlInstruction instruction
     instructionList += !instruction
     @string templateString = @string.retrieveAndResetTemplateString
     if templateString != "" then
@@ -86,7 +89,7 @@ rule <gtl_instruction_list> !@gtlInstructionList instructionList
 # emit parsing. Syntax is:
 # ! expression
 #-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
+rule <gtl_template_instruction> !@gtlInstruction instruction
 {
   $!$ @location where = .here
   <gtl_expression> ?@gtlExpression expression
@@ -100,14 +103,14 @@ rule <gtl_instruction> !@gtlInstruction instruction
 #   ...
 # end write
 #-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
+rule <gtl_template_instruction> !@gtlInstruction instruction
 {
   @bool isExecutable = false
   $write$ @location where = .here $to$
   select $executable$ isExecutable = true or end
   <gtl_expression> ?@gtlExpression fileName
   $:$
-  <gtl_instruction_list> ?@gtlInstructionList instructionList
+  <gtl_template_instruction_list> ?@gtlInstructionList instructionList
   $end$ $write$ 
   
   instruction = @gtlWriteToInstruction.new {
@@ -133,7 +136,7 @@ rule <gtl_template_instruction> !@gtlInstruction instruction
     or prefix = .new { !"" !@location.here } end
     select
       $or$
-      <gtl_instruction_list> ?instructionList
+      <gtl_template_instruction_list> ?instructionList
       $end$ $template$
     or end
   or
@@ -149,7 +152,7 @@ rule <gtl_template_instruction> !@gtlInstruction instruction
 }
 
 #-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
+rule <gtl_template_instruction> !@gtlInstruction instruction
 {
   $?$ @location where = .here
   <gtl_variable> ?let @gtlVarPath columnConstantName
@@ -160,7 +163,7 @@ rule <gtl_instruction> !@gtlInstruction instruction
 }
 
 #-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
+rule <gtl_template_instruction> !@gtlInstruction instruction
 {
   @gtlThenElsifStatementList thenElsifList = .emptyList
   @gtlInstructionList elseList = .emptyList
@@ -169,7 +172,7 @@ rule <gtl_instruction> !@gtlInstruction instruction
   repeat
     <gtl_expression> ?@gtlExpression condition
     $then$
-    <gtl_instruction_list> ?@gtlInstructionList instructionList
+    <gtl_template_instruction_list> ?@gtlInstructionList instructionList
     
     thenElsifList += !condition !instructionList
   while
@@ -178,7 +181,7 @@ rule <gtl_instruction> !@gtlInstruction instruction
 #--- else
   select
     $else$
-    <gtl_instruction_list> ?elseList
+    <gtl_template_instruction_list> ?elseList
   or end
 #---
   $end$
@@ -190,7 +193,7 @@ rule <gtl_instruction> !@gtlInstruction instruction
 }
 
 #-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
+rule <gtl_template_instruction> !@gtlInstruction instruction
 {
   @gtlInstructionList beforeList = .emptyList
   @gtlInstructionList doList = .emptyList
@@ -203,20 +206,20 @@ rule <gtl_instruction> !@gtlInstruction instruction
 #--- before block
   select
     $before$
-    <gtl_instruction_list> ?beforeList
+    <gtl_template_instruction_list> ?beforeList
   or end
 #--- do block
   $do$
-  <gtl_instruction_list> ?doList
+  <gtl_template_instruction_list> ?doList
 #--- between block
   select
     $between$
-    <gtl_instruction_list> ?betweenList
+    <gtl_template_instruction_list> ?betweenList
   or end
 #--- after block
   select
     $after$
-    <gtl_instruction_list> ?afterList
+    <gtl_template_instruction_list> ?afterList
   or end
 #---
   $end$
@@ -228,7 +231,7 @@ rule <gtl_instruction> !@gtlInstruction instruction
 }
 
 #-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
+rule <gtl_template_instruction> !@gtlInstruction instruction
 {
   @gtlInstructionList doList = .emptyList
   @gtlInstructionList betweenList = .emptyList
@@ -245,11 +248,11 @@ rule <gtl_instruction> !@gtlInstruction instruction
   end
 #--- Do block
   $do$
-  <gtl_instruction_list> ?doList
+  <gtl_template_instruction_list> ?doList
 #--- between block
   select
     $between$
-    <gtl_instruction_list> ?betweenList
+    <gtl_template_instruction_list> ?betweenList
   or end
 #---
   $end$
@@ -261,7 +264,7 @@ rule <gtl_instruction> !@gtlInstruction instruction
 }
 
 #-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
+rule <gtl_template_instruction> !@gtlInstruction instruction
 {
   @gtlInstructionList beforeList = .emptyList
   @gtlInstructionList betweenList = .emptyList
@@ -292,20 +295,20 @@ rule <gtl_instruction> !@gtlInstruction instruction
 #--- before block
   select
     $before$
-    <gtl_instruction_list> ?beforeList
+    <gtl_template_instruction_list> ?beforeList
   or end
 #--- do block
   $do$
-  <gtl_instruction_list> ?@gtlInstructionList doList
+  <gtl_template_instruction_list> ?@gtlInstructionList doList
 #--- between block
   select
     $between$
-    <gtl_instruction_list> ?betweenList
+    <gtl_template_instruction_list> ?betweenList
   or end
 #--- after block
   select
     $after$
-    <gtl_instruction_list> ?afterList
+    <gtl_template_instruction_list> ?afterList
   or end
 #---
   $end$
@@ -318,200 +321,19 @@ rule <gtl_instruction> !@gtlInstruction instruction
 }
 
 #-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
+rule <gtl_template_instruction> !@gtlInstruction instruction
 {
   $repeat$ @location where = .here
-  <gtl_instruction_list> ?@gtlInstructionList continueList
+  <gtl_template_instruction_list> ?@gtlInstructionList continueList
   $while$
   <gtl_expression> ?@gtlExpression condition
   $do$
-  <gtl_instruction_list> ?@gtlInstructionList doList
+  <gtl_template_instruction_list> ?@gtlInstructionList doList
   $end$
   $repeat$
   
   instruction = @gtlRepeatStatementInstruction.new {
     !where !condition !continueList !doList
-  }
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
-{
-  $let$ @location where = .here
-  <gtl_variable> ?@gtlVarPath variable
-  select
-    $:=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetInstruction.new { !where !variable !expression} 
-  or
-    $+=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetAddInstruction.new { !where !variable !expression} 
-  or
-    $-=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetSubstractInstruction.new { !where !variable !expression} 
-  or
-    $*=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetMultiplyInstruction.new { !where !variable !expression} 
-  or
-    $/=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetDivideInstruction.new { !where !variable !expression} 
-  or
-    $mod=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetModuloInstruction.new { !where !variable !expression} 
-  or
-    $<<=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetShiftLeftInstruction.new { !where !variable !expression} 
-  or
-    $>>=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetShiftRightInstruction.new { !where !variable !expression} 
-  or
-    $&=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetAndInstruction.new { !where !variable !expression} 
-  or
-    $|=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetOrInstruction.new { !where !variable !expression} 
-  or
-    $^=$
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetXorInstruction.new { !where !variable !expression} 
-  end
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
-{
-  $error$ @location where = .here
-  <gtl_variable_or_here> ?@gtlVarPath variable ?@bool hereInstead
-  $:$
-  <gtl_expression> ?@gtlExpression expression
-
-  instruction = @gtlErrorStatementInstruction.new {
-    !where !variable !hereInstead !expression
-  }
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
-{
-  $warning$ @location where = .here
-  <gtl_variable_or_here> ?@gtlVarPath variable ?@bool hereInstead
-  $:$
-  <gtl_expression> ?@gtlExpression expression
-
-  instruction = @gtlWarningStatementInstruction.new {
-    !where !variable !hereInstead !expression
-  }
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
-{
-  $print$ @location where = .here
-  <gtl_expression> ?@gtlExpression expression
-
-  instruction = @gtlPrintStatementInstruction.new {
-    !where !false !expression
-  }
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
-{
-  $println$ @location where = .here
-  <gtl_expression> ?@gtlExpression expression
-
-  instruction = @gtlPrintStatementInstruction.new {
-    !where !true !expression
-  }
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
-{
-  $display$ @location where = .here
-  <gtl_variable> ?@gtlVarPath variable
-
-  instruction = @gtlDisplayStatementInstruction.new {
-    !where !variable
-  }
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
-{
-  $sort$ @location where = .here
-  <gtl_variable> ?@gtlVarPath variable
-  select
-    @sortingKeyList sortList = .emptyList
-    $by$
-    repeat
-      $identifier$ ?let @lstring key
-      <gtl_sorting_order> ?@lsint order
-      sortList += !key !order
-    while $,$ end
-    
-    instruction = @gtlSortStatementStructInstruction.new {
-      !where !variable !sortList
-    }    
-  or
-    <gtl_sorting_order> ?@lsint order
-    
-    instruction = @gtlSortStatementInstruction.new {
-      !where !variable !order
-    }
-  end
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
-{
-  $tab$ @location where = .here
-  <gtl_expression> ?@gtlExpression expression
-  
-  instruction = @gtlTabStatementInstruction.new {
-    !where !expression
-  }  
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
-{
-  $variables$ @location where = .here
-  instruction = @gtlVariablesInstruction.new { !where }
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_instruction> !@gtlInstruction instruction
-{
-  $call$ $[$
-  <gtl_variable> ?@gtlVarPath target
-  $identifier$ ?let @lstring setterName
-  @gtlExpressionList argumentList = .emptyList
-  select
-  or
-    $:$
-    repeat
-      <gtl_expression> ?@gtlExpression argument
-      argumentList += !argument
-    while
-      $,$
-    end
-  end
-  $]$
-  instruction = @gtlSetterCallInstruction.new {
-    !.here
-    !target
-    !setterName
-    !argumentList
   }
 }
 
@@ -529,18 +351,6 @@ rule <gtl_file_name>
   or
     $from$
     <gtl_expression> ?expression
-  end
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_sorting_order>
-  !@lsint order {
-  select
-    $>$ 
-    order = @lsint. new { !-1s !@location.here}
-  or
-    $<$
-    order = @lsint. new { !1s !@location.here}
   end
 }
 
