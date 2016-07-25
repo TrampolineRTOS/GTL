@@ -1,2 +1,2 @@
 # GTL
-Goil Template Language
+GTL Template Language
