@@ -47,7 +47,6 @@ project (3:0:0) -> "gtl" {
   "galgas-sources/gtl_instruction_parser.galgas"
   "galgas-sources/gtl_module.galgas"
   "galgas-sources/gtl_module_parser.galgas"
-  "galgas-sources/gtl_module_scanner.galgas"
   "galgas-sources/gtl_module_grammar.galgas"
   "galgas-sources/gtl_expression_parser.galgas"
   "galgas-sources/gtl_options.galgas"

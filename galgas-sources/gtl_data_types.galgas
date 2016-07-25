@@ -88,6 +88,12 @@ private func %once stringArgument -> @gtlTypedArgumentList result
   result = .listWithValue { !`@gtlString }
 }
 
+private func %once stringStringArgument -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlString }
+  result += !`@gtlString
+}
+
 private func %once boolIntArguments -> @gtlTypedArgumentList result
 {
   result = .listWithValue { !`@gtlBool }
@@ -1070,6 +1076,11 @@ override getter @gtlFloat performGetter
     result = @gtlFloat.new {
       ![methodName location] ![value exp]
     }
+  elsif "logn"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlFloat.new {
+      ![methodName location] ![value logn]
+    }
   elsif "log2"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
@@ -1284,7 +1295,7 @@ override getter @gtlString performGetter
     result = @gtlInt.new {
       ![methodName location] ![[value length] bigint]
     }
-  elsif [methodName string] == "stringByCapitalizingFirstCharacter" then
+  elsif [methodName string] == "capitalized" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] ![value stringByCapitalizingFirstCharacter]
@@ -1373,7 +1384,15 @@ override getter @gtlString performGetter
       ![methodName location]
       !@string.componentsJoinedByString { !resultParagraphs !"\n" }
     }
-  elsif [methodName string] == "substringExists" then
+  elsif [methodName string] == "replaceString" then
+    argumentsCheck(!methodName !stringStringArgument() !arguments)
+    @string find = [[arguments dataAtIndex !0] as @gtlString value]
+    @string rep  = [[arguments dataAtIndex !1] as @gtlString value]
+    result = @gtlString.new {
+      ![methodName location]
+      ![value stringByReplacingStringByString !find !rep]
+    }
+  elsif [methodName string] == "subStringExists" then
     argumentsCheck(!methodName !stringArgument() !arguments)
     @string subString = [[arguments dataAtIndex !0] as @gtlString string]
     @uint subLength = [subString length]
@@ -1457,7 +1476,7 @@ override getter @gtlBool minusOp -> @gtlData result {
 }
 
 override getter @gtlBool notOp   -> @gtlData result {
-  error where : "bool forbidden" : result
+  result = @gtlBool.new { !where !not value }
 }
 
 override getter @gtlBool addOp ?let @gtlData unused right -> @gtlData result {

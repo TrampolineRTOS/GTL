@@ -81,7 +81,7 @@ list galgasDelimitorsList style delimitersStyle error message "the '%K' delimito
     "/",    "!=",   ">=",      "&",     "<=",      "{",     "}",
     "<",     "^",   ">>",      "~",     "<-",     "<<",     "@",   "*=",
     "/=",   "&=",   "|=",    "<<=",    ">>=",   "mod=",     "^=",  "@[",
-    "@(",   "@{"
+    "@(",   "@{",   "[!"
 }
 
 rule list galgasDelimitorsList
@@ -124,6 +124,16 @@ rule '-' {
     send $-$
   end
 }
+
+rule "0x" | "0X" {
+  repeat
+  while '0'->'9' | 'a'->'f' | 'A'->'F':
+    enterCharacterIntoString(!?tokenString !*)
+  end
+  convertHexStringIntoBigInt(!tokenString !?intValue error internalError)
+  send $signed_literal_integer_bigint$
+}
+
 
 rule '0'->'9' {
   enterCharacterIntoString(!?tokenString !*)
@@ -185,19 +195,136 @@ rule '.' {
 message unterminatedLitteralString : "Unterminated literal string" 
 
 @string a_string
+@char charValue
+@uint uint32value
+
+message invalideUnicodeDefinition4 : "\\u should be followed by exactly four hexadecimal digits"
+message invalideUnicodeDefinition8 : "\\U should be followed by exactly eight hexadecimal digits"
+message unassignedUnicodeValue : "this value does not correspond to an assigned Unicode point"
+message incorrectHTMLescapeSequence : "Invalid HTML sequence, should be '&...;'"
+message unknownHTMLescapeSequence : "Invalid &...; HTML sequence"
+message incorrectCharConstant : "incorrect literal character"
 
 $string$ !a_string  style stringStyle error message "literal string"
 
 rule '"' {
-    repeat
-    while '\u0020'->'\u0021' | '\u0023' -> '\uFFFD' :
-        enterCharacterIntoString(!?a_string !*)
-    end
+  repeat
+  while '\\' :
     select
-        case '"' :
-            send $string$
+    case 'f' :
+      enterCharacterIntoString (!?a_string !'\f' )
+    case 'n' :
+      enterCharacterIntoString (!?a_string !'\n' )
+    case 'r' :
+      enterCharacterIntoString (!?a_string !'\r' )
+    case 't' :
+      enterCharacterIntoString (!?a_string !'\t' )
+    case 'v' :
+      enterCharacterIntoString (!?a_string !'\v' )
+    case '\\' :
+      enterCharacterIntoString (!?a_string !'\\' )
+    case '"' :
+      enterCharacterIntoString (!?a_string !'"' )
+    case '\'' :
+      enterCharacterIntoString (!?a_string !'\'' )
+    case '?' :
+      enterCharacterIntoString (!?a_string !'?' )
+    case '&' :
+      repeat
+      while ~ ";" error incorrectHTMLescapeSequence :
+        enterCharacterIntoString (!?identifierString !* )
+      end
+      convertHTMLSequenceToUnicodeCharacter (!?identifierString !?charValue error unknownHTMLescapeSequence )
+      enterCharacterIntoString (!?a_string !charValue )
+    case 'u' :
+      select
+      case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+        enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+        select
+        case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+          enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+          select
+          case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+           enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+            select
+            case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+              enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+              convertUnsignedNumberToUnicodeChar (!?uint32value !?charValue error unassignedUnicodeValue )
+              enterCharacterIntoString (!?a_string !charValue )
+            default
+              error invalideUnicodeDefinition4
+            end
+          default
+            error invalideUnicodeDefinition4
+          end
         default
-            error unterminatedLitteralString
+          error invalideUnicodeDefinition4
+        end
+      default
+        error invalideUnicodeDefinition4
+      end
+    case 'U' :
+      select
+      case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+        enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+        select
+        case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+          enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+          select
+          case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+            enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+            select
+            case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+              enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+              select
+              case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+                enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+                select
+                case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+                  enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+                  select
+                  case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+                   enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+                    select
+                    case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+                      enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+                      convertUnsignedNumberToUnicodeChar (!?uint32value !?charValue error unassignedUnicodeValue )
+                      enterCharacterIntoString (!?a_string !charValue )
+                    default
+                      error invalideUnicodeDefinition8
+                    end
+                  default
+                    error invalideUnicodeDefinition8
+                  end
+                default
+                  error invalideUnicodeDefinition8
+                end
+              default
+                error invalideUnicodeDefinition8
+              end
+            default
+              error invalideUnicodeDefinition8
+            end
+          default
+            error invalideUnicodeDefinition8
+          end
+        default
+          error invalideUnicodeDefinition8
+        end
+      default
+        error invalideUnicodeDefinition8
+      end
+    default
+      error incorrectCharConstant
+    end
+   while ' ' | '!' | '#'-> '\uFFFD' :
+    enterCharacterIntoString (!?a_string !* )
+  end
+    select
+      case '"' :
+        send $string$
+      default
+        error unterminatedLitteralString
     end
 }
 

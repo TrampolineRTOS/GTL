@@ -1,0 +1,79 @@
+%
+
+let a := 1
+display a
+
+let b := a + a
+display b
+
+let c := b * b
+display c
+
+let d := c / b
+display d
+
+let e := 5 mod 4
+display e
+
+let f := c << 1
+display f
+
+let g := f >> 1
+display g
+
+let h := [65 hexString]
+display h
+
+let i := [65 xString]
+display i
+
+let j := [-65 hexString]
+display j
+
+let k := [-65 xString]
+display k
+
+let l := [255 numberOfBytes]
+display l
+
+let m := [256 numberOfBytes]
+display m
+
+let n := [65536 numberOfBytes]
+display n
+
+let o := [127 signedNumberOfBytes]
+display o
+
+let p := [128 signedNumberOfBytes]
+display p
+
+let q := [63 numberOfBits]
+display q
+
+let r := [64 numberOfBits]
+display r
+
+let s := [63 signedNumberOfBits]
+display s
+
+let t := [64 signedNumberOfBits]
+display t
+
+println [1 bitAtIndex: 0]
+println [1 bitAtIndex: 1]
+
+
+loop index from 0 to 7 do
+  print "> "
+  println [0xAA bitAtIndex: index] 
+end loop
+
+let a := 0
+[!a setBitAtIndex: true, 0]
+display a
+[!a complementBitAtIndex: 1]
+display a
+
+let b := [4.0 log2]
+display b

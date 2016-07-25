@@ -1,0 +1,684 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{a4paper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{colortbl}
+\usepackage[table]{xcolor}
+\usepackage{underscore}
+\usepackage{tikzpagenodes}
+\usetikzlibrary{calc}
+\usepackage{eso-pic}
+
+\AddToShipoutPictureBG{%
+\begin{tikzpicture}[overlay,remember picture]
+\draw[line width=0.5pt]
+      ($ (current page text area.north west) $)
+      rectangle
+      ($ (current page text area.south east) $);
+\end{tikzpicture}
+}
+
+\makeatletter
+\newcommand*{\pmzeroslash}{%
+  \nfss@text{%
+    \sbox0{0}%
+    \sbox2{/}%
+    \sbox4{%
+      \raise\dimexpr((\ht0-\dp0)-(\ht2-\dp2))/2\relax\copy2 %
+    }%
+    \ooalign{%
+      \hfill\copy4 \hfill\cr
+      \hfill0\hfill\cr
+    }%
+    \vphantom{0\copy4 }% correct overall height and depth of the symbol
+  }%
+}
+\makeatother
+
+
+
+\definecolor{seagreen}{RGB}{64,100,120}
+\definecolor{darkpink}{RGB}{200,100,120}
+\definecolor{light-gray}{gray}{0.85}
+\definecolor{medium-gray}{gray}{0.5}
+
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\lstdefinelanguage{goilTemplate}
+{
+  morekeywords= {
+	  after,
+	  before,
+	  between,
+	  default,
+	  do,
+	  down,
+	  else,
+	  elsif,
+	  emptylist,
+	  emptymap,
+	  end,
+	  error,
+	  exists,
+	  false,
+	  for,
+	  foreach,
+	  from,
+	  here,
+	  let,
+	  loop,
+	  no,
+	  if,
+	  in,
+	  mod,
+	  not,
+	  or,
+	  step,
+	  template,
+	  then,
+	  to,
+	  true,
+	  yes,
+	  warning,
+	  while,
+	  write,
+	  !,
+	  ?
+	}
+}
+
+\lstset{
+  language=goilTemplate,
+  emph={
+    variable,
+    expression,
+    string,
+    instruction_list,
+    template_file_name,
+    getter,
+    setter,
+    hierarchy
+  },
+  emphstyle=\em,
+  moredelim=[s][\color{blue}]{\%}{\%},
+  moredelim=[s]{"}{"},
+  morecomment=[l][\color{medium-gray}\itshape]{\#},
+  basicstyle=\ttfamily\small,
+  morekeywords=\bfseries
+}
+
+\newcommand{\cdata}[1]{{\ttfamily #1}}
+\newcommand{\character}[1]{{\small\ttfamily `{#1}'}}
+
+\title{GTL Template language}
+\author{Jean-Luc B\'echennec}
+%\date{}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+%\section{}
+%\subsection{}
+
+\tableofcontents
+
+\section{Data types}
+
+GTL supports the following data types:
+\begin{description}
+\item[int] arbitrary precision integer numbers. The GMP library is used;
+\item[float] 64 bits floating point numbers;
+\item[bool] standard boolean;
+\item[type] the type of a data;
+\item[string] unicode strings;
+\item[struct] structured data;
+\item[list] lists of data, may be accessed as a table;
+\item[map] map (aka dictionary) of data.
+\end{description}
+
+Each type has its set of operators, getters and setters. The expression, for getters, or the variable, for setters, is called the {\em target}. Getters return a value related to the data but do not change it. They are used to get information from a data or to convert it into another type. Setter may target a literal expressions. Setters change the data and do not return anything. Setter may only target a variable. Getters and setters may have arguments. Syntax for getters without argument is as follow:
+
+\begin{lstlisting}[language=goilTemplate]
+[expression getter]
+\end{lstlisting}
+
+When the getter takes arguments, they are listed after a colon and separated commas as follow:
+
+\begin{lstlisting}[language=goilTemplate]
+[expression getter : arg1, arg2, ..., argN]
+\end{lstlisting}
+
+Syntax for setters without arguments is as follow:
+
+\begin{lstlisting}[language=goilTemplate]
+[!variable setter]
+\end{lstlisting}
+
+When the setter takes arguments, they are listed after a colon and separated by commas as follow:
+
+\begin{lstlisting}[language=goilTemplate]
+[!variable setter : arg1, arg2, ..., argN]
+\end{lstlisting}
+
+\subsection{getters applicable to any data type}
+
+\paragraph{\lstinline{type}} returns the data type of the expression. See the section \ref{sec:type}.
+
+\paragraph{\lstinline{isANumber}} returns \lstinline{true} if the expression is a number: \lstinline{int} or \lstinline{float}, \lstinline{false} otherwise.
+
+\subsection{\lstinline{int} data type}
+
+The \lstinline{int} data type support arbitrary precision arithmetic by using the GNU Multiple Precision Arithmetic Library (GMP).
+
+\subsubsection{\lstinline{int} operators}
+
+The \lstinline{int} datatype supports the following operators:
+
+\paragraph{Unary operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3.34in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {+}&
+  {int $\leftarrow$ +int}&
+  {Plus operator. No effect}\\
+ {-}&
+  {int $\leftarrow$ -int}&
+  {Minus operator. Negation}\\
+ {\raisebox{-1.2mm}{\textasciitilde}}&
+  {int $\leftarrow$ \raisebox{-1.2mm}{\textasciitilde}int}&
+  {Not operator. Complementation by 1}\\
+\end{longtable}
+
+\paragraph{Binary arithmetic operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3.14in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {+}&
+  {int $\leftarrow$ int + int}&
+  {Addition}\\
+ {-}&
+  {int $\leftarrow$ int - int}&
+  {Substraction}\\
+ {*}&
+  {int $\leftarrow$ int * int}&
+  {Multiplication}\\
+ {/}&
+  {int $\leftarrow$ int / int}&
+  {Division}\\
+ {mod}&
+  {int $\leftarrow$ int mod int}&
+  {Modulus}\\
+\end{longtable}
+
+\paragraph{Binary bitwise operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3.22in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {\&}&
+  {int $\leftarrow$ int \& int}&
+  {bitwise and}\\
+ {\hspace{.8mm}\rule{1pt}{1.5ex}}&
+  {int $\leftarrow$ int \rule{1pt}{1.5ex} int}&
+  {bitwise or}\\
+ {\^~}&
+  {int $\leftarrow$ int \^{} int}&
+  {bitwise exclusive or}\\
+ {<<}&
+  {int $\leftarrow$ int << int}&
+  {shift left}\\
+ {>>}&
+  {int $\leftarrow$ int >> int}&
+  {shift right}\\
+\end{longtable}
+
+\paragraph{Comparison operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3.15in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {!=}&
+  {bool $\leftarrow$ int != int}&
+  {Not equal}\\
+ {==}&
+  {bool $\leftarrow$ int == int}&
+  {Equal}\\
+ {>}&
+  {bool $\leftarrow$ int > int}&
+  {Greater than}\\
+ {<}&
+  {bool $\leftarrow$ int < int}&
+  {Lower than}\\
+ {>=}&
+  {bool $\leftarrow$ int >= int}&
+  {Greater or equal}\\
+ {<=}&
+  {bool $\leftarrow$ int <= int}&
+  {Lower or equal}\\
+\end{longtable}
+
+\subsubsection{\lstinline{int} getters}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|l|p{3.13in}}
+{\bf getter}&{\bf Type}&{\bf Meaning}\\
+\hline\endhead
+ {string}&
+  {string}&
+  {Returns a string decimal representation of the int expression. \texttt{[42 string]} returns string \texttt{"42"}.}\\
+ {hexString}&
+  {string}&
+  {Returns a string hexadecimal representation of the int expression prefixed by \texttt{0x}. If the expression is negative a `-' is inserted before. \texttt{[42 hexString]} returns string \texttt{"0x2A"}. \texttt{[-1 hexString]} returns string \texttt{"-0x1"}.}\\
+ {xString}&
+  {string}&
+  {Returns a string hexadecimal representation of the int expression. If the expression is negative a `-' is inserted before. \texttt{[42 xString]} returns string \texttt{"2A"}. \texttt{[-42 xString]} returns string \texttt{"-2A"}.}\\
+ {numberOfBytes}&
+  {int}&
+  {Returns the number of bytes needed to store an unsigned expression. \texttt{[255 numberOfBytes]} returns \texttt{1}, \texttt{[256 numberOfBytes]} returns \texttt{2}}\\
+ {signedNumberOfBytes}&
+  {int}&
+  {Returns the number of bytes needed to store a signed expression. \texttt{[127 numberOfBytes]} returns \texttt{1}, \texttt{[128 numberOfBytes]} returns \texttt{2}}\\
+ {numberOfBits}&
+  {int}&
+  {Returns the number of bits needed to store an unsigned expression. \texttt{[63 numberOfBits]} returns \texttt{6}, \texttt{[64 numberOfBits]} returns \texttt{7}}\\
+ {signedNumberOfBits}&
+  {int}&
+  {Returns the number of bits needed to store a signed expression. \texttt{[63 signedNumberOfBits]} returns \texttt{7}, \texttt{[64 signedNumberOfBits]} returns \texttt{8}}\\
+ {sign}&
+  {int}&
+  {Returns \texttt{-1} if the expression is strictly negative, \texttt{0} if it is null and \texttt{+1} if the expression is strictly positive.}\\
+ {fitsUnsignedInByte}&
+  {bool}&
+  {Returns \texttt{true} if the expression fits in an unsigned byte, \texttt{false} otherwise.}\\
+ {fitsSignedInByte}&
+  {bool}&
+  {Returns \texttt{true} if the expression fits in a signed byte, \texttt{false} otherwise.}\\
+ {fitsUnsignedInWord}&
+  {bool}&
+  {Returns \texttt{true} if the expression fits in an unsigned 16 bits word, \texttt{false} otherwise.}\\
+ {fitsSignedInWord}&
+  {bool}&
+  {Returns \texttt{true} if the expression fits in a signed 16 bits word, \texttt{false} otherwise.}\\
+ {fitsUnsignedInLong}&
+  {bool}&
+  {Returns \texttt{true} if the expression fits in an unsigned 32 bits long, \texttt{false} otherwise.}\\
+ {fitsSignedInLong}&
+  {bool}&
+  {Returns \texttt{true} if the expression fits in a signed 32 bits long, \texttt{false} otherwise.}\\
+ {fitsUnsignedInLongLong}&
+  {bool}&
+  {Returns \texttt{true} if the expression fits in an unsigned 64 bits long long, \texttt{false} otherwise.}\\
+ {fitsSignedInLongLong}&
+  {bool}&
+  {Returns \texttt{true} if the expression fits in a signed 64 bits long long, \texttt{false} otherwise.}\\
+ {abs}&
+  {int}&
+  {Returns the absolute value of the expression.}\\
+ {bitAtIndex}&
+  {bool}&
+  {This getter takes one argument: \texttt{index}. It returns \texttt{true} if the bit at index \texttt{index} is set and \texttt{false} otherwise. \texttt{index} 0 corresponds to the lowest significant bit. \texttt{[1 bitAtIndex: 0]} returns \texttt{true}}\\
+\end{longtable}
+
+\subsubsection{\lstinline{int} setters}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|p{3.84in}}
+{\bf setter}&{\bf Meaning}\\
+\hline\endhead
+ {setBitAtIndex}&
+  {This setter takes two arguments. The first one, \texttt{value}, is a bool. The second one, \texttt{index}, is the index of the bit to set. if \texttt{value} is \texttt{true} the bit is set to \texttt{1} and to \texttt{0} otherwise. Assuming \texttt{a} contains \texttt{0} at start, \texttt{[!a setBitAtIndex: true, 0]} sets \texttt{a} to \texttt{1}.}\\
+ {complementBitAtIndex}&
+  {This setter takes one argument, \texttt{index}, which is the index of the bit to complement.  Assuming \texttt{a} contains \texttt{1} at start, \texttt{[!a complementBitAtIndex: 1]} sets \texttt{a} to \texttt{3}.}\\
+\end{longtable}
+
+\subsection{The \lstinline{float} data type}
+
+The \lstinline{float} data type is the standard IEEE784 64 bits floating point number.
+
+\subsubsection{\lstinline{float} operators}
+
+The \lstinline{float} data type supports the following operators:
+
+\paragraph{Unary operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3.34in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {+}&
+  {float $\leftarrow$ +float}&
+  {Plus operator. No effect}\\
+ {-}&
+  {float $\leftarrow$ -float}&
+  {Minus operator. Negation}\\
+\end{longtable}
+
+\paragraph{Binary arithmetic operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{2.83in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {+}&
+  {float $\leftarrow$ float + float}&
+  {Addition}\\
+ {-}&
+  {float $\leftarrow$ float - float}&
+  {Substraction}\\
+ {*}&
+  {float $\leftarrow$ float * float}&
+  {Multiplication}\\
+ {/}&
+  {float $\leftarrow$ float / float}&
+  {Division}\\
+\end{longtable}
+
+\paragraph{Comparison operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{2.83in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {!=}&
+  {bool $\leftarrow$ float != float}&
+  {Not equal}\\
+ {==}&
+  {bool $\leftarrow$ float == float}&
+  {Equal}\\
+ {>}&
+  {bool $\leftarrow$ float > float}&
+  {Greater than}\\
+ {<}&
+  {bool $\leftarrow$ float < float}&
+  {Lower than}\\
+ {>=}&
+  {bool $\leftarrow$ float >= float}&
+  {Greater or equal}\\
+ {<=}&
+  {bool $\leftarrow$ float <= float}&
+  {Lower or equal}\\
+\end{longtable}
+
+
+\subsubsection{\lstinline{float} getters}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|l|p{4.16in}}
+{\bf getter}&{\bf Type}&{\bf Meaning}\\
+\hline\endhead
+ {string}&
+  {string}&
+  {Returns a string representation of the float expression. \texttt{[4.2 string]} returns string \texttt{"4.2"}.}\\
+ {cos}&
+  {float}&
+  {Returns the cosine of a float expression expressed in radian.}\\
+ {sin}&
+  {float}&
+  {Returns the sine of a float expression expressed in radian.}\\
+ {tan}&
+  {float}&
+  {Returns the tangent of a float expression expressed in radian.}\\
+ {cosDegree}&
+  {float}&
+  {Returns the cosine of a float expression expressed in degree.}\\
+ {sinDegree}&
+  {float}&
+  {Returns the sine of a float expression expressed in degree.}\\
+ {tanDegree}&
+  {float}&
+  {Returns the tangent of a float expression expressed in degree.}\\
+ {exp}&
+  {float}&
+  {Returns the exponentiation of a float expression.}\\
+ {logn}&
+  {float}&
+  {Returns the natural logarithm of a float expression.}\\
+ {log2}&
+  {float}&
+  {Returns the logarithm base 2 of a float expression.}\\
+ {log10}&
+  {float}&
+  {Returns the logarithm base 10 of a float expression.}\\
+ {sqrt}&
+  {float}&
+  {Returns the square root of a float expression.}\\
+ {power}&
+  {float}&
+  {This getter takes one argument, \texttt{p}. It returns the expression raised to the  power of \texttt{p}.}\\
+\end{longtable}
+
+\subsection{The \texttt{\small string} data type}
+
+The \texttt{string} data type supports unicode. A literal string is delimited by a pair of \texttt{"}. Literal strings support special characters:
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l}
+{\bf Escape sequence}&{\bf Corresponding character}\\
+\hline\endhead
+ {\textbackslash f}&
+  {form feed}\\
+ {\textbackslash n}&
+  {new line}\\
+ {\textbackslash r}&
+  {return}\\
+ {\textbackslash t}&
+  {horizontal tab}\\
+ {\textbackslash v}&
+  {vertical tab}\\
+ {\textbackslash\textbackslash}&
+  {backslash}\\
+ {\textbackslash\pmzeroslash}&
+  {null character}\\
+ {\textbackslash u\textsl{nnnn}}&
+  {unicode character with code \textsl{nnnn} in hexadecimal}\\
+ {\textbackslash U\textsl{nnnnnnnn}}&
+  {unicode character with code \textsl{nnnnnnnn} in hexadecimal}\\
+\end{longtable}
+
+\subsubsection{\texttt{\small string} operators}
+
+
+The \texttt{\small string} data type supports the following operators:
+
+\paragraph{Binary operator}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{2.6in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {+}&
+  {string $\leftarrow$ string + string}&
+  {Concatenation}\\
+\end{longtable}
+
+\paragraph{Comparison operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{2.67in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {!=}&
+  {bool $\leftarrow$ string != string}&
+  {Not equal}\\
+ {==}&
+  {bool $\leftarrow$ string == string}&
+  {Equal}\\
+ {>}&
+  {bool $\leftarrow$ string > string}&
+  {Greater than}\\
+ {<}&
+  {bool $\leftarrow$ string < string}&
+  {Lower than}\\
+ {>=}&
+  {bool $\leftarrow$ string >= string}&
+  {Greater or equal}\\
+ {<=}&
+  {bool $\leftarrow$ string <= string}&
+  {Lower or equal}\\
+\end{longtable}
+
+
+\subsubsection{\texttt{\small string} getters}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|l|p{2.68in}}
+{\bf getter}&{\bf Type}&{\bf Meaning}\\
+\hline\endhead
+ {HTMLRepresentation}&
+  {string}&
+  {Returns a representation of the string suitable for an HTML encoded representation. \character{\&} is encoded by \cdata{\&amp;} , \character{"} by \cdata{\&quot;} , \character{<} by \cdata{\&lt;} and \character{>} by \cdata{\&gt;} .}\\
+ {identifierRepresentation}&
+  {string}&
+  {Returns an unique representation of the string conforming to a C identifier. Any Unicode character that is not a latin letter is transformed into its hexadecimal code point value, enclosed by \character{_} characters. This representation is unique: two different strings are transformed into different C identifiers. For example: \cdata{value3} is transformed to \cdata{value_33_}; \cdata{+=} is transformed to \cdata{_2B__3D_};
+\cdata{An_Identifier} is transformed to \cdata{An_5F_Identifier}.}\\
+ {fileExists}&
+  {bool}&
+  {Returns \texttt{true} if a file exists at the target path, \texttt{false} otherwise.}\\
+ {length}&
+  {integer}&
+  {Returns the number of characters in the string}\\
+ {lowercaseString}&
+  {string}&
+  {Returns the lowercased representation of the string.}\\
+ {capitalized}&
+  {string}&
+  {if the string is empty, this getter returns the empty string; otherwise, it returns the string with the first character being replaced with the corresponding upper case character.}\\
+ {uppercaseString}&
+  {string}&
+  {Returns uppercased representation of the receiver}\\
+ {leftSubString}&
+  {string}&
+  {Returns the sub-string from the beginning of the target and with the number of characters passed as argument. If the sub-string is longer that the target, the target is returned. \texttt{["Hello World !" leftSubString : 5]} returns \texttt{"Hello"}.}\\
+ {rightSubString}&
+  {string}&
+  {Returns the sub-string from the end of the target and with the number of characters passed as argument. If the sub-string is longer that the target, the target is returned. \texttt{[["Hello World !" leftSubString : 11] rightSubString: 5]} returns \texttt{"World"}.}\\
+ {subString}&
+  {string}&
+  {Returns the sub-string from the \texttt{index} passed as first argument and with the number of characters passed as second argument. If the \texttt{index} is out of the target, the empty string is returned. If the number of characters is greater than the sub-string, the sub-string is returned. \texttt{["Hello World !" subString : 6, 5]} returns \texttt{"World"}. \texttt{["Hello" subString : 10, 3]} returns the empty string. \texttt{["Hello" subString : 2, 10]} returns \texttt{"llo"}.}\\
+ {reversedString}&
+  {string}&
+  {Returns a mirrored string. \texttt{["Hello World !" reversedString]} returns \texttt{"! dlroW olleH"}.}\\
+ {componentsSeparatedByString}&
+  {list}&
+  {This getter takes one string argument: \texttt{separator}. The target is cut into pieces according to the separator and a list of the pieces is returned. \texttt{["Hello World !" componentsSeparatedByString : " "]} returns \texttt{@( "Hello", "World", "!" )}.}\\
+ {columnPrefixedBy}&
+  {string}&
+  {This getter takes one string argument: \texttt{prefix}. Return the target with each line prefixed by \texttt{prefix}. \texttt{["Hello\textbackslash nWorld" columnPrefixedBy : "\#\textvisiblespace"]} returns \texttt{"\#\textvisiblespace Hello\textbackslash n\#\textvisiblespace World"}.}\\
+ {wrap}&
+  {string}&
+  {Wraps the target to a width. This getter takes two int arguments: \texttt{width} and \texttt{shift}. The target is assumed to contain paragraphs separated by \texttt{\textbackslash n}. Returns the target with each paragraph wrapped to \texttt{width}. In addition, each line of the paragraph except the first one is prefixed by \texttt{shift} spaces. \texttt{["Hello beautiful World.\textbackslash nHow are you" wrap : 6, 2]} returns \texttt{"Hello\textbackslash n\allowbreak\textvisiblespace\textvisiblespace beautiful\textbackslash n\textvisiblespace\textvisiblespace World\textbackslash nHow\textbackslash n\textvisiblespace\textvisiblespace are\textbackslash n  you"}.}\\
+ {subStringExists}&
+  {bool}&
+  {This getter takes one argument, \texttt{subString}. It returns \texttt{true} if the sub-string \texttt{subString} is found in the target, \texttt{false otherwise}.}\\
+ {replaceString}&
+  {string}&
+  {This getter takes two argument, \texttt{find} and \texttt{replace}. It returns the target where each occurrence of \texttt{find} is replaced by \texttt{replace}.}\\
+\end{longtable}
+
+\subsection{The \lstinline{bool} data type}
+
+A true literal bool can be written as \texttt{true} or \texttt{yes} and a false literal bool can be written as \texttt{false} or \texttt{no}.
+
+\subsubsection{\lstinline{bool} operators}
+
+
+The \lstinline{bool} data type supports the following operators:
+
+\paragraph{Unary operator}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3.36in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {\raisebox{-1.2mm}{\textasciitilde}}&
+  {bool $\leftarrow$ bool}&
+  {logical not}\\
+\end{longtable}
+
+\paragraph{Binary operator}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3.08in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {\&}&
+  {bool $\leftarrow$ bool \& bool}&
+  {logical and}\\
+ {\hspace{.8mm}\rule{1pt}{1.5ex}}&
+  {bool $\leftarrow$ bool \rule{1pt}{1.5ex} bool}&
+  {logical or}\\
+ {\^~}&
+  {bool $\leftarrow$ bool \^{} bool}&
+  {logical exclusive or}\\
+\end{longtable}
+
+\paragraph{Comparison operators}~
+
+
+\vspace{2mm}
+\noindent
+For comparison operators, \texttt{false} is considered to be lower than \texttt{true}.
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {!=}&
+  {bool $\leftarrow$ bool != bool}&
+  {Not equal}\\
+ {==}&
+  {bool $\leftarrow$ bool == bool}&
+  {Equal}\\
+ {>}&
+  {bool $\leftarrow$ bool > bool}&
+  {Greater than}\\
+ {<}&
+  {bool $\leftarrow$ bool < bool}&
+  {Lower than}\\
+ {>=}&
+  {bool $\leftarrow$ bool >= bool}&
+  {Greater or equal}\\
+ {<=}&
+  {bool $\leftarrow$ bool <= bool}&
+  {Lower or equal}\\
+\end{longtable}
+
+\subsubsection{\lstinline{bool} getters}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|l|p{4.01in}}
+{\bf getter}&{\bf Type}&{\bf Meaning}\\
+\hline\endhead
+ {trueOrFalse}&
+  {string}&
+  {Returns a string representation, \texttt{"true"} or \texttt{"false"} of the bool expression.}\\
+ {string}&
+  {string}&
+  {Returns a string representation, \texttt{"true"} or \texttt{"false"} of the bool expression.}\\
+ {yesOrNo}&
+  {string}&
+  {Returns a string representation, \texttt{"yes"} or \texttt{"no"} of the bool expression.}\\
+ {TRUEOrFALSE}&
+  {string}&
+  {Returns a string representation, \texttt{"TRUE"} or \texttt{"FALSE"} of the bool expression.}\\
+ {YESOrNO}&
+  {string}&
+  {Returns a string representation, \texttt{"YES"} or \texttt{"NO"} of the bool expression.}\\
+ {int}&
+  {int}&
+  {Returns an int representation, \texttt{1} or \texttt{0} of the bool expression.}\\
+\end{longtable}
+
+
+\end{document}  

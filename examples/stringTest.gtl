@@ -1,0 +1,67 @@
+%
+
+let a := "Hello <World> !"
+display a
+
+let b := [a HTMLRepresentation]
+display b
+
+let b := [a identifierRepresentation]
+display b
+
+let b := ["stringTest.gtl" fileExists]
+display b
+
+let b := ["dummy" fileExists]
+display b
+
+let b := [a length]
+display b
+
+let b := [a lowercaseString]
+display b
+
+let b := [a uppercaseString]
+display b
+
+let b := [[a lowercaseString] capitalized]
+display b
+
+let b := [a leftSubString: 5]
+display b
+
+let b := [["Hello World !" leftSubString : 11] rightSubString: 5]
+display b
+
+let b := ["Hello World !" subString : 6, 5]
+display b
+
+let b := ["Hello" rightSubString : 10]
+display b
+
+let b := ["Hello" leftSubString : 10]
+display b
+
+let b := ["Hello" subString : 10, 3]
+display b
+
+let b := ["Hello" subString : 2, 10]
+display b
+
+let b := ["Hello World !" reversedString]
+display b
+
+let b := ["Hello World !" componentsSeparatedByString : " "]
+display b
+
+let b := ["Hello\nWorld" columnPrefixedBy : "# "]
+println b
+
+let b := ["Hello beautiful World.\nHow are you" wrap : 6, 2]
+println b
+
+let b := ["Hello beautiful World.\nHow are you" subStringExists : "beau"]
+display b
+
+let b := ["Hello beautiful World. How are you" replaceString : "Hello", "Goodbye"]
+display b
