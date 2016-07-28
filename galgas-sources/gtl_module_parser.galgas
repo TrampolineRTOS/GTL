@@ -33,7 +33,8 @@ rule <gtl_simple_instruction>
   !@gtlInstruction instruction
 
 rule <gtl_import>
-  ?!@gtlFuncMap funcMap 
+  ?!@gtlFuncMap   funcMap 
+  ?!@gtlGetterMap getterMap 
 
 #-----------------------------------------------------------------------------*
 rule <gtl_instruction_list>
@@ -64,16 +65,20 @@ rule <gtl_instruction_list>
 #-----------------------------------------------------------------------------*
 rule <gtl_module_start_symbol>
   ?!@gtlFuncMap funcMap
+  ?!@gtlGetterMap getterMap
 {
   repeat
   while
-    <gtl_import> !?funcMap
+    <gtl_import> !?funcMap !?getterMap
   end
 
   repeat
   while
-    <gtl_function> ?@gtlFunction function
-    [!?funcMap put ![function name] !function]
+    <gtl_function> ?@gtlFunction aFunction
+    [!?funcMap put ![aFunction name] !aFunction]
+  while
+    <gtl_getter> ?@gtlGetter aGetter
+    [!?getterMap put ![aGetter typedName] !aGetter]
   end
 }
 
@@ -91,6 +96,31 @@ rule <gtl_function>
   
   function = .new {
     !where !functionName !arguments !instructionList !returnVariable
+  }
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_getter>
+  !@gtlGetter aGetter
+{
+  $getter$
+  $@$ $identifier$ ?let @lstring targetType
+  $($ $identifier$ ?let @lstring targetName $)$
+  $identifier$ ?let @lstring getterName
+  @location where = .here
+  <gtl_argument_list> ?@gtlArgumentList arguments
+  $identifier$ ?let @lstring returnVariable
+  <gtl_instruction_list> ?let @gtlInstructionList instructionList
+  $end$ $getter$
+  
+  aGetter = .new {
+    !where
+    !getterName
+    !arguments
+    !instructionList
+    !returnVariable
+    ![targetType gtlType]
+    !targetName
   }
 }
 

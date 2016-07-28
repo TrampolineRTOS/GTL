@@ -1,0 +1,8 @@
+%
+let a := "Hello"
+
+let b := [a type]
+display b
+
+let b := [@int type]
+display b

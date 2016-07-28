@@ -983,10 +983,12 @@ override getter @gtlGetterCallExpression eval
 proc checkArgumentError
   ?let @lstring name
   ?let @type    formalType
-  ?let @object  actualArgument
+  ?let @gtlData actualArgument
   ?let @uint    argumentNum
 {
-  if formalType != [actualArgument dynamicType] then
+  if formalType != [actualArgument embeddedType] then
+    let @type argType = [actualArgument dynamicType]
+    log argType
     error name : [formalType typeName] + " expected for argument "
       + argumentNum + ", " + [[actualArgument dynamicType] typeName]
       + " provided"
@@ -998,14 +1000,16 @@ func validateReturnValue
   ?let @object  returnedValue
   ->@gtlData    result
 {
-  @type returnedType = [returnedValue dynamicType]
-  if    returnedType == `@gtlInt    then result = returnedValue as @gtlInt
-  elsif returnedType == `@gtlFloat  then result = returnedValue as @gtlFloat
-  elsif returnedType == `@gtlString then result = returnedValue as @gtlString
-  elsif returnedType == `@gtlBool   then result = returnedValue as @gtlBool
-  elsif returnedType == `@gtlStruct then result = returnedValue as @gtlStruct
-  elsif returnedType == `@gtlList   then result = returnedValue as @gtlList
-  elsif returnedType == `@gtlMap    then result = returnedValue as @gtlMap
+  @type returnedType = [returnedValue objectDynamicType]
+  @location loc = [functionName location]
+  if    returnedType == `@bigint then
+    result = @gtlInt.new    { !loc !returnedValue as @bigint }
+  elsif returnedType == `@double then
+    result = @gtlFloat.new  { !loc !returnedValue as @double }
+  elsif returnedType == `@string then
+    result = @gtlString.new { !loc !returnedValue as @string }
+  elsif returnedType == `@bool   then
+    result = @gtlBool.new   { !loc !returnedValue as @bool   }
   else
     error functionName
       : "this function does not return a compatible type" : result
@@ -1026,11 +1030,19 @@ override getter @gtlFunctionCallExpression eval
   -> @gtlData result
 {
   if @function.isFunctionDefined { ![functionName string] } then
+
     @objectlist arguments = .emptyList
+    @gtlDataList dataArguments = .emptyList
+
     for () in functionArguments do
-      arguments += ![[expression eval !gtlVariableMap !functionMap] object]
+      @gtlData arg = [expression eval !gtlVariableMap !functionMap]
+      dataArguments += !arg
+      [arg addMyValue !?arguments]
+      #@arguments += ![arg object]
     end
-    @function function = .functionWithName { ![functionName string]}
+    
+    @function function = .functionWithName { ![functionName string] }
+
     let @typelist formalParameterList = [function formalParameterTypeList]
     if [formalParameterList length] != [arguments length] then
       error functionName: "this function is invoked with "
@@ -1040,7 +1052,7 @@ override getter @gtlFunctionCallExpression eval
         + if [formalParameterList length] > 1 then "s" else "" end
         : result
     else
-      for (formal) in formalParameterList, (actual) in arguments do (index)
+      for (formal) in formalParameterList, (actual) in dataArguments do (index)
         checkArgumentError(!functionName !formal !actual !index)
       end
       if @uint.errorCount == 0 then
@@ -1048,7 +1060,7 @@ override getter @gtlFunctionCallExpression eval
           [function invoke !arguments ![functionName location]]
         result = validateReturnValue(!functionName !returnedValue) 
       else
-        result = @gtlBool.new { ![functionName location] !false}
+        result = @gtlUnconstructed.new { ![functionName location] }
       end
     end
   else

@@ -54,5 +54,6 @@ project (3:0:0) -> "gtl" {
   "galgas-sources/gtl_grammar.galgas"
   "galgas-sources/gtl_cocoa.galgas"
   "galgas-sources/gtl_program.galgas"
+  "galgas-sources/gtl_functions.galgas"
 }
 

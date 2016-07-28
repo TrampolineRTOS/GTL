@@ -1,0 +1,5 @@
+%
+
+if envVarExists("LOGNAME") then
+  println "LOGNAME found"
+end if

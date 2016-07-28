@@ -91,7 +91,7 @@ method @gtlProcedure call
 
 class @gtlFunction : @gtlExecutableEntity
 {
-  @lstring            returnVariable
+  @lstring returnVariable
 }
 
 getter @gtlFunction call
@@ -116,6 +116,44 @@ getter @gtlFunction call
   end
 }
 
+class @gtlGetter : @gtlFunction
+{
+  @type targetType
+  @lstring targetVarName
+}
+
+getter @gtlGetter callGetter
+  ?let @location     fromLocation
+  ?let @gtlFuncMap   funcs
+  ?let @gtlGetterMap getterMap
+  ?let @gtlData      target
+  ?let @gtlDataList  actualArguments
+  ->@gtlData         result
+{
+  [self checkArguments
+    !fromLocation !actualArguments ?@gtlVarMap getterVariableMap ?@bool ok]
+  [!?getterVariableMap put
+    !returnVariable
+    !@gtlUnconstructed.new{ ![returnVariable location] }
+  ]
+  if ok then
+    [!?getterVariableMap put
+      !targetVarName
+      !target
+    ]
+    @gtlContext getterContext = emptyContext()
+    @string outputString = ""
+    [instructions execute !getterContext !?getterVariableMap !funcs !?outputString]
+    [getterVariableMap getResult !returnVariable ?result]
+  end
+}
+
+getter @gtlGetter typedName
+  ->@lstring result
+{
+  result = .new { ![targetType typeName]+[name string] !where }
+}
+
 map @gtlProcMap
 {
   @gtlProcedure procedure
@@ -128,6 +166,13 @@ map @gtlFuncMap
   @gtlFunction function
   insert put error message "a function named '%K' is already declared in %L"
   search get error message "there is no function named '%K'"
+}
+
+map @gtlGetterMap
+{
+  @gtlGetter theGetter
+  insert put error message "a getter named '%K' is already declared in %L"
+  search get error message "there is no getter named '%K'"
 }
 
 class @gtlModule

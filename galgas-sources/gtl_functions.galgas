@@ -24,6 +24,42 @@
 #
 #-----------------------------------------------------------------------------*
 
-#=============================================================================*
-# lstring returns a @lstring initialized with tha argument and the location
-#-----------------------------------------------------------------------------*
+func envVarExists
+  ?let @string varName
+  ->@bool result
+{
+  result = [varName doesEnvironmentVariableExist]
+}
+
+func trueFalse ?let @bool inBool ->@string result {
+  if inBool then
+    result = "true"
+  else
+    result = "false"
+  end
+}
+
+func TrueFalse ?let @bool inBool ->@string result {
+  if inBool then
+    result = "True"
+  else
+    result = "False"
+  end
+}
+
+func yesNo ?let @bool inBool ->@string result {
+  if inBool then
+    result = "YES"
+  else
+    result = "NO"
+  end
+}
+
+func TRUEFALSE ?let @bool inBool ->@string result {
+  if inBool then
+    result = "TRUE"
+  else
+    result = "FALSE"
+  end
+}
+

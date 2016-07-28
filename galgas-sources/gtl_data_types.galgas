@@ -34,8 +34,9 @@ getter @type typeName
   elsif self == `@gtlStruct        then typeName = "struct"
   elsif self == `@gtlList          then typeName = "list"
   elsif self == `@gtlMap           then typeName = "map"
+  elsif self == `@gtlType          then typeName = "type"
   elsif self == `@gtlUnconstructed then typeName = "unconstructed"
-  else typeName = "-unkown-" end
+  else typeName = "-unknown-" end
 }
 
 getter @string gtlType
@@ -49,6 +50,7 @@ getter @string gtlType
   elsif self == "struct"        then type = `@gtlStruct
   elsif self == "list"          then type = `@gtlList
   elsif self == "map"           then type = `@gtlMap
+  elsif self == "type"          then type = `@gtlType
   elsif self == "unconstructed" then type = `@gtlUnconstructed
   else error location : "unknown type" : type end
 }
@@ -64,6 +66,7 @@ getter @lstring gtlType
   elsif typeName == "struct"        then type = `@gtlStruct
   elsif typeName == "list"          then type = `@gtlList
   elsif typeName == "map"           then type = `@gtlMap
+  elsif typeName == "type"          then type = `@gtlType
   elsif typeName == "unconstructed" then type = `@gtlUnconstructed
   else error location : "unknown type" : type end
 }
@@ -156,6 +159,10 @@ abstract getter @gtlData ltOp  ?let @gtlData right -> @gtlData result
 abstract getter @gtlData leOp  ?let @gtlData right -> @gtlData result
 abstract getter @gtlData gtOp  ?let @gtlData right -> @gtlData result
 abstract getter @gtlData geOp  ?let @gtlData right -> @gtlData result
+
+abstract getter @gtlData embeddedType -> @type result
+
+abstract method @gtlData addMyValue ?!@objectlist objectList
 
 list @gtlTypedArgumentList {
   @type type
@@ -259,6 +266,16 @@ override getter @gtlUnconstructed ltOp ?let @gtlData unused right -> @gtlData re
 }
 override getter @gtlUnconstructed leOp ?let @gtlData unused right -> @gtlData result {
   error where : "unconstructed forbidden" : result
+}
+
+override getter @gtlUnconstructed embeddedType -> @type result
+{
+  error where : "unconstructed data provided as argument" : result
+}
+
+override method @gtlUnconstructed addMyValue ?!@objectlist unused objectList
+{
+  error where : "Attempting to pass an unconstructed data to a function"
 }
 
 #-----------------------------------------------------------------------------*
@@ -387,6 +404,16 @@ override getter @gtlType leOp ?let @gtlData unused right -> @gtlData result {
   error where : "type forbidden" : result
 }
 
+override getter @gtlType embeddedType -> @type result
+{
+  result = `@type
+}
+
+override method @gtlType addMyValue ?!@objectlist objectList
+{
+  objectList += ![type object]
+}
+
 #-----------------------------------------------------------------------------*
 # Performs a getter on a @gtlType
 #-----------------------------------------------------------------------------*
@@ -395,7 +422,7 @@ override getter @gtlType performGetter
   ?let @gtlDataList arguments
   ->@gtlData        result
 {
-   if   "string"    == methodName then
+  if    "string"    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] ![self string]
@@ -520,6 +547,16 @@ override getter @gtlEnum ltOp ?let @gtlData unused right -> @gtlData result {
 }
 override getter @gtlEnum leOp ?let @gtlData unused right -> @gtlData result {
   error where : "enum forbidden" : result
+}
+
+override getter @gtlEnum embeddedType -> @type result
+{
+  error where : "enum forbidden as built in function argument" : result
+}
+
+override method @gtlEnum addMyValue ?!@objectlist unused objectList
+{
+  error where : "enum forbidden as built in function argument"
 }
 
 #-----------------------------------------------------------------------------*
@@ -733,6 +770,16 @@ override getter @gtlInt leOp ?let @gtlData right -> @gtlData result {
   else
     error [right where] : "int expected" : result
   end
+}
+
+override getter @gtlInt embeddedType -> @type result
+{
+  result = `@bigint
+}
+
+override method @gtlInt addMyValue ?!@objectlist objectList
+{
+  objectList += ![value object]
 }
 
 #-----------------------------------------------------------------------------*
@@ -1028,6 +1075,16 @@ override getter @gtlFloat leOp ?let @gtlData right -> @gtlData result {
   end
 }
 
+override getter @gtlFloat embeddedType -> @type result
+{
+  result = `@double
+}
+
+override method @gtlFloat addMyValue ?!@objectlist objectList
+{
+  objectList += ![value object]
+}
+
 #-----------------------------------------------------------------------------*
 # Performs a getter on a @gtlFloat
 #-----------------------------------------------------------------------------*
@@ -1255,6 +1312,16 @@ override getter @gtlString leOp ?let @gtlData right -> @gtlData result {
   else
     error [right where] : "string expected" : result
   end
+}
+
+override getter @gtlString embeddedType -> @type result
+{
+  result = `@string
+}
+
+override method @gtlString addMyValue ?!@objectlist objectList
+{
+  objectList += ![value object]
 }
 
 #-----------------------------------------------------------------------------*
@@ -1579,6 +1646,16 @@ override getter @gtlBool leOp ?let @gtlData right -> @gtlData result {
   end
 }
 
+override getter @gtlBool embeddedType -> @type result
+{
+  result = `@bool
+}
+
+override method @gtlBool addMyValue ?!@objectlist objectList
+{
+  objectList += ![value object]
+}
+
 #-----------------------------------------------------------------------------*
 # Performs a getter on a @gtlBool
 #-----------------------------------------------------------------------------*
@@ -1774,6 +1851,16 @@ override getter @gtlStruct leOp ?let @gtlData unused right -> @gtlData result {
   error where : "struct forbidden" : result
 }
 
+override getter @gtlStruct embeddedType -> @type result
+{
+  error where : "struct forbidden as built in function argument" : result
+}
+
+override method @gtlStruct addMyValue ?!@objectlist objectList
+{
+  objectList += ![value object]
+}
+
 #-----------------------------------------------------------------------------*
 # Performs a getter on a @gtlStruct
 #-----------------------------------------------------------------------------*
@@ -1941,6 +2028,16 @@ override getter @gtlList ltOp ?let @gtlData unused right -> @gtlData result {
 
 override getter @gtlList leOp ?let @gtlData unused right -> @gtlData result {
   error where : "a list does not support the <= operator" : result
+}
+
+override getter @gtlList embeddedType -> @type result
+{
+  error where : "list forbidden as built in function argument" : result
+}
+
+override method @gtlList addMyValue ?!@objectlist objectList
+{
+  objectList += ![value object]
 }
 
 #-----------------------------------------------------------------------------*
@@ -2132,6 +2229,16 @@ override getter @gtlMap ltOp ?let @gtlData unused right -> @gtlData result {
 
 override getter @gtlMap leOp ?let @gtlData unused right -> @gtlData result {
   error where : "a map does not support the <= operator" : result
+}
+
+override getter @gtlMap embeddedType -> @type result
+{
+  error where : "map forbidden as built in function argument" : result
+}
+
+override method @gtlMap addMyValue ?!@objectlist objectList
+{
+  objectList += ![value object]
 }
 
 #-----------------------------------------------------------------------------*
