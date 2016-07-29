@@ -4,7 +4,7 @@
 #
 #  @section desc File description
 #
-#  expressions in GTL.
+#  built in functions of GTL.
 #
 #  @section copyright Copyright
 #
@@ -23,13 +23,6 @@
 #  $URL$
 #
 #-----------------------------------------------------------------------------*
-
-func envVarExists
-  ?let @string varName
-  ->@bool result
-{
-  result = [varName doesEnvironmentVariableExist]
-}
 
 func trueFalse ?let @bool inBool ->@string result {
   if inBool then

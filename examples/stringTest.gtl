@@ -65,3 +65,17 @@ display b
 
 let b := ["Hello beautiful World. How are you" replaceString : "Hello", "Goodbye"]
 display b
+
+if ["LOGNAME" envVarExists] then
+  println "LOGNAME: " + ["LOGNAME" envVar]
+else
+  println "LOGNAME environment variable not found"
+end if
+
+if ["DUMMY" envVarExists] then
+  println "DUMMY: " + ["DUMMY" envVar]
+else
+  println "DUMMY environment variable not found"
+end if
+
+println "DUMMY: " + ["DUMMY" envVar]

@@ -90,3 +90,57 @@ map @gtlExpressionMap {
   search get error message "there is no or field named '%K'"
   remove del error message "there is no field named '%K' to delete"
 }
+
+#=============================================================================*
+# An library stores a map of functions and getter
+#-----------------------------------------------------------------------------*
+class @library {
+  @gtlFuncMap   funcMap
+  @gtlGetterMap getterMap
+}
+
+getter @library functionExists
+  ?let @lstring name
+  ->@bool exists
+{
+  exists = [funcMap hasKey ![name string]]
+}
+
+getter @library getFunction
+  ?let @lstring  name
+  ->@gtlFunction aFunction
+{
+  [funcMap get !name ?aFunction]
+}
+
+setter @library putFunction
+  ?let @lstring     name
+  ?let @gtlFunction aFunction
+{
+  [!?funcMap put !name !aFunction]
+}
+
+getter @library getterExists
+  ?let @string  type
+  ?let @lstring name
+  ->@bool exists
+{
+  exists = [getterMap hasKey !type + name]
+}
+
+getter @library getGetter
+  ?let @string   type
+  ?let @lstring  name
+  ->@gtlGetter   aGetter
+{
+  [getterMap get !.new { !type + name ![name location] } ?aGetter]
+}
+
+setter @library putGetter
+  ?let @lstring   name
+  ?let @gtlGetter aGetter
+{
+  [!?getterMap put !name !aGetter]
+}
+
+

@@ -39,7 +39,7 @@ abstract class @gtlVarItem { @lstring field }
 abstract method @gtlVarItem set
   ?!     @gtlVarMap  context
   ?  let @gtlVarMap  vars
-  ?  let @gtlFuncMap funcs
+  ?  let @library    lib
   ?  let @gtlVarPath path
   ?  let @gtlData    data
 
@@ -49,7 +49,7 @@ abstract method @gtlVarItem set
 abstract getter @gtlVarItem get
   ? let @gtlVarMap  context
   ? let @gtlVarMap  vars
-  ? let @gtlFuncMap funcs
+  ? let @library    lib
   ? let @gtlVarPath path
   -> @gtlData result
   
@@ -59,7 +59,7 @@ abstract getter @gtlVarItem get
 abstract getter @gtlVarItem exists
   ? let @gtlVarMap  context
   ? let @gtlVarMap  vars
-  ? let @gtlFuncMap funcs
+  ? let @library    lib
   ? let @gtlVarPath path
   -> @bool result
   
@@ -74,7 +74,7 @@ class @gtlVarItemField : @gtlVarItem { }
 override method @gtlVarItemField set
   ?!     @gtlVarMap  context
   ?  let @gtlVarMap  vars
-  ? let @gtlFuncMap  funcs
+  ?  let @library    lib
   ?  let @gtlVarPath path
   ?  let @gtlData    data
 { 
@@ -103,7 +103,7 @@ override method @gtlVarItemField set
       [[path itemAtIndex !0] set
         !?subContext
         !vars
-        !funcs
+        !lib
         ![path subListFromIndex !1]
         !data
       ]
@@ -117,7 +117,7 @@ override method @gtlVarItemField set
       [[path itemAtIndex !0] set
         !?subContext
         !vars
-        !funcs
+        !lib
         ![path subListFromIndex !1]
         !data
       ]
@@ -133,7 +133,7 @@ override method @gtlVarItemField set
 override getter @gtlVarItemField get
   ? let @gtlVarMap  context
   ? let @gtlVarMap  vars
-  ? let @gtlFuncMap funcs
+  ? let @library    lib
   ? let @gtlVarPath path
   -> @gtlData result
 {
@@ -148,7 +148,7 @@ override getter @gtlVarItemField get
       result = [[path itemAtIndex !0] get
                  ![structVar value]
                  !vars
-                 !funcs
+                 !lib
                  ![path subListFromIndex !1]
                ]
     else
@@ -163,7 +163,7 @@ override getter @gtlVarItemField get
 override getter @gtlVarItemField exists
   ? let @gtlVarMap  context
   ? let @gtlVarMap  vars
-  ? let @gtlFuncMap funcs
+  ? let @library    lib
   ? let @gtlVarPath path
   -> @bool result
 {
@@ -179,7 +179,7 @@ override getter @gtlVarItemField exists
       result = [[path itemAtIndex !0] exists
                  ![structVar value]
                  !vars
-                 !funcs
+                 !lib
                  ![path subListFromIndex !1]
                ]
       else
@@ -202,12 +202,12 @@ class @gtlVarItemCollection : @gtlVarItem { @gtlExpression key }
 override method @gtlVarItemCollection set
   ?!    @gtlVarMap  context
   ? let @gtlVarMap  vars
-  ? let @gtlFuncMap funcs
+  ? let @library    lib
   ? let @gtlVarPath path
   ? let @gtlData    data
 {
   # evaluate the expression to a string
-  cast [key eval !vars !funcs]
+  cast [key eval !vars !lib]
   
   case == @gtlString keyValue :
     if [path length] == 0 then
@@ -276,7 +276,7 @@ override method @gtlVarItemCollection set
           [[path itemAtIndex !0] set
             !?subContext
             !vars
-            !funcs
+            !lib
             ![path subListFromIndex !1]
             !data
           ]
@@ -287,7 +287,7 @@ override method @gtlVarItemCollection set
           [[path itemAtIndex !0] set
             !?subContext
             !vars
-            !funcs
+            !lib
             ![path subListFromIndex !1]
             !data
           ]
@@ -300,7 +300,7 @@ override method @gtlVarItemCollection set
         [[path itemAtIndex !0] set
           !?subContext
           !vars
-          !funcs
+          !lib
           ![path subListFromIndex !1]
           !data
         ]
@@ -362,7 +362,7 @@ override method @gtlVarItemCollection set
             [[path itemAtIndex !0] set
               !?subContext
               !vars
-              !funcs
+              !lib
               ![path subListFromIndex !1]
               !data
             ]
@@ -397,11 +397,11 @@ override method @gtlVarItemCollection set
 override getter @gtlVarItemCollection get
   ? let @gtlVarMap  context
   ? let @gtlVarMap  vars
-  ? let @gtlFuncMap funcs
+  ? let @library    lib
   ? let @gtlVarPath path
   -> @gtlData result
 {
-  cast [key eval !vars !funcs]
+  cast [key eval !vars !lib]
   
   case == @gtlString keyValue :
     # get the map
@@ -422,7 +422,7 @@ override getter @gtlVarItemCollection get
           result = [[path itemAtIndex !0] get
                      ![structVar value]
                      !vars
-                     !funcs
+                     !lib
                      ![path subListFromIndex !1]
                    ]
         else
@@ -450,7 +450,7 @@ override getter @gtlVarItemCollection get
           result = [[path itemAtIndex !0] get
                      ![structVar value]
                      !vars
-                     !funcs
+                     !lib
                      ![path subListFromIndex !1]
                    ]
         else
@@ -473,11 +473,11 @@ override getter @gtlVarItemCollection get
 override getter @gtlVarItemCollection exists
   ? let @gtlVarMap  context
   ? let @gtlVarMap  vars
-  ? let @gtlFuncMap funcs
+  ? let @library    lib
   ? let @gtlVarPath path
   -> @bool result
 {
-  cast [key eval !vars !funcs]
+  cast [key eval !vars !lib]
   
   case == @gtlString keyValue :
     if [context hasKey ![field string]] then
@@ -500,7 +500,7 @@ override getter @gtlVarItemCollection exists
               result = [[path itemAtIndex !0] exists
                          ![structVar value]
                          !vars
-                         !funcs
+                         !lib
                          ![path subListFromIndex !1]
                        ]
             else
@@ -535,7 +535,7 @@ override getter @gtlVarItemCollection exists
               result = [[path itemAtIndex !0] exists
                          ![structVar value]
                          !vars
-                         !funcs
+                         !lib
                          ![path subListFromIndex !1]
                        ]
             else
@@ -569,12 +569,12 @@ list @gtlVarPath {
 #-----------------------------------------------------------------------------*
 method @gtlVarPath setMe
   ?!@gtlVarMap      context
-  ? let @gtlFuncMap funcs
+  ? let @library    lib
   ? let @gtlData    data
 {
   if [self length] > 0 then
     @gtlVarItem item = [self itemAtIndex !0]
-    [item set !?context !context !funcs ![self subListFromIndex !1] !data]
+    [item set !?context !context !lib ![self subListFromIndex !1] !data]
   else
     error .here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
   end
@@ -585,12 +585,12 @@ method @gtlVarPath setMe
 #-----------------------------------------------------------------------------*
 getter @gtlVarPath get
   ?let @gtlVarMap context
-  ?let @gtlFuncMap funcs
-  -> @gtlData variableValue
+  ? let @library  lib
+  -> @gtlData     variableValue
 {
   if [self length] > 0 then
     @gtlVarItem item = [self itemAtIndex !0]
-    variableValue = [item get !context !context !funcs ![self subListFromIndex !1]]
+    variableValue = [item get !context !context !lib ![self subListFromIndex !1]]
   else
     error .here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
     : variableValue
@@ -602,12 +602,12 @@ getter @gtlVarPath get
 #-----------------------------------------------------------------------------*
 getter @gtlVarPath exists
   ?let @gtlVarMap context
-  ?let @gtlFuncMap funcs
+  ?let @library  lib
   -> @bool result
 {
   if [self length] > 0 then
     @gtlVarItem item = [self itemAtIndex !0]
-    result = [item exists !context !context !funcs ![self subListFromIndex !1]]
+    result = [item exists !context !context !lib ![self subListFromIndex !1]]
   else
     error .here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
     : result
@@ -640,8 +640,8 @@ abstract class @gtlBinaryExpression : @gtlExpression {
 }
 
 abstract getter @gtlExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 
 #=============================================================================*
@@ -655,8 +655,8 @@ list @gtlExpressionList { @gtlExpression expression }
 class @gtlTerminal : @gtlExpression { @gtlData value }
 
 override getter @gtlTerminal eval
-  ?let @gtlVarMap  unused gtlVariableMap
-  ?let @gtlFuncMap unused functionMap
+  ? let @gtlVarMap  unused gtlVariableMap
+  ? let @library    unused lib
   -> @gtlData result
 {
   result = value
@@ -668,11 +668,11 @@ override getter @gtlTerminal eval
 class @gtlVarRef : @gtlExpression { @gtlVarPath variableName }
 
 override getter @gtlVarRef eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [variableName get !gtlVariableMap !functionMap]
+  result = [variableName get !gtlVariableMap !lib]
   [!?result setWhere !where]
 }
 
@@ -684,11 +684,11 @@ override getter @gtlVarRef eval
 class @gtlParenthesizedExpression : @gtlUnaryExpression {}
 
 override getter @gtlParenthesizedExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [son eval !gtlVariableMap !functionMap]
+  result = [son eval !gtlVariableMap !lib]
   [!?result setWhere !where]
 }
 
@@ -698,11 +698,11 @@ override getter @gtlParenthesizedExpression eval
 class @gtlMinusExpression : @gtlUnaryExpression {}
 
 override getter @gtlMinusExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[son eval !gtlVariableMap !functionMap] minusOp]
+  result = [[son eval !gtlVariableMap !lib] minusOp]
 }
 
 #-----------------------------------------------------------------------------*
@@ -711,11 +711,11 @@ override getter @gtlMinusExpression eval
 class @gtlPlusExpression : @gtlUnaryExpression {}
 
 override getter @gtlPlusExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[son eval !gtlVariableMap !functionMap] plusOp]
+  result = [[son eval !gtlVariableMap !lib] plusOp]
 }
 
 #-----------------------------------------------------------------------------*
@@ -724,11 +724,11 @@ override getter @gtlPlusExpression eval
 class @gtlNotExpression : @gtlUnaryExpression {}
 
 override getter @gtlNotExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[son eval !gtlVariableMap !functionMap] notOp]
+  result = [[son eval !gtlVariableMap !lib] notOp]
 }
 
 #=============================================================================*
@@ -739,12 +739,12 @@ override getter @gtlNotExpression eval
 class @gtlAddExpression : @gtlBinaryExpression {}
 
 override getter @gtlAddExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] addOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] addOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -753,12 +753,12 @@ override getter @gtlAddExpression eval
 class @gtlSubstractExpression : @gtlBinaryExpression {}
 
 override getter @gtlSubstractExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] subOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] subOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -767,12 +767,12 @@ override getter @gtlSubstractExpression eval
 class @gtlMultiplyExpression : @gtlBinaryExpression {}
 
 override getter @gtlMultiplyExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] mulOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] mulOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -781,12 +781,12 @@ override getter @gtlMultiplyExpression eval
 class @gtlDivideExpression : @gtlBinaryExpression {}
 
 override getter @gtlDivideExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] divOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] divOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -795,12 +795,12 @@ override getter @gtlDivideExpression eval
 class @gtlModulusExpression : @gtlBinaryExpression {}
 
 override getter @gtlModulusExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] modOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] modOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -809,12 +809,12 @@ override getter @gtlModulusExpression eval
 class @gtlAndExpression : @gtlBinaryExpression {}
 
 override getter @gtlAndExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] andOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] andOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -823,12 +823,12 @@ override getter @gtlAndExpression eval
 class @gtlOrExpression : @gtlBinaryExpression {}
 
 override getter @gtlOrExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] orOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] orOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -837,12 +837,12 @@ override getter @gtlOrExpression eval
 class @gtlXorExpression : @gtlBinaryExpression {}
 
 override getter @gtlXorExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] xorOp
-            ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] xorOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -851,12 +851,12 @@ override getter @gtlXorExpression eval
 class @gtlShiftLeftExpression : @gtlBinaryExpression {}
 
 override getter @gtlShiftLeftExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] slOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] slOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -865,12 +865,12 @@ override getter @gtlShiftLeftExpression eval
 class @gtlShiftRightExpression : @gtlBinaryExpression {}
 
 override getter @gtlShiftRightExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] srOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] srOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -879,12 +879,12 @@ override getter @gtlShiftRightExpression eval
 class @gtlNotEqualExpression : @gtlBinaryExpression {}
 
 override getter @gtlNotEqualExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] neqOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] neqOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -893,12 +893,12 @@ override getter @gtlNotEqualExpression eval
 class @gtlEqualExpression : @gtlBinaryExpression {}
 
 override getter @gtlEqualExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] eqOp 
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] eqOp 
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -907,12 +907,12 @@ override getter @gtlEqualExpression eval
 class @gtlLowerThanExpression : @gtlBinaryExpression {}
 
 override getter @gtlLowerThanExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] ltOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] ltOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -921,12 +921,12 @@ override getter @gtlLowerThanExpression eval
 class @gtlLowerOrEqualExpression : @gtlBinaryExpression {}
 
 override getter @gtlLowerOrEqualExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] leOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] leOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -935,12 +935,12 @@ override getter @gtlLowerOrEqualExpression eval
 class @gtlGreaterThanExpression : @gtlBinaryExpression {}
 
 override getter @gtlGreaterThanExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] gtOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] gtOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -949,12 +949,12 @@ override getter @gtlGreaterThanExpression eval
 class @gtlGreaterOrEqualExpression : @gtlBinaryExpression {}
 
 override getter @gtlGreaterOrEqualExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  result = [[lSon eval !gtlVariableMap !functionMap] geOp
-           ![rSon eval !gtlVariableMap !functionMap]]
+  result = [[lSon eval !gtlVariableMap !lib] geOp
+           ![rSon eval !gtlVariableMap !lib]]
 }
 
 #-----------------------------------------------------------------------------*
@@ -967,16 +967,16 @@ class @gtlGetterCallExpression : @gtlExpression {
 }
 
 override getter @gtlGetterCallExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
   @gtlDataList dataArguments = .emptyList
   for () in arguments do
-    dataArguments += ![expression eval !gtlVariableMap !functionMap]
+    dataArguments += ![expression eval !gtlVariableMap !lib]
   end
-  @gtlData targetData = [target eval !gtlVariableMap !functionMap]
-  result = [targetData performGetter !getterName !dataArguments]
+  @gtlData targetData = [target eval !gtlVariableMap !lib]
+  result = [targetData performGetter !getterName !dataArguments !lib]
 }
 
 
@@ -1025,8 +1025,8 @@ class @gtlFunctionCallExpression : @gtlExpression {
 }
 
 override getter @gtlFunctionCallExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
   if @function.isFunctionDefined { ![functionName string] } then
@@ -1035,7 +1035,7 @@ override getter @gtlFunctionCallExpression eval
     @gtlDataList dataArguments = .emptyList
 
     for () in functionArguments do
-      @gtlData arg = [expression eval !gtlVariableMap !functionMap]
+      @gtlData arg = [expression eval !gtlVariableMap !lib]
       dataArguments += !arg
       [arg addMyValue !?arguments]
       #@arguments += ![arg object]
@@ -1064,12 +1064,12 @@ override getter @gtlFunctionCallExpression eval
       end
     end
   else
-    [functionMap get !functionName ?@gtlFunction function]
+    @gtlFunction function = [lib getFunction !functionName]
     @gtlDataList arguments = .emptyList
     for () in functionArguments do
-      arguments += ![expression eval !gtlVariableMap !functionMap]
+      arguments += ![expression eval !gtlVariableMap !lib]
     end
-    result = [function call ![functionName location] !functionMap !arguments]
+    result = [function call ![functionName location] !lib !arguments]
   end
 }
 
@@ -1081,12 +1081,12 @@ class @gtlExistsExpression : @gtlExpression {
 }
 
 override getter @gtlExistsExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
   result = @gtlBool.new {
-    !where ![variable exists !gtlVariableMap !functionMap]
+    !where ![variable exists !gtlVariableMap !lib]
   }
 }
 
@@ -1099,14 +1099,14 @@ class @gtlExistsDefaultExpression : @gtlExistsExpression {
 }
 
 override getter @gtlExistsDefaultExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  if [variable exists !gtlVariableMap !functionMap] then
-    result = [variable get !gtlVariableMap !functionMap]
+  if [variable exists !gtlVariableMap !lib] then
+    result = [variable get !gtlVariableMap !lib]
   else
-    result = [defaultValue eval !gtlVariableMap !functionMap]
+    result = [defaultValue eval !gtlVariableMap !lib]
   end
 }
 
@@ -1118,11 +1118,11 @@ class @gtlTypeOfExpression : @gtlExpression {
 }
 
 override getter @gtlTypeOfExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  @gtlData variableValue = [variable get !gtlVariableMap !functionMap]
+  @gtlData variableValue = [variable get !gtlVariableMap !lib]
   result = @gtlType.new { !where ![variableValue dynamicType] }
 }
 
@@ -1134,11 +1134,11 @@ class @gtlMapOfStructExpression : @gtlExpression {
 }
 
 override getter @gtlMapOfStructExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  @gtlData expressionValue = [expression eval !gtlVariableMap !functionMap]
+  @gtlData expressionValue = [expression eval !gtlVariableMap !lib]
   cast expressionValue
   case == @gtlStruct expressionValueStruct:
     result = @gtlMap.new { !where ![expressionValueStruct value] }
@@ -1155,11 +1155,11 @@ class @gtlMapOfListExpression : @gtlMapOfStructExpression {
 }
 
 override getter @gtlMapOfListExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  @gtlData expressionValue = [expression eval !gtlVariableMap !functionMap]
+  @gtlData expressionValue = [expression eval !gtlVariableMap !lib]
   cast expressionValue
   case == @gtlList expressionValueList:
     @gtlVarMap resultMap = .emptyMap
@@ -1194,11 +1194,11 @@ class @gtlListOfExpression : @gtlExpression {
 }
 
 override getter @gtlListOfExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
-  @gtlData expressionValue = [expression eval !gtlVariableMap !functionMap]
+  @gtlData expressionValue = [expression eval !gtlVariableMap !lib]
   cast expressionValue
   case == @gtlMap expressionValueMap:
     @list resultList = .emptyList
@@ -1219,13 +1219,13 @@ class @gtlLiteralStructExpression : @gtlExpression {
 }
 
 override getter @gtlLiteralStructExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
   @gtlVarMap resultStruct = .emptyMap
   for (key item) in value do
-    [!?resultStruct put !key ![item eval !gtlVariableMap !functionMap]]
+    [!?resultStruct put !key ![item eval !gtlVariableMap !lib]]
   end
   result = @gtlStruct.new { !where !resultStruct }
 }
@@ -1238,13 +1238,13 @@ class @gtlLiteralMapExpression : @gtlExpression {
 }
 
 override getter @gtlLiteralMapExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
   @gtlVarMap resultStruct = .emptyMap
   for (key item) in value do
-    [!?resultStruct put !key ![item eval !gtlVariableMap !functionMap]]
+    [!?resultStruct put !key ![item eval !gtlVariableMap !lib]]
   end
   result = @gtlMap.new { !where !resultStruct }
 }
@@ -1257,13 +1257,13 @@ class @gtlLiteralListExpression : @gtlExpression {
 }
 
 override getter @gtlLiteralListExpression eval
-  ?let @gtlVarMap  gtlVariableMap
-  ?let @gtlFuncMap functionMap
+  ? let @gtlVarMap  gtlVariableMap
+  ? let @library    lib
   -> @gtlData result
 {
   @list resultList = .emptyList
   for (item) in value do
-    resultList += ![item eval !gtlVariableMap !functionMap]
+    resultList += ![item eval !gtlVariableMap !lib]
   end
   result = @gtlList.new { !where !resultList }
 }

@@ -31,8 +31,7 @@ grammar gtl_module_grammar "LL1" {
   syntax gtl_expression_parser
 
    <gtl_module_start_symbol>
-     ?!@gtlFuncMap functionMap
-     ?!@gtlGetterMap getterMap
+     ?!@library      lib
 }
 
 #---------------------------------------------------------------------------*

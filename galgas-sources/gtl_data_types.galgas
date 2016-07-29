@@ -171,11 +171,13 @@ list @gtlTypedArgumentList {
 abstract getter @gtlData performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
   ->@gtlData        result
 
 abstract setter @gtlData performSetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
 
 #-----------------------------------------------------------------------------*
 # unconstructed type and operations on unconstructed
@@ -284,6 +286,7 @@ override method @gtlUnconstructed addMyValue ?!@objectlist unused objectList
 override getter @gtlUnconstructed performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
   ->@gtlData        result
 {
   if "type"      == methodName then
@@ -291,6 +294,13 @@ override getter @gtlUnconstructed performGetter
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
     }
+  elsif [lib getterExists !"unconstructed" !methodName] then
+    result = [[lib getGetter !"unconstructed" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
   else
     error methodName : "unknown getter '" + methodName +"' for unconstructed target" : result
   end
@@ -302,6 +312,7 @@ override getter @gtlUnconstructed performGetter
 override setter @gtlUnconstructed performSetter
   ?let @lstring            methodName
   ?let @gtlDataList unused arguments
+  ?let @library     unused lib
 {
   error methodName : "unknown setter '" + methodName +"' for unconstructed target"
 }
@@ -420,6 +431,7 @@ override method @gtlType addMyValue ?!@objectlist objectList
 override getter @gtlType performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
   ->@gtlData        result
 {
   if    "string"    == methodName then
@@ -437,6 +449,13 @@ override getter @gtlType performGetter
     result = @gtlBool.new {
       ![methodName location] !false
     }
+  elsif [lib getterExists !"type" !methodName] then
+    result = [[lib getGetter !"type" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
   else
     error methodName : "unknown getter '" + methodName +"' for type target" : result
   end
@@ -448,6 +467,7 @@ override getter @gtlType performGetter
 override setter @gtlType performSetter
   ?let @lstring            methodName
   ?let @gtlDataList unused arguments
+  ?let @library     unused lib
 {
   error methodName : "unknown setter '" + methodName +"' for type target"
 }
@@ -565,6 +585,7 @@ override method @gtlEnum addMyValue ?!@objectlist unused objectList
 override getter @gtlEnum performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
   ->@gtlData        result
 {
   if    "string"    == methodName then
@@ -582,6 +603,13 @@ override getter @gtlEnum performGetter
     result = @gtlBool.new {
       ![methodName location] !false
     }
+  elsif [lib getterExists !"enum" !methodName] then
+    result = [[lib getGetter !"enum" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
   else
     error methodName : "unknown getter '" + methodName +"' for enum target" : result
   end
@@ -593,6 +621,7 @@ override getter @gtlEnum performGetter
 override setter @gtlEnum performSetter
   ?let @lstring            methodName
   ?let @gtlDataList unused arguments
+  ?let @library     unused lib
 {
   error methodName : "unknown setter '" + methodName +"' for enum target"
 }
@@ -788,6 +817,7 @@ override method @gtlInt addMyValue ?!@objectlist objectList
 override getter @gtlInt performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
   ->@gtlData        result
 {
   if    "string"                 == methodName then
@@ -906,6 +936,13 @@ override getter @gtlInt performGetter
     result = @gtlBool.new {
       ![methodName location] !true
     }
+  elsif [lib getterExists !"int" !methodName] then
+    result = [[lib getGetter !"int" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
   else
     error methodName : "unknown getter '" + methodName +"' for int target" : result
   end
@@ -917,6 +954,7 @@ override getter @gtlInt performGetter
 override setter @gtlInt performSetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     unused lib
 {
   if    [methodName string] == "setBitAtIndex" then
     argumentsCheck(!methodName !boolIntArguments() !arguments)
@@ -1091,6 +1129,7 @@ override method @gtlFloat addMyValue ?!@objectlist objectList
 override getter @gtlFloat performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
   ->@gtlData        result
 {
   if    "string"                 == methodName then
@@ -1169,6 +1208,13 @@ override getter @gtlFloat performGetter
     result = @gtlBool.new {
       ![methodName location] !true
     }
+  elsif [lib getterExists !"float" !methodName] then
+    result = [[lib getGetter !"float" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
   else
     error methodName : "unknown getter '" + methodName +"' for float target" : result
   end
@@ -1180,6 +1226,7 @@ override getter @gtlFloat performGetter
 override setter @gtlFloat performSetter
   ?let @lstring     methodName
   ?let @gtlDataList unused arguments
+  ?let @library     unused lib
 {
   error methodName : "unknown setter '" + methodName +"' for float target"
 }
@@ -1330,6 +1377,7 @@ override method @gtlString addMyValue ?!@objectlist objectList
 override getter @gtlString performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
   ->@gtlData        result
 {
   if    [methodName string] == "string" then
@@ -1477,6 +1525,18 @@ override getter @gtlString performGetter
       ![methodName location]
       !exists
     }
+  elsif [methodName string] == "envVarExists" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location]
+      ![value doesEnvironmentVariableExist]
+    }
+  elsif [methodName string] == "envVar" then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location]
+      !@string.stringWithEnvironmentVariableOrEmpty { ! value }
+    }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
@@ -1487,6 +1547,13 @@ override getter @gtlString performGetter
     result = @gtlBool.new {
       ![methodName location] !false
     }
+  elsif [lib getterExists !"string" !methodName] then
+    result = [[lib getGetter !"string" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
   else
     error methodName : "unknown getter '" + methodName +"' for string target"
       : result
@@ -1499,6 +1566,7 @@ override getter @gtlString performGetter
 override setter @gtlString performSetter
   ?let @lstring     methodName
   ?let @gtlDataList unused arguments
+  ?let @library     unused lib
 {
   error methodName : "unknown setter '" + methodName +"' for string target"
 }
@@ -1662,6 +1730,7 @@ override method @gtlBool addMyValue ?!@objectlist objectList
 override getter @gtlBool performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
   ->@gtlData        result
 {
   if     [methodName string] == "trueOrFalse" then
@@ -1710,6 +1779,13 @@ override getter @gtlBool performGetter
     result = @gtlBool.new {
       ![methodName location] !false
     }
+  elsif [lib getterExists !"bool" !methodName] then
+    result = [[lib getGetter !"bool" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
   else
     error methodName : "unknown getter '" + methodName +"' for boolean target"
       : result
@@ -1722,6 +1798,7 @@ override getter @gtlBool performGetter
 override setter @gtlBool performSetter
   ?let @lstring     methodName
   ?let @gtlDataList unused arguments
+  ?let @library     unused lib
 {
   error methodName : "unknown setter '" + methodName +"' for boolean target"
 }
@@ -1865,9 +1942,10 @@ override method @gtlStruct addMyValue ?!@objectlist objectList
 # Performs a getter on a @gtlStruct
 #-----------------------------------------------------------------------------*
 override getter @gtlStruct performGetter
-  ?let @lstring            methodName
-  ?let @gtlDataList        arguments
-  ->@gtlData               result
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ?let @library     lib
+  ->@gtlData        result
 {
   if    "map"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
@@ -1885,6 +1963,13 @@ override getter @gtlStruct performGetter
     result = @gtlBool.new {
       ![methodName location] !false
     }
+  elsif [lib getterExists !"struct" !methodName] then
+    result = [[lib getGetter !"struct" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
   else
     error methodName : "unknown getter '" + methodName +"' for struct target"
       : result
@@ -1897,6 +1982,7 @@ override getter @gtlStruct performGetter
 override setter @gtlStruct performSetter
   ?let @lstring            methodName
   ?let @gtlDataList unused arguments
+  ?let @library     unused lib
 {
   error methodName : "unknown setter '" + methodName +"' for struct target"
 }
@@ -2046,6 +2132,7 @@ override method @gtlList addMyValue ?!@objectlist objectList
 override getter @gtlList performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
   ->@gtlData        result
 {
   if    "length"                 == methodName then
@@ -2092,6 +2179,13 @@ override getter @gtlList performGetter
     result = @gtlBool.new {
       ![methodName location] !false
     }
+  elsif [lib getterExists !"list" !methodName] then
+    result = [[lib getGetter !"list" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
   else
     error methodName : "unknown getter '" + methodName +"' for list target"
       : result
@@ -2104,6 +2198,7 @@ override getter @gtlList performGetter
 override setter @gtlList performSetter
   ?let @lstring            methodName
   ?let @gtlDataList unused arguments
+  ?let @library     unused lib
 {
   error methodName : "unknown setter '" + methodName +"' for list target"
 }
@@ -2247,6 +2342,7 @@ override method @gtlMap addMyValue ?!@objectlist objectList
 override getter @gtlMap performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
+  ?let @library     lib
   ->@gtlData        result
 {
   if    "length"                 == methodName then
@@ -2272,6 +2368,13 @@ override getter @gtlMap performGetter
       resultList += !item
     end
     result = @gtlList.new { !where !resultList }
+  elsif [lib getterExists !"map" !methodName] then
+    result = [[lib getGetter !"map" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
   else
     error methodName : "unknown getter '" + methodName +"' for map target"
       : result
@@ -2284,6 +2387,7 @@ override getter @gtlMap performGetter
 override setter @gtlMap performSetter
   ?let @lstring            methodName
   ?let @gtlDataList unused arguments
+  ?let @library     unused lib
 {
   error methodName : "unknown setter '" + methodName +"' for map target"
 }

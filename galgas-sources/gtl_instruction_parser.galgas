@@ -242,8 +242,7 @@ rule <gtl_sorting_order>
 
 #-----------------------------------------------------------------------------*
 rule <gtl_import>
-  ?!@gtlFuncMap funcMap 
-  ?!@gtlGetterMap getterMap 
+  ?!@library      lib 
 {
   $import$ $string$ ?let @lstring fileName
   @string fullName = [fileName string]
@@ -251,7 +250,7 @@ rule <gtl_import>
     fullName = [fileName string] + ".gtm"
   end
   grammar gtl_module_grammar in
-    @lstring.new{ !fullName ![fileName location] } !?funcMap !?getterMap
+    @lstring.new{ !fullName ![fileName location] } !?lib
 }
 
 }

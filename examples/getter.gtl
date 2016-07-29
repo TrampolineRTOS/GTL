@@ -1,0 +1,52 @@
+%
+
+import "getter"
+
+let c := [3 square]
+display c
+
+let c := ["Hello" firstChar]
+display c
+
+let c := [3.5 cube]
+display c
+
+let c := @(
+  @{
+    age : 18,
+    height : 180,
+    name : "Arnold"
+  },
+  @{
+    age : 22,
+    height : 170,
+    name : "Bob"
+  },
+  @{
+    age : 29,
+    height : 175,
+    name : "John"
+  }
+)
+
+display c
+
+if [c alwaysHasField : "age"] then
+  println "List ok"
+else
+  println "One of the element does not have the age field"
+end if
+
+let c += @{ height : 150, name : "Sally" }
+
+display c
+
+if [c alwaysHasField : "age"] then
+  println "List ok"
+else
+  println "One of the element does not have the age field"
+end if
+
+println [c[0] hasField: "age"]
+
+println [c[3] hasField: "age"]

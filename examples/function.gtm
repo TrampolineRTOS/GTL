@@ -31,4 +31,3 @@ func psquare(x) result
     error x : "int or float expected"
   end if
 end func
-

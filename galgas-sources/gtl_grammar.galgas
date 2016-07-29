@@ -31,7 +31,7 @@ grammar gtl_grammar "LL1" {
   syntax gtl_instruction_parser
 
    <gtl_start_symbol>
-     !@gtlFuncMap         functions
+     !@library            lib
      !@gtlInstructionList program
 
 }

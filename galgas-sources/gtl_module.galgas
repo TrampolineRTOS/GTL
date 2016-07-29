@@ -75,7 +75,7 @@ class @gtlProcedure : @gtlExecutableEntity
 
 method @gtlProcedure call
   ? let @gtlContext  context
-  ? let @gtlFuncMap  funcs
+  ? let @library     lib
   ?!@string          outputString
   ? let @location    fromLocation
   ? let @gtlDataList actualArguments
@@ -83,7 +83,7 @@ method @gtlProcedure call
   [self checkArguments
     !fromLocation !actualArguments ?@gtlVarMap procVariableMap ?@bool ok]
   if ok then
-    [instructions execute !context !?procVariableMap !funcs !?outputString]
+    [instructions execute !context !?procVariableMap !lib !?outputString]
   else
     error fromLocation : "procedure call failed"
   end
@@ -95,9 +95,9 @@ class @gtlFunction : @gtlExecutableEntity
 }
 
 getter @gtlFunction call
-  ?let @location    fromLocation
-  ?let @gtlFuncMap  funcs
-  ?let @gtlDataList actualArguments
+  ? let @location    fromLocation
+  ? let @library     lib
+  ? let @gtlDataList actualArguments
   ->@gtlData        result
 {
   [self checkArguments
@@ -109,7 +109,7 @@ getter @gtlFunction call
   if ok then
     @gtlContext functionContext = emptyContext()
     @string outputString = ""
-    [instructions execute !functionContext !?funcVariableMap !funcs !?outputString]
+    [instructions execute !functionContext !?funcVariableMap !lib !?outputString]
     [funcVariableMap getResult !returnVariable ?result]
   else
    error fromLocation : "function call failed" : result
@@ -119,13 +119,11 @@ getter @gtlFunction call
 class @gtlGetter : @gtlFunction
 {
   @type targetType
-  @lstring targetVarName
 }
 
 getter @gtlGetter callGetter
   ?let @location     fromLocation
-  ?let @gtlFuncMap   funcs
-  ?let @gtlGetterMap getterMap
+  ?let @library      lib
   ?let @gtlData      target
   ?let @gtlDataList  actualArguments
   ->@gtlData         result
@@ -138,13 +136,15 @@ getter @gtlGetter callGetter
   ]
   if ok then
     [!?getterVariableMap put
-      !targetVarName
+      !.new { !"self" !fromLocation }
       !target
     ]
     @gtlContext getterContext = emptyContext()
     @string outputString = ""
-    [instructions execute !getterContext !?getterVariableMap !funcs !?outputString]
+    [instructions execute !getterContext !?getterVariableMap !lib !?outputString]
     [getterVariableMap getResult !returnVariable ?result]
+  else
+   error fromLocation : "getter call failed" : result
   end
 }
 

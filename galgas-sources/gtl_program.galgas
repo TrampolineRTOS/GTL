@@ -8,7 +8,7 @@ message "a source text file with the .gtl extension"
 grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
 {
   grammar gtl_grammar in inSourceFile
-    ?@gtlFuncMap functions
+    ?@library            lib
     ?@gtlInstructionList program
   
   @gtlContext context = emptyContext()
@@ -16,7 +16,7 @@ grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
 
   @string result = ""
   
-  [program execute !context !?variables !functions !?result]
+  [program execute !context !?variables !lib !?result]
   
   message "================================================================\n"
   message result

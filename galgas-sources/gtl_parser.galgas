@@ -37,20 +37,20 @@ rule <gtl_variable_or_here>
   !@bool hereInstead
 
 rule <gtl_import>
-  ?!@gtlFuncMap funcMap 
+  ?!@library lib 
 
 rule <gtl_simple_instruction>
   !@gtlInstruction instruction
 
 #-----------------------------------------------------------------------------*
 rule <gtl_start_symbol>
-  !@gtlFuncMap functions
+  !@library            lib
   !@gtlInstructionList program
 {
-  functions = .emptyMap
+  lib = .new { !.emptyMap !.emptyMap }
   repeat 
   while
-    <gtl_import> !?functions
+    <gtl_import> !?lib
   end
   <gtl_template_instruction_list> ?program
 }

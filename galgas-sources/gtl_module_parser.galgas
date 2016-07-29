@@ -33,8 +33,7 @@ rule <gtl_simple_instruction>
   !@gtlInstruction instruction
 
 rule <gtl_import>
-  ?!@gtlFuncMap   funcMap 
-  ?!@gtlGetterMap getterMap 
+  ?!@library lib 
 
 #-----------------------------------------------------------------------------*
 rule <gtl_instruction_list>
@@ -64,21 +63,20 @@ rule <gtl_instruction_list>
 
 #-----------------------------------------------------------------------------*
 rule <gtl_module_start_symbol>
-  ?!@gtlFuncMap funcMap
-  ?!@gtlGetterMap getterMap
+  ?!@library lib
 {
   repeat
   while
-    <gtl_import> !?funcMap !?getterMap
+    <gtl_import> !?lib
   end
 
   repeat
   while
     <gtl_function> ?@gtlFunction aFunction
-    [!?funcMap put ![aFunction name] !aFunction]
+    [!?lib putFunction ![aFunction name] !aFunction]
   while
     <gtl_getter> ?@gtlGetter aGetter
-    [!?getterMap put ![aGetter typedName] !aGetter]
+    [!?lib putGetter ![aGetter typedName] !aGetter]
   end
 }
 
@@ -105,7 +103,6 @@ rule <gtl_getter>
 {
   $getter$
   $@$ $identifier$ ?let @lstring targetType
-  $($ $identifier$ ?let @lstring targetName $)$
   $identifier$ ?let @lstring getterName
   @location where = .here
   <gtl_argument_list> ?@gtlArgumentList arguments
@@ -120,7 +117,6 @@ rule <gtl_getter>
     !instructionList
     !returnVariable
     ![targetType gtlType]
-    !targetName
   }
 }
 
