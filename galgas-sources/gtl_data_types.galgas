@@ -294,6 +294,11 @@ override getter @gtlUnconstructed performGetter
     result = @gtlType.new {
       ![methodName location] ![self dynamicType]
     }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !false
+    }
   elsif [lib getterExists !"unconstructed" !methodName] then
     result = [[lib getGetter !"unconstructed" !methodName] callGetter
       ![methodName location]
@@ -1818,13 +1823,13 @@ override getter @gtlStruct desc
   -> @string result
 {
   result =  @string.stringWithSequenceOfCharacters{!' ' !tab} +
-    "struct: [\n"
+    "struct: @{\n"
   for () in value do
     result += @string.stringWithSequenceOfCharacters{!' ' !tab+4} +
       [lkey string] + " :>\n" + 
       [value desc !tab+8]
   end
-  result += @string.stringWithSequenceOfCharacters{!' ' !tab} + "]\n"
+  result += @string.stringWithSequenceOfCharacters{!' ' !tab} + "}\n"
 }
 
 override getter @gtlStruct string -> @string result {
@@ -1901,7 +1906,22 @@ override getter @gtlStruct srOp ?let @gtlData unused right -> @gtlData result {
 
 override getter @gtlStruct neqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlStruct then
-    result = @gtlBool.new { !where !(value != [right as @gtlStruct value]) }
+    @gtlVarMap rValue = [right as @gtlStruct value]
+    @bool equal
+    if [value count] != [rValue count] then
+      equal = false
+    else
+      equal = true
+      for (lkey lValue) in value do
+        if [rValue hasKey !lkey] then
+          [rValue get !lkey ?@gtlData rData]
+          equal = equal & [lValue eqOp !rData]
+        else
+          equal = false
+        end
+      end
+    end
+    result = @gtlBool.new { !where !not equal }
   else
     error [right where] : "struct expected" : result
   end
@@ -1909,7 +1929,22 @@ override getter @gtlStruct neqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlStruct eqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlStruct then
-    result = @gtlBool.new { !where !(value == [right as @gtlStruct value]) }
+    @gtlVarMap rValue = [right as @gtlStruct value]
+    @bool equal
+    if [value count] != [rValue count] then
+      equal = false
+    else
+      equal = true
+      for (lkey lValue) in value do
+        if [rValue hasKey !lkey] then
+          [rValue get !lkey ?@gtlData rData]
+          equal = equal & [lValue eqOp !rData]
+        else
+          equal = false
+        end
+      end
+    end
+    result = @gtlBool.new { !where !equal }
   else
     error [right where] : "struct expected" : result
   end
@@ -1997,13 +2032,13 @@ override getter @gtlList desc
   -> @string result
 {
   result =  @string.stringWithSequenceOfCharacters{!' ' !tab} +
-    "list: [\n"
+    "list: @(\n"
   for () in value do (i)
     result += @string.stringWithSequenceOfCharacters{!' ' !tab+4} +
       [i string] + " :>\n" + 
       [value desc !tab+8]
   end
-  result += @string.stringWithSequenceOfCharacters{!' ' !tab} + "]\n"
+  result += @string.stringWithSequenceOfCharacters{!' ' !tab} + ")\n"
 }
 
 override getter @gtlList string -> @string result {
@@ -2086,7 +2121,17 @@ override getter @gtlList srOp ?let @gtlData unused right -> @gtlData result {
 
 override getter @gtlList neqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlList then
-    result = @gtlBool.new { !where !(value != [right as @gtlList value]) }
+    @list rValue = [right as @gtlList value]
+    @bool equal
+    if [value length] != [rValue length] then
+      equal = false
+    else
+      equal = true
+      for (left) in value, (right) in rValue do
+        equal = equal & [left eqOp !right]
+      end
+    end
+    result = @gtlBool.new { !where !not equal }
   else
     error [right where] : "list expected" : result
   end
@@ -2094,7 +2139,17 @@ override getter @gtlList neqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlList eqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlList then
-    result = @gtlBool.new { !where !(value == [right as @gtlList value]) }
+    @list rValue = [right as @gtlList value]
+    @bool equal
+    if [value length] != [rValue length] then
+      equal = false
+    else
+      equal = true
+      for (left) in value, (right) in rValue do
+        equal = equal & [left eqOp !right]
+      end
+    end
+    result = @gtlBool.new { !where !equal }
   else
     error [right where] : "list expected" : result
   end
@@ -2164,6 +2219,17 @@ override getter @gtlList performGetter
           error methodName : "item at index " + index
             + " does not have field named " + key
         end
+      case == @gtlMap itemMap:
+        if [[itemMap value] hasKey ![key string]] then
+          [[itemMap value] get !key ?@gtlData keyValue]
+          [!?resultMap put
+            ![keyValue lstring]
+            !item
+          ]
+        else
+          error methodName : "item at index " + index
+            + " does not have field named " + key
+        end
       else
         error methodName : "list of struct expected"
       end
@@ -2213,7 +2279,7 @@ override getter @gtlMap desc
   -> @string result
 {
   result =  @string.stringWithSequenceOfCharacters{!' ' !tab} +
-    "map: [\n"
+    "map: @[\n"
   for () in value do
     result += @string.stringWithSequenceOfCharacters{!' ' !tab+4} +
       "\""+ [lkey string] + "\" :>\n" + 

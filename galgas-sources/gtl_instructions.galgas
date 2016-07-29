@@ -56,10 +56,25 @@ method @gtlInstructionList execute
 }
 
 #-----------------------------------------------------------------------------*
+# let unconstructed instruction
+#-----------------------------------------------------------------------------*
+class @gtlLetUnconstructedInstruction : @gtlInstruction {
+  @gtlVarPath    lValue
+}
+
+override method @gtlLetUnconstructedInstruction execute
+  ?let @gtlContext unused context
+  ?!@gtlVarMap            gtlVariableMap
+  ?let @library           lib
+  ?!@string        unused outputString
+{ 
+  [lValue setMe !?gtlVariableMap !lib !@gtlUnconstructed.new { ![[lValue itemAtIndex !0] location] } ]
+}
+  
+#-----------------------------------------------------------------------------*
 # let instructions
 #-----------------------------------------------------------------------------*
-abstract class @gtlAssignInstruction : @gtlInstruction {
-  @gtlVarPath    lValue
+abstract class @gtlAssignInstruction : @gtlLetUnconstructedInstruction {
   @gtlExpression rValue
 }
 

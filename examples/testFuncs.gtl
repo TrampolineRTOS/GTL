@@ -1,11 +1,5 @@
 %
 
-if envVarExists("LOGNAME") then
-  println "LOGNAME found"
-end if
-
-println envVar("TUTU")
-
 println yesNo(true)
 
 println trueFalse(false)

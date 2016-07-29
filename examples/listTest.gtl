@@ -1,0 +1,53 @@
+%
+let a := @( 1, 2, 3, 4 )
+display a
+
+let b := a
+display b
+
+println a == b
+
+let b := @( 1, 2, 3, 4 )
+display b
+
+println a == b
+
+let b += 5
+display b
+
+println a == b
+
+let b := @( 1, 2, 3, 5 )
+display b
+
+println a == b
+
+let b := b | b
+display b
+
+let b := b + b
+display b
+
+let b |= a
+display b
+
+let myList := @(
+  @{
+    age : 18,
+    height : 180,
+    name : "Arnold"
+  },
+  @{
+    age : 22,
+    height : 170,
+    name : "Bob"
+  },
+  @{
+    age : 29,
+    height : 175,
+    name : "John"
+  }
+)
+
+let myMap := [myList mapBy : "name"]
+display myMap

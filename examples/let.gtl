@@ -43,3 +43,8 @@ display a
 # type
 let a := @int
 display a
+
+# unconstructed
+let z
+display z
+

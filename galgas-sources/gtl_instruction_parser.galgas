@@ -85,7 +85,9 @@ rule <gtl_simple_instruction>
   or
     $^=$
     <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlLetXorInstruction.new { !where !variable !expression} 
+    instruction = @gtlLetXorInstruction.new { !where !variable !expression}
+  or
+    instruction = @gtlLetUnconstructedInstruction.new { !where !variable }
   end
 }
 

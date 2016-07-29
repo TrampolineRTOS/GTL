@@ -1,0 +1,17 @@
+%
+let s1 := @{ a: 1, b: 2 }
+let s2 := s1
+
+display s1
+display s2
+
+println s1 == s2
+
+let s2 := @{ a: 1, b: 2 }
+
+println s1 == s2
+
+let s2::c := 3
+
+println s1 == s2
+

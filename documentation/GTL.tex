@@ -113,8 +113,22 @@
   morekeywords=\bfseries
 }
 
-\newcommand{\cdata}[1]{{\ttfamily #1}}
 \newcommand{\character}[1]{{\small\ttfamily `{#1}'}}
+
+\newcommand{\argu}[1]{{\ttfamily #1}}
+\newcommand{\ctype}[1]{{\small\ttfamily #1}}
+\newcommand{\cdata}[1]{{\ttfamily #1}}
+\newcommand{\var}[1]{{\ttfamily\em #1}}
+\newcommand{\va}{\small\ttfamily\em}
+\newcommand{\cfunction}[1]{{\ttfamily #1}}
+\newcommand{\cmacro}[1]{{\small\ttfamily #1}}
+\newcommand{\constant}[1]{{\small\ttfamily #1}}
+\newcommand{\oilobj}[1]{{\small\ttfamily #1}}
+\newcommand{\oilattr}[1]{{\small\ttfamily #1}}
+\newcommand{\oilval}[1]{{\small\ttfamily #1}}
+\newcommand{\member}[1]{{\small\ttfamily #1}}
+\newcommand{\mem}{\small\ttfamily}
+\newcommand{\tool}[1]{{\em #1}}
 
 \title{GTL Template language}
 \author{Jean-Luc B\'echennec}
@@ -138,7 +152,8 @@ GTL supports the following data types:
 \item[string] unicode strings;
 \item[struct] structured data;
 \item[list] lists of data, may be accessed as a table;
-\item[map] map (aka dictionary) of data.
+\item[map] map (aka dictionary) of data;
+\item[unconstructed] an unconstructed variable.
 \end{description}
 
 Each type has its set of operators, getters and setters. The expression, for getters, or the variable, for setters, is called the {\em target}. Getters return a value related to the data but do not change it. They are used to get information from a data or to convert it into another type. Setter may target a literal expressions. Setters change the data and do not return anything. Setter may only target a variable. Getters and setters may have arguments. Syntax for getters without argument is as follow:
@@ -228,7 +243,7 @@ The \lstinline{int} datatype supports the following operators:
  {\&}&
   {int $\leftarrow$ int \& int}&
   {bitwise and}\\
- {\hspace{.8mm}\rule{1pt}{1.5ex}}&
+ {|}&
   {int $\leftarrow$ int \rule{1pt}{1.5ex} int}&
   {bitwise or}\\
  {\^~}&
@@ -559,31 +574,37 @@ The \texttt{\small string} data type supports the following operators:
   {Returns uppercased representation of the receiver}\\
  {leftSubString}&
   {string}&
-  {Returns the sub-string from the beginning of the target and with the number of characters passed as argument. If the sub-string is longer that the target, the target is returned. \texttt{["Hello World !" leftSubString : 5]} returns \texttt{"Hello"}.}\\
+  {Returns the sub-string from the beginning of the target and with the number of characters passed as argument. If the sub-string is longer that the target, the target is returned. \texttt{["Hello\textvisiblespace World\textvisiblespace !" leftSubString : 5]} returns \texttt{"Hello"}.}\\
  {rightSubString}&
   {string}&
-  {Returns the sub-string from the end of the target and with the number of characters passed as argument. If the sub-string is longer that the target, the target is returned. \texttt{[["Hello World !" leftSubString : 11] rightSubString: 5]} returns \texttt{"World"}.}\\
+  {Returns the sub-string from the end of the target and with the number of characters passed as argument. If the sub-string is longer that the target, the target is returned. \texttt{[["Hello\textvisiblespace World\textvisiblespace !" leftSubString : 11] rightSubString: 5]} returns \texttt{"World"}.}\\
  {subString}&
   {string}&
-  {Returns the sub-string from the \texttt{index} passed as first argument and with the number of characters passed as second argument. If the \texttt{index} is out of the target, the empty string is returned. If the number of characters is greater than the sub-string, the sub-string is returned. \texttt{["Hello World !" subString : 6, 5]} returns \texttt{"World"}. \texttt{["Hello" subString : 10, 3]} returns the empty string. \texttt{["Hello" subString : 2, 10]} returns \texttt{"llo"}.}\\
+  {Returns the sub-string from the \texttt{index} passed as first argument and with the number of characters passed as second argument. If the \texttt{index} is out of the target, the empty string is returned. If the number of characters is greater than the sub-string, the sub-string is returned. \texttt{["Hello\textvisiblespace World\textvisiblespace !" subString : 6, 5]} returns \texttt{"World"}. \texttt{["Hello" subString : 10, 3]} returns the empty string. \texttt{["Hello" subString : 2, 10]} returns \texttt{"llo"}.}\\
  {reversedString}&
   {string}&
-  {Returns a mirrored string. \texttt{["Hello World !" reversedString]} returns \texttt{"! dlroW olleH"}.}\\
+  {Returns a mirrored string. \texttt{["Hello\textvisiblespace World\textvisiblespace !" reversedString]} returns \texttt{"!\textvisiblespace dlroW\textvisiblespace olleH"}.}\\
  {componentsSeparatedByString}&
   {list}&
-  {This getter takes one string argument: \texttt{separator}. The target is cut into pieces according to the separator and a list of the pieces is returned. \texttt{["Hello World !" componentsSeparatedByString : " "]} returns \texttt{@( "Hello", "World", "!" )}.}\\
+  {This getter takes one string argument: \texttt{separator}. The target is cut into pieces according to the separator and a list of the pieces is returned. \texttt{["Hello\textvisiblespace World\textvisiblespace !" componentsSeparatedByString : " "]} returns \texttt{@( "Hello", "World", "!" )}.}\\
  {columnPrefixedBy}&
   {string}&
   {This getter takes one string argument: \texttt{prefix}. Return the target with each line prefixed by \texttt{prefix}. \texttt{["Hello\textbackslash nWorld" columnPrefixedBy : "\#\textvisiblespace"]} returns \texttt{"\#\textvisiblespace Hello\textbackslash n\#\textvisiblespace World"}.}\\
  {wrap}&
   {string}&
-  {Wraps the target to a width. This getter takes two int arguments: \texttt{width} and \texttt{shift}. The target is assumed to contain paragraphs separated by \texttt{\textbackslash n}. Returns the target with each paragraph wrapped to \texttt{width}. In addition, each line of the paragraph except the first one is prefixed by \texttt{shift} spaces. \texttt{["Hello beautiful World.\textbackslash nHow are you" wrap : 6, 2]} returns \texttt{"Hello\textbackslash n\allowbreak\textvisiblespace\textvisiblespace beautiful\textbackslash n\textvisiblespace\textvisiblespace World\textbackslash nHow\textbackslash n\textvisiblespace\textvisiblespace are\textbackslash n  you"}.}\\
+  {Wraps the target to a width. This getter takes two int arguments: \texttt{width} and \texttt{shift}. The target is assumed to contain paragraphs separated by \texttt{\textbackslash n}. Returns the target with each paragraph wrapped to \texttt{width}. In addition, each line of the paragraph except the first one is prefixed by \texttt{shift} spaces. \texttt{["Hello\textvisiblespace beautiful\textvisiblespace World.\textbackslash nHow\textvisiblespace are\allowbreak\textvisiblespace\allowbreak you" wrap : 6, 2]} returns \texttt{"Hello\textbackslash n\allowbreak\textvisiblespace\textvisiblespace beautiful\textbackslash n\textvisiblespace\textvisiblespace World\textbackslash nHow\textbackslash n\textvisiblespace\textvisiblespace are\textbackslash n  you"}.}\\
  {subStringExists}&
   {bool}&
   {This getter takes one argument, \texttt{subString}. It returns \texttt{true} if the sub-string \texttt{subString} is found in the target, \texttt{false otherwise}.}\\
  {replaceString}&
   {string}&
   {This getter takes two argument, \texttt{find} and \texttt{replace}. It returns the target where each occurrence of \texttt{find} is replaced by \texttt{replace}.}\\
+ {envVar}&
+  {string}&
+  {Returns the value of the target environment variable. If it does not exists, \texttt{envVar} returns the empty string.}\\
+ {envVarExists}&
+  {bool}&
+  {Returns \texttt{true} if target environment variable exists, \texttt{false} otherwise.}\\
 \end{longtable}
 
 \subsection{The \lstinline{bool} data type}
@@ -615,7 +636,7 @@ The \lstinline{bool} data type supports the following operators:
  {\&}&
   {bool $\leftarrow$ bool \& bool}&
   {logical and}\\
- {\hspace{.8mm}\rule{1pt}{1.5ex}}&
+ {|}&
   {bool $\leftarrow$ bool \rule{1pt}{1.5ex} bool}&
   {logical or}\\
  {\^~}&
@@ -679,6 +700,183 @@ For comparison operators, \texttt{false} is considered to be lower than \texttt{
   {int}&
   {Returns an int representation, \texttt{1} or \texttt{0} of the bool expression.}\\
 \end{longtable}
+
+\subsection{The \lstinline{struct} data type}
+
+The struct data type allows to store a heterogeneous set of data in one variable. Struct members are accessed by using the \var{::} separator. If \var{A} is a struct, \var{A::B} refers to field \var{B} of \var{A}.
+
+A literal struct is defined as follow:
+
+\begin{lstlisting}[language=goilTemplate]
+@{ a: 1, b: 2, c: 3 }
+\end{lstlisting}
+
+This define a struct with fields a, b and c and respective values 1, 2 and 3.
+
+\subsubsection{\lstinline{struct} operators}
+
+The \lstinline{struct} data type supports the following operators:
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{2.682in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {!=}&
+  {bool $\leftarrow$ struct != struct}&
+  {Not equal}\\
+ {==}&
+  {bool $\leftarrow$ struct == struct}&
+  {Equal}\\
+\end{longtable}
+
+Two structs are equal if:
+\begin{itemize}
+\item they have the same number of field
+\item they have the same field names
+\item they have the same field values
+\end{itemize}
+
+\subsubsection{\lstinline{struct} getter}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|l|p{4.43in}}
+{\bf getter}&{\bf Type}&{\bf Meaning}\\
+\hline\endhead
+ {map}&
+  {map}&
+  {Returns a map representation.}\\
+\end{longtable}
+
+
+\subsection{The \lstinline{list} data type}
+
+The list data type allows to store a list of data in one variable. list members are accessed by using \var{[<number>]} where \var{<number>} is the rank of the element starting at 0. If \var{A} is a list, \var{A[0]} refers to element 0 of \var{A}.
+
+A literal list is defined as follow:
+
+\begin{lstlisting}[language=goilTemplate]
+@( 1, 2, 3 )
+\end{lstlisting}
+
+This define a list of int with elements 1, 2 and 3.
+
+\subsubsection{\lstinline{list} operators}
+
+The \lstinline{list} data type supports the following operators:
+
+\paragraph{Binary operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3.08in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {+}&
+  {list $\leftarrow$ list + any}&
+  {add \texttt{any} add the end of the list}\\
+ {|}&
+  {list $\leftarrow$ list | list}&
+  {Concatenate lists}\\
+\end{longtable}
+
+\paragraph{Comparison operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {!=}&
+  {bool $\leftarrow$ list != list}&
+  {Not equal}\\
+ {==}&
+  {bool $\leftarrow$ list == list}&
+  {Equal}\\
+\end{longtable}
+
+Two structs are equal if:
+\begin{itemize}
+\item they have the same number of elements
+\item they have the same elements values
+\end{itemize}
+
+\subsubsection{\lstinline{list} getters}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|l|p{4.41in}}
+{\bf getter}&{\bf Type}&{\bf Meaning}\\
+\hline\endhead
+ {length}&
+  {int}&
+  {Returns the number of elements in the list.}\\
+ {first}&
+  {any}&
+  {Returns the first element of the list.}\\
+ {last}&
+  {any}&
+  {Returns the last element of the list.}\\
+ {mapBy}&
+  {map}&
+  {\cfunction{mapBy} takes on string argument which is the field (for a struct list item) or the key (for a map list item) used as key to store the element in the resulting map. It returns a map where each element is the element of the list with the key being the corresponding field/key.}\\
+\end{longtable}
+
+\paragraph{example of \cfunction{mapBy}}~
+
+The following code snippet:
+
+\begin{lstlisting}[language=goilTemplate]
+let myList := @(
+  @{
+    age : 18,
+    height : 180,
+    name : "Arnold"
+  },
+  @{
+    age : 22,
+    height : 170,
+    name : "Bob"
+  },
+  @{
+    age : 29,
+    height : 175,
+    name : "John"
+  }
+)
+
+let myMap := [myList mapBy : "name"]
+display myMap
+\end{lstlisting}
+
+outputs:
+\begin{lstlisting}[language=goilTemplate]
+map: @[
+    "Arnold" :>
+        struct: @{
+            age :>
+                integer: 18
+            height :>
+                integer: 180
+            name :>
+                string: "Arnold"
+        }
+    "Bob" :>
+        struct: @{
+            age :>
+                integer: 22
+            height :>
+                integer: 170
+            name :>
+                string: "Bob"
+        }
+    "John" :>
+        struct: @{
+            age :>
+                integer: 29
+            height :>
+                integer: 175
+            name :>
+                string: "John"
+        }
+]
+\end{lstlisting}
 
 
 \end{document}  
