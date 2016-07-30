@@ -2362,17 +2362,47 @@ override getter @gtlMap srOp ?let @gtlData unused right -> @gtlData result {
 
 override getter @gtlMap neqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlMap then
-    result = @gtlBool.new { !where !(value != [right as @gtlMap value]) }
+    @gtlVarMap rValue = [right as @gtlMap value]
+    @bool equal
+    if [value count] != [rValue count] then
+      equal = false
+    else
+      equal = true
+      for (lkey lValue) in value do
+        if [rValue hasKey !lkey] then
+          [rValue get !lkey ?@gtlData rData]
+          equal = equal & [lValue eqOp !rData]
+        else
+          equal = false
+        end
+      end
+    end
+    result = @gtlBool.new { !where !not equal }
   else
-    error [right where] : "map expected" : result
+    error [right where] : "struct expected" : result
   end
 }
 
 override getter @gtlMap eqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlMap then
-    result = @gtlBool.new { !where !(value == [right as @gtlMap value]) }
+    @gtlVarMap rValue = [right as @gtlMap value]
+    @bool equal
+    if [value count] != [rValue count] then
+      equal = false
+    else
+      equal = true
+      for (lkey lValue) in value do
+        if [rValue hasKey !lkey] then
+          [rValue get !lkey ?@gtlData rData]
+          equal = equal & [lValue eqOp !rData]
+        else
+          equal = false
+        end
+      end
+    end
+    result = @gtlBool.new { !where !equal }
   else
-    error [right where] : "map expected" : result
+    error [right where] : "struct expected" : result
   end
 }
 

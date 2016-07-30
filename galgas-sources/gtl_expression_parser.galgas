@@ -457,6 +457,7 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $emptylist$
+  warning .here : "emptylist is deprecated, use @() instead"
   expression = @gtlTerminal.new {
     !.here
     !@gtlList.new { 
@@ -472,6 +473,7 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $emptymap$
+  warning .here : "emptymap is deprecated, use @[] instead"
   expression = @gtlTerminal.new {
     !.here
     !@gtlMap.new { 
@@ -523,10 +525,13 @@ rule <gtl_factor>
 {
   $@($
   @gtlExpressionList expressionList = .emptyList
-  repeat
-    <gtl_expression> ?@gtlExpression listItem
-    expressionList += !listItem
-  while $,$
+  select
+    repeat
+      <gtl_expression> ?@gtlExpression listItem
+      expressionList += !listItem
+    while $,$
+    end
+  or
   end
   $)$
   expression = @gtlLiteralListExpression.new { !.here !expressionList }
@@ -539,12 +544,15 @@ rule <gtl_factor>
 {
   $@[$
   @gtlExpressionMap expressionMap = .emptyMap
-  repeat
-    $string$ ?let @lstring key
-    $:$
-    <gtl_expression> ?@gtlExpression mapItem
-    [!?expressionMap put !key !mapItem]
-  while $,$
+  select 
+    repeat
+      $string$ ?let @lstring key
+      $:$
+      <gtl_expression> ?@gtlExpression mapItem
+      [!?expressionMap put !key !mapItem]
+    while $,$
+    end
+  or
   end
   $]$
   expression = @gtlLiteralMapExpression.new { !.here !expressionMap }
@@ -557,12 +565,15 @@ rule <gtl_factor>
 {
   $@{$
   @gtlExpressionMap expressionMap = .emptyMap
-  repeat
-    $identifier$ ?let @lstring fieldName
-    $:$
-    <gtl_expression> ?@gtlExpression structField
-    [!?expressionMap put !fieldName !structField]
-  while $,$
+  select
+    repeat
+      $identifier$ ?let @lstring fieldName
+      $:$
+      <gtl_expression> ?@gtlExpression structField
+      [!?expressionMap put !fieldName !structField]
+    while $,$
+    end
+  or
   end
   $}$
   expression = @gtlLiteralStructExpression.new { !.here !expressionMap }

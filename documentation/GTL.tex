@@ -3,6 +3,8 @@
 \geometry{a4paper}                   % ... or a4paper or a5paper or ... 
 %\geometry{landscape}                % Activate for for rotated page geometry
 %\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
 \usepackage{graphicx}
 \usepackage{amssymb}
 \usepackage{epstopdf}
@@ -11,18 +13,19 @@
 \usepackage{colortbl}
 \usepackage[table]{xcolor}
 \usepackage{underscore}
+\usepackage{xcolor}
 \usepackage{tikzpagenodes}
 \usetikzlibrary{calc}
 \usepackage{eso-pic}
 
-\AddToShipoutPictureBG{%
-\begin{tikzpicture}[overlay,remember picture]
-\draw[line width=0.5pt]
-      ($ (current page text area.north west) $)
-      rectangle
-      ($ (current page text area.south east) $);
-\end{tikzpicture}
-}
+%\AddToShipoutPictureBG{%
+%\begin{tikzpicture}[overlay,remember picture]
+%\draw[line width=0.5pt]
+%      ($ (current page text area.north west) $)
+%      rectangle
+%      ($ (current page text area.south east) $);
+%\end{tikzpicture}
+%}
 
 \makeatletter
 \newcommand*{\pmzeroslash}{%
@@ -129,6 +132,23 @@
 \newcommand{\member}[1]{{\small\ttfamily #1}}
 \newcommand{\mem}{\small\ttfamily}
 \newcommand{\tool}[1]{{\em #1}}
+\newcommand{\na}{\scriptsize\ttfamily NA}
+
+
+\newcommand\Warning{%
+ \makebox[1.4em][c]{%
+ \makebox[0pt][c]{\raisebox{.1em}{\small!}}%
+ \makebox[0pt][c]{\color{red}\Large$\bigtriangleup$}}}%
+
+\newcommand{\warning}[1]{%
+\vspace{1em}
+\hspace{-18.3mm}
+\rowcolors{1}{white}{light-gray}
+\begin{tabular}[b]{m{5mm}|m{\linewidth}}
+\Warning & #1\\
+\end{tabular}
+}
+
 
 \title{GTL Template language}
 \author{Jean-Luc B\'echennec}
@@ -141,6 +161,7 @@
 
 \tableofcontents
 
+\newpage
 \section{Data types}
 
 GTL supports the following data types:
@@ -750,7 +771,7 @@ Two structs are equal if:
 
 \subsection{The \lstinline{list} data type}
 
-The list data type allows to store a list of data in one variable. list members are accessed by using \var{[<number>]} where \var{<number>} is the rank of the element starting at 0. If \var{A} is a list, \var{A[0]} refers to element 0 of \var{A}.
+The list data type allows to store a list of data. list items are accessed by using \var{[<number>]} where \var{<number>} is the rank of the element starting at 0. If \var{A} is a list, \var{A[0]} refers to element 0 of \var{A}.
 
 A literal list is defined as follow:
 
@@ -759,6 +780,10 @@ A literal list is defined as follow:
 \end{lstlisting}
 
 This define a list of int with elements 1, 2 and 3.
+
+An empty list can be initialized using the \texttt{emptylist} constant.
+
+\warning{The {\tt emptylist} constant is deprecated. Use a literal empty list, \texttt{@()}, instead.}
 
 \subsubsection{\lstinline{list} operators}
 
@@ -772,7 +797,7 @@ The \lstinline{list} data type supports the following operators:
 \hline\endhead
  {+}&
   {list $\leftarrow$ list + any}&
-  {add \texttt{any} add the end of the list}\\
+  {add \texttt{any} at the end of the list}\\
  {|}&
   {list $\leftarrow$ list | list}&
   {Concatenate lists}\\
@@ -877,6 +902,215 @@ map: @[
         }
 ]
 \end{lstlisting}
+
+\subsection{The \lstinline{map} data type}
+
+The map data type allows to store an association of key and value. map members are accessed by using \var{[<key>]} where \var{<key>} is a \texttt{string}. If \var{A} is a map, \var{A["John"]} refers to element of \var{A} having key \texttt{"John"}.
+
+A literal map is defined as follow:
+
+\begin{lstlisting}[language=goilTemplate]
+@[ "age" : 29, "height" : 175, "name" : "John" ]
+\end{lstlisting}
+
+An empty map can be initialized using the \texttt{emptymap} constant.
+
+\warning{The {\tt emptymap} constant is deprecated. Use a literal empty map, \texttt{@[]}, instead.}
+
+
+\subsubsection{\lstinline{map} operators}
+
+The \lstinline{map} data type supports the following operators:
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3.16in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {!=}&
+  {bool $\leftarrow$ map != map}&
+  {Not equal}\\
+ {==}&
+  {bool $\leftarrow$ map == map}&
+  {Equal}\\
+\end{longtable}
+
+Two maps are equal if:
+\begin{itemize}
+\item they have the same number of items
+\item they have the same item keys
+\item they have the same item values
+\end{itemize}
+
+
+
+\section{GTL instructions}
+
+\subsection{The {\em let} instruction}
+
+Data assignment instruction. The general form is:
+
+\begin{lstlisting}
+let var := expression
+\end{lstlisting}
+
+As in the C language, GTL has assignment operator: 
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|}
+{\bf Assign.}&{\bf int}&{\bf float}&{\bf string}&{\bf bool}&{\bf struct}&{\bf list}&{\bf map}&{\bf uncons}\\
+\hline\endhead
+ {+=}&
+  {+}&{+}&{\footnotesize concat}&{\na}&{\na}&{\footnotesize add}&{\na}&{\na}\\
+ {-=}&
+  {-}&{-}&{\na}&{\na}&{\na}&{\na}&{\na}&{\na}\\
+ {*=}&
+  {*}&{*}&{\na}&{\na}&{\na}&{\na}&{\na}&{\na}\\
+ {/=}&
+  {/}&{/}&{\na}&{\na}&{\na}&{\na}&{\na}&{\na}\\
+ {mod=}&
+  {mod}&{\na}&{\na}&{\na}&{\na}&{\na}&{\na}&{\na}\\
+ {<<=}&
+  {<<}&{\na}&{\na}&{\na}&{\na}&{\na}&{\na}&{\na}\\
+ {>>=}&
+  {>>}&{\na}&{\na}&{\na}&{\na}&{\na}&{\na}&{\na}\\
+ {\&=}&
+  {\footnotesize bitwise \&}&{\na}&{\na}&{\footnotesize logical \&}&{\na}&{\na}&{\na}&{\na}\\
+ {|=}&
+  {\footnotesize bitwise |}&{\na}&{\na}&{\footnotesize logical |}&{\na}&{\na}&{\na}&{\na}\\
+ {\^{}=}&
+  {\footnotesize bitwise \^{}}&{\na}&{\na}&{\footnotesize logical \^{}}&{\na}&{\na}&{\na}&{\na}\\
+\end{longtable}
+
+
+The scope of a variable depends on the location where the variable is assigned the first time. For instance, in the following code:
+
+\begin{lstlisting}
+let a := 1
+foreach task in TASKS do
+  let b := 2
+  let a += 1
+end foreach
+println a
+println b
+\end{lstlisting}
+
+Because a is assigned outside the {\tt foreach} loop, it is both accessible within the foreach loop and accessible after the {\tt foreach} loop. So it contains the value number of items in TASKS + 1 after the {\tt foreach}. Because b is assigned inside the {\tt foreach} loop, it does not exist after the loop anymore and {\tt println b} will trigger and error.
+
+\subsection{The {\em if} instruction}
+
+Conditional execution. The forms are:
+
+\begin{lstlisting}
+if expression then ... end if
+if expression then ... else ... end if
+if expression then ... elsif expression then ... end if
+if expression then ... elsif expression then ... else ... end if
+\end{lstlisting}    
+
+The {\em expression} must be boolean. In the following example, the blue text (within the \%) is produced only if the \var{USECOM} boolean variable is true:
+
+\begin{lstlisting}
+if USECOM then %
+#include "tpl_com.h" %
+end if
+\end{lstlisting}
+
+\subsection{The {\em foreach} instruction}
+
+This instruction iterates on the elements of a collection, a list or a map. The simplest form is the following one:
+
+\begin{lstlisting}
+foreach var in expression do ... end foreach
+\end{lstlisting}
+
+Here var takes the value of each of the elements of the collection. If the collection is a list, the elements are iterated in the order of the list. If the collection is a map, the element are iterated in the alphanumerical order of the keys.
+
+In the following example, for each element in the \var{ALARMS} list, the text between the {\tt do} and the {\tt end foreach} is produced with the \var{NAME} attribute of the current element of the \var{ALARMS} list inserted at the specified location. \var{INDEX} is not an attribute of the current element. It is generated for each element and ranges from 0 to the number of elements in the list minus 1.
+\begin{lstlisting}
+foreach alr in ALARMS do
+%
+/* Alarm % !alr::NAME % identifier */
+#define % !alr::NAME %_id % !INDEX %
+CONST(AlarmType, AUTOMATIC) % !alr::NAME % = % !NAME %_id;
+%
+end foreach
+\end{lstlisting}
+
+A more general form of the {\tt foreach} instruction is:
+
+\begin{lstlisting}
+foreach var in expression
+  before ...
+  do ...
+  between ...
+  after ...
+end foreach
+\end{lstlisting}
+
+If the collection is not empty, the {\tt before} section is executed once before the first execution of the {\tt do} section. If the collection contains at least two elements, the {\tt between} section is executed between the execution of the {\tt do} section.  If the list is not empty, the {\tt after} section is executed once after the last execution of the {\tt do} section.
+
+The following example illustrates the general form. Here a table of pointers to alarm descriptors is generated:
+
+\begin{lstlisting}
+let ALARMS := @( @{ NAME: "alr1"}, @{ NAME: "alr1"} )
+
+foreach alr in ALARMS
+  before %
+tpl_time_obj *tpl_alarm_table[ALARM_COUNT] = {
+%
+  do %  &% !alr::NAME %_alarm_desc%
+  between %,
+%
+  after %
+};
+%
+end foreach
+\end{lstlisting}
+
+It produces the following output:
+
+\begin{lstlisting}[language=C]
+tpl_time_obj *tpl_alarm_table[ALARM_COUNT] = {
+  &alr1_alarm_desc,
+  &alr1_alarm_desc
+};
+\end{lstlisting}
+
+\subsection{The {\em for} instruction}
+
+The {\bf for} instruction iterates along a literal list of elements.
+
+\begin{lstlisting}
+for var in expression, ... , expression do
+  ...
+end for
+\end{lstlisting}
+
+At each iteration, {\em var} gets the value of the current {\em expression}. As in the {\tt foreach} instruction, \var{INDEX} is generated and ranges from 0 to the number of elements in the list minus 1.
+
+\warning{The {\em for} instruction is deprecated. Use \texttt{foreach} with a literal list instead.}
+
+\subsection{The {\em loop} instruction}
+
+The {\bf loop} instruction iterate over a range of integers. Its simplest form is:
+
+\begin{lstlisting}
+loop var from expression to expression do
+  ...
+end loop
+\end{lstlisting}
+
+Like in the foreach instruction, {\tt before},  {\tt between} and  {\tt after} sections may be used:
+
+\begin{lstlisting}
+loop var from expression <down> to expression <step> <increment>
+  before ...
+  do ...
+  between ...
+  after ...
+end loop
+\end{lstlisting}
+
 
 
 \end{document}  

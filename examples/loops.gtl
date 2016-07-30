@@ -58,10 +58,15 @@ display myMap
 let aSecondList := listof myMap end
 display aSecondList
 
-# for loop test
+# deprecated for loop test
 for a in "Paris", "New-York", "Nantes" do
   display a
 end for
+
+# replacement for loop test
+foreach a in @( "Paris", "New-York", "Nantes" ) do
+  display a
+end foreach
 
 # loop tests
 loop a from 1 to 10 do

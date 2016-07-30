@@ -51,3 +51,23 @@ let myList := @(
 
 let myMap := [myList mapBy : "name"]
 display myMap
+
+let ALARMS := @( @{ NAME: "alr1"}, @{ NAME: "alr1"} )
+
+foreach alr in ALARMS
+  before %
+tpl_time_obj *tpl_alarm_table[ALARM_COUNT] = {
+%
+  do %  &% !alr::NAME %_alarm_desc%
+  between %,
+%
+  after %
+};
+%
+end foreach
+
+let myEmptyList := @()
+display myEmptyList
+
+let myDeprecatedEmptyList := emptylist
+

@@ -238,6 +238,7 @@ rule <gtl_template_instruction> !@gtlInstruction instruction
   @gtlExpressionList  iterable = .emptyList 
 
   $for$ @location where = .here
+  warning .here : "for var in expression, ..., expression is deprecated. Use foreach var in @( expression, ..., expression ) instead"
   $identifier$ ?let @lstring variableName
   $in$
   repeat

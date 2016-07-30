@@ -1,0 +1,15 @@
+%
+
+let myDeprecatedEmptyMap := emptymap
+
+let myEmptyMap := @[]
+
+display myEmptyMap
+
+let myMap := @[]
+let myMap["age"] := 17
+let myMap["gender"] := "male"
+let myMap["friends"] := @()
+let myMap["friends"] += "Bill"
+let myMap["friends"] += "John"
+display myMap
