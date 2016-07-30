@@ -3,3 +3,5 @@ documentation/*.log
 documentation/*.aux
 documentation/*.toc
 documentation/*.synctex.gz
+*/gtl
+*/gtl-debug
