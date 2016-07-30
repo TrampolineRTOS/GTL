@@ -5,3 +5,5 @@ documentation/*.toc
 documentation/*.synctex.gz
 */gtl
 */gtl-debug
+xcode-project/gtl.xcodeproj/project.xcworkspace
+xcode-project/gtl.xcodeproj/xcuserdata
