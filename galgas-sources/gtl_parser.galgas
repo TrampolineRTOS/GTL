@@ -199,9 +199,23 @@ rule <gtl_template_instruction> !@gtlInstruction instruction
   @gtlInstructionList doList = .emptyList
   @gtlInstructionList betweenList = .emptyList
   @gtlInstructionList afterList = .emptyList
-
+  @lstring indexName
+  @lstring variableName
+  
   $foreach$ @location where = .here
-  $identifier$ ?let @lstring variableName $in$
+  $identifier$ ?var @lstring keyName
+  select
+    $,$ $identifier$ ?variableName
+  or
+    variableName = keyName
+    keyName = .new { !"" !where }
+  end
+  select
+    $($ $identifier$ ?indexName $)$
+  or
+    indexName = .new { !"INDEX" !.here }
+  end
+  $in$
   <gtl_expression> ?@gtlExpression iterable
 #--- before block
   select
@@ -226,7 +240,15 @@ rule <gtl_template_instruction> !@gtlInstruction instruction
   $foreach$
   
   instruction = @gtlForeachStatementInstruction.new {
-    !where !variableName !iterable !beforeList !betweenList !afterList !doList
+    !where
+    !keyName
+    !variableName 
+    !indexName 
+    !iterable 
+    !beforeList 
+    !betweenList
+    !afterList
+    !doList
   }
 }
 

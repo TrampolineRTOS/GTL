@@ -1023,9 +1023,10 @@ This instruction iterates on the elements of a collection, a list or a map. The 
 foreach var in expression do ... end foreach
 \end{lstlisting}
 
-Here var takes the value of each of the elements of the collection. If the collection is a list, the elements are iterated in the order of the list. If the collection is a map, the element are iterated in the alphanumerical order of the keys.
+Here var takes the value of each of the elements of the collection. If the collection is a list, the elements are iterated in the order of the list. If the collection is a map, the element are iterated in the alphanumerical order of the keys. In both cases, a variable named {\tt INDEX} which contains the current iteration number is available inside the loop. {\tt INDEX} ranges from 0 to the number of elements in the list minus 1. If the collection is a map, a second variable, {\tt KEY}, which contains the key associated to the value of the current item, is available.
 
-In the following example, for each element in the \var{ALARMS} list, the text between the {\tt do} and the {\tt end foreach} is produced with the \var{NAME} attribute of the current element of the \var{ALARMS} list inserted at the specified location. \var{INDEX} is not an attribute of the current element. It is generated for each element and ranges from 0 to the number of elements in the list minus 1.
+In the following example, for each element in the \var{ALARMS} list, the text between the {\tt do} and the {\tt end foreach} is produced with the \var{NAME} attribute of the current element of the \var{ALARMS} list inserted at the specified location.
+
 \begin{lstlisting}
 foreach alr in ALARMS do
 %
@@ -1039,7 +1040,7 @@ end foreach
 A more general form of the {\tt foreach} instruction is:
 
 \begin{lstlisting}
-foreach var in expression
+foreach key,var (index) in expression
   before ...
   do ...
   between ...
@@ -1047,11 +1048,16 @@ foreach var in expression
 end foreach
 \end{lstlisting}
 
+\texttt{key} may be used only when iterating on a map and allows to give a custom name to the default {\tt KEY} variable. \texttt{(index)} may be used both for a list or a map and allows to give a custom name to the default {\tt INDEX} variable.
+
 If the collection is not empty, the {\tt before} section is executed once before the first execution of the {\tt do} section. If the collection contains at least two elements, the {\tt between} section is executed between the execution of the {\tt do} section.  If the list is not empty, the {\tt after} section is executed once after the last execution of the {\tt do} section.
 
 The following example illustrates the general form. Here a table of pointers to alarm descriptors is generated:
 
 \begin{lstlisting}
+#
+# Initialize ALARMS with a list of 2 structs with a NAME field.
+#
 let ALARMS := @( @{ NAME: "alr1"}, @{ NAME: "alr1"} )
 
 foreach alr in ALARMS
@@ -1095,12 +1101,14 @@ At each iteration, {\em var} gets the value of the current {\em expression}. As 
 The {\bf loop} instruction iterate over a range of integers. Its simplest form is:
 
 \begin{lstlisting}
-loop var from expression to expression do
+loop var from expression_start to expression_end do
   ...
 end loop
 \end{lstlisting}
 
-Like in the foreach instruction, {\tt before},  {\tt between} and  {\tt after} sections may be used:
+Both {\tt expression_start} and {\tt expression_end} must be integer expression. By default {\tt var} is incremented by one from {\tt expression_start}, inclusive, to {\tt expression_end}, inclusive. 
+
+Like in the foreach instruction, {\tt before},  {\tt between} and  {\tt after} sections may be used. Moreover, {\tt down} may be used to decrement {\tt var} by one. {\tt step} allows to increment or decrement by {\tt increment}.
 
 \begin{lstlisting}
 loop var from expression <down> to expression <step> <increment>
@@ -1111,6 +1119,23 @@ loop var from expression <down> to expression <step> <increment>
 end loop
 \end{lstlisting}
 
+For instance, in the following loop, {\tt var} goes from 0 to 10 with an increment of 2:
 
+\begin{lstlisting}
+loop a from 0 to 10 step 2 do
+  display a
+end loop
+\end{lstlisting}
+
+and produces the following output:
+
+\begin{verbatim}
+integer: 0
+integer: 2
+integer: 4
+integer: 6
+integer: 8
+integer: 10
+\end{verbatim}
 
 \end{document}  

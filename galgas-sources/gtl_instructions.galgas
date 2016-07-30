@@ -471,7 +471,9 @@ override method @gtlIfStatementInstruction execute
 # template instructions : foreach statement
 #-----------------------------------------------------------------------------*
 class @gtlForeachStatementInstruction : @gtlInstruction {
-  @lstring            identifier
+  @lstring            keyName
+  @lstring            variableName
+  @lstring            indexName
   @gtlExpression      iterable
   @gtlInstructionList beforeList
   @gtlInstructionList betweenList
@@ -486,13 +488,11 @@ method @gtlForeachStatementInstruction iterateOnMap
   ?!@string             outputString
   ? let @gtlMap         iterableMap
 {
-  @lstring keyName = .new{!"KEY" !where}
-  @lstring indexName = .new{!"INDEX" !where}
   for () in [iterableMap value]
   before
     [beforeList execute !context !?variableMap !lib !?outputString]
   do (index)
-    [!?variableMap replaceOrCreate !identifier !value]
+    [!?variableMap replaceOrCreate !variableName !value]
     [!?variableMap replaceOrCreate
       !keyName !@gtlString.new{!where ![lkey string]}]
     [!?variableMap replaceOrCreate
@@ -512,12 +512,14 @@ method @gtlForeachStatementInstruction iterateOnList
   ?!@string             outputString
   ? let @gtlList        iterableList
 {
-  @lstring indexName = .new{!"INDEX" !where}
+  if "" != keyName then
+    warning keyName : "a key variable cannot be define when iterating on a list"
+  end
   for () in [iterableList value]
   before
     [beforeList execute !context !?variableMap !lib !?outputString]
   do (index)
-    [!?variableMap replaceOrCreate !identifier !value]
+    [!?variableMap replaceOrCreate !variableName !value]
     [!?variableMap replaceOrCreate
       !indexName !@gtlInt.new{!where ![index bigint]}]
     [doList execute !context !?variableMap !lib !?outputString]

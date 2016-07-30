@@ -8,8 +8,8 @@ let x := 3
 let myList := @( 1, 2, x + 10, 4 )
 display myList
 
-foreach element in myList do
-  print INDEX
+foreach element (iteration) in myList do
+  print iteration
   print " : "
   println element
 end foreach
@@ -55,8 +55,17 @@ let myMap := @[
 ]
 display myMap
 
+foreach theKey,theitem (iteration) in myMap do
+  print iteration
+  print " (" + theKey + "):"
+  println theitem
+end foreach
+
 let aSecondList := listof myMap end
 display aSecondList
+
+let aThirdList := [myMap list]
+display aThirdList
 
 # deprecated for loop test
 for a in "Paris", "New-York", "Nantes" do
@@ -73,7 +82,7 @@ loop a from 1 to 10 do
   display a
 end loop
 
-loop a from 1 to 10 step 2 do
+loop a from 0 to 10 step 2 do
   display a
 end loop
 
