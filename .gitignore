@@ -1,1 +1,5 @@
 build
+documentation/*.log
+documentation/*.aux
+documentation/*.toc
+documentation/*.synctex.gz
