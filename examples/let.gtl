@@ -21,6 +21,9 @@ let a::i := 3
 let a::s := "Hello !"
 display a
 
+unlet a::s
+display a
+
 # list 
 let a := emptylist
 let a += 3
@@ -40,6 +43,12 @@ let a["age"] := 18
 let a["friends"] := 5
 display a
 
+unlet a["name"]
+display a
+
+unlet a
+if not exists a then println "unlet a ok" end if
+
 # type
 let a := @int
 display a
@@ -48,3 +57,17 @@ display a
 let z
 display z
 
+# unlet
+unlet z
+if not exists z then println "unlet z ok" end if
+
+# more unlet test
+let a::b::c["t"]::d := @( 1, 2, 3, 4 )
+display a
+println a::b::c["t"]::d[0]
+
+unlet a::b::c["t"]::d[1]
+display a
+
+let a["a"]::b := 1
+println a["a"]::b

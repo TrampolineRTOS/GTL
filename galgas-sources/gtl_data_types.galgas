@@ -1811,12 +1811,12 @@ override setter @gtlBool performSetter
 #-----------------------------------------------------------------------------*
 # foundation types for collections
 #-----------------------------------------------------------------------------*
-list @list { @gtlData value %setter}
+list @list { @gtlData value %setter }
 
 #-----------------------------------------------------------------------------*
 # Struct type and operations on struct
 #-----------------------------------------------------------------------------*
-class @gtlStruct : @gtlData { @gtlVarMap  value }
+class @gtlStruct : @gtlData { @gtlVarMap  value  %setter }
 
 override getter @gtlStruct desc
   ?let @uint tab

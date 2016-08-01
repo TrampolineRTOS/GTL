@@ -62,6 +62,7 @@
 	  default,
 	  do,
 	  down,
+	  up,
 	  else,
 	  elsif,
 	  emptylist,
@@ -91,6 +92,9 @@
 	  warning,
 	  while,
 	  write,
+	  display,
+	  print,
+	  println,
 	  !,
 	  ?
 	}
@@ -99,14 +103,20 @@
 \lstset{
   language=goilTemplate,
   emph={
+    var,
     variable,
     expression,
+    expression_start,
+    expression_end,
+    increment,
     string,
     instruction_list,
     template_file_name,
     getter,
     setter,
-    hierarchy
+    hierarchy,
+    index,
+    key
   },
   emphstyle=\em,
   moredelim=[s][\color{blue}]{\%}{\%},
@@ -121,7 +131,7 @@
 \newcommand{\argu}[1]{{\ttfamily #1}}
 \newcommand{\ctype}[1]{{\small\ttfamily #1}}
 \newcommand{\cdata}[1]{{\ttfamily #1}}
-\newcommand{\var}[1]{{\ttfamily\em #1}}
+\newcommand{\var}[1]{{\small\ttfamily #1}}
 \newcommand{\va}{\small\ttfamily\em}
 \newcommand{\cfunction}[1]{{\ttfamily #1}}
 \newcommand{\cmacro}[1]{{\small\ttfamily #1}}
@@ -134,11 +144,12 @@
 \newcommand{\tool}[1]{{\em #1}}
 \newcommand{\na}{\scriptsize\ttfamily NA}
 
+\renewcommand{\ttdefault}{pcr}
 
 \newcommand\Warning{%
  \makebox[1.4em][c]{%
- \makebox[0pt][c]{\raisebox{.1em}{\small!}}%
- \makebox[0pt][c]{\color{red}\Large$\bigtriangleup$}}}%
+ \makebox[0pt][c]{\raisebox{-.05em}{\scriptsize!}}%
+ \makebox[0pt][c]{\raisebox{-.2em}{\color{red}\Large$\bigtriangleup$}}}}%
 
 \newcommand{\warning}[1]{%
 \vspace{1em}
@@ -783,7 +794,7 @@ This define a list of int with elements 1, 2 and 3.
 
 An empty list can be initialized using the \texttt{emptylist} constant.
 
-\warning{The {\tt emptylist} constant is deprecated. Use a literal empty list, \texttt{@()}, instead.}
+\warning{The \lstinline{emptylist} constant is deprecated. Use a literal empty list, \texttt{@()}, instead.}
 
 \subsubsection{\lstinline{list} operators}
 
@@ -915,7 +926,7 @@ A literal map is defined as follow:
 
 An empty map can be initialized using the \texttt{emptymap} constant.
 
-\warning{The {\tt emptymap} constant is deprecated. Use a literal empty map, \texttt{@[]}, instead.}
+\warning{The \lstinline{emptymap} constant is deprecated. Use a literal empty map, \texttt{@[]}, instead.}
 
 
 \subsubsection{\lstinline{map} operators}
@@ -945,13 +956,26 @@ Two maps are equal if:
 
 \section{GTL instructions}
 
+\subsection{The {\em \%\ldots\%} instruction}
+
+The {\em \%\ldots\%} is the literal template string instruction. Every characters appearing between \lstinline{%} are accumulated in the output string of the template. GTL starts by assuming a \lstinline{%} exists just before the first character of the file. So if the first character of the file is not a \lstinline{%} the first instruction is a {\em \%\ldots\%} instruction up to the first \lstinline{%} in the file. 
+
 \subsection{The {\em let} instruction}
 
-Data assignment instruction. The general form is:
+{\em let} is the data assignment instruction. The general form is:
 
 \begin{lstlisting}
 let var := expression
 \end{lstlisting}
+
+If the variable does not exists, it is created. The variable is set to \lstinline{expression}
+
+If the \lstinline{:= expression} is omitted, the variable is created and is unconstructed:
+
+\begin{lstlisting}
+let var
+\end{lstlisting}
+
 
 As in the C language, GTL has assignment operator: 
 
@@ -994,17 +1018,36 @@ println a
 println b
 \end{lstlisting}
 
-Because a is assigned outside the {\tt foreach} loop, it is both accessible within the foreach loop and accessible after the {\tt foreach} loop. So it contains the value number of items in TASKS + 1 after the {\tt foreach}. Because b is assigned inside the {\tt foreach} loop, it does not exist after the loop anymore and {\tt println b} will trigger and error.
+Because a is assigned outside the \lstinline{foreach} loop, it is both accessible within the foreach loop and accessible after the \lstinline{foreach} loop. So it contains the number of items in TASKS + 1 after the \lstinline{foreach}. Because b is assigned inside the \lstinline{foreach} loop, it does not exist after the loop anymore and \lstinline{println b} will trigger and error.
 
 \subsection{The {\em if} instruction}
 
 Conditional execution. The forms are:
 
 \begin{lstlisting}
-if expression then ... end if
-if expression then ... else ... end if
-if expression then ... elsif expression then ... end if
-if expression then ... elsif expression then ... else ... end if
+if expression then
+  instruction_list
+end if
+
+if expression then
+  instruction_list
+else
+  instruction_list
+end if
+
+if expression then
+  instruction_list
+elsif expression then
+  instruction_list
+end if
+
+if expression then
+  instruction_list
+elsif expression then
+  instruction_list
+else
+  instruction_list
+end if
 \end{lstlisting}    
 
 The {\em expression} must be boolean. In the following example, the blue text (within the \%) is produced only if the \var{USECOM} boolean variable is true:
@@ -1020,12 +1063,14 @@ end if
 This instruction iterates on the elements of a collection, a list or a map. The simplest form is the following one:
 
 \begin{lstlisting}
-foreach var in expression do ... end foreach
+foreach var in expression do
+  instruction_list
+end foreach
 \end{lstlisting}
 
-Here var takes the value of each of the elements of the collection. If the collection is a list, the elements are iterated in the order of the list. If the collection is a map, the element are iterated in the alphanumerical order of the keys. In both cases, a variable named {\tt INDEX} which contains the current iteration number is available inside the loop. {\tt INDEX} ranges from 0 to the number of elements in the list minus 1. If the collection is a map, a second variable, {\tt KEY}, which contains the key associated to the value of the current item, is available.
+Here var takes the value of each of the elements of the collection. If the collection is a list, the elements are iterated in the order of the list. If the collection is a map, the element are iterated in the alphanumerical order of the keys. In both cases, a variable named \lstinline{INDEX} which contains the current iteration number is available inside the loop. \lstinline{INDEX} ranges from 0 to the number of elements in the list minus 1. If the collection is a map, a second variable, \lstinline{KEY}, which contains the key associated to the value of the current item, is available.
 
-In the following example, for each element in the \var{ALARMS} list, the text between the {\tt do} and the {\tt end foreach} is produced with the \var{NAME} attribute of the current element of the \var{ALARMS} list inserted at the specified location.
+In the following example, for each element in the \var{ALARMS} list, the text between the \lstinline{do} and the \lstinline{end foreach} is produced with the \var{NAME} attribute of the current element of the \var{ALARMS} list inserted at the specified location.
 
 \begin{lstlisting}
 foreach alr in ALARMS do
@@ -1037,20 +1082,24 @@ CONST(AlarmType, AUTOMATIC) % !alr::NAME % = % !NAME %_id;
 end foreach
 \end{lstlisting}
 
-A more general form of the {\tt foreach} instruction is:
+A more general form of the \lstinline{foreach} instruction is:
 
 \begin{lstlisting}
 foreach key,var (index) in expression
-  before ...
-  do ...
-  between ...
-  after ...
+  before
+    instruction_list
+  do 
+    instruction_list
+  between
+    instruction_list
+  after 
+    instruction_list
 end foreach
 \end{lstlisting}
 
-\texttt{key} may be used only when iterating on a map and allows to give a custom name to the default {\tt KEY} variable. \texttt{(index)} may be used both for a list or a map and allows to give a custom name to the default {\tt INDEX} variable.
+\texttt{key} may be used only when iterating on a map and allows to give a custom name to the default \lstinline{KEY} variable. \lstinline{(index)} may be used both for a list or a map and allows to give a custom name to the default \var{INDEX} variable.
 
-If the collection is not empty, the {\tt before} section is executed once before the first execution of the {\tt do} section. If the collection contains at least two elements, the {\tt between} section is executed between the execution of the {\tt do} section.  If the list is not empty, the {\tt after} section is executed once after the last execution of the {\tt do} section.
+If the collection is not empty, the \lstinline{before} section is executed once before the first execution of the \lstinline{do} section. If the collection contains at least two elements, the \lstinline{between} section is executed between the execution of the \lstinline{do} section.  If the list is not empty, the \lstinline{after} section is executed once after the last execution of the \lstinline{do} section.
 
 The following example illustrates the general form. Here a table of pointers to alarm descriptors is generated:
 
@@ -1084,7 +1133,7 @@ tpl_time_obj *tpl_alarm_table[ALARM_COUNT] = {
 
 \subsection{The {\em for} instruction}
 
-The {\bf for} instruction iterates along a literal list of elements.
+The {\em for} instruction iterates along a literal list of elements.
 
 \begin{lstlisting}
 for var in expression, ... , expression do
@@ -1092,13 +1141,13 @@ for var in expression, ... , expression do
 end for
 \end{lstlisting}
 
-At each iteration, {\em var} gets the value of the current {\em expression}. As in the {\tt foreach} instruction, \var{INDEX} is generated and ranges from 0 to the number of elements in the list minus 1.
+At each iteration, {\em var} gets the value of the current {\em expression}. As in the \lstinline{foreach} instruction, \var{INDEX} is generated and ranges from 0 to the number of elements in the list minus 1.
 
-\warning{The {\em for} instruction is deprecated. Use \texttt{foreach} with a literal list instead.}
+\warning{The \lstinline{for} instruction is deprecated. Use \lstinline{foreach} with a literal list instead.}
 
 \subsection{The {\em loop} instruction}
 
-The {\bf loop} instruction iterate over a range of integers. Its simplest form is:
+The {\em loop} instruction iterate over a range of integers. Its simplest form is:
 
 \begin{lstlisting}
 loop var from expression_start to expression_end do
@@ -1106,12 +1155,12 @@ loop var from expression_start to expression_end do
 end loop
 \end{lstlisting}
 
-Both {\tt expression_start} and {\tt expression_end} must be integer expression. By default {\tt var} is incremented by one from {\tt expression_start}, inclusive, to {\tt expression_end}, inclusive. 
+Both \lstinline{expression_start} and \lstinline{expression_end} must be integer expressions. By default \var{var} is incremented by one from \lstinline{expression_start}, inclusive, to \lstinline{expression_end}, inclusive. 
 
-Like in the foreach instruction, {\tt before},  {\tt between} and  {\tt after} sections may be used. Moreover, {\tt down} may be used to decrement {\tt var} by one. {\tt step} allows to increment or decrement by {\tt increment}.
+Like in the foreach instruction, \lstinline{before},  \lstinline{between} and \lstinline{after} sections may be used. Moreover, \lstinline{down} may be used to decrement \lstinline{var} by one. \lstinline{up} is a syntactic sugar which is here for symmetry purpose and may be omitted. \lstinline{step} allows to increment or decrement by \lstinline{increment}. If \lstinline{step} is omitted, \lstinline{step 1} is assumed.
 
 \begin{lstlisting}
-loop var from expression <down> to expression <step> <increment>
+loop var from expression <up|down> to expression <step increment>
   before ...
   do ...
   between ...
@@ -1119,7 +1168,7 @@ loop var from expression <down> to expression <step> <increment>
 end loop
 \end{lstlisting}
 
-For instance, in the following loop, {\tt var} goes from 0 to 10 with an increment of 2:
+For instance, in the following loop, \var{a} goes from 0 to 10 with an increment of 2:
 
 \begin{lstlisting}
 loop a from 0 to 10 step 2 do
@@ -1129,6 +1178,7 @@ end loop
 
 and produces the following output:
 
+{\small
 \begin{verbatim}
 integer: 0
 integer: 2
@@ -1137,5 +1187,37 @@ integer: 6
 integer: 8
 integer: 10
 \end{verbatim}
+}
+
+In the following loop, \var{a} goes from 25 to 20 with a decrement of 1:
+
+\begin{lstlisting}
+loop a from 25 down to 20 do
+  display a
+end loop
+\end{lstlisting}
+
+and produces the following output:
+
+{\small
+\begin{verbatim}
+integer: 25
+integer: 24
+integer: 23
+integer: 22
+integer: 21
+integer: 20
+\end{verbatim}
+}
+
+Because the step can be a negative integer number, this output may be produced by the following program too:
+
+\begin{lstlisting}
+loop a from 25 to 20 step -1 do
+  display a
+end loop
+\end{lstlisting}
+
+
 
 \end{document}  

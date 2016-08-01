@@ -33,6 +33,11 @@
 #-----------------------------------------------------------------------------*
 abstract class @gtlVarItem { @lstring field }
 
+abstract getter @gtlVarItem string
+  ? let @gtlVarMap  vars
+  ? let @library    lib
+  -> @string result
+
 getter @gtlVarItem location 
   -> @location loc
 {
@@ -69,10 +74,27 @@ abstract getter @gtlVarItem exists
   ? let @gtlVarPath path
   -> @bool result
   
+#-----------------------------------------------------------------------------*
+# abstact method to remove field in a context
+#-----------------------------------------------------------------------------*
+abstract method @gtlVarItem delete
+  ?!    @gtlVarMap  context
+  ? let @gtlVarMap  vars
+  ? let @library    lib
+  ? let @gtlVarPath path
+  
 #=============================================================================*
 # Scalar struct field, ie A or C in the example above
 #-----------------------------------------------------------------------------*
 class @gtlVarItemField : @gtlVarItem { }
+
+override getter @gtlVarItemField string
+  ? let @gtlVarMap  unused vars
+  ? let @library    unused lib
+  -> @string result
+{
+  result = field
+}
 
 #-----------------------------------------------------------------------------*
 # set a scalar field
@@ -197,10 +219,66 @@ override getter @gtlVarItemField exists
   end
 }
 
+#-----------------------------------------------------------------------------*
+# method to delete a field in a context
+#-----------------------------------------------------------------------------*
+override method @gtlVarItemField delete
+  ?!    @gtlVarMap  context
+  ? let @gtlVarMap  vars
+  ? let @library    lib
+  ? let @gtlVarPath path
+{
+  if [path length] == 0 then
+    message "delete field " + field + "\n"
+    # at the end, get the variable in the context
+    if [context hasKey !field] then
+      [!?context del !field ?*]
+    else
+      warning self : "attempting to unlet an unexisting data"
+    end
+  else
+    # not at the end
+    # continue only if it is a sruct, fail silently otherwise
+    if [context hasKey ![field string]] then
+      [context get !field ?let @gtlData subContextData]
+      cast subContextData
+      case == @gtlStruct structVar:
+        @gtlVarMap subContext = [structVar value]
+        [[path itemAtIndex !0] delete
+          !?subContext
+          !vars
+          !lib
+          ![path subListFromIndex !1]
+        ]
+        [!?context replaceOrCreate
+           !field
+           !@gtlStruct.new { !structVar !subContext }
+        ]
+      end
+    end
+  end
+}
+
 #=============================================================================*
 # Collection field, ie B or D in the example above
 #-----------------------------------------------------------------------------*
 class @gtlVarItemCollection : @gtlVarItem { @gtlExpression key }
+
+override getter @gtlVarItemCollection string
+  ? let @gtlVarMap  vars
+  ? let @library    lib
+  -> @string result
+{
+  result = [field string] + "["
+  @gtlData keyValue = [key eval !vars !lib]
+  cast keyValue
+  case == @gtlString keyString:
+    result += "\"" + keyString + "\""
+  case == @gtlInt keyInt:
+    result += keyInt
+  end
+  result += "]"
+}
 
 #-----------------------------------------------------------------------------*
 # set a map item field
@@ -301,7 +379,6 @@ override method @gtlVarItemCollection set
           [!?context put !field !@gtlMap.new{![field location] !subContext}]
         end
       else
-        message "OK\n"
         # set in the subcontext
         [[path itemAtIndex !0] set
           !?subContext
@@ -311,7 +388,9 @@ override method @gtlVarItemCollection set
           !data
         ]
         # update with the result
-        [!?context put !field !@gtlMap.new{![field location] !subContext}]
+        @gtlVarMap newMap = .emptyMap
+        [!?newMap put !keyValue !@gtlStruct.new{ !field !subContext }]
+        [!?context put !field !@gtlMap.new{![field location] !newMap}]
       end
     end
     
@@ -325,7 +404,7 @@ override method @gtlVarItemCollection set
       # 3) the variable does not exist, create a list and add the item
       if [context hasKey ![field string]] then
         # A field with the same name exists, get it
-        [!?context del !field ?var @gtlData item]
+        [context get !field ?var @gtlData item]
         cast item
         case == @gtlList listItem :
           @list listToSet = [listItem value]
@@ -337,7 +416,7 @@ override method @gtlVarItemCollection set
             error [idxValue where] : "index "+[idxValue value]+" out of range"
           end
           # update the context
-          [!?context put
+          [!?context replaceOrCreate
             !field
             !@gtlList.new{![data where] !listToSet}
           ]
@@ -353,14 +432,15 @@ override method @gtlVarItemCollection set
     else
       @gtlVarMap subContext = .emptyMap{}
       # not at the end, get and set the subcontext
-      if [context hasKey ![field string]] then
+      if [context hasKey !field] then
         # get the variable
-        [!?context del !field ?var @gtlData variable]
+        [context get !field ?var @gtlData variable]
         cast variable
         case == @gtlList listVar :
-          # it is a map, get the item corresponding to the key
+          # it is a list, get the item corresponding to the index
           @list theList = [listVar value]
-          if [theList length] > [[idxValue value] uint] then
+          @uint indexUint = [[idxValue value] uint]
+          if [theList length] > indexUint then
             cast [theList valueAtIndex ![[idxValue value] uint]]
             case == @gtlStruct subStruct:
                 subContext = [subStruct value]
@@ -372,10 +452,8 @@ override method @gtlVarItemCollection set
               ![path subListFromIndex !1]
               !data
             ]
-            [!?context setValueForKey
-              !@gtlMap.new{![field location] !subContext}
-              ![field string]
-            ]
+            [!?theList setValueAtIndex !@gtlStruct.new{ !self !subContext } !indexUint]
+            [!?context replaceOrCreate !field !@gtlList.new { !self !theList }]
           else
             # out of range index, emit an error
             error [idxValue where] : "index "+[idxValue value]+" out of range"
@@ -414,29 +492,24 @@ override getter @gtlVarItemCollection get
     [context get !field ?let @gtlData item]
     cast item
     case == @gtlMap mapItem :
-      [[mapItem value] get
-        !@lstring.new{![keyValue value] ![key where]}
-        ?let @gtlData mapItemField
-      ]
       if [path length] == 0 then
         # at the end, get the variable in the context
-        result = mapItemField
+        [[mapItem value] get
+          !@lstring.new{![keyValue value] ![key where]}
+          ?result
+        ]
       else
-        # not at the end, get and set the subcontext
-        cast mapItemField
-        case == @gtlStruct structVar:
-          result = [[path itemAtIndex !0] get
-                     ![structVar value]
-                     !vars
-                     !lib
-                     ![path subListFromIndex !1]
-                   ]
-        else
-          error [field location] : [field string]+" is not a struct" : result
-        end
+        # not at the end, get the subcontext
+        result = [[path itemAtIndex !0] get
+                   ![mapItem value]
+                   !vars
+                   !lib
+                   ![path subListFromIndex !1]
+                 ]
       end
     else
-      error [item where] : "field "+[field string]+" is not a map" : result
+      error self : "field "+[field string]+" is not a map" : result
+      error item : "assignment is here"
     end
     
   case == @gtlInt idxValue :
@@ -563,11 +636,156 @@ override getter @gtlVarItemCollection exists
   end
 }
 
+#-----------------------------------------------------------------------------*
+# method to delete a collection field in a context
+#-----------------------------------------------------------------------------*
+override method @gtlVarItemCollection delete
+  ?!    @gtlVarMap  context
+  ? let @gtlVarMap  vars
+  ? let @library    lib
+  ? let @gtlVarPath path
+{
+  cast [key eval !vars !lib]
+
+  case == @gtlString keyValue :
+    if [path length] == 0 then
+      # at the end, delete the variable in the context
+      # 2 cases :
+      # 1) the variable exists and is a map, delete the element
+      # 2) the variable already exists and is not a map, fail silently
+      # 3) the variable does not exist, fail silently
+      if [context hasKey ![field string]] then
+        # A field with the same name exists, get it
+        [!?context del !field ?var @gtlData item]
+        cast item
+        case == @gtlMap mapItem :
+          @gtlVarMap mapToSet = [mapItem value]
+          if [mapToSet hasKey ![keyValue value]] then
+            # delete it
+            [!?mapToSet del !keyValue ?*]
+          end
+          # update the context
+          [!?context put !field !@gtlMap.new{![mapItem where] !mapToSet}]
+        end
+      end
+    else
+      @gtlVarMap subContext = .emptyMap{}
+      # not at the end, get and set the subcontext
+      if [context hasKey ![field string]] then
+        # get the variable
+        [context get !field ?var @gtlData variable]
+        cast variable
+        case == @gtlMap mapVar :
+          # it is a map, get the item corresponding to the key
+          @gtlVarMap theMap = [mapVar value]
+          if [theMap hasKey ![keyValue value]] then
+            [!?theMap del
+              !@lstring.new{![keyValue value] ![key where]}
+              ?let @gtlData subField
+            ]
+            cast subField
+              case == @gtlStruct subStruct:
+                subContext = [subStruct value]
+            end
+          end
+          [[path itemAtIndex !0] delete
+            !?subContext
+            !vars
+            !lib
+            ![path subListFromIndex !1]
+          ]
+          [!?theMap put !keyValue !@gtlStruct.new{![field location] !subContext}]
+          [!?context replaceOrCreate !field !@gtlMap.new{![field location] !theMap}]
+        end
+      end
+    end
+    
+  case == @gtlInt idxValue:
+    if [path length] == 0 then
+      # at the end, set the variable in the context
+      # 2 cases :
+      # 1) the variable already exists and is a list, delete the element
+      # 2) the variable already exists and is not a list, fail silently
+      # 3) the variable does not exist, fail silently
+      if [context hasKey ![field string]] then
+        # A field with the same name exists, get it
+        [context get !field ?var @gtlData item]
+        cast item
+        case == @gtlList listItem :
+          @list listToSet = [listItem value]
+          @uint indexUint = [[idxValue value] uint]
+          @list newList
+          if [listToSet length] > indexUint then
+            # update it
+            if indexUint == 0 then
+              newList = [listToSet subListFromIndex !1]
+            else
+              newList = [listToSet subListToIndex !indexUint - 1] 
+              newList += [listToSet subListFromIndex !indexUint + 1]
+            end
+          else
+            newList = listToSet
+          end
+          # update the context
+          [!?context replaceOrCreate
+            !field
+            !@gtlList.new{ !field !newList}
+          ]
+        end
+      end
+    else
+      @gtlVarMap subContext = .emptyMap{}
+      # not at the end, get and set the subcontext
+      if [context hasKey ![field string]] then
+        # get the variable
+        [context get !field ?var @gtlData variable]
+        cast variable
+        case == @gtlList listVar :
+          # it is a list, get the item corresponding to the index
+          @list theList = [listVar value]
+          @uint indexUint = [[idxValue value] uint]
+          if [theList length] > indexUint then
+            cast [theList valueAtIndex !indexUint]
+            case == @gtlStruct subStruct:
+              subContext = [subStruct value]
+            end
+            [[path itemAtIndex !0] delete
+              !?subContext
+              !vars
+              !lib
+              ![path subListFromIndex !1]
+            ]
+            [!?theList setValueAtIndex !@gtlStruct.new { !self !subContext } !indexUint]
+            [!?context replaceOrCreate
+              !field
+              !@gtlList.new{ !self !theList }
+            ]
+          end
+        end
+      end
+    end
+  end
+}
+
 #=============================================================================*
 # A variable path is a list of variable items
 #-----------------------------------------------------------------------------*
 list @gtlVarPath {
   @gtlVarItem item
+}
+
+#-----------------------------------------------------------------------------*
+# variable path as string
+#-----------------------------------------------------------------------------*
+getter @gtlVarPath string
+  ? let @gtlVarMap  vars
+  ? let @library    lib
+  -> @string result
+{
+  result = ""
+  for (item) in self do
+    result += [item string !vars !lib]
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -617,6 +835,21 @@ getter @gtlVarPath exists
   else
     error .here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
     : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Set a data in a path
+#-----------------------------------------------------------------------------*
+method @gtlVarPath deleteMe
+  ?!@gtlVarMap      context
+  ? let @library    lib
+{
+  if [self length] > 0 then
+    @gtlVarItem item = [self itemAtIndex !0]
+    [item delete !?context !context !lib ![self subListFromIndex !1]]
+  else
+    error .here : "INTERNAL ERROR. A @gtlVarPath should not be an empty list"
   end
 }
 
@@ -993,8 +1226,6 @@ proc checkArgumentError
   ?let @uint    argumentNum
 {
   if formalType != [actualArgument embeddedType] then
-    let @type argType = [actualArgument dynamicType]
-    log argType
     error name : [formalType typeName] + " expected for argument "
       + argumentNum + ", " + [[actualArgument dynamicType] typeName]
       + " provided"

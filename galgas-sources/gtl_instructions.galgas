@@ -283,6 +283,23 @@ override method @gtlLetXorInstruction execute
 }
 
 #-----------------------------------------------------------------------------*
+# unlet instruction
+#-----------------------------------------------------------------------------*
+class @gtlUnletInstruction : @gtlLetUnconstructedInstruction {}   
+
+override method @gtlUnletInstruction execute
+  ? let @gtlContext unused context
+  ?!@gtlVarMap             gtlVariableMap
+  ? let @library           lib
+  ?!@string         unused outputString
+{ 
+  [lValue deleteMe
+    !?gtlVariableMap
+    !lib
+  ]
+}
+
+#-----------------------------------------------------------------------------*
 # %...% : template string instruction
 #-----------------------------------------------------------------------------*
 class @gtlTemplateStringInstruction : @gtlInstruction {
@@ -759,12 +776,12 @@ class @gtlDisplayStatementInstruction : @gtlInstruction {
 
 override method @gtlDisplayStatementInstruction execute
   ? let @gtlContext unused context
-  ?!@gtlVarMap             gtlVariableMap
+  ?!@gtlVarMap             vars
   ? let @library           lib
   ?!@string         unused outputString
 {
-  @gtlData variable = [variablePath get !gtlVariableMap !lib]
-  message [variable desc !0]
+  @gtlData variable = [variablePath get !vars !lib]
+  message [variablePath string !vars !lib] + " - " + [variable desc !0]
 }
 
 #-----------------------------------------------------------------------------*

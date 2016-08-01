@@ -95,6 +95,15 @@ rule <gtl_simple_instruction>
 rule <gtl_simple_instruction>
   !@gtlInstruction instruction
 {
+  $unlet$ @location where = .here
+  <gtl_variable> ?@gtlVarPath variable
+  instruction = @gtlUnletInstruction.new { !where !variable }
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_simple_instruction>
+  !@gtlInstruction instruction
+{
   $error$ @location where = .here
   <gtl_variable_or_here> ?@gtlVarPath variable ?@bool hereInstead
   $:$

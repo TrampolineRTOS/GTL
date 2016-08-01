@@ -1,0 +1,38 @@
+%
+
+let c["a"]::fb := 1
+let c["a"]::fc := 2
+let c["b"] := 3
+let c["w"]::fd["w"] := 4
+let c["w"]::fd["x"] := 5
+
+display c
+
+unlet c["a"]::fb
+unlet c["a"]::xx
+unlet c["a"]::fd["x"]
+
+display c
+
+let c := @( 1, 2, 3, 4 )
+let c[1]::d := 3
+
+let c[2]::b["cle"]::r := 5
+
+
+let a := @()
+let a += 1
+display a
+unlet a[0]
+
+let a := @()
+let a += @{ a:1, b:2, c:3 }
+let a += @{ a:1, b:2, c:3 }
+display a
+unlet a[1]
+display a
+unlet a[0]::z
+unlet a[0]::a
+let a += @{ a:1, b:2, c:3 }
+
+display a
