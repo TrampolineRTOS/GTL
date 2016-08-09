@@ -42,11 +42,11 @@ class @gtlExecutableEntity
 method @gtlExecutableEntity checkArguments
   ?let @location    fromLocation
   ?let @gtlDataList actualArguments
-  !@gtlVarMap       entityVariableMap
+  !@gtlData         entityVariableMap
   !@bool            result
 {
   result = true
-  entityVariableMap = .emptyMap
+  entityVariableMap = @gtlStruct.new { !fromLocation !.emptyMap }
   
   if [formalArguments length] != [actualArguments length] then 
     error fromLocation : "calling "
@@ -63,7 +63,7 @@ method @gtlExecutableEntity checkArguments
         error [data location] : [type typeName] + " expected for " + name
         result = false
       else
-        [!?entityVariableMap put !name !data]
+        [!?entityVariableMap setStructField !name !data]
       end
     end
   end
@@ -81,9 +81,9 @@ method @gtlProcedure call
   ? let @gtlDataList actualArguments
 {
   [self checkArguments
-    !fromLocation !actualArguments ?@gtlVarMap procVariableMap ?@bool ok]
+    !fromLocation !actualArguments ?@gtlData vars ?@bool ok]
   if ok then
-    [instructions execute !context !?procVariableMap !lib !?outputString]
+    [instructions execute !context !?vars !lib !?outputString]
   else
     error fromLocation : "procedure call failed"
   end
@@ -101,8 +101,8 @@ getter @gtlFunction call
   ->@gtlData        result
 {
   [self checkArguments
-    !fromLocation !actualArguments ?@gtlVarMap funcVariableMap ?@bool ok]
-  [!?funcVariableMap put
+    !fromLocation !actualArguments ?@gtlData funcVariableMap ?@bool ok]
+  [!?funcVariableMap setStructField
     !returnVariable
     !@gtlUnconstructed.new{ ![returnVariable location] }
   ]
@@ -110,7 +110,7 @@ getter @gtlFunction call
     @gtlContext functionContext = emptyContext()
     @string outputString = ""
     [instructions execute !functionContext !?funcVariableMap !lib !?outputString]
-    [funcVariableMap getResult !returnVariable ?result]
+    result = [funcVariableMap resultField !returnVariable]
   else
    error fromLocation : "function call failed" : result
   end
@@ -129,20 +129,20 @@ getter @gtlGetter callGetter
   ->@gtlData         result
 {
   [self checkArguments
-    !fromLocation !actualArguments ?@gtlVarMap getterVariableMap ?@bool ok]
-  [!?getterVariableMap put
+    !fromLocation !actualArguments ?@gtlData getterVariableMap ?@bool ok]
+  [!?getterVariableMap setStructField
     !returnVariable
     !@gtlUnconstructed.new{ ![returnVariable location] }
   ]
   if ok then
-    [!?getterVariableMap put
+    [!?getterVariableMap setStructField
       !.new { !"self" !fromLocation }
       !target
     ]
     @gtlContext getterContext = emptyContext()
     @string outputString = ""
     [instructions execute !getterContext !?getterVariableMap !lib !?outputString]
-    [getterVariableMap getResult !returnVariable ?result]
+    result = [getterVariableMap resultField !returnVariable]
   else
    error fromLocation : "getter call failed" : result
   end

@@ -365,7 +365,7 @@ rule <gtl_factor>
       end
     or end
     $)$
-    @lstring functionName = [[path itemAtIndex !0] field]
+    @lstring functionName = [path pathAsFunctionName]
     expression = @gtlFunctionCallExpression.new {
       !.here
       !functionName
@@ -592,6 +592,20 @@ rule <gtl_variable>
       <gtl_expression> ?let @gtlExpression expression
       $]$
       path += !@gtlVarItemCollection.new { !variableName !expression }
+      select
+        $[$
+        <gtl_expression> ?let @gtlExpression expression
+        $]$
+        path += !@gtlVarItemSubCollection.new { !.here !expression }
+        repeat
+        while
+          $[$
+          <gtl_expression> ?let @gtlExpression expression
+          $]$
+          path += !@gtlVarItemSubCollection.new { !.here !expression }
+        end
+      or
+      end
     or
       path += !@gtlVarItemField.new { !variableName }
     end

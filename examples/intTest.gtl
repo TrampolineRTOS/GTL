@@ -77,3 +77,6 @@ display a
 
 let b := [4.0 log2]
 display b
+
+let c := [b int]
+display c

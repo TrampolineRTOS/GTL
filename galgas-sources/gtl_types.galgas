@@ -64,9 +64,10 @@ setter @gtlVarMap replaceOrCreate
   ?let @gtlData data
 {
   if [self hasKey ![key string]] then
-    [!?self del !key ?*]
+    [!?self setValueForKey !data !key]
+  else
+    [!?self put !key !data]
   end
-  [!?self put !key !data]
 }
 
 setter @gtlVarMap replaceOrCreateAtLevel

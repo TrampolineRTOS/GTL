@@ -1,0 +1,9 @@
+%
+
+import "function"
+
+let a := 1
+variables
+
+let b := psquare(3.0)
+variables

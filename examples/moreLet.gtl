@@ -1,0 +1,92 @@
+%
+#let a::b::c["t"]::d := @( 1, 2, 3, 4 )
+#display a
+#let c := a::b::c["t"]::d
+#println a::b::c["t"]::d[0]
+#display c
+
+#let a := 1
+#let b := 2
+#let c := 2
+##let c::d::e := 3
+##let c::d::e := "hello"
+##let b[2] := 2
+#variables
+#let b := 3
+#variables
+#
+#let d := @( 1, 2, 3, 4 )
+#variables
+#
+#let e::b := 1
+#variables
+#
+#let e::c := 2
+#variables
+#
+#let d := 2
+#variables
+#
+#let e::c::f := 3
+#variables
+#
+#let b::c::d::e := 4
+#let b::c::e := 5
+#variables
+
+#let v["a"] := 3
+#let v["b"] := 4
+#variables
+#
+#let c := @( 0, 1, 2, 3 )
+#variables
+#
+#let c[0] := 60
+#variables
+#
+let v["c"] := @( 0, 1, 2, 3 )
+variables
+
+let v["c"][3] := @( 10,11,12,13)
+variables
+
+if exists v["c"][3] then println "OK List !" end if
+
+let v["c"][3]["t"] := 4
+variables
+println v["c"][3]["t"]
+
+let v["c"]["d"] := 5
+variables
+
+let v["c"]["d"]["e"] := 6
+variables
+
+let v["c"]["d"]::e := 6
+variables
+
+let a := 1
+println a
+
+println v["c"]["d"]::e
+
+if exists v then println "OK !" end if
+if exists v["c"] then println "OK !" end if
+if exists v["c"]["d"] then println "OK !" end if
+if exists v["c"]["y"] then println "OK !" else println "NO" end if
+
+unlet v["d"]
+variables
+unlet v["c"]["d"]
+variables
+let v["c"]["d"] := 4
+variables
+let v["c"]["d"] := @( 1,2,3,4,5 )
+variables
+unlet v["c"]["d"][0]
+variables
+unlet v["c"]["d"][3]
+variables
+unlet v["c"]["d"][1]
+variables
+unlet v["c"]["d"][10]

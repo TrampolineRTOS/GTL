@@ -15,15 +15,23 @@ unlet c["a"]::fd["x"]
 display c
 
 let c := @( 1, 2, 3, 4 )
+display c
+let c[1] := 60
+display c
+
 let c[1]::d := 3
+display c
 
 let c[2]::b["cle"]::r := 5
+
+display c
 
 
 let a := @()
 let a += 1
 display a
 unlet a[0]
+display a
 
 let a := @()
 let a += @{ a:1, b:2, c:3 }

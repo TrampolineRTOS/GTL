@@ -102,7 +102,7 @@ end loop
 # repeat test
 let x := 10
 
-repeat
+repeat (10)
   println "repeat x = " + [x string]
 while x > 0 do
   println "while  x = " + [x string]

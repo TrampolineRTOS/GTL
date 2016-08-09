@@ -14,15 +14,15 @@ display b
 #----------------------------------------------------------------
 # Error because the * op cannot operate on a string
 #----------------------------------------------------------------
-let c := square("help me")
-display c
+#let c := square("help me")
+#display c
 
 
 #----------------------------------------------------------------
 # Error because csquare defines a typed int argument
 #----------------------------------------------------------------
-let c := csquare("help me")
-display c
+#let c := csquare("help me")
+#display c
 
 let c := csquare(5)
 display c
@@ -30,8 +30,8 @@ display c
 #----------------------------------------------------------------
 # Error because psquare checks the argument is a number
 #----------------------------------------------------------------
-let c := psquare("help me")
-display c
+#let c := psquare("help me")
+#display c
 
 let c := psquare( pi() * 2.0 )
 display c

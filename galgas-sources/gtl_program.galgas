@@ -12,11 +12,11 @@ grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
     ?@gtlInstructionList program
   
   @gtlContext context = emptyContext()
-  @gtlVarMap variables = .emptyMap
+  @gtlData vars = @gtlStruct.new { !.here !.emptyMap }
 
   @string result = ""
   
-  [program execute !context !?variables !lib !?result]
+  [program execute !context !?vars !lib !?result]
   
   message "================================================================\n"
   message result

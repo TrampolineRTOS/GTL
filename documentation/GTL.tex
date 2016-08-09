@@ -75,6 +75,7 @@
 	  foreach,
 	  from,
 	  here,
+	  unlet,
 	  let,
 	  loop,
 	  no,
@@ -95,6 +96,7 @@
 	  display,
 	  print,
 	  println,
+	  repeat,
 	  !,
 	  ?
 	}
@@ -103,6 +105,7 @@
 \lstset{
   language=goilTemplate,
   emph={
+    condition,
     var,
     variable,
     expression,
@@ -111,6 +114,8 @@
     increment,
     string,
     instruction_list,
+    instruction_list_1,
+    instruction_list_2,
     template_file_name,
     getter,
     setter,
@@ -123,7 +128,8 @@
   moredelim=[s]{"}{"},
   morecomment=[l][\color{medium-gray}\itshape]{\#},
   basicstyle=\ttfamily\small,
-  morekeywords=\bfseries
+  morekeywords=\bfseries,
+  frame=tb,
 }
 
 \newcommand{\character}[1]{{\small\ttfamily `{#1}'}}
@@ -882,8 +888,10 @@ display myMap
 \end{lstlisting}
 
 outputs:
-\begin{lstlisting}[language=goilTemplate]
-map: @[
+
+{\small
+\begin{verbatim}
+myMap - map: @[
     "Arnold" :>
         struct: @{
             age :>
@@ -912,11 +920,11 @@ map: @[
                 string: "John"
         }
 ]
-\end{lstlisting}
+\end{verbatim}
 
 \subsection{The \lstinline{map} data type}
 
-The map data type allows to store an association of key and value. map members are accessed by using \var{[<key>]} where \var{<key>} is a \texttt{string}. If \var{A} is a map, \var{A["John"]} refers to element of \var{A} having key \texttt{"John"}.
+The map data type allows to store an association of key and value. map members are accessed by using \var{[<key>]} where \var{<key>} is a \lstinline{string}. If \var{A} is a map, \var{A["John"]} refers to an element of \var{A} having key \texttt{"John"}.
 
 A literal map is defined as follow:
 
@@ -1019,6 +1027,106 @@ println b
 \end{lstlisting}
 
 Because a is assigned outside the \lstinline{foreach} loop, it is both accessible within the foreach loop and accessible after the \lstinline{foreach} loop. So it contains the number of items in TASKS + 1 after the \lstinline{foreach}. Because b is assigned inside the \lstinline{foreach} loop, it does not exist after the loop anymore and \lstinline{println b} will trigger and error.
+
+
+\subsection{The {\em unlet} instruction}
+
+The {\em unlet} instruction removes a variable, a struct field, a map item or a list item. The variable / struct field / map item / list item ceases to exist. If the variable / struct field / map item / list does not exist, {\em unlet} fails silently. Here are some examples. The following program:
+
+\begin{lstlisting}
+let a := 0
+
+if exists a then
+  println "'a' found"
+else
+  println "'a' not found"
+end if
+
+unlet a
+
+if exists a then
+  println "'a' found"
+else
+  println "'a' not found"
+end if
+\end{lstlisting}
+
+outputs:
+
+{\small
+\begin{verbatim}
+’a’ found
+’a’ not found
+\end{verbatim}
+}
+
+Here {\em unlet} is used to remove a field from a struct:
+
+\begin{lstlisting}
+let myStruct := @{ a: 1, b: 2, c: 3 }
+unlet myStruct::a
+display myStruct
+\end{lstlisting} 
+
+and produces the following output
+
+{\small
+\begin{verbatim}
+myStruct - struct: @{
+    b :>
+        integer: 2
+    c :>
+        integer: 3
+}
+\end{verbatim}
+}
+
+Here we use {\em unlet} to remove an item from a list:
+
+\begin{lstlisting}
+let myList := @( 1, 2, 3, 4 )
+unlet myList[2]
+display myList
+\end{lstlisting}
+
+The execution produces the following output:
+
+{\small
+\begin{verbatim}
+myList - list: @(
+    0 :>
+        integer: 1
+    1 :>
+        integer: 2
+    2 :>
+        integer: 4
+)
+\end{verbatim}
+}
+
+And here to remove an item from a map
+
+\begin{lstlisting}
+let myList := @( 1, 2, 3, 4 )
+unlet myList[2]
+display myList
+\end{lstlisting}
+
+The execution produces the following output:
+
+{\small
+\begin{verbatim}
+myList - list: @(
+    0 :>
+        integer: 1
+    1 :>
+        integer: 2
+    2 :>
+        integer: 4
+)
+\end{verbatim}
+}
+
 
 \subsection{The {\em if} instruction}
 
@@ -1124,13 +1232,16 @@ end foreach
 
 It produces the following output:
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C,frame=]
 tpl_time_obj *tpl_alarm_table[ALARM_COUNT] = {
   &alr1_alarm_desc,
   &alr1_alarm_desc
 };
 \end{lstlisting}
 
+%
+% for instruction
+%
 \subsection{The {\em for} instruction}
 
 The {\em for} instruction iterates along a literal list of elements.
@@ -1218,6 +1329,20 @@ loop a from 25 to 20 step -1 do
 end loop
 \end{lstlisting}
 
+\warning{Despite the use of big integers the number of iteration is limited to $2^{32}-1$}
+
+\subsection{The {\em repeat} instruction}
+
+The {\em repeat} instruction combine the C ~ \lstinline!while (...) { ... }! ~ and ~ \lstinline!do { ... } while! \lstinline!(...);! ~ in one instruction. The general form is:
+
+\begin{lstlisting}
+repeat <(limit)>
+  instruction_list_1
+while condition do
+  instruction_list_2
+end repeat
+
+\end{lstlisting}
 
 
 \end{document}  

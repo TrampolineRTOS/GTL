@@ -329,7 +329,16 @@ rule <gtl_instruction>
 rule <gtl_instruction>
   !@gtlInstruction instruction
 {
+  @gtlExpression limit
+  
   $repeat$ @location where = .here
+  select
+    $($
+    <gtl_expression> ?limit
+    $)$
+  or
+    limit = @gtlTerminal.new { !.here !@gtlInt.new{ !.here ![@uint.max{} bigint] } }
+  end
   <gtl_instruction_list> ?@gtlInstructionList continueList
   $while$
   <gtl_expression> ?@gtlExpression condition
@@ -339,7 +348,7 @@ rule <gtl_instruction>
   $repeat$
   
   instruction = @gtlRepeatStatementInstruction.new {
-    !where !condition !continueList !doList
+    !where !limit !condition !continueList !doList
   }
 }
 

@@ -122,7 +122,9 @@ private proc argumentsCheck
   else
     for () in concreteArgumentList, () in abstractArgumentList do (index)
       if [data dynamicType] != type then
-        error [data location] : [type typeName] + " expected for argument " + (index + 1)
+        error [data location] : [type typeName] +
+                                " expected for argument " +
+                                (index + 1)
       end
     end
   end 
@@ -178,6 +180,116 @@ abstract setter @gtlData performSetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
   ?let @library     lib
+
+method @gtlData structField
+  ?let @lstring name
+  !@gtlData     result
+{
+  error name : "a " + [[self dynamicType] typeName] + " is not a struct" : result
+}
+
+getter @gtlData resultField
+  ?let @lstring name
+  ->@gtlData     result
+{
+  error name : "a " + [[self dynamicType] typeName] + " is not a struct" : result
+}
+
+setter @gtlData setStructField
+  ?let @lstring name
+  ?let @gtlData unused data
+{
+  
+  error name : "a " + [[self dynamicType] typeName] + " is not a struct"
+}
+
+setter @gtlData setStructFieldAtLevel
+  ?let @lstring name
+  ?let @gtlData unused data
+  ?let @uint    unused level
+{
+  
+  error name : "a " + [[self dynamicType] typeName] + " is not a struct"
+}
+
+setter @gtlData deleteStructField
+  ?let @lstring name
+{
+  error name : "a " + [[self dynamicType] typeName] + " is not a struct"
+}
+
+getter @gtlData hasStructField
+  ?let @lstring unused name
+  ->@bool result
+{
+  result = false
+}
+
+getter @gtlData overrideMap
+  -> @gtlStruct mapOverriden
+{
+  error self : "INTERNAL ERROR : a variable map should be a @gtlStruct" : mapOverriden
+}
+
+getter @gtlData overriddenMap
+  -> @gtlStruct overriddenMap
+{
+  error self : "INTERNAL ERROR : a variable map should be a @gtlStruct" : overriddenMap
+}
+
+method @gtlData mapItem
+  ?let @lstring name
+  !@gtlData     result
+{
+  error name : "a " + [[self dynamicType] typeName] + " is not a map" : result
+}
+
+getter @gtlData hasMapItem
+  ?let @lstring unused name
+  ->@bool result
+{
+  result = false
+}
+
+setter @gtlData setMapItem
+  ?let @lstring name
+  ?let @gtlData unused data
+{
+  error name : "a " + [[self dynamicType] typeName] + " is not a map"
+}
+
+setter @gtlData deleteMapItem
+  ?let @lstring name
+{
+  error name : "a " + [[self dynamicType] typeName] + " is not a map"
+}
+
+method @gtlData itemAtIndex
+  !@gtlData     result
+  ?let @gtlInt  index
+{
+  error index : "a " + [[self dynamicType] typeName] + " is not a list" : result
+}
+
+getter @gtlData hasItemAtIndex
+  ?let @gtlInt unused index
+  ->@bool result
+{
+  result = false
+}
+
+setter @gtlData setItemAtIndex
+  ?let @gtlData unused data
+  ?let @gtlInt  index
+{
+  error index : "a " + [[self dynamicType] typeName] + " is not a list"
+}
+
+setter @gtlData deleteItemAtIndex
+  ?let @gtlInt  index
+{
+  error index : "a " + [[self dynamicType] typeName] + " is not a list"
+}
 
 #-----------------------------------------------------------------------------*
 # unconstructed type and operations on unconstructed
@@ -1213,6 +1325,11 @@ override getter @gtlFloat performGetter
     result = @gtlBool.new {
       ![methodName location] !true
     }
+  elsif "int" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location] ![[value sint64] bigint]
+    }
   elsif [lib getterExists !"float" !methodName] then
     result = [[lib getGetter !"float" !methodName] callGetter
       ![methodName location]
@@ -2023,6 +2140,71 @@ override setter @gtlStruct performSetter
 }
 
 #-----------------------------------------------------------------------------*
+# get a data from a @gtlStruct
+#-----------------------------------------------------------------------------*
+override method @gtlStruct structField
+  ?let @lstring name
+  !@gtlData     result
+{
+  if [value hasKey !name] then
+    [value get !name ?result]
+  else
+    result = @gtlUnconstructed.new { !name }
+  end
+}
+
+override getter @gtlStruct resultField
+  ?let @lstring name
+  ->@gtlData    result
+{
+  if [value hasKey !name] then
+    [value get !name ?result]
+  else
+    result = @gtlUnconstructed.new { !name }
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# check if a field exists in a @gtlStruct
+#-----------------------------------------------------------------------------*
+override getter @gtlStruct hasStructField
+  ?let @lstring name
+  ->@bool result
+{
+  result = [value hasKey !name]
+}
+
+#-----------------------------------------------------------------------------*
+# Set a data in a @gtlStruct
+#-----------------------------------------------------------------------------*
+override setter @gtlStruct setStructField
+  ?let @lstring name
+  ?let @gtlData data
+{
+  [!?value replaceOrCreate !name !data]
+}
+
+#-----------------------------------------------------------------------------*
+# Set a data in a @gtlStruct
+#-----------------------------------------------------------------------------*
+override setter @gtlStruct setStructFieldAtLevel
+  ?let @lstring name
+  ?let @gtlData data
+  ?let @uint    level
+{
+  [!?value replaceOrCreateAtLevel !name !data !level]
+}
+
+#-----------------------------------------------------------------------------*
+# delete a data in a @gtlStruct
+#-----------------------------------------------------------------------------*
+override setter @gtlStruct deleteStructField
+  ?let @lstring name
+{
+  [!?value del !name ?*]
+}
+
+#-----------------------------------------------------------------------------*
 # List type and operations on lists
 #-----------------------------------------------------------------------------*
 class @gtlList   : @gtlData { @list value }
@@ -2269,6 +2451,43 @@ override setter @gtlList performSetter
   error methodName : "unknown setter '" + methodName +"' for list target"
 }
 
+override setter @gtlList setItemAtIndex
+  ?let @gtlData data
+  ?let @gtlInt  index
+{
+  [!?value setValueAtIndex !data ![[index value] uint]]
+}
+
+override setter @gtlList deleteItemAtIndex
+  ?let @gtlInt  index
+{
+  @uint indexUint = [[index value] uint]
+  if indexUint < [value length] then
+    if indexUint == 0 then
+      value = [value subListFromIndex !1]
+    elsif indexUint == [value length] - 1 then
+      value = [value subListToIndex !indexUint - 1]
+    else
+      value = [value subListToIndex !indexUint - 1]
+            + [value subListFromIndex !indexUint + 1]
+    end
+  end
+}
+
+override method @gtlList itemAtIndex
+  !@gtlData     data
+  ?let @gtlInt  index
+{
+  data = [value valueAtIndex ![[index value] uint]]
+}
+
+override getter @gtlList hasItemAtIndex
+  ?let @gtlInt index
+  ->@bool result
+{
+  result = [value length] > [[index value] uint]
+}
+
 #-----------------------------------------------------------------------------*
 # Map type and operations on maps
 #-----------------------------------------------------------------------------*
@@ -2486,4 +2705,92 @@ override setter @gtlMap performSetter
   ?let @library     unused lib
 {
   error methodName : "unknown setter '" + methodName +"' for map target"
+}
+
+#-----------------------------------------------------------------------------*
+# Set a data in a @gtlMap
+#-----------------------------------------------------------------------------*
+override setter @gtlMap setMapItem
+  ?let @lstring name
+  ?let @gtlData data
+{
+  [!?value replaceOrCreate !name !data]
+}
+
+override setter @gtlMap deleteMapItem
+  ?let @lstring name
+{
+  [!?value del !name ?*]
+}
+
+override method @gtlMap mapItem
+  ?let @lstring name
+  !@gtlData     result
+{
+  if [value hasKey !name] then
+    [value get !name ?result]
+  else
+    result = @gtlUnconstructed.new { !name }
+  end
+}
+
+override getter @gtlMap hasMapItem
+  ?let @lstring name
+  ->@bool result
+{
+  result = [value hasKey !name]
+}
+
+#-----------------------------------------------------------------------------*
+# Wrappers on @gtlStruct
+#-----------------------------------------------------------------------------*
+override getter @gtlStruct overrideMap
+  -> @gtlStruct mapOverriden
+{
+  mapOverriden = .new { !where !@gtlVarMap.mapWithMapToOverride{!value} }
+}
+
+override getter @gtlStruct overriddenMap
+  -> @gtlStruct overriddenMap
+{
+  overriddenMap = .new{ !where ![value overriddenMap] }
+}
+
+#-----------------------------------------------------------------------------*
+func wantGtlStruct
+  ?@gtlData  inData
+  ->@gtlData outData
+{
+  cast inData
+  case == @gtlStruct inDataStruct:
+    outData = inDataStruct
+  else
+    outData = @gtlStruct.new { !inData !.emptyMap }
+  end
+}
+
+#-----------------------------------------------------------------------------*
+func wantGtlMap
+  ?@gtlData  inData
+  ->@gtlData outData
+{
+  cast inData
+  case == @gtlMap inDataMap:
+    outData = inDataMap
+  else
+    outData = @gtlMap.new { !inData !.emptyMap }
+  end
+}
+
+#-----------------------------------------------------------------------------*
+func wantGtlList
+  ?@gtlData  inData
+  ->@gtlData outData
+{
+  cast inData
+  case == @gtlList inDataList:
+    outData = inDataList
+  else
+    outData = @gtlList.new { !inData !.emptyList }
+  end
 }
