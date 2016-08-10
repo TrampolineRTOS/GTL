@@ -15,8 +15,13 @@
 \usepackage{underscore}
 \usepackage{xcolor}
 \usepackage{tikzpagenodes}
-\usetikzlibrary{calc}
 \usepackage{eso-pic}
+
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usepgflibrary{shapes.geometric}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{arrows}
 
 %\AddToShipoutPictureBG{%
 %\begin{tikzpicture}[overlay,remember picture]
@@ -121,7 +126,8 @@
     setter,
     hierarchy,
     index,
-    key
+    key,
+    limit_expression
   },
   emphstyle=\em,
   moredelim=[s][\color{blue}]{\%}{\%},
@@ -809,7 +815,7 @@ The \lstinline{list} data type supports the following operators:
 \paragraph{Binary operators}~
 
 \rowcolors{1}{white}{light-gray}
-\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3.08in}}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{2.88in}}
 {\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
 \hline\endhead
  {+}&
@@ -823,7 +829,7 @@ The \lstinline{list} data type supports the following operators:
 \paragraph{Comparison operators}~
 
 \rowcolors{1}{white}{light-gray}
-\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{3in}}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{2.79in}}
 {\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
 \hline\endhead
  {!=}&
@@ -843,7 +849,7 @@ Two structs are equal if:
 \subsubsection{\lstinline{list} getters}
 
 \rowcolors{1}{white}{light-gray}
-\begin{longtable}{>{\ttfamily}l|l|p{4.41in}}
+\begin{longtable}{>{\ttfamily}l|l|p{3.88in}}
 {\bf getter}&{\bf Type}&{\bf Meaning}\\
 \hline\endhead
  {length}&
@@ -857,7 +863,16 @@ Two structs are equal if:
   {Returns the last element of the list.}\\
  {mapBy}&
   {map}&
-  {\cfunction{mapBy} takes on string argument which is the field (for a struct list item) or the key (for a map list item) used as key to store the element in the resulting map. It returns a map where each element is the element of the list with the key being the corresponding field/key.}\\
+  {\cfunction{mapBy} takes a string argument which is the field (for a struct list item) or the key (for a map list item) used as key to store the element in the resulting map. It returns a map where each element is the element of the list with the key being the corresponding field/key.}\\
+ {subListTo}&
+  {list}&
+  {\cfunction{subListTo} takes an int argument which is the stop \texttt{index} of the sublist. It returns a sublist which is a copy of target list ranging from 0 to the \texttt{index} included. If \texttt{aList} contains \texttt{@( 1, 2, 3, 4 )}, \texttt{[aList subListTo: 1]} returns \texttt{@( 1, 2 )}}\\
+ {subListFrom}&
+  {list}&
+  {\cfunction{subListTo} takes an int argument which is the start \texttt{index} of the sublist. It returns a sublist which is a copy of target list ranging from \texttt{index} included to the end of the list. If \texttt{aList} contains \texttt{@( 1, 2, 3, 4 )}, \texttt{[aList subListFrom: 1]} returns \texttt{@( 2, 3, 4 )}}\\
+ {subList}&
+  {list}&
+  {\cfunction{subList} takes 2 int arguments. The first one is the start \texttt{index} of the sublist. The second one is the \texttt{length} of the sublist. It returns a sublist which is a copy of target list ranging from \texttt{index} included to up to \texttt{length} items. If \texttt{aList} contains \texttt{@( 1, 2, 3, 4 )}, \texttt{[aList subList: 1, 5]} returns \texttt{@( 2, 3, 4 )},  \texttt{[aList subList: 2, 1]} returns \texttt{@( 3 )}}\\
 \end{longtable}
 
 \paragraph{example of \cfunction{mapBy}}~
@@ -922,6 +937,17 @@ myMap - map: @[
 ]
 \end{verbatim}
 
+\subsubsection{\lstinline{list} setters}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|l|p{3.88in}}
+{\bf getter}&{\bf Type}&{\bf Meaning}\\
+\hline\endhead
+ {insert}&
+  {list}&
+  {\cfunction{insert} takes 2 arguments. The first one is the \texttt{index} of the list where the data will be inserted. The second one is the \texttt{data} to insert. It inserts \texttt{data} before the item at \texttt{index}. If \texttt{aList} contains \texttt{@( 1, 2, 3, 4 )}, \texttt{[!aList insert: 1, "Hello"]} changes \texttt{aList} to  \texttt{@( 1, "Hello", 2, 3, 4 )}}\\
+\end{longtable}
+
 \subsection{The \lstinline{map} data type}
 
 The map data type allows to store an association of key and value. map members are accessed by using \var{[<key>]} where \var{<key>} is a \lstinline{string}. If \var{A} is a map, \var{A["John"]} refers to an element of \var{A} having key \texttt{"John"}.
@@ -959,8 +985,6 @@ Two maps are equal if:
 \item they have the same item keys
 \item they have the same item values
 \end{itemize}
-
-
 
 \section{GTL instructions}
 
@@ -1127,6 +1151,13 @@ myList - list: @(
 \end{verbatim}
 }
 
+\subsection{The {\em !} instruction}
+
+The {\em !} instruction emits an expression in the output template string. The syntax is
+
+\begin{lstlisting}
+! expression
+\end{lstlisting}
 
 \subsection{The {\em if} instruction}
 
@@ -1336,7 +1367,7 @@ end loop
 The {\em repeat} instruction combine the C ~ \lstinline!while (...) { ... }! ~ and ~ \lstinline!do { ... } while! \lstinline!(...);! ~ in one instruction. The general form is:
 
 \begin{lstlisting}
-repeat <(limit)>
+repeat <(limit_expression)>
   instruction_list_1
 while condition do
   instruction_list_2
@@ -1344,5 +1375,47 @@ end repeat
 
 \end{lstlisting}
 
+\lstinline{limit_expression} is an optional expression to bound the number of iterations. If the number of iterations exceeds \lstinline{limit}, a runtime error is emitted. If \lstinline{limit_expression} is omitted, the number of iterations is bounded to $2^{32}-1$.
+
+The semantics of this instruction is shown at figure \ref{fig:repeat}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[
+      cloud/.style ={draw=red, thick, ellipse,fill=red!20, minimum height=2em},
+      block/.style ={rectangle, draw=blue, thick, fill=green!20, align=center},
+      error/.style ={rectangle, draw=red, thick, fill=green!20, align=center},
+      decision/.style={chamfered rectangle, draw=blue, thick, fill=green!20},
+      node distance=7mm
+    ]
+    \node [cloud] (start) {\textsc{begin}} ;
+    \node [block] (affectationVariant) [below=of start] {count := {\tt \emph{limit_expression}}} ;
+    \node [decision] (premierTest) [below=of affectationVariant] {count $> 0$ ?} ;
+    \node [error] (loopVariantError) [right=of premierTest] {loop count error} ;
+    \node [block] (instructions1) [below=of premierTest] {\tt \emph{instructions\_list\_1}} ;
+    \node [decision] (expression) [below=of instructions1] {\tt \emph{condition} ?} ;
+    \node [decision] (secondTest) [below=of expression] {count $> 0$ ?} ;
+    \node [error] (loopVariantError2) [right=of secondTest] {loop count error} ;
+    \node [block] (decVariant) [below=of secondTest] {count {-}{-}} ;
+    \node [block] (instructions2) [below=of decVariant] {\tt \emph{instructions\_list\_2}} ;
+    \node [cloud] (end) [below=of instructions2] {\textsc{end}} ;
+    
+    \draw [-stealth, thick] (start) -- (affectationVariant) ;
+    \draw [-stealth, thick] (affectationVariant) -- (premierTest) ;
+    \draw [o-stealth, thick] (premierTest) -- (loopVariantError) ;
+    \draw [o-stealth, thick] (secondTest) -- (loopVariantError2) ;
+    \draw [-stealth, thick] (loopVariantError.east) -- +(1, 0) |- (end.east) ;
+    \draw [-stealth, thick] (loopVariantError2.east) -- +(1, 0) ;
+    \draw [o-stealth, thick] (expression.east) -- +(4.42, 0) ;
+    \draw [-stealth, thick] (instructions1) -- (expression) ;
+    \draw [>-stealth, thick] (premierTest) -- (instructions1) ;
+    \draw [>-stealth, thick] (expression) -- (secondTest) ;
+    \draw [>-stealth, thick] (secondTest) -- (decVariant) ;
+    \draw [-stealth, thick] (decVariant) -- (instructions2) ;
+    \draw [-stealth, thick] (instructions2.west) -- +(-1, 0) |- (instructions1.west) ;
+  \end{tikzpicture}
+  \caption{semantics of the \emph{repeat} instruction}
+  \label{fig:repeat}
+\end{figure}
 
 \end{document}  

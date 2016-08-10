@@ -55,7 +55,7 @@ $identifier$ ! tokenString error message "an identifier"
 
 list goilTemplateKeyWordList style keywordsStyle error message "the '%K' keyword"
 {
-  "after", "before", "between", "block", "by", "call", "default", "display",
+  "after", "before", "between", "by", "default", "display",
   "do", "down", "else", "elsif", "emptylist", "emptymap", "end", "error",
   "exists", "false", "for", "foreach", "from", "func", "here", "if", "in",
   "import", "listof", "let", "loop", "mapof", "mod", "module", "no", "not", "or",

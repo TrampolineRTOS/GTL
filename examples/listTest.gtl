@@ -71,3 +71,30 @@ display myEmptyList
 
 let myDeprecatedEmptyList := emptylist
 
+let aList := @( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 )
+display aList
+let aSecondList := [aList subListFrom: 4]
+display aSecondList
+let aSecondList := [aList subListFrom: 20]
+display aSecondList
+let aSecondList := [aList subListTo: 2]
+display aSecondList
+let aSecondList := [aList subListTo: 20]
+display aSecondList
+let aSecondList := [aList subList: 2, 5]
+display aSecondList
+let aSecondList := [aList subList: 2, 0]
+display aSecondList
+let aSecondList := [aList subList: 2, 20]
+display aSecondList
+
+[!aSecondList insert: 3, "Hello"]
+display aSecondList
+[!aSecondList insert: 3, @{ a: 3, b: 4} ]
+display aSecondList
+
+let aList := @( 1, 2, 3, 4 )
+let subList := [aList subListTo: 1]
+display subList
+let subList := [aList subListFrom: 1]
+display subList

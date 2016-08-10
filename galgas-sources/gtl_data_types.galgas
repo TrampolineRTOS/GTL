@@ -109,6 +109,12 @@ private func %once intIntArguments -> @gtlTypedArgumentList result
   result += !`@gtlInt
 }
 
+private func %once intAnyArguments -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlInt }
+  result += !`@gtlData
+}
+
 private proc argumentsCheck
   ?let @lstring methodName
   ?@gtlTypedArgumentList abstractArgumentList
@@ -121,7 +127,7 @@ private proc argumentsCheck
                        " arguments. " + concreteLength + " arguments provided."
   else
     for () in concreteArgumentList, () in abstractArgumentList do (index)
-      if [data dynamicType] != type then
+      if [data dynamicType] != type & type != `@gtlData then
         error [data location] : [type typeName] +
                                 " expected for argument " +
                                 (index + 1)
@@ -2383,7 +2389,50 @@ override getter @gtlList performGetter
     [value first ?result]     
   elsif "last"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
-    [value last ?result]     
+    [value last ?result]
+  elsif "subListTo"              == methodName then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint index = [[arguments dataAtIndex !0] int]
+    if index < [value length] then
+      result = @gtlList.new {
+        !methodName
+        ![value subListToIndex !index]
+      }
+    else
+      result = self
+    end
+  elsif "subListFrom"            == methodName then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint index = [[arguments dataAtIndex !0] int]
+    if index < [value length] then
+      result = @gtlList.new {
+        !methodName
+        ![value subListFromIndex !index]
+      }
+    else
+      result = @gtlList.new {
+        !methodName
+        !.emptyList
+      }
+    end
+  elsif "subList"                == methodName then
+    argumentsCheck(!methodName !intIntArguments() !arguments)
+    @uint start  = [[arguments dataAtIndex !0] int]
+    @uint length = [[arguments dataAtIndex !1] int]
+    if start < [value length] then
+      if start + length > [value length] then
+        length = [value length] - start
+      end
+      result = @gtlList.new {
+        !methodName
+        ![value subListWithRange !@range.new { !start !length }]
+      }
+    else
+      result = @gtlList.new {
+        !methodName
+        !.emptyList
+      }
+    end
   elsif "mapBy"                  == methodName then
     argumentsCheck(!methodName !stringArgument() !arguments)
     @lstring key = [[arguments dataAtIndex !0] lstring]
@@ -2445,10 +2494,17 @@ override getter @gtlList performGetter
 #-----------------------------------------------------------------------------*
 override setter @gtlList performSetter
   ?let @lstring            methodName
-  ?let @gtlDataList unused arguments
+  ?let @gtlDataList        arguments
   ?let @library     unused lib
 {
-  error methodName : "unknown setter '" + methodName +"' for list target"
+  if    "insert" == methodName then
+    argumentsCheck(!methodName !intAnyArguments() !arguments)
+    @uint insertIndex = [[arguments dataAtIndex !0] int]
+    @gtlData node = [arguments dataAtIndex !1]
+    [!?value insertAtIndex !node !insertIndex]
+  else
+    error methodName : "unknown setter '" + methodName +"' for list target"
+  end
 }
 
 override setter @gtlList setItemAtIndex
