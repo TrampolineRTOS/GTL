@@ -46,6 +46,7 @@ style integerStyle -> "Integer Constants"
 style floatCsts -> "Floating Point Constants"
 style stringStyle -> "String literals"
 style commentStyle -> "Comments"
+style characterStyle -> "Character Constants"
 
 # -------------------------- identifier or lkey word --------------------
 # keywords can be written in lower or upper case
@@ -204,6 +205,126 @@ message unassignedUnicodeValue : "this value does not correspond to an assigned 
 message incorrectHTMLescapeSequence : "Invalid HTML sequence, should be '&...;'"
 message unknownHTMLescapeSequence : "Invalid &...; HTML sequence"
 message incorrectCharConstant : "incorrect literal character"
+
+$literal_char$ ! charValue  style characterStyle error message "a character constant"
+
+rule '\'' {
+  select
+  case '\\' :
+    select
+    case 'f' :
+      enterCharacterIntoCharacter (!?charValue !'\f' )
+    case 'n' :
+      enterCharacterIntoCharacter (!?charValue !'\n' )
+    case 'r' :
+      enterCharacterIntoCharacter (!?charValue !'\r' )
+    case 't' :
+      enterCharacterIntoCharacter (!?charValue !'\t' )
+    case 'v' :
+      enterCharacterIntoCharacter (!?charValue !'\v' )
+    case '\\' :
+      enterCharacterIntoCharacter (!?charValue !'\\' )
+    case '0' :
+      enterCharacterIntoCharacter (!?charValue !'\0' )
+    case '\'' :
+      enterCharacterIntoCharacter (!?charValue !'\'' )
+    case 'u' :
+      select
+      case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+        enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+        select
+        case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+          enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+          select
+          case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+           enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+            select
+            case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+              enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+              convertUnsignedNumberToUnicodeChar (!?uint32value !?charValue error unassignedUnicodeValue )
+            default
+              error invalideUnicodeDefinition4
+            end
+          default
+            error invalideUnicodeDefinition4
+          end
+        default
+          error invalideUnicodeDefinition4
+        end
+      default
+        error invalideUnicodeDefinition4
+      end
+    case 'U' :
+      select
+      case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+        enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+        select
+        case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+          enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+          select
+          case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+            enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+            select
+            case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+              enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+              select
+              case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+                enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+                select
+                case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+                  enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+                  select
+                  case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+                   enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+                    select
+                    case '0' -> '9' | 'a' -> 'f' | 'A' -> 'F' :
+                      enterHexDigitIntoUInt ( !* !?uint32value error internalError, internalError )
+                      convertUnsignedNumberToUnicodeChar (!?uint32value !?charValue error unassignedUnicodeValue )
+                    default
+                      error invalideUnicodeDefinition8
+                    end
+                  default
+                    error invalideUnicodeDefinition8
+                  end
+                default
+                  error invalideUnicodeDefinition8
+                end
+              default
+                error invalideUnicodeDefinition8
+              end
+            default
+              error invalideUnicodeDefinition8
+            end
+          default
+            error invalideUnicodeDefinition8
+          end
+        default
+          error invalideUnicodeDefinition8
+        end
+      default
+        error invalideUnicodeDefinition8
+      end
+    case '&' :
+      repeat
+      while ~ ";" error incorrectHTMLescapeSequence :
+        enterCharacterIntoString (!?tokenString !* )
+      end
+      convertHTMLSequenceToUnicodeCharacter (!?tokenString !?charValue error unknownHTMLescapeSequence )
+    default
+      error incorrectCharConstant
+    end
+  case ' ' -> '\uFFFD' :
+     enterCharacterIntoCharacter (!?charValue !* )
+  default
+    error incorrectCharConstant
+  end
+  select
+  case '\'' :
+    send $literal_char$
+  default
+    error incorrectCharConstant
+  end
+}
 
 $string$ !a_string  style stringStyle error message "literal string"
 

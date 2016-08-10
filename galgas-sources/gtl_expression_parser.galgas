@@ -312,6 +312,19 @@ rule <gtl_factor>
 }
 
 #------------------------------------------------------------------------------*
+#   F A C T O R    :    a literal char value                                 *
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $literal_char$ ?let @lchar literalChar
+  expression = @gtlTerminal.new{
+    !.here !@gtlChar.new { !.here ![literalChar char] }
+  }
+}
+
+#------------------------------------------------------------------------------*
 #                         F A C T O R                                          *
 #   template getter call :   [expression getter : ... ]                        *
 #------------------------------------------------------------------------------*
@@ -416,6 +429,8 @@ rule <gtl_factor>
     }
   }
 }
+
+#------------------------------------------------------------------------------*
 
 rule <gtl_factor>
   !@gtlExpression expression

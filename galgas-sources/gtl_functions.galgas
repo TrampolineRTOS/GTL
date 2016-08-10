@@ -24,7 +24,8 @@
 #
 #-----------------------------------------------------------------------------*
 
-func trueFalse ?let @bool inBool ->@string result {
+func trueFalse ?let @bool inBool ->@string result
+{
   if inBool then
     result = "true"
   else
@@ -32,7 +33,8 @@ func trueFalse ?let @bool inBool ->@string result {
   end
 }
 
-func TrueFalse ?let @bool inBool ->@string result {
+func TrueFalse ?let @bool inBool ->@string result
+{
   if inBool then
     result = "True"
   else
@@ -40,7 +42,8 @@ func TrueFalse ?let @bool inBool ->@string result {
   end
 }
 
-func yesNo ?let @bool inBool ->@string result {
+func yesNo ?let @bool inBool ->@string result
+{
   if inBool then
     result = "YES"
   else
@@ -48,7 +51,8 @@ func yesNo ?let @bool inBool ->@string result {
   end
 }
 
-func TRUEFALSE ?let @bool inBool ->@string result {
+func TRUEFALSE ?let @bool inBool ->@string result
+{
   if inBool then
     result = "TRUE"
   else
@@ -56,3 +60,12 @@ func TRUEFALSE ?let @bool inBool ->@string result {
   end
 }
 
+func listOfSize ?@bigint inSize -> @list result
+{
+  result = .emptyList
+  loop ([inSize uint])
+  while inSize > 0 do
+    result += !@gtlUnconstructed.new { !.here }
+    inSize--
+  end
+}

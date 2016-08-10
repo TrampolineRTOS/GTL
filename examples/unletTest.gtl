@@ -25,6 +25,7 @@ unlet myList[2]
 display myList
 
 let myMap := @[ "a": @( 1, 2) , "b": @( 3, 4) ]
+unlet myMap["b"]
 display myMap
 println myMap["a"][0]
 
@@ -33,3 +34,10 @@ display b
 
 let b := exists myMap["a"][4] default (-1)
 display b
+
+loop i from 1 to 10 do
+  !" " !i
+end loop
+%
+%
+

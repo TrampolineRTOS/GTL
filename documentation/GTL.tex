@@ -986,6 +986,23 @@ Two maps are equal if:
 \item they have the same item values
 \end{itemize}
 
+
+\subsubsection{\lstinline{map} getters}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|l|p{3.88in}}
+{\bf getter}&{\bf Type}&{\bf Meaning}\\
+\hline\endhead
+ {length}&
+  {int}&
+  {Returns the number of elements in the map.}\\
+ {list}&
+  {any}&
+  {Returns a list representation of the map. Elements of the list are in the alphanumerical order of the keys of the map.}\\
+\end{longtable}
+
+
+
 \section{GTL instructions}
 
 \subsection{The {\em \%\ldots\%} instruction}
@@ -1009,7 +1026,13 @@ let var
 \end{lstlisting}
 
 
-As in the C language, GTL has assignment operator: 
+As in the C language, GTL has assignment operators. For instance to increment an \lstinline{int} variable, one can write: 
+
+\begin{lstlisting}
+let var += 1
+\end{lstlisting}
+
+The following table gives the available assignment operators and their meaning.
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|}
@@ -1131,23 +1154,25 @@ myList - list: @(
 And here to remove an item from a map
 
 \begin{lstlisting}
-let myList := @( 1, 2, 3, 4 )
-unlet myList[2]
-display myList
+let myMap := @[ "a": @( 1, 2) , "b": @( 3, 4) ]
+unlet myMap["b"]
+display myMap
 \end{lstlisting}
 
 The execution produces the following output:
 
 {\small
 \begin{verbatim}
-myList - list: @(
-    0 :>
-        integer: 1
-    1 :>
-        integer: 2
-    2 :>
-        integer: 4
-)
+myMap - map: @[
+    "a" :>
+        list: @(
+            0 :>
+                integer: 1
+            1 :>
+                integer: 2
+        )
+]
+
 \end{verbatim}
 }
 
@@ -1158,6 +1183,23 @@ The {\em !} instruction emits an expression in the output template string. The s
 \begin{lstlisting}
 ! expression
 \end{lstlisting}
+
+For instance the following program:
+
+\begin{lstlisting}
+loop i from 1 to 10 do
+  !" " !i
+end loop
+%
+%
+\end{lstlisting}
+
+produces the following output string:
+
+\begin{verbatim}
+ 1 2 3 4 5 6 7 8 9 10
+
+\end{verbatim}
 
 \subsection{The {\em if} instruction}
 
@@ -1375,7 +1417,7 @@ end repeat
 
 \end{lstlisting}
 
-\lstinline{limit_expression} is an optional expression to bound the number of iterations. If the number of iterations exceeds \lstinline{limit}, a runtime error is emitted. If \lstinline{limit_expression} is omitted, the number of iterations is bounded to $2^{32}-1$.
+\lstinline{limit_expression} is an optional expression to bound the number of iterations. If the number of iterations exceeds \lstinline{limit}, a runtime error is emitted. If \lstinline{limit_expression} is omitted, its default value is $2^{32}-1$.
 
 The semantics of this instruction is shown at figure \ref{fig:repeat}
 

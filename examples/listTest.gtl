@@ -98,3 +98,8 @@ let subList := [aList subListTo: 1]
 display subList
 let subList := [aList subListFrom: 1]
 display subList
+
+let aBigList := listOfSize(20)
+display aBigList
+let aBigList[0] := "Hello"
+display aBigList

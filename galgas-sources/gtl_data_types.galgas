@@ -81,6 +81,17 @@ private func %once intArgument -> @gtlTypedArgumentList result
   result = .listWithValue { !`@gtlInt }
 }
 
+private func %once charArgument -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlChar }
+}
+
+private func %once charCharArguments -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlChar }
+  result += !`@gtlChar
+}
+
 private func %once floatArgument -> @gtlTypedArgumentList result
 {
   result = .listWithValue { !`@gtlFloat }
@@ -752,6 +763,229 @@ override setter @gtlEnum performSetter
 #-----------------------------------------------------------------------------*
 # Int type and operations on int
 #-----------------------------------------------------------------------------*
+class @gtlChar : @gtlData { @char value %setter }
+
+override getter @gtlChar desc
+  ?let @uint tab
+  -> @string result
+{
+  result = @string.stringWithSequenceOfCharacters{!' ' !tab} +
+    "char: " + [value string] + "\n"
+}
+
+override getter @gtlChar string  -> @string result { result = [value string] }
+
+override getter @gtlChar lstring -> @lstring result {
+  result = .new { ![value string] !where }
+}
+
+override getter @gtlChar bool    -> @bool result {
+  error where : "cannot cast a char to a bool" : result
+}
+
+override getter @gtlChar int     -> @bigint result {
+  result = [[value uint] bigint]
+}
+
+override getter @gtlChar float   -> @double result {
+  error where : "cannot cast a char to a float" : result
+}
+
+override getter @gtlChar plusOp  -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar minusOp -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar notOp   -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar addOp ?let @gtlData unused right -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar subOp ?let @gtlData unused right -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar mulOp ?let @gtlData unused right -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar divOp ?let @gtlData unused right -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar modOp ?let @gtlData unused right -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar andOp ?let @gtlData unused right -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar orOp ?let @gtlData unused right -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar xorOp ?let @gtlData unused right -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar slOp ?let @gtlData unused right -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar srOp ?let @gtlData unused right -> @gtlData result {
+  error where : "char forbidden" : result
+}
+
+override getter @gtlChar neqOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlChar then
+    result = @gtlBool.new { !where !value != [right as @gtlChar value] }
+  else
+    error right : "char expected" : result
+  end
+}
+
+override getter @gtlChar eqOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlChar then
+    result = @gtlBool.new { !where !value == [right as @gtlChar value] }
+  else
+    error right : "char expected" : result
+  end
+}
+
+override getter @gtlChar gtOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlChar then
+    result = @gtlBool.new { !where !value > [right as @gtlChar value] }
+  else
+    error right : "char expected" : result
+  end
+}
+
+override getter @gtlChar geOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlChar then
+    result = @gtlBool.new { !where !value >= [right as @gtlChar value] }
+  else
+    error [right where] : "char expected" : result
+  end
+}
+
+override getter @gtlChar ltOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlChar then
+    result = @gtlBool.new { !where !value < [right as @gtlChar value] }
+  else
+    error [right where] : "int expected" : result
+  end
+}
+
+override getter @gtlChar leOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlChar then
+    result = @gtlBool.new { !where !value <= [right as @gtlChar value] }
+  else
+    error [right where] : "int expected" : result
+  end
+}
+
+override getter @gtlChar embeddedType -> @type result
+{
+  result = `@char
+}
+
+override method @gtlChar addMyValue ?!@objectlist objectList
+{
+  objectList += ![value object]
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a getter on a @gtlChar
+#-----------------------------------------------------------------------------*
+override getter @gtlChar performGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ?let @library     lib
+  ->@gtlData        result
+{
+  if    "string"                 == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      ![methodName location] ![self string]
+    }
+  elsif "isAlnum"                 == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] ![value isalnum]
+    }
+  elsif "isCntrl"                 == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] ![value iscntrl]
+    }
+  elsif "isDigit"                 == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] ![value isdigit]
+    }
+  elsif "isAlpha"                 == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] ![value isalpha]
+    }
+  elsif "isLower"                 == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] ![value islower]
+    }
+  elsif "isUpper"                 == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] ![value isupper]
+    }
+  elsif "isXDigit"                == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] ![value isxdigit]
+    }
+  elsif "type"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlType.new {
+      ![methodName location] ![self dynamicType]
+    }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !false
+    }
+  elsif [lib getterExists !"char" !methodName] then
+    result = [[lib getGetter !"char" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
+  else
+    error methodName : "unknown getter '" + methodName +"' for char target" : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a setter on a @gtlInt
+#-----------------------------------------------------------------------------*
+override setter @gtlChar performSetter
+  ?let @lstring     methodName
+  ?let @gtlDataList unused arguments
+  ?let @library     unused lib
+{
+  error methodName : "unknown setter '" + methodName +"' for char target"
+}
+
+#-----------------------------------------------------------------------------*
+# Int type and operations on int
+#-----------------------------------------------------------------------------*
 class @gtlInt    : @gtlData { @bigint  value %setter }
 
 override getter @gtlInt desc
@@ -947,6 +1181,24 @@ override getter @gtlInt performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] ![self string]
+    }
+  elsif "padded"                 == methodName then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint   fieldSize = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    result = @gtlString.new {
+      ![methodName location] ![[self string] stringByLeftAndRightPadding !fieldSize !' ']
+    }
+  elsif "leftPadded"             == methodName then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint   fieldSize = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    result = @gtlString.new {
+      ![methodName location] ![[self string] stringByLeftPadding !fieldSize !' ']
+    }
+  elsif "rightPadded"            == methodName then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint   fieldSize = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    result = @gtlString.new {
+      ![methodName location] ![[self string] stringByRightPadding !fieldSize !' ']
     }
   elsif "hexString"              == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
@@ -1512,6 +1764,25 @@ override getter @gtlString performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] !value
+    }
+  elsif [methodName string] == "charAtIndex" then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    result = @gtlChar.new {
+      ![methodName location] ![value characterAtIndex !index]
+    }
+  elsif [methodName string] == "containsChar" then
+    argumentsCheck(!methodName !charArgument() !arguments)
+    @char lookedUpChar = [[arguments dataAtIndex !0] as @gtlChar value]
+    result = @gtlBool.new {
+      ![methodName location] ![value containsCharacter !lookedUpChar]
+    }
+  elsif [methodName string] == "containsCharInRange" then
+    argumentsCheck(!methodName !charCharArguments() !arguments)
+    @char minChar = [[arguments dataAtIndex !0] as @gtlChar value]
+    @char maxChar = [[arguments dataAtIndex !1] as @gtlChar value]
+    result = @gtlBool.new {
+      ![methodName location] ![value containsCharacterInRange !minChar !maxChar]
     }
   elsif [methodName string] == "HTMLRepresentation" then
     argumentsCheck(!methodName !noArgument() !arguments)

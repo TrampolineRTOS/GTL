@@ -1150,6 +1150,8 @@ func validateReturnValue
     result = @gtlString.new { !loc !returnedValue as @string }
   elsif returnedType == `@bool   then
     result = @gtlBool.new   { !loc !returnedValue as @bool   }
+  elsif returnedType == `@list   then
+    result = @gtlList.new   { !loc !returnedValue as @list   }
   else
     error functionName
       : "this function does not return a compatible type" : result
@@ -1170,7 +1172,7 @@ override getter @gtlFunctionCallExpression eval
   -> @gtlData result
 {
   if @function.isFunctionDefined { ![functionName string] } then
-
+    # built in function
     @objectlist arguments = .emptyList
     @gtlDataList dataArguments = .emptyList
 
@@ -1178,7 +1180,6 @@ override getter @gtlFunctionCallExpression eval
       @gtlData arg = [expression eval !vars !lib]
       dataArguments += !arg
       [arg addMyValue !?arguments]
-      #@arguments += ![arg object]
     end
     
     @function function = .functionWithName { ![functionName string] }
