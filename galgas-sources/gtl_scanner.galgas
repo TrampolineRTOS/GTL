@@ -74,6 +74,17 @@ rule 'a'->'z' |  'A'->'Z' {
   send search identifierString in goilTemplateKeyWordList default $identifier$
 }
 
+# ---------------------------------- enum value--------------------------------
+$literal_enum$ ! tokenString error message "a literal enum value"
+
+rule '$' {
+  repeat
+  while 'a'->'z' | 'A'->'Z' | '_' | '0'->'9' :
+    enterCharacterIntoString ( !?tokenString !*)
+  end
+  send $literal_enum$
+}
+
 # ----------------------------- Delimitors ---------------------------------------
 list galgasDelimitorsList style delimitersStyle error message "the '%K' delimitor"{
     "*",    "|",     ",",      "+",     "::",     ">",

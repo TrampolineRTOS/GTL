@@ -450,6 +450,22 @@ rule <gtl_factor>
 rule <gtl_factor>
   !@gtlExpression expression
 {
+  $literal_enum$ ?let @lstring enumValue
+  message [enumValue string] + "\n"
+  expression = @gtlTerminal.new {
+    !.here
+    !@gtlEnum.new { 
+      !.here
+      !enumValue
+    }
+  }
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
   $@$ $identifier$ ?let @lstring typeName
   @string name = [typeName string]
   @gtlType type

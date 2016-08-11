@@ -28,6 +28,7 @@ getter @type typeName
   ->@string typeName
 {
   if    self == `@gtlInt           then typeName = "int"
+  elsif self == `@gtlChar          then typeName = "char"
   elsif self == `@gtlFloat         then typeName = "float"
   elsif self == `@gtlString        then typeName = "string"
   elsif self == `@gtlBool          then typeName = "bool"
@@ -44,6 +45,7 @@ getter @string gtlType
   ->@type type
 {
   if    self == "int"           then type = `@gtlInt
+  elsif self == "char"          then type = `@gtlChar
   elsif self == "float"         then type = `@gtlFloat
   elsif self == "string"        then type = `@gtlString
   elsif self == "bool"          then type = `@gtlBool
@@ -60,6 +62,7 @@ getter @lstring gtlType
 {
   @string typeName = [self string]
   if    typeName == "int"           then type = `@gtlInt
+  elsif typeName == "char"          then type = `@gtlChar
   elsif typeName == "float"         then type = `@gtlFloat
   elsif typeName == "string"        then type = `@gtlString
   elsif typeName == "bool"          then type = `@gtlBool
@@ -90,6 +93,12 @@ private func %once charCharArguments -> @gtlTypedArgumentList result
 {
   result = .listWithValue { !`@gtlChar }
   result += !`@gtlChar
+}
+
+private func %once charIntArguments -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlChar }
+  result += !`@gtlInt
 }
 
 private func %once floatArgument -> @gtlTypedArgumentList result
@@ -1771,6 +1780,42 @@ override getter @gtlString performGetter
     result = @gtlChar.new {
       ![methodName location] ![value characterAtIndex !index]
     }
+  elsif [methodName string] == "indexOfChar" then
+    argumentsCheck(!methodName !charArgument() !arguments)
+    @char lookedUpChar = [[arguments dataAtIndex !0] as @gtlChar value]
+    @uint index = 0
+    @uint length = [value length]
+    @bool found = false
+    loop (length)
+    while not found && index < length do
+      if [value characterAtIndex !index] == lookedUpChar then
+        found = true
+      else
+        index++
+      end
+    end
+    result = @gtlInt.new {
+      ![methodName location] !if found then [index bigint] else -1_G end
+    }
+  elsif [methodName string] == "indexOfCharInRange" then
+    argumentsCheck(!methodName !charCharArguments() !arguments)
+    @char minChar = [[arguments dataAtIndex !0] as @gtlChar value]
+    @char maxChar = [[arguments dataAtIndex !1] as @gtlChar value]
+    @uint index = 0
+    @uint length = [value length]
+    @bool found = false
+    loop (length)
+    while not found && index < length do
+      @char currentChar = [value characterAtIndex !index]
+      if currentChar >= minChar && currentChar <= maxChar then
+        found = true
+      else
+        index++
+      end
+    end
+    result = @gtlInt.new {
+      ![methodName location] !if found then [index bigint] else -1_G end
+    }
   elsif [methodName string] == "containsChar" then
     argumentsCheck(!methodName !charArgument() !arguments)
     @char lookedUpChar = [[arguments dataAtIndex !0] as @gtlChar value]
@@ -1964,10 +2009,17 @@ override getter @gtlString performGetter
 #-----------------------------------------------------------------------------*
 override setter @gtlString performSetter
   ?let @lstring     methodName
-  ?let @gtlDataList unused arguments
+  ?let @gtlDataList arguments
   ?let @library     unused lib
 {
-  error methodName : "unknown setter '" + methodName +"' for string target"
+  if "setCharAtIndex" == methodName then
+    argumentsCheck(!methodName !charIntArguments() !arguments)
+    @char charToSet = [[arguments dataAtIndex !0] as @gtlChar value]
+    @uint index = [[[arguments dataAtIndex !1] as @gtlInt value] uint]
+    [!?value setCharacterAtIndex !charToSet !index]
+  else
+    error methodName : "unknown setter '" + methodName +"' for string target"
+  end
 }
 
 #-----------------------------------------------------------------------------*

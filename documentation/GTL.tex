@@ -190,6 +190,7 @@
 GTL supports the following data types:
 \begin{description}
 \item[int] arbitrary precision integer numbers. The GMP library is used;
+\item[char] unicode chars;
 \item[float] 64 bits floating point numbers;
 \item[bool] standard boolean;
 \item[type] the type of a data;
@@ -200,7 +201,7 @@ GTL supports the following data types:
 \item[unconstructed] an unconstructed variable.
 \end{description}
 
-Each type has its set of operators, getters and setters. The expression, for getters, or the variable, for setters, is called the {\em target}. Getters return a value related to the data but do not change it. They are used to get information from a data or to convert it into another type. Setter may target a literal expressions. Setters change the data and do not return anything. Setter may only target a variable. Getters and setters may have arguments. Syntax for getters without argument is as follow:
+Each type has its set of operators, getters and setters. The expression, for getters, or the variable, for setters, is called the {\em target}. Getters return a value related to the data but do not change it. They are used to get information from a data or to convert it into another type. Setter may target a literal expression. Setters change the data and do not return anything. Setter may only target a variable. Getters and setters may have arguments. Syntax for getters without argument is as follow:
 
 \begin{lstlisting}[language=goilTemplate]
 [expression getter]
@@ -401,6 +402,105 @@ The \lstinline{int} datatype supports the following operators:
   {This setter takes one argument, \texttt{index}, which is the index of the bit to complement.  Assuming \texttt{a} contains \texttt{1} at start, \texttt{[!a complementBitAtIndex: 1]} sets \texttt{a} to \texttt{3}.}\\
 \end{longtable}
 
+\subsection{The \lstinline{char} data type}
+
+The \lstinline{char} data type supports unicode characters. A literal char is delimited by a pair of \texttt{'}:
+
+\begin{lstlisting}
+let a := 'A'
+\end{lstlisting}
+
+Literal chars support escaped special characters:
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|l}
+{\bf Escape sequence}&{\bf Corresponding character}\\
+\hline\endhead
+ {\textbackslash f}&
+  {form feed}\\
+ {\textbackslash n}&
+  {new line}\\
+ {\textbackslash r}&
+  {return}\\
+ {\textbackslash t}&
+  {horizontal tab}\\
+ {\textbackslash v}&
+  {vertical tab}\\
+ {\textbackslash\textbackslash}&
+  {backslash}\\
+ {\textbackslash '}&
+  {'}\\
+ {\textbackslash\pmzeroslash}&
+  {null character}\\
+ {\textbackslash u\textsl{nnnn}}&
+  {unicode character with code \textsl{nnnn} in hexadecimal}\\
+ {\textbackslash U\textsl{nnnnnnnn}}&
+  {unicode character with code \textsl{nnnnnnnn} in hexadecimal}\\
+\end{longtable}
+
+\subsubsection{\lstinline{char} operators}
+
+The \lstinline{char} data type supports the following operators:
+
+\paragraph{Comparison operators}~
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{2.83in}}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {!=}&
+  {bool $\leftarrow$ char != char}&
+  {Not equal}\\
+ {==}&
+  {bool $\leftarrow$ char == char}&
+  {Equal}\\
+ {>}&
+  {bool $\leftarrow$ char > char}&
+  {Greater than}\\
+ {<}&
+  {bool $\leftarrow$ char < char}&
+  {Lower than}\\
+ {>=}&
+  {bool $\leftarrow$ char >= char}&
+  {Greater or equal}\\
+ {<=}&
+  {bool $\leftarrow$ char <= char}&
+  {Lower or equal}\\
+\end{longtable}
+
+\subsubsection{\lstinline{char} getters}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|l|p{4.16in}}
+{\bf getter}&{\bf Type}&{\bf Meaning}\\
+\hline\endhead
+ {string}&
+  {string}&
+  {Returns a string representation of the char expression. \texttt{['c' string]} returns string \texttt{"c"}.}\\
+ {isAlnum}&
+  {bool}&
+  {Returns \texttt{true} if the char expression is alphanumeric, \texttt{false} otherwise}\\
+ {isAlpha}&
+  {bool}&
+  {Returns \texttt{true} if the char expression is a letter, \texttt{false} otherwise}\\
+ {isDigit}&
+  {bool}&
+  {Returns \texttt{true} if the char expression is a digit, \texttt{false} otherwise}\\
+ {isCntrl}&
+  {bool}&
+  {Returns \texttt{true} if the char expression is control character, \texttt{false} otherwise}\\
+ {isLower}&
+  {bool}&
+  {Returns \texttt{true} if the char expression is a lower case letter, \texttt{false} otherwise}\\
+ {isUpper}&
+  {bool}&
+  {Returns \texttt{true} if the char expression is an upper case letter, \texttt{false} otherwise}\\
+ {isXDigit}&
+  {bool}&
+  {Returns \texttt{true} if the char expression is an hexadecimal digit, \texttt{false} otherwise}\\
+
+\end{longtable}
+
 \subsection{The \lstinline{float} data type}
 
 The \lstinline{float} data type is the standard IEEE784 64 bits floating point number.
@@ -519,10 +619,16 @@ The \lstinline{float} data type supports the following operators:
 
 \subsection{The \texttt{\small string} data type}
 
-The \texttt{string} data type supports unicode. A literal string is delimited by a pair of \texttt{"}. Literal strings support special characters:
+The \texttt{string} data type supports unicode. A literal string is delimited by a pair of \texttt{"}.
+
+\begin{lstlisting}
+let a := "A literal string"
+\end{lstlisting}
+
+Literal strings support escaped special characters:
 
 \rowcolors{1}{white}{light-gray}
-\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l}
+\begin{longtable}{>{\ttfamily}l|l}
 {\bf Escape sequence}&{\bf Corresponding character}\\
 \hline\endhead
  {\textbackslash f}&
@@ -537,6 +643,10 @@ The \texttt{string} data type supports unicode. A literal string is delimited by
   {vertical tab}\\
  {\textbackslash\textbackslash}&
   {backslash}\\
+ {\textbackslash '}&
+  {'}\\
+ {\textbackslash "}&
+  {"}\\
  {\textbackslash\pmzeroslash}&
   {null character}\\
  {\textbackslash u\textsl{nnnn}}&
@@ -594,6 +704,12 @@ The \texttt{\small string} data type supports the following operators:
 \begin{longtable}{>{\ttfamily}l|l|p{2.68in}}
 {\bf getter}&{\bf Type}&{\bf Meaning}\\
 \hline\endhead
+ {charAtIndex}&
+  {char}&
+  {This getter takes one int argument, the \texttt{index}. It returns the character at index \texttt{index}. \texttt{["Hello" charAtIndex: 1]} returns \texttt{'e'}. If \texttt{index} is greater or equal than the length of the target, a run time error occurs.}\\
+ {indexOfChar}&
+  {char}&
+  {This getter takes one char argument, the \texttt{character} to look up. It returns the index of the first occurrence of \texttt{character} in the target. \texttt{["Hello" indexOfChar: 'l']} returns \texttt{2}. If \texttt{character} is not found in the target, \texttt{-1} is returned.}\\
  {HTMLRepresentation}&
   {string}&
   {Returns a representation of the string suitable for an HTML encoded representation. \character{\&} is encoded by \cdata{\&amp;} , \character{"} by \cdata{\&quot;} , \character{<} by \cdata{\&lt;} and \character{>} by \cdata{\&gt;} .}\\
