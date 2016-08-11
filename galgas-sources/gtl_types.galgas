@@ -98,6 +98,7 @@ map @gtlExpressionMap {
 class @library {
   @gtlFuncMap   funcMap
   @gtlGetterMap getterMap
+  @gtlSetterMap setterMap
 }
 
 getter @library functionExists
@@ -142,6 +143,29 @@ setter @library putGetter
   ?let @gtlGetter aGetter
 {
   [!?getterMap put !name !aGetter]
+}
+
+getter @library setterExists
+  ?let @string  type
+  ?let @lstring name
+  ->@bool exists
+{
+  exists = [setterMap hasKey !type + name]
+}
+
+getter @library getSetter
+  ?let @string   type
+  ?let @lstring  name
+  ->@gtlSetter   aSetter
+{
+  [setterMap get !.new { !type + name ![name location] } ?aSetter]
+}
+
+setter @library putSetter
+  ?let @lstring   name
+  ?let @gtlSetter aSetter
+{
+  [!?setterMap put !name !aSetter]
 }
 
 

@@ -1,6 +1,6 @@
 %
 
-import "getter"
+import "getterSetter"
 
 let c := [3 square]
 display c
@@ -50,3 +50,8 @@ end if
 println [c[0] hasField: "age"]
 
 println [c[3] hasField: "age"]
+
+let a := "OH"
+[!a thisIsAnA]
+display a
+

@@ -47,7 +47,7 @@ rule <gtl_start_symbol>
   !@library            lib
   !@gtlInstructionList program
 {
-  lib = .new { !.emptyMap !.emptyMap }
+  lib = .new { !.emptyMap !.emptyMap !.emptyMap }
   repeat 
   while
     <gtl_import> !?lib

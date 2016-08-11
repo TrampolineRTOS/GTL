@@ -77,6 +77,9 @@ rule <gtl_module_start_symbol>
   while
     <gtl_getter> ?@gtlGetter aGetter
     [!?lib putGetter ![aGetter typedName] !aGetter]
+  while
+    <gtl_setter> ?@gtlSetter aSetter
+    [!?lib putSetter ![aSetter typedName] !aSetter]
   end
 }
 
@@ -116,6 +119,27 @@ rule <gtl_getter>
     !arguments
     !instructionList
     !returnVariable
+    ![targetType gtlType]
+  }
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_setter>
+  !@gtlSetter aSetter
+{
+  $setter$
+  $@$ $identifier$ ?let @lstring targetType
+  $identifier$ ?let @lstring getterName
+  @location where = .here
+  <gtl_argument_list> ?@gtlArgumentList arguments
+  <gtl_instruction_list> ?let @gtlInstructionList instructionList
+  $end$ $setter$
+  
+  aSetter = .new {
+    !where
+    !getterName
+    !arguments
+    !instructionList
     ![targetType gtlType]
   }
 }

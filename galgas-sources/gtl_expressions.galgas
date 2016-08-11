@@ -24,6 +24,61 @@
 #
 #-----------------------------------------------------------------------------*
 
+#-----------------------------------------------------------------------------*
+# Wrappers on @gtlStruct because a gtlStruct is used to store the variables
+#-----------------------------------------------------------------------------*
+override getter @gtlStruct overrideMap
+  -> @gtlStruct mapOverriden
+{
+  mapOverriden = .new { !where !@gtlVarMap.mapWithMapToOverride{!value} }
+}
+
+#-----------------------------------------------------------------------------*
+override getter @gtlStruct overriddenMap
+  -> @gtlStruct overriddenMap
+{
+  overriddenMap = .new{ !where ![value overriddenMap] }
+}
+
+#-----------------------------------------------------------------------------*
+func wantGtlStruct
+  ?@gtlData  inData
+  ->@gtlData outData
+{
+  cast inData
+  case == @gtlStruct inDataStruct:
+    outData = inDataStruct
+  else
+    outData = @gtlStruct.new { !inData !.emptyMap }
+  end
+}
+
+#-----------------------------------------------------------------------------*
+func wantGtlMap
+  ?@gtlData  inData
+  ->@gtlData outData
+{
+  cast inData
+  case == @gtlMap inDataMap:
+    outData = inDataMap
+  else
+    outData = @gtlMap.new { !inData !.emptyMap }
+  end
+}
+
+#-----------------------------------------------------------------------------*
+func wantGtlList
+  ?@gtlData  inData
+  ->@gtlData outData
+{
+  cast inData
+  case == @gtlList inDataList:
+    outData = inDataList
+  else
+    outData = @gtlList.new { !inData !.emptyList }
+  end
+}
+
 #=============================================================================*
 # A @gtlVarItem is a part of a variable path.
 # For instance A::B["e"]::C::D[3] is a path. A is a struct, B is a field of

@@ -455,9 +455,13 @@ override getter @gtlUnconstructed performGetter
 override setter @gtlUnconstructed performSetter
   ?let @lstring            methodName
   ?let @gtlDataList unused arguments
-  ?let @library     unused lib
+  ?let @library            lib
 {
-  error methodName : "unknown setter '" + methodName +"' for unconstructed target"
+  if [lib setterExists !"unconstructed" !methodName] then
+    # nothing to do, an unconstructed has no data
+  else
+    error methodName : "unknown setter '" + methodName +"' for unconstructed target"
+  end
 }
 
 
@@ -609,10 +613,21 @@ override getter @gtlType performGetter
 #-----------------------------------------------------------------------------*
 override setter @gtlType performSetter
   ?let @lstring            methodName
-  ?let @gtlDataList unused arguments
-  ?let @library     unused lib
+  ?let @gtlDataList        arguments
+  ?let @library            lib
 {
-  error methodName : "unknown setter '" + methodName +"' for type target"
+  if [lib setterExists !"type" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"type" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    type = [copy as @gtlType type]
+  else
+    error methodName : "unknown setter '" + methodName +"' for type target"
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -762,11 +777,22 @@ override getter @gtlEnum performGetter
 # Performs a setter on a @gtlEnum
 #-----------------------------------------------------------------------------*
 override setter @gtlEnum performSetter
-  ?let @lstring            methodName
-  ?let @gtlDataList unused arguments
-  ?let @library     unused lib
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ?let @library     lib
 {
-  error methodName : "unknown setter '" + methodName +"' for enum target"
+  if [lib setterExists !"enum" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"enum" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    value = [copy as @gtlEnum value]
+  else
+    error methodName : "unknown setter '" + methodName +"' for enum target"
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -986,10 +1012,21 @@ override getter @gtlChar performGetter
 #-----------------------------------------------------------------------------*
 override setter @gtlChar performSetter
   ?let @lstring     methodName
-  ?let @gtlDataList unused arguments
-  ?let @library     unused lib
+  ?let @gtlDataList arguments
+  ?let @library     lib
 {
-  error methodName : "unknown setter '" + methodName +"' for char target"
+  if [lib setterExists !"char" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"char" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    value = [copy as @gtlChar value]
+  else
+    error methodName : "unknown setter '" + methodName +"' for char target"
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -1338,7 +1375,7 @@ override getter @gtlInt performGetter
 override setter @gtlInt performSetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
-  ?let @library     unused lib
+  ?let @library     lib
 {
   if    [methodName string] == "setBitAtIndex" then
     argumentsCheck(!methodName !boolIntArguments() !arguments)
@@ -1349,6 +1386,15 @@ override setter @gtlInt performSetter
     argumentsCheck(!methodName !intArgument() !arguments)
     @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     [!?value complementBitAtIndex !index]
+  elsif [lib setterExists !"int" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"int" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    value = [copy as @gtlInt value]
   else
     error methodName : "unknown setter '" + methodName +"' for int target"
   end
@@ -1614,10 +1660,21 @@ override getter @gtlFloat performGetter
 #-----------------------------------------------------------------------------*
 override setter @gtlFloat performSetter
   ?let @lstring     methodName
-  ?let @gtlDataList unused arguments
-  ?let @library     unused lib
+  ?let @gtlDataList arguments
+  ?let @library     lib
 {
-  error methodName : "unknown setter '" + methodName +"' for float target"
+  if [lib setterExists !"float" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"float" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    value = [copy as @gtlFloat value]
+  else
+    error methodName : "unknown setter '" + methodName +"' for float target"
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -2010,13 +2067,22 @@ override getter @gtlString performGetter
 override setter @gtlString performSetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
-  ?let @library     unused lib
+  ?let @library     lib
 {
   if "setCharAtIndex" == methodName then
     argumentsCheck(!methodName !charIntArguments() !arguments)
     @char charToSet = [[arguments dataAtIndex !0] as @gtlChar value]
     @uint index = [[[arguments dataAtIndex !1] as @gtlInt value] uint]
     [!?value setCharacterAtIndex !charToSet !index]
+  elsif [lib setterExists !"string" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"string" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    value = [copy as @gtlString value]
   else
     error methodName : "unknown setter '" + methodName +"' for string target"
   end
@@ -2248,10 +2314,21 @@ override getter @gtlBool performGetter
 #-----------------------------------------------------------------------------*
 override setter @gtlBool performSetter
   ?let @lstring     methodName
-  ?let @gtlDataList unused arguments
-  ?let @library     unused lib
+  ?let @gtlDataList arguments
+  ?let @library     lib
 {
-  error methodName : "unknown setter '" + methodName +"' for boolean target"
+  if [lib setterExists !"bool" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"bool" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    value = [copy as @gtlBool value]
+  else
+    error methodName : "unknown setter '" + methodName +"' for boolean target"
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -2461,11 +2538,22 @@ override getter @gtlStruct performGetter
 # Performs a setter on a @gtlStruct
 #-----------------------------------------------------------------------------*
 override setter @gtlStruct performSetter
-  ?let @lstring            methodName
-  ?let @gtlDataList unused arguments
-  ?let @library     unused lib
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ?let @library     lib
 {
-  error methodName : "unknown setter '" + methodName +"' for struct target"
+  if [lib setterExists !"struct" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"struct" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    value = [copy as @gtlStruct value]
+  else
+    error methodName : "unknown setter '" + methodName +"' for struct target"
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -2816,15 +2904,24 @@ override getter @gtlList performGetter
 # Performs a setter on a @gtlList
 #-----------------------------------------------------------------------------*
 override setter @gtlList performSetter
-  ?let @lstring            methodName
-  ?let @gtlDataList        arguments
-  ?let @library     unused lib
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ?let @library     lib
 {
   if    "insert" == methodName then
     argumentsCheck(!methodName !intAnyArguments() !arguments)
     @uint insertIndex = [[arguments dataAtIndex !0] int]
     @gtlData node = [arguments dataAtIndex !1]
     [!?value insertAtIndex !node !insertIndex]
+  elsif [lib setterExists !"list" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"list" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    value = [copy as @gtlList value]
   else
     error methodName : "unknown setter '" + methodName +"' for list target"
   end
@@ -3079,11 +3176,22 @@ override getter @gtlMap performGetter
 # Performs a setter on a @gtlMap
 #-----------------------------------------------------------------------------*
 override setter @gtlMap performSetter
-  ?let @lstring            methodName
-  ?let @gtlDataList unused arguments
-  ?let @library     unused lib
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ?let @library     lib
 {
-  error methodName : "unknown setter '" + methodName +"' for map target"
+  if [lib setterExists !"map" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"map" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    value = [copy as @gtlMap value]
+  else
+    error methodName : "unknown setter '" + methodName +"' for map target"
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -3118,58 +3226,4 @@ override getter @gtlMap hasMapItem
   ->@bool result
 {
   result = [value hasKey !name]
-}
-
-#-----------------------------------------------------------------------------*
-# Wrappers on @gtlStruct
-#-----------------------------------------------------------------------------*
-override getter @gtlStruct overrideMap
-  -> @gtlStruct mapOverriden
-{
-  mapOverriden = .new { !where !@gtlVarMap.mapWithMapToOverride{!value} }
-}
-
-override getter @gtlStruct overriddenMap
-  -> @gtlStruct overriddenMap
-{
-  overriddenMap = .new{ !where ![value overriddenMap] }
-}
-
-#-----------------------------------------------------------------------------*
-func wantGtlStruct
-  ?@gtlData  inData
-  ->@gtlData outData
-{
-  cast inData
-  case == @gtlStruct inDataStruct:
-    outData = inDataStruct
-  else
-    outData = @gtlStruct.new { !inData !.emptyMap }
-  end
-}
-
-#-----------------------------------------------------------------------------*
-func wantGtlMap
-  ?@gtlData  inData
-  ->@gtlData outData
-{
-  cast inData
-  case == @gtlMap inDataMap:
-    outData = inDataMap
-  else
-    outData = @gtlMap.new { !inData !.emptyMap }
-  end
-}
-
-#-----------------------------------------------------------------------------*
-func wantGtlList
-  ?@gtlData  inData
-  ->@gtlData outData
-{
-  cast inData
-  case == @gtlList inDataList:
-    outData = inDataList
-  else
-    outData = @gtlList.new { !inData !.emptyList }
-  end
 }

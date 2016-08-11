@@ -31,6 +31,7 @@ list @gtlArgumentList
   @lstring name
 }
 
+#-----------------------------------------------------------------------------*
 class @gtlExecutableEntity
 {
   @location           where
@@ -69,6 +70,7 @@ method @gtlExecutableEntity checkArguments
   end
 }  
 
+#-----------------------------------------------------------------------------*
 class @gtlProcedure : @gtlExecutableEntity
 {
 }
@@ -89,6 +91,7 @@ method @gtlProcedure call
   end
 }
 
+#-----------------------------------------------------------------------------*
 class @gtlFunction : @gtlExecutableEntity
 {
   @lstring returnVariable
@@ -116,6 +119,7 @@ getter @gtlFunction call
   end
 }
 
+#-----------------------------------------------------------------------------*
 class @gtlGetter : @gtlFunction
 {
   @type targetType
@@ -154,6 +158,42 @@ getter @gtlGetter typedName
   result = .new { ![targetType typeName]+[name string] !where }
 }
 
+#-----------------------------------------------------------------------------*
+class @gtlSetter : @gtlExecutableEntity
+{
+  @type targetType
+}
+
+method @gtlSetter callSetter
+  ?let @location     fromLocation
+  ?let @library      lib
+  ?!@gtlData         target
+  ?let @gtlDataList  actualArguments
+{
+  [self checkArguments
+    !fromLocation !actualArguments ?@gtlData setterVariableMap ?@bool ok]
+  if ok then
+    let @lstring selfName = .new { !"self" !fromLocation }
+    [!?setterVariableMap setStructField
+      !selfName
+      !target
+    ]
+    @gtlContext setterContext = emptyContext()
+    @string outputString = ""
+    [instructions execute !setterContext !?setterVariableMap !lib !?outputString]
+    [setterVariableMap structField !selfName ?target]
+  else
+   error fromLocation : "setter call failed"
+  end
+}
+
+getter @gtlSetter typedName
+  ->@lstring result
+{
+  result = .new { ![targetType typeName]+[name string] !where }
+}
+
+#-----------------------------------------------------------------------------*
 map @gtlProcMap
 {
   @gtlProcedure procedure
@@ -161,6 +201,7 @@ map @gtlProcMap
   search get error message "there is no procedure named '%K'"
 }
 
+#-----------------------------------------------------------------------------*
 map @gtlFuncMap
 {
   @gtlFunction function
@@ -168,6 +209,7 @@ map @gtlFuncMap
   search get error message "there is no function named '%K'"
 }
 
+#-----------------------------------------------------------------------------*
 map @gtlGetterMap
 {
   @gtlGetter theGetter
@@ -175,6 +217,15 @@ map @gtlGetterMap
   search get error message "there is no getter named '%K'"
 }
 
+#-----------------------------------------------------------------------------*
+map @gtlSetterMap
+{
+  @gtlSetter theSetter
+  insert put error message "a setter named '%K' is already declared in %L"
+  search get error message "there is no setter named '%K'"
+}
+
+#-----------------------------------------------------------------------------*
 class @gtlModule
 {
   @lstring    name
