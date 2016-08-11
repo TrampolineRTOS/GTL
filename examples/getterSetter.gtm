@@ -1,0 +1,62 @@
+%
+
+#----------------------------------------------------------------
+# getter : square of a int
+#----------------------------------------------------------------
+getter @int square () result
+  let result := self * self
+end getter
+
+#----------------------------------------------------------------
+# getter : returns a string with the first character of the
+# target
+#----------------------------------------------------------------
+getter @string firstChar () result
+  let result := [self leftSubString: 1]
+end getter
+
+#----------------------------------------------------------------
+# getter : returns the cube of target (float)
+#----------------------------------------------------------------
+getter @float cube () result
+  let result := self * self * self
+end getter
+
+#----------------------------------------------------------------
+# getter : returns true if the target has a field
+#----------------------------------------------------------------
+getter @struct hasField (field : @string) result
+  let selfAsMap := [self map]
+  let result := exists selfAsMap[field]
+end getter
+
+
+#----------------------------------------------------------------
+# getter : returns all the elements of the list are structs and
+# if all the elements of the list have a field
+#----------------------------------------------------------------
+getter @list alwaysHasField (field : @string) result
+  let result := true
+  foreach element in self do
+    let result &= [element hasField : field]
+  end foreach
+end getter
+
+#----------------------------------------------------------------
+# setter : replaces the first character of a string by and 'A'
+#----------------------------------------------------------------
+setter @string thisIsAnA ()
+  [!self setCharAtIndex: 'A', 0]
+end setter
+
+#----------------------------------------------------------------
+# getter : get a sublist where CATEGORY is equal to category
+#----------------------------------------------------------------
+getter @list isrOfCategory (category : @int) result
+  let result := @()
+  foreach item in self do
+    if item::CATEGORY == category then
+      let result += item
+    end if
+  end foreach
+end getter

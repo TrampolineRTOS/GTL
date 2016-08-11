@@ -1,0 +1,9 @@
+%
+
+let a := $toto
+display a
+
+let b := $_tata
+display b
+
+variables

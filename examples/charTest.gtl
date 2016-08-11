@@ -1,0 +1,34 @@
+%
+
+let a := 'a'
+display a
+
+let a := a == a
+display a
+
+let a := ["Hello" charAtIndex: 1]
+display a
+
+let b := ["Hello" containsChar: 'l']
+display b
+
+let b := ["Hello" containsChar: 'a']
+display b
+
+let b := ["Hello" containsCharInRange: 'a', 'e']
+display b
+
+let b := ["Hello" containsCharInRange: 'x', 'z']
+display b
+
+let b := ["Hello" indexOfChar: 'l']
+display b
+
+let b := ["Hello how are you" indexOfCharInRange: 'o', 'y']
+display b
+
+let c := "Hello I am fine"
+[!c setCharAtIndex: '_', 5]
+[!c setCharAtIndex: '_', 7]
+[!c setCharAtIndex: '_', 10]
+display c

@@ -55,3 +55,27 @@ let a := "OH"
 [!a thisIsAnA]
 display a
 
+let isrList := @(
+  @{
+    CATEGORY: 1,
+    NAME: "isr1"
+  },
+  @{
+    CATEGORY: 2,
+    NAME: "isr2"
+  },
+  @{
+    CATEGORY: 2,
+    NAME: "isr3"
+  },
+  @{
+    CATEGORY: 1,
+    NAME: "isr4"
+  }
+)
+
+let isr1List := [isrList isrOfCategory: 1]
+display isr1List
+
+let isr2List := [isrList isrOfCategory: 2]
+display isr2List
