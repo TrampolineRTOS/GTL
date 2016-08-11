@@ -37,6 +37,7 @@ rule <gtl_variable_or_here>
   !@bool hereInstead
 
 rule <gtl_import>
+  ?@gtlContext context
   ?!@library lib 
 
 rule <gtl_simple_instruction>
@@ -44,13 +45,14 @@ rule <gtl_simple_instruction>
 
 #-----------------------------------------------------------------------------*
 rule <gtl_start_symbol>
+  ?@gtlContext         context
   !@library            lib
   !@gtlInstructionList program
 {
   lib = .new { !.emptyMap !.emptyMap !.emptyMap }
   repeat 
   while
-    <gtl_import> !?lib
+    <gtl_import> !context !?lib
   end
   <gtl_template_instruction_list> ?program
 }

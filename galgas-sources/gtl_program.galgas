@@ -7,13 +7,19 @@ case . "gtl"
 message "a source text file with the .gtl extension"
 grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
 {
+  @gtlContext context = emptyContext()
+  
+  @string sourceFileDirectory =
+    [[inSourceFile string] stringByDeletingLastPathComponent]
+  
+  [!?context addModulePath !sourceFileDirectory !"../modules"]
+    
   grammar gtl_grammar in inSourceFile
+    !context
     ?@library            lib
     ?@gtlInstructionList program
   
-  @gtlContext context = emptyContext()
   @gtlData vars = @gtlStruct.new { !.here !.emptyMap }
-
   @string result = ""
   
   [program execute !context !?vars !lib !?result]

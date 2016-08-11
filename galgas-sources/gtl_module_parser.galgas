@@ -33,6 +33,7 @@ rule <gtl_simple_instruction>
   !@gtlInstruction instruction
 
 rule <gtl_import>
+  ?@gtlContext context
   ?!@library lib 
 
 #-----------------------------------------------------------------------------*
@@ -63,11 +64,12 @@ rule <gtl_instruction_list>
 
 #-----------------------------------------------------------------------------*
 rule <gtl_module_start_symbol>
+  ?@gtlContext context
   ?!@library lib
 {
   repeat
   while
-    <gtl_import> !?lib
+    <gtl_import> !context !?lib
   end
 
   repeat

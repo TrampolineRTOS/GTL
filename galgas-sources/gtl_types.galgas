@@ -31,12 +31,33 @@ class @gtlContext {
   @string prefix %setter
   @string path
   @string templateDirectory
+  @stringlist importPath
 }
 
 func emptyContext
   ->@gtlContext context
 {
-  context = .new { !"" !"" !"" }
+  context = .new { !"" !"" !"" !.emptyList}
+}
+
+setter @gtlContext addModulePath
+  ?let @string rootPath
+  ?let @string modulePath
+{
+  @string normalizedModulePath =
+    [[modulePath absolutePathFromPath !rootPath] stringByStandardizingPath]
+  importPath += !normalizedModulePath
+}
+
+getter @string stringByAppendingPath
+  ?let @string pathToAppend
+  ->@string result
+{
+  if [self lastCharacter] == '/' then
+    result = self + pathToAppend
+  else
+    result = self + '/' + pathToAppend
+  end
 }
 
 #=============================================================================*
