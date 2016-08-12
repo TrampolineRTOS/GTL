@@ -40,7 +40,7 @@ getter @gtlInstruction location
 abstract method @gtlInstruction execute
   ? let @gtlContext context
   ?!@gtlData        vars
-  ? let @library    lib
+  ?!@library        lib
   ?!@string         outputString
 
 #=============================================================================*
@@ -53,12 +53,12 @@ list @gtlInstructionList {
 method @gtlInstructionList execute
   ?let @gtlContext context
   ?!@gtlData       vars
-  ? let @library   lib
+  ?!@library       lib
   ?!@string        outputString
 {
   for () in self do
     if @uint.errorCount == 0 then
-      [instruction execute !context !?vars !lib !?outputString]
+      [instruction execute !context !?vars !?lib !?outputString]
       if @uint.errorCount != 0 then
         error instruction : "runtime error"
       end
@@ -74,10 +74,10 @@ class @gtlLetUnconstructedInstruction : @gtlInstruction {
 }
 
 override method @gtlLetUnconstructedInstruction execute
-  ?let @gtlContext unused context
-  ?!@gtlData              vars
-  ?let @library           lib
-  ?!@string        unused outputString
+  ? let @gtlContext unused context
+  ?!@gtlData               vars
+  ?!@library               lib
+  ?!@string         unused outputString
 { 
   [lValue set !?vars !lib !@gtlUnconstructed.new { ![[lValue itemAtIndex !0] location] } ]
 }
@@ -97,7 +97,7 @@ class @gtlLetInstruction           : @gtlAssignInstruction {}
 override method @gtlLetInstruction execute
   ?let @gtlContext unused context
   ?!@gtlData              vars
-  ?let @library           lib
+  ?!@library              lib
   ?!@string        unused outputString
 { 
   [lValue set !?vars !lib ![rValue eval !vars !lib]]
@@ -111,7 +111,7 @@ class @gtlLetAddInstruction        : @gtlAssignInstruction {}
 override method @gtlLetAddInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 { 
   [lValue set
@@ -130,7 +130,7 @@ class @gtlLetSubstractInstruction  : @gtlAssignInstruction {}
 override method @gtlLetSubstractInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 { 
   [lValue set
@@ -149,7 +149,7 @@ class @gtlLetMultiplyInstruction   : @gtlAssignInstruction {}
 override method @gtlLetMultiplyInstruction execute
   ? let@gtlContext unused context
   ?!@gtlData              vars
-  ? let @library          lib
+  ?!@library              lib
   ?!@string        unused outputString
 { 
   [lValue set
@@ -168,7 +168,7 @@ class @gtlLetDivideInstruction     : @gtlAssignInstruction {}
 override method @gtlLetDivideInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 { 
   [lValue set
@@ -187,7 +187,7 @@ class @gtlLetModuloInstruction     : @gtlAssignInstruction {}
 override method @gtlLetModuloInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 { 
   [lValue set
@@ -206,7 +206,7 @@ class @gtlLetShiftLeftInstruction  : @gtlAssignInstruction {}
 override method @gtlLetShiftLeftInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 { 
   [lValue set
@@ -225,7 +225,7 @@ class @gtlLetShiftRightInstruction : @gtlAssignInstruction {}
 override method @gtlLetShiftRightInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 { 
   [lValue set
@@ -244,7 +244,7 @@ class @gtlLetAndInstruction        : @gtlAssignInstruction {}
 override method @gtlLetAndInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 { 
   [lValue set
@@ -263,7 +263,7 @@ class @gtlLetOrInstruction         : @gtlAssignInstruction {}
 override method @gtlLetOrInstruction execute 
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 {  
   [lValue set
@@ -282,7 +282,7 @@ class @gtlLetXorInstruction        : @gtlAssignInstruction {}
 override method @gtlLetXorInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 { 
   [lValue set
@@ -301,7 +301,7 @@ class @gtlUnletInstruction : @gtlLetUnconstructedInstruction {}
 override method @gtlUnletInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 { 
   [lValue delete
@@ -320,7 +320,7 @@ class @gtlTemplateStringInstruction : @gtlInstruction {
 override method @gtlTemplateStringInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData        unused vars
-  ? let @library    unused lib
+  ?!@library        unused lib
   ?!@string                outputString
 {
   outputString += value
@@ -336,7 +336,7 @@ class @gtlEmitInstruction : @gtlInstruction {
 override method @gtlEmitInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string                outputString
 { 
   outputString += [[rValue eval !vars !lib] string]
@@ -354,7 +354,7 @@ class @gtlWriteToInstruction : @gtlInstruction {
 override method @gtlWriteToInstruction execute
   ? let @gtlContext        context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 { 
   @string fullFileName = [[fileNameExpression eval !vars !lib] string]
@@ -375,7 +375,7 @@ override method @gtlWriteToInstruction execute
     !0
   ]
   if (@uint.errorCount == 0) then
-    [instructions execute !context !?varsCopy !lib !?result]
+    [instructions execute !context !?varsCopy !?lib !?result]
     if (@uint.errorCount == 0) then
       if isExecutable then
         @string directory = [fullFileName stringByDeletingLastPathComponent]
@@ -403,10 +403,11 @@ class @gtlTemplateInstruction : @gtlInstruction {
 override method @gtlTemplateInstruction execute
   ? let @gtlContext context
   ?!@gtlData        vars
-  ? let @library    lib
-  ?!@string  unused outputString
-{
+  ?!@library        lib
+  ?!@string         outputString
+{  
   @gtlContext newContext = context
+
   if [prefix string] != "" then
     [!?newContext setPrefix ![prefix string]]
   end
@@ -414,38 +415,38 @@ override method @gtlTemplateInstruction execute
   @lstring templateFileName =
     [[fileName eval !vars !lib] as @gtlString lstring]
   
+  @gtlData localVars
+  [!?newContext setInputVars !.emptyList]
   if not isGlobal then
     # build the variable map for the template
-    @gtlData localVars = @gtlStruct.new { !where !.emptyMap }
+    localVars = @gtlStruct.new { !where !.emptyMap }
     for (argumentExpression) in arguments do
       @gtlData evaluedArg = [argumentExpression eval !vars !lib]
       [!?newContext addInputVariable !evaluedArg]
     end
-#    gtlInvocation(
-#      !templateFileName
-#      !newContext
-#      !ifExists == false
-#      !false
-#      !vars
-#      !?outputString
-#      ?let @bool found
-#    )      
   else
-#  gtlInvocation(
-#    !templateFileName
-#    !newContext
-#    !ifExists == false
-#    !false
-#    !vars
-#    !?outputString
-#    ?let @bool found
-#  )
-#  if not found & ifExists then
-#    @gtlStruct localMap = .mapWithMapToOverride{!vars}
-#    [instructionsIfNotFound execute !context !?localMap !funcs !?outputString]
-#    vars = [localMap overriddenMap]
-#  end
+    localVars = vars
   end
+  
+  [!?lib getTemplate
+    !newContext
+    !templateFileName
+    !ifExists
+    !?lib
+    ?@bool        found
+    ?@gtlTemplate result
+  ]
+  
+  if found then
+    log result
+    [result execute !newContext !?localVars !?lib !?outputString]
+  else
+    if ifExists then
+      @gtlData localMap = [vars overrideMap]
+      [instructionsIfNotFound execute !context !?localMap !?lib !?outputString]
+      vars = [localMap overriddenMap]
+    end
+  end 
 }
 
 #-----------------------------------------------------------------------------*
@@ -459,7 +460,7 @@ class @gtlGetColumnInstruction : @gtlInstruction {
 override method @gtlGetColumnInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string                outputString
 {
   @string value = ""
@@ -492,7 +493,7 @@ class @gtlIfStatementInstruction : @gtlInstruction {
 override method @gtlIfStatementInstruction execute
   ? let @gtlContext context
   ?!@gtlData        vars
-  ? let @library    lib
+  ?!@library        lib
   ?!@string         outputString
 {
   @gtlData localMap = [vars overrideMap]
@@ -503,7 +504,7 @@ override method @gtlIfStatementInstruction execute
     if dataCondition is == @gtlBool then
       @bool boolCondition = [dataCondition as @gtlBool value]
       if boolCondition then
-        [instructionList execute !context !?localMap !lib !?outputString]
+        [instructionList execute !context !?localMap !?lib !?outputString]
         noConditionMatching = false
       end
     else
@@ -511,7 +512,7 @@ override method @gtlIfStatementInstruction execute
     end
   end
   if noConditionMatching then
-    [elseList execute !context !?localMap !lib !?outputString]
+    [elseList execute !context !?localMap !?lib !?outputString]
   end
 
   vars = [localMap overriddenMap]
@@ -534,31 +535,31 @@ class @gtlForeachStatementInstruction : @gtlInstruction {
 method @gtlForeachStatementInstruction iterateOnMap
   ? let @gtlContext     context
   ?!@gtlData            vars
-  ? let @library        lib
+  ?!@library            lib
   ?!@string             outputString
   ? let @gtlMap         iterableMap
 {
   for () in [iterableMap value]
   before
-    [beforeList execute !context !?vars !lib !?outputString]
+    [beforeList execute !context !?vars !?lib !?outputString]
   do (index)
     [!?vars setStructField !variableName !value]
     [!?vars setStructField
       !keyName !@gtlString.new{!where ![lkey string]}]
     [!?vars setStructField
       !indexName !@gtlInt.new{!where ![index bigint]}]
-    [doList execute !context !?vars !lib !?outputString]
+    [doList execute !context !?vars !?lib !?outputString]
   between
-    [betweenList execute !context !?vars !lib !?outputString]
+    [betweenList execute !context !?vars !?lib !?outputString]
   after
-    [afterList execute !context !?vars !lib !?outputString]
+    [afterList execute !context !?vars !?lib !?outputString]
   end
 }
 
 method @gtlForeachStatementInstruction iterateOnList
   ? let @gtlContext context
   ?!@gtlData        vars
-  ? let @library    lib
+  ?!@library        lib
   ?!@string         outputString
   ? let @gtlList    iterableList
 {
@@ -567,32 +568,32 @@ method @gtlForeachStatementInstruction iterateOnList
   end
   for () in [iterableList value]
   before
-    [beforeList execute !context !?vars !lib !?outputString]
+    [beforeList execute !context !?vars !?lib !?outputString]
   do (index)
     [!?vars setStructField !variableName !value]
     [!?vars setStructField
       !indexName !@gtlInt.new{!where ![index bigint]}]
-    [doList execute !context !?vars !lib !?outputString]
+    [doList execute !context !?vars !?lib !?outputString]
   between
-    [betweenList execute !context !?vars !lib !?outputString]
+    [betweenList execute !context !?vars !?lib !?outputString]
   after
-    [afterList execute !context !?vars !lib !?outputString]
+    [afterList execute !context !?vars !?lib !?outputString]
   end
 }
 
 override method @gtlForeachStatementInstruction execute
   ? let @gtlContext context
   ?!@gtlData        vars
-  ? let @library    lib
+  ?!@library        lib
   ?!@string         outputString
 {
   @gtlData localMap = [vars overrideMap]
   @gtlData iterableData = [iterable eval !localMap !lib]
   cast iterableData
   case == @gtlMap iterableMap:
-    [self iterateOnMap !context !?localMap !lib !?outputString !iterableMap]
+    [self iterateOnMap !context !?localMap !?lib !?outputString !iterableMap]
   case == @gtlList iterableList:
-    [self iterateOnList !context !?localMap !lib !?outputString !iterableList]
+    [self iterateOnList !context !?localMap !?lib !?outputString !iterableList]
   else
     error [iterable location] : "Map or List expected"
   end 
@@ -612,7 +613,7 @@ class @gtlForStatementInstruction : @gtlInstruction {
 override method @gtlForStatementInstruction execute
   ? let @gtlContext context
   ?!@gtlData        vars
-  ? let @library    lib
+  ?!@library        lib
   ?!@string         outputString
 {
   @lstring indexName = .new{!"INDEX" !where}
@@ -622,9 +623,9 @@ override method @gtlForStatementInstruction execute
     @gtlData value = [expression eval !localMap !lib]
     [!?localMap setStructField !identifier !value]
     [!?localMap setStructField !indexName !@gtlInt.new{!where ![index bigint]}]
-    [doList execute !context !?localMap !lib !?outputString]
+    [doList execute !context !?localMap !?lib !?outputString]
   between
-    [betweenList execute !context !?localMap !lib !?outputString]
+    [betweenList execute !context !?localMap !?lib !?outputString]
   end
   vars = [localMap overriddenMap]
 }
@@ -647,7 +648,7 @@ class @gtlLoopStatementInstruction : @gtlInstruction {
 override method @gtlLoopStatementInstruction execute
   ? let @gtlContext     context
   ?!@gtlData            vars
-  ? let @library        lib
+  ?!@library            lib
   ?!@string             outputString
 {
   @gtlData localMap = [vars overrideMap]
@@ -675,17 +676,17 @@ override method @gtlLoopStatementInstruction execute
   @bigint direction = 1_G
   if stepVal < 0_G then direction = -1_G end
   if (stopVal - startVal) * direction >= 0_G then
-    [beforeList execute !context !?localMap !lib !?outputString]
+    [beforeList execute !context !?localMap !?lib !?outputString]
     @uint count = [(stopVal - startVal) * direction + 1LS uint]
     loop (count)
       [!?localMap setStructField
         !identifier !@gtlInt.new{![identifier location] !startVal}]
-      [doList execute !context !?localMap !lib !?outputString]
+      [doList execute !context !?localMap !?lib !?outputString]
       startVal = startVal + stepVal
     while (stopVal - startVal) * direction >= 0_G do
-      [betweenList execute !context !?localMap !lib !?outputString]
+      [betweenList execute !context !?localMap !?lib !?outputString]
     end
-    [afterList execute !context !?localMap !lib !?outputString]
+    [afterList execute !context !?localMap !?lib !?outputString]
   end
   vars = [localMap overriddenMap]
 }
@@ -703,7 +704,7 @@ class @gtlRepeatStatementInstruction : @gtlInstruction {
 override method @gtlRepeatStatementInstruction execute
   ? let @gtlContext context
   ?!@gtlData        vars
-  ? let @library    lib
+  ?!@library        lib
   ?!@string         outputString
 {
   @gtlData localMap = [vars overrideMap]
@@ -718,7 +719,7 @@ override method @gtlRepeatStatementInstruction execute
   end
   
   loop (limitVal)
-    [continueList execute !context !?localMap !lib !?outputString]
+    [continueList execute !context !?localMap !?lib !?outputString]
     @gtlData conditionData = [condition eval !localMap !lib]
     if [conditionData dynamicType] == `@gtlBool then
       boolCondition = [conditionData as @gtlBool value] 
@@ -726,7 +727,7 @@ override method @gtlRepeatStatementInstruction execute
       error conditionData : "bool expected"
     end
   while boolCondition do
-    [doList execute !context !?localMap !lib !?outputString]
+    [doList execute !context !?localMap !?lib !?outputString]
   end
   vars = [localMap overriddenMap]
 }
@@ -743,7 +744,7 @@ class @gtlErrorStatementInstruction : @gtlInstruction {
 override method @gtlErrorStatementInstruction execute
   ? let@gtlContext unused context
   ?!@gtlData              vars
-  ? let @library          lib
+  ?!@library              lib
   ?!@string        unused outputString
 {
   @location errorLocation
@@ -772,7 +773,7 @@ class @gtlWarningStatementInstruction : @gtlInstruction {
 override method @gtlWarningStatementInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 {
   @location warningLocation
@@ -800,7 +801,7 @@ class @gtlPrintStatementInstruction : @gtlInstruction {
 override method @gtlPrintStatementInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 {
   @string messageToPrintString =
@@ -819,7 +820,7 @@ class @gtlDisplayStatementInstruction : @gtlInstruction {
 override method @gtlDisplayStatementInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 {
   @gtlData variable = [variablePath get !vars !lib]
@@ -891,7 +892,7 @@ method @gtlAbstractSortInstruction sort
 override method @gtlAbstractSortInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 {
   @gtlData variable = [variablePath get !vars !lib]
@@ -985,7 +986,7 @@ class @gtlTabStatementInstruction : @gtlInstruction {
 override method @gtlTabStatementInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 {
   @gtlData tabValueData = [tabValue eval !vars !lib]
@@ -1001,7 +1002,7 @@ class @gtlVariablesInstruction : @gtlInstruction {}
 override method @gtlVariablesInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library    unused lib
+  ?!@library        unused lib
   ?!@string         unused outputString
 {
   @string delimitor = @string.stringWithSequenceOfCharacters{!'=' !79 } + "\n"
@@ -1027,7 +1028,96 @@ override method @gtlVariablesInstruction execute
 }
 
 #-----------------------------------------------------------------------------*
-# template instructions : [target setter : <argument list>]
+# template instructions : libraries
+#-----------------------------------------------------------------------------*
+class @gtlLibrariesInstruction : @gtlInstruction {}
+
+override method @gtlLibrariesInstruction execute
+  ? let @gtlContext unused context
+  ?!@gtlData        unused vars
+  ?!@library               lib
+  ?!@string         unused outputString
+{
+  @string delimitor = @string.stringWithSequenceOfCharacters{!'=' !79 } + "\n"
+  @string varDelim  = @string.stringWithSequenceOfCharacters{!'-' !79 } + "\n"
+  @string separator = @string.stringWithSequenceOfCharacters{!'=' !17 }
+  message separator + " Libraries "
+        + separator + "= Displayed from "
+        + separator + "\n"
+  message [where locationString] + "\n"
+  message delimitor
+  message " Functions \n"
+  message varDelim
+  @uint lineSize = 0
+  for (name *) in [lib funcMap] do
+    if lineSize + [[name string] length] > 75 then
+      lineSize = 0
+      message "\n"
+    end
+    message [name string]
+    lineSize += [[name string] length]
+  between
+    message ", "
+    lineSize += 2
+  after
+    message "\n"
+  end
+  message delimitor
+  message " Getters \n"
+  message varDelim
+  lineSize = 0
+  for (name *) in [lib getterMap] do
+    if lineSize + [[name string] length] > 75 then
+      lineSize = 0
+      message "\n"
+    end
+    message [name string]
+    lineSize += [[name string] length]
+  between
+    message ", "
+    lineSize += 2
+  after
+    message "\n"
+  end
+  message delimitor
+  message " Setters \n"
+  message varDelim
+  lineSize = 0
+  for (name *) in [lib setterMap] do
+    if lineSize + [[name string] length] > 75 then
+      lineSize = 0
+      message "\n"
+    end
+    message [name string]
+    lineSize += [[name string] length]
+  between
+    message ", "
+    lineSize += 2
+  after
+    message "\n"
+  end
+  message delimitor
+  message " Templates \n"
+  message varDelim
+  lineSize = 0
+  for (name *) in [lib templateMap] do
+    if lineSize + [[name string] length] > 75 then
+      lineSize = 0
+      message "\n"
+    end
+    message [name string]
+    lineSize += [[name string] length]
+  between
+    message ", "
+    lineSize += 2
+  after
+    message "\n"
+  end
+  message delimitor
+}
+
+#-----------------------------------------------------------------------------*
+# template instructions : [!target setter : <argument list>]
 #-----------------------------------------------------------------------------*
 class @gtlSetterCallInstruction : @gtlInstruction {
   @gtlVarPath        target
@@ -1038,7 +1128,7 @@ class @gtlSetterCallInstruction : @gtlInstruction {
 override method @gtlSetterCallInstruction execute
   ? let @gtlContext unused context
   ?!@gtlData               vars
-  ? let @library           lib
+  ?!@library               lib
   ?!@string         unused outputString
 {
   @gtlDataList dataArguments = .emptyList

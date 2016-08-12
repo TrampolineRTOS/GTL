@@ -45,11 +45,10 @@ rule <gtl_simple_instruction>
 
 #-----------------------------------------------------------------------------*
 rule <gtl_start_symbol>
-  ?@gtlContext         context
-  !@library            lib
-  !@gtlInstructionList program
+  ? @gtlContext         context
+  ?!@library            lib
+  ! @gtlInstructionList program
 {
-  lib = .new { !.emptyMap !.emptyMap !.emptyMap !.emptySet }
   repeat 
   while
     <gtl_import> !context !?lib
@@ -62,28 +61,18 @@ rule <gtl_template_instruction_list> !@gtlInstructionList instructionList
 {
   instructionList = .emptyList
 
-  @string templateString = @string.retrieveAndResetTemplateString
-  if templateString != "" then
-    instructionList +=
-      !@gtlTemplateStringInstruction.new{ !.here !templateString }
-  end
   repeat
+    @string templateString = @string.retrieveAndResetTemplateString
+    if templateString != "" then
+      instructionList +=
+        !@gtlTemplateStringInstruction.new{ !.here !templateString }
+    end
   while
     <gtl_template_instruction> ?@gtlInstruction instruction
     instructionList += !instruction
-    @string templateString = @string.retrieveAndResetTemplateString
-    if templateString != "" then
-      instructionList +=
-        !@gtlTemplateStringInstruction.new{ !.here !templateString }
-    end
   while
     <gtl_simple_instruction> ?@gtlInstruction instruction
     instructionList += !instruction
-    @string templateString = @string.retrieveAndResetTemplateString
-    if templateString != "" then
-      instructionList +=
-        !@gtlTemplateStringInstruction.new{ !.here !templateString }
-    end
   end
 }
 

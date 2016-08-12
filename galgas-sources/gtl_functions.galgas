@@ -24,6 +24,10 @@
 #
 #-----------------------------------------------------------------------------*
 
+#-----------------------------------------------------------------------------*
+# For compatibility purpose with previous version : returns "true" or "false"
+# string according to the bool argument.
+#-----------------------------------------------------------------------------*
 func trueFalse ?let @bool inBool ->@string result
 {
   if inBool then
@@ -33,6 +37,10 @@ func trueFalse ?let @bool inBool ->@string result
   end
 }
 
+#-----------------------------------------------------------------------------*
+# For compatibility purpose with previous version : returns "True" or "False"
+# string according to the bool argument.
+#-----------------------------------------------------------------------------*
 func TrueFalse ?let @bool inBool ->@string result
 {
   if inBool then
@@ -42,6 +50,10 @@ func TrueFalse ?let @bool inBool ->@string result
   end
 }
 
+#-----------------------------------------------------------------------------*
+# For compatibility purpose with previous version : returns "YES" or "NO"
+# string according to the bool argument.
+#-----------------------------------------------------------------------------*
 func yesNo ?let @bool inBool ->@string result
 {
   if inBool then
@@ -51,6 +63,10 @@ func yesNo ?let @bool inBool ->@string result
   end
 }
 
+#-----------------------------------------------------------------------------*
+# For compatibility purpose with previous version : returns "TRUE" or "FALSE"
+# string according to the bool argument.
+#-----------------------------------------------------------------------------*
 func TRUEFALSE ?let @bool inBool ->@string result
 {
   if inBool then
@@ -60,6 +76,9 @@ func TRUEFALSE ?let @bool inBool ->@string result
   end
 }
 
+#-----------------------------------------------------------------------------*
+# returns a list with inSize elements. Each element is unconstructed
+#-----------------------------------------------------------------------------*
 func listOfSize ?@bigint inSize -> @list result
 {
   result = .emptyList
@@ -70,21 +89,78 @@ func listOfSize ?@bigint inSize -> @list result
   end
 }
 
+#-----------------------------------------------------------------------------*
+# Returns the version string.
+#-----------------------------------------------------------------------------*
 func version -> @string result
 {
   result = @application.projectVersionString
 }
 
+#-----------------------------------------------------------------------------*
+# Returns the major version as int.
+#-----------------------------------------------------------------------------*
+func majorVersion -> @bigint result
+{
+  @string version = @application.projectVersionString
+  @stringlist versionComponents = [version componentsSeparatedByString !"."]
+  if [versionComponents length] > 0 then
+    result =
+      [[[versionComponents mValueAtIndex !0] decimalUnsignedNumber] bigint]
+  else
+    result = 0_G
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the minor version as int.
+#-----------------------------------------------------------------------------*
+func minorVersion -> @bigint result
+{
+  @string version = @application.projectVersionString
+  @stringlist versionComponents = [version componentsSeparatedByString !"."]
+  if [versionComponents length] > 1 then
+    result =
+      [[[versionComponents mValueAtIndex !1] decimalUnsignedNumber] bigint]
+  else
+    result = 0_G
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the revision as int.
+#-----------------------------------------------------------------------------*
+func revision -> @bigint result
+{
+  @string version = @application.projectVersionString
+  @stringlist versionComponents = [version componentsSeparatedByString !"."]
+  if [versionComponents length] > 2 then
+    result =
+      [[[versionComponents mValueAtIndex !2] decimalUnsignedNumber] bigint]
+  else
+    result = 0_G
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the current directory.
+#-----------------------------------------------------------------------------*
 func currentDir -> @string result
 {
   result = @string.stringWithCurrentDirectory
 }
 
+#-----------------------------------------------------------------------------*
+# Returns the home directory.
+#-----------------------------------------------------------------------------*
 func homeDir -> @string result
 {
   result = @string.homeDirectory
 }
 
+#-----------------------------------------------------------------------------*
+# Returns the current date and time as GMT
+#-----------------------------------------------------------------------------*
 func currentDateTime -> @string result
 {
   result = @string.stringWithCurrentDateTime

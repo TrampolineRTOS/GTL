@@ -8,6 +8,7 @@ message "a source text file with the .gtl extension"
 grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
 {
   @gtlContext context = emptyContext()
+  @library lib = emptyLib()
   
   @string sourceFileDirectory =
     [[inSourceFile string] stringByDeletingLastPathComponent]
@@ -16,13 +17,13 @@ grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
     
   grammar gtl_grammar in inSourceFile
     !context
-    ?@library            lib
+    !?lib
     ?@gtlInstructionList program
   
   @gtlData vars = @gtlStruct.new { !.here !.emptyMap }
   @string result = ""
   
-  [program execute !context !?vars !lib !?result]
+  [program execute !context !?vars !?lib !?result]
   
   message "================================================================\n"
   message result

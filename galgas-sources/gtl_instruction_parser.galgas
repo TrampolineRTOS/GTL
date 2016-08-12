@@ -215,6 +215,14 @@ rule <gtl_simple_instruction>
 rule <gtl_simple_instruction>
   !@gtlInstruction instruction
 {
+  $libraries$ @location where = .here
+  instruction = @gtlLibrariesInstruction.new { !where }
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_simple_instruction>
+  !@gtlInstruction instruction
+{
   $[!$
   <gtl_variable> ?@gtlVarPath target
   $identifier$ ?let @lstring setterName

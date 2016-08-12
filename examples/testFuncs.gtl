@@ -10,6 +10,12 @@ println TRUEFALSE(false)
 
 println version()
 
+println majorVersion()
+
+println minorVersion()
+
+println revision()
+
 println currentDateTime()
 
 println homeDir()

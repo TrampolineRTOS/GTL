@@ -77,7 +77,7 @@ class @gtlProcedure : @gtlExecutableEntity
 
 method @gtlProcedure call
   ? let @gtlContext  context
-  ? let @library     lib
+  ?!@library         lib
   ?!@string          outputString
   ? let @location    fromLocation
   ? let @gtlDataList actualArguments
@@ -85,7 +85,7 @@ method @gtlProcedure call
   [self checkArguments
     !fromLocation !actualArguments ?@gtlData vars ?@bool ok]
   if ok then
-    [instructions execute !context !?vars !lib !?outputString]
+    [instructions execute !context !?vars !?lib !?outputString]
   else
     error fromLocation : "procedure call failed"
   end
@@ -99,7 +99,7 @@ class @gtlFunction : @gtlExecutableEntity
 
 getter @gtlFunction call
   ? let @location    fromLocation
-  ? let @library     lib
+  ?     @library     lib
   ? let @gtlDataList actualArguments
   ->@gtlData        result
 {
@@ -112,7 +112,7 @@ getter @gtlFunction call
   if ok then
     @gtlContext functionContext = emptyContext()
     @string outputString = ""
-    [instructions execute !functionContext !?funcVariableMap !lib !?outputString]
+    [instructions execute !functionContext !?funcVariableMap !?lib !?outputString]
     result = [funcVariableMap resultField !returnVariable]
   else
    error fromLocation : "function call failed" : result
@@ -127,7 +127,7 @@ class @gtlGetter : @gtlFunction
 
 getter @gtlGetter callGetter
   ?let @location     fromLocation
-  ?let @library      lib
+  ?    @library      lib
   ?let @gtlData      target
   ?let @gtlDataList  actualArguments
   ->@gtlData         result
@@ -145,7 +145,7 @@ getter @gtlGetter callGetter
     ]
     @gtlContext getterContext = emptyContext()
     @string outputString = ""
-    [instructions execute !getterContext !?getterVariableMap !lib !?outputString]
+    [instructions execute !getterContext !?getterVariableMap !?lib !?outputString]
     result = [getterVariableMap resultField !returnVariable]
   else
    error fromLocation : "getter call failed" : result
@@ -166,8 +166,8 @@ class @gtlSetter : @gtlExecutableEntity
 
 method @gtlSetter callSetter
   ?let @location     fromLocation
-  ?let @library      lib
-  ?!@gtlData         target
+  ?    @library      lib
+  ?!   @gtlData      target
   ?let @gtlDataList  actualArguments
 {
   [self checkArguments
@@ -180,7 +180,7 @@ method @gtlSetter callSetter
     ]
     @gtlContext setterContext = emptyContext()
     @string outputString = ""
-    [instructions execute !setterContext !?setterVariableMap !lib !?outputString]
+    [instructions execute !setterContext !?setterVariableMap !?lib !?outputString]
     [setterVariableMap structField !selfName ?target]
   else
    error fromLocation : "setter call failed"

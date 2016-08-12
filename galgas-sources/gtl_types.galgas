@@ -28,17 +28,32 @@
 # @gtlContext is used to store the execution context of a template
 #-----------------------------------------------------------------------------*
 class @gtlContext {
-  @string prefix %setter
-  @string path
-  @string templateDirectory
-  @stringlist importPath
-  @gtlDataList inputVars
+  @string      prefix %setter
+  @string      path
+  @string      templateDirectory
+  @function    templatePathHelper
+  @stringlist  importPath
+  @gtlDataList inputVars %setter
+}
+
+func voidFunc
+  ?@lstring path
+  ->@lstring result
+{
+  result = .new { ![path string] + ".gtl" ![path location] }
 }
 
 func emptyContext
   ->@gtlContext context
 {
-  context = .new { !"" !"" !"" !.emptyList !.emptyList}
+  context = .new {
+    !""
+    !""
+    !""
+    !.functionWithName { !"voidFunc" }
+    !.emptyList
+    !.emptyList
+  }
 }
 
 setter @gtlContext addModulePath
@@ -116,18 +131,84 @@ setter @gtlVarMap replaceOrCreateAtLevel
 map @gtlExpressionMap {
   @gtlExpression expression
   insert put error message "a field named '%K' is already declared in %L"
-  search get error message "there is no or field named '%K'"
+  search get error message "there is no field named '%K'"
   remove del error message "there is no field named '%K' to delete"
+}
+
+#=============================================================================*
+# templates are cached in a @gtlTemplateMap in order to retrieve them without
+# parsing more than once
+#-----------------------------------------------------------------------------*
+class @gtlTemplate {
+  @string             path
+  @gtlInstructionList program
+}
+
+method @gtlTemplate execute
+  ? let @gtlContext context
+  ?!@gtlData        vars
+  ?!@library        lib
+  ?!@string         outputString
+{
+  [program execute !context !?vars !?lib !?outputString]
+}
+
+map @gtlTemplateMap {
+  @gtlTemplate aTemplate
+  insert put error message "a template at path '%K' is already declared in %L"
+  search get error message "there is no template at path '%K'"
+}
+
+setter @gtlTemplateMap getTemplate
+  ? let @gtlContext  context
+  ? @lstring         path
+  ? @bool            ifExists
+  ?!@library         lib
+  ! @bool            found
+  ! @gtlTemplate     result
+{
+  @objectlist helperArguments = .listWithValue{ ![path object] }
+  @lstring fullPath =
+    [[context templatePathHelper] invoke !helperArguments !.here] as @lstring
+        
+  if [self hasKey !fullPath] then
+    found = true
+    [self get !fullPath ?result]
+  else
+    if [fullPath fileExists] then
+      found = true
+      grammar gtl_grammar in fullPath
+        !                    context
+        !?                   lib
+        ?@gtlInstructionList program
+      result = .new { !fullPath !program }
+      [!?self put !fullPath !result]
+    else
+      found = false
+      if ifExists then
+        result = .new { !fullPath !.emptyList }
+      else
+        error path : "template file not found" : result
+      end
+    end
+  end
 }
 
 #=============================================================================*
 # An library stores a map of functions and getter
 #-----------------------------------------------------------------------------*
 class @library {
-  @gtlFuncMap   funcMap
-  @gtlGetterMap getterMap
-  @gtlSetterMap setterMap
-  @stringset    doneImports
+  @gtlFuncMap     funcMap
+  @gtlGetterMap   getterMap
+  @gtlSetterMap   setterMap
+  @gtlTemplateMap templateMap
+  @stringset      doneImports
+}
+
+func emptyLib
+  ->@library result
+{
+  result = .new { !.emptyMap !.emptyMap !.emptyMap !.emptyMap !.emptySet }
 }
 
 getter @library functionExists
@@ -209,3 +290,21 @@ setter @library doImport
 {
   doneImports += !importPath
 } 
+
+setter @library getTemplate
+  ? @gtlContext  context
+  ? @lstring     path
+  ? @bool        ifExists
+  ?!@library     lib
+  ! @bool        found
+  ! @gtlTemplate result
+{
+  [!?templateMap getTemplate
+    !context
+    !path
+    !ifExists
+    !?lib
+    ?found
+    ?result
+  ]
+}

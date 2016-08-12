@@ -31,9 +31,9 @@ grammar gtl_grammar "LL1" {
   syntax gtl_instruction_parser
 
    <gtl_start_symbol>
-     ?@gtlContext         context
-     !@library            lib
-     !@gtlInstructionList program
+     ? @gtlContext         context
+     ?!@library            lib
+     ! @gtlInstructionList program
 
 }
 
