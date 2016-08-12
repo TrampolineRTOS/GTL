@@ -40,6 +40,8 @@ rule <gtl_argument_list>
   !@gtlArgumentList arguments
 
 #-----------------------------------------------------------------------------*
+# Instruction list in a setter, getter or function or any control instruction
+#-----------------------------------------------------------------------------*
 rule <gtl_instruction_list>
   !@gtlInstructionList instructionList
 {
@@ -66,6 +68,8 @@ rule <gtl_instruction_list>
 }
 
 #-----------------------------------------------------------------------------*
+# Start symbol of a module
+#-----------------------------------------------------------------------------*
 rule <gtl_module_start_symbol>
   ?@gtlContext context
   ?!@library lib
@@ -89,6 +93,8 @@ rule <gtl_module_start_symbol>
 }
 
 #-----------------------------------------------------------------------------*
+# function definition
+#-----------------------------------------------------------------------------*
 rule <gtl_function>
   !@gtlFunction function
 {
@@ -105,6 +111,8 @@ rule <gtl_function>
   }
 }
 
+#-----------------------------------------------------------------------------*
+# getter definition
 #-----------------------------------------------------------------------------*
 rule <gtl_getter>
   !@gtlGetter aGetter
@@ -129,6 +137,8 @@ rule <gtl_getter>
 }
 
 #-----------------------------------------------------------------------------*
+# setter definition
+#-----------------------------------------------------------------------------*
 rule <gtl_setter>
   !@gtlSetter aSetter
 {
@@ -149,6 +159,8 @@ rule <gtl_setter>
   }
 }
 
+#-----------------------------------------------------------------------------*
+# if ... elsif ... else ... end if instruction in a module
 #-----------------------------------------------------------------------------*
 rule <gtl_instruction>
   !@gtlInstruction instruction
@@ -180,6 +192,8 @@ rule <gtl_instruction>
   }
 }
 
+#-----------------------------------------------------------------------------*
+# foreach instruction in a module
 #-----------------------------------------------------------------------------*
 rule <gtl_instruction>
   !@gtlInstruction instruction
@@ -242,6 +256,8 @@ rule <gtl_instruction>
 }
 
 #-----------------------------------------------------------------------------*
+# for instruction in a module
+#-----------------------------------------------------------------------------*
 rule <gtl_instruction>
   !@gtlInstruction instruction
 {
@@ -275,6 +291,8 @@ rule <gtl_instruction>
   }
 }
 
+#-----------------------------------------------------------------------------*
+# loop instruction in a module
 #-----------------------------------------------------------------------------*
 rule <gtl_instruction>
   !@gtlInstruction instruction
@@ -333,6 +351,8 @@ rule <gtl_instruction>
   }
 }
 
+#-----------------------------------------------------------------------------*
+# repat instruction in a module
 #-----------------------------------------------------------------------------*
 rule <gtl_instruction>
   !@gtlInstruction instruction
