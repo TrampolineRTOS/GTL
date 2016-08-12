@@ -69,3 +69,23 @@ func listOfSize ?@bigint inSize -> @list result
     inSize--
   end
 }
+
+func version -> @string result
+{
+  result = @application.projectVersionString
+}
+
+func currentDir -> @string result
+{
+  result = @string.stringWithCurrentDirectory
+}
+
+func homeDir -> @string result
+{
+  result = @string.homeDirectory
+}
+
+func currentDateTime -> @string result
+{
+  result = @string.stringWithCurrentDateTime
+}

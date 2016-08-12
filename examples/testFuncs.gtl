@@ -7,3 +7,11 @@ println trueFalse(false)
 println TrueFalse(false)
 
 println TRUEFALSE(false)
+
+println version()
+
+println currentDateTime()
+
+println homeDir()
+
+println currentDir()

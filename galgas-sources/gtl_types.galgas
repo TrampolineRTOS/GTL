@@ -32,12 +32,13 @@ class @gtlContext {
   @string path
   @string templateDirectory
   @stringlist importPath
+  @gtlDataList inputVars
 }
 
 func emptyContext
   ->@gtlContext context
 {
-  context = .new { !"" !"" !"" !.emptyList}
+  context = .new { !"" !"" !"" !.emptyList !.emptyList}
 }
 
 setter @gtlContext addModulePath
@@ -47,6 +48,12 @@ setter @gtlContext addModulePath
   @string normalizedModulePath =
     [[modulePath absolutePathFromPath !rootPath] stringByStandardizingPath]
   importPath += !normalizedModulePath
+}
+
+setter @gtlContext addInputVariable
+  ?@gtlData inputVariable
+{
+  inputVars += !inputVariable
 }
 
 getter @string stringByAppendingPath
@@ -120,6 +127,7 @@ class @library {
   @gtlFuncMap   funcMap
   @gtlGetterMap getterMap
   @gtlSetterMap setterMap
+  @stringset    doneImports
 }
 
 getter @library functionExists
@@ -189,4 +197,15 @@ setter @library putSetter
   [!?setterMap put !name !aSetter]
 }
 
+getter @library hasImport
+  ?let @string importPath
+  ->@bool result
+{
+  result = [doneImports hasKey !importPath]
+} 
 
+setter @library doImport
+  ?let @string importPath
+{
+  doneImports += !importPath
+} 

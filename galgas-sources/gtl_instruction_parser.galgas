@@ -279,8 +279,11 @@ rule <gtl_import>
   end
   
   if found then
-    grammar gtl_module_grammar in
-      @lstring.new{ !fullName ![fileName location] } !context !?lib
+    if not [lib hasImport !fullName] then
+      [!?lib doImport !fullName]
+      grammar gtl_module_grammar in
+        @lstring.new{ !fullName ![fileName location] } !context !?lib
+    end
   else
     error .here : "module not found"
   end

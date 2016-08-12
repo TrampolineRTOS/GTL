@@ -395,6 +395,8 @@ class @gtlTemplateInstruction : @gtlInstruction {
   @lstring            prefix
   @gtlExpression      fileName
   @bool               ifExists
+  @bool               isGlobal
+  @gtlExpressionList  arguments
   @gtlInstructionList instructionsIfNotFound
 }
 
@@ -408,8 +410,27 @@ override method @gtlTemplateInstruction execute
   if [prefix string] != "" then
     [!?newContext setPrefix ![prefix string]]
   end
+
   @lstring templateFileName =
     [[fileName eval !vars !lib] as @gtlString lstring]
+  
+  if not isGlobal then
+    # build the variable map for the template
+    @gtlData localVars = @gtlStruct.new { !where !.emptyMap }
+    for (argumentExpression) in arguments do
+      @gtlData evaluedArg = [argumentExpression eval !vars !lib]
+      [!?newContext addInputVariable !evaluedArg]
+    end
+#    gtlInvocation(
+#      !templateFileName
+#      !newContext
+#      !ifExists == false
+#      !false
+#      !vars
+#      !?outputString
+#      ?let @bool found
+#    )      
+  else
 #  gtlInvocation(
 #    !templateFileName
 #    !newContext
@@ -424,6 +445,7 @@ override method @gtlTemplateInstruction execute
 #    [instructionsIfNotFound execute !context !?localMap !funcs !?outputString]
 #    vars = [localMap overriddenMap]
 #  end
+  end
 }
 
 #-----------------------------------------------------------------------------*
