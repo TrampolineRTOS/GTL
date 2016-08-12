@@ -2,6 +2,14 @@
 
 let a := 3
 
-template () subTemplate
+template subTemplate # vars are copied for the template
 
-#libraries
+template () subTemplate # vars are not copied
+
+template if exists nonExistentTemplate
+
+template if exists nonExistentTemplate or
+  println "not found"
+end template
+
+template ( 3, 4, 5, "Hi !" ) subTemplateWithArgs

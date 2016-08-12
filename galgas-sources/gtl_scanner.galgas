@@ -62,7 +62,7 @@ list goilTemplateKeyWordList style keywordsStyle error message "the '%K' keyword
   "import", "listof", "let", "loop", "mapof", "mod", "module", "no", "not", "or",
   "print", "println", "proc", "repeat", "sort", "step", "tab", "template", 
   "then", "to", "true", "typeof", "up", "yes", "warning", "while", "write",
-  "executable", "variables", "getter", "unlet", "setter", "libraries"
+  "executable", "variables", "getter", "unlet", "setter", "libraries", "input"
 }
 
 rule 'a'->'z' |  'A'->'Z' {

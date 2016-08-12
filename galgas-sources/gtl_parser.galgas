@@ -43,6 +43,9 @@ rule <gtl_import>
 rule <gtl_simple_instruction>
   !@gtlInstruction instruction
 
+rule <gtl_argument_list>
+  !@gtlArgumentList arguments
+
 #-----------------------------------------------------------------------------*
 rule <gtl_start_symbol>
   ? @gtlContext         context
@@ -378,6 +381,17 @@ rule <gtl_template_instruction> !@gtlInstruction instruction
   
   instruction = @gtlRepeatStatementInstruction.new {
     !where !limit !condition !continueList !doList
+  }
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_template_instruction> !@gtlInstruction instruction
+{
+  $input$ @location where = .here
+  <gtl_argument_list> ?@gtlArgumentList arguments
+  
+  instruction = @gtlInputStatementInstruction.new {
+    !where !arguments
   }
 }
 

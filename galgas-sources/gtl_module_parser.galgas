@@ -36,6 +36,9 @@ rule <gtl_import>
   ?@gtlContext context
   ?!@library lib 
 
+rule <gtl_argument_list>
+  !@gtlArgumentList arguments
+
 #-----------------------------------------------------------------------------*
 rule <gtl_instruction_list>
   !@gtlInstructionList instructionList
@@ -144,27 +147,6 @@ rule <gtl_setter>
     !instructionList
     ![targetType gtlType]
   }
-}
-
-#-----------------------------------------------------------------------------*
-rule <gtl_argument_list>
-  !@gtlArgumentList arguments
-{
-  arguments = .emptyList
-  $($
-  select
-    repeat
-      $identifier$ ?let @lstring argumentName
-      select
-        $:$ $@$ $identifier$ ?let @lstring typeName
-        arguments += !true ![typeName gtlType] !argumentName
-      or
-        arguments += !false !`@gtlData !argumentName
-      end
-    while $,$ 
-    end
-  or end
-  $)$
 }
 
 #-----------------------------------------------------------------------------*

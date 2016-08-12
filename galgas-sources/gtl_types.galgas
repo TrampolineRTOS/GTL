@@ -71,6 +71,17 @@ setter @gtlContext addInputVariable
   inputVars += !inputVariable
 }
 
+setter @gtlContext popFirstInputArg
+  ?@location where
+  !@gtlData  result
+{
+  if [inputVars length] > 0 then
+    [!?inputVars popFirst ?result]
+  else
+    error where : "No input argument available" : result
+  end
+}
+
 getter @string stringByAppendingPath
   ?let @string pathToAppend
   ->@string result
@@ -145,12 +156,12 @@ class @gtlTemplate {
 }
 
 method @gtlTemplate execute
-  ? let @gtlContext context
-  ?!@gtlData        vars
-  ?!@library        lib
-  ?!@string         outputString
+  ?!@gtlContext context
+  ?!@gtlData    vars
+  ?!@library    lib
+  ?!@string     outputString
 {
-  [program execute !context !?vars !?lib !?outputString]
+  [program execute !?context !?vars !?lib !?outputString]
 }
 
 map @gtlTemplateMap {

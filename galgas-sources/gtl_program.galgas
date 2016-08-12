@@ -23,7 +23,7 @@ grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
   @gtlData vars = @gtlStruct.new { !.here !.emptyMap }
   @string result = ""
   
-  [program execute !context !?vars !?lib !?result]
+  [program execute !?context !?vars !?lib !?result]
   
   message "================================================================\n"
   message result
