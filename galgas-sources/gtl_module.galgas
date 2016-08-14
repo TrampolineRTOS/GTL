@@ -47,7 +47,11 @@ method @gtlExecutableEntity checkArguments
   !@bool            result
 {
   result = true
-  entityVariableMap = @gtlStruct.new { !fromLocation !.emptyMap }
+  entityVariableMap = @gtlStruct.new {
+    !fromLocation
+    !emptylstring()
+    !.emptyMap
+  }
   
   if [formalArguments length] != [actualArguments length] then 
     error fromLocation : "calling "
@@ -107,7 +111,7 @@ getter @gtlFunction call
     !fromLocation !actualArguments ?@gtlData funcVariableMap ?@bool ok]
   [!?funcVariableMap setStructField
     !returnVariable
-    !@gtlUnconstructed.new{ ![returnVariable location] }
+    !@gtlUnconstructed.new{ ![returnVariable location] !emptylstring() }
   ]
   if ok then
     @gtlContext functionContext = emptyContext()
@@ -136,7 +140,7 @@ getter @gtlGetter callGetter
     !fromLocation !actualArguments ?@gtlData getterVariableMap ?@bool ok]
   [!?getterVariableMap setStructField
     !returnVariable
-    !@gtlUnconstructed.new{ ![returnVariable location] }
+    !@gtlUnconstructed.new{ ![returnVariable location] !emptylstring() }
   ]
   if ok then
     [!?getterVariableMap setStructField

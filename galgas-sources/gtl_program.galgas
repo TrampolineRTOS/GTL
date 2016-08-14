@@ -20,7 +20,7 @@ grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
     !?lib
     ?@gtlInstructionList program
   
-  @gtlData vars = @gtlStruct.new { !.here !.emptyMap }
+  @gtlData vars = @gtlStruct.new { !.here !emptylstring() !.emptyMap }
   @string result = ""
   
   [program execute !?context !?vars !?lib !?result]

@@ -255,7 +255,7 @@ rule <gtl_factor>
 {
   $yes$ @location opLocation = .here
   expression = @gtlTerminal.new{
-    !opLocation !@gtlBool.new { !opLocation !true }
+    !opLocation !@gtlBool.new { !opLocation !emptylstring() !true }
   }
 }
 
@@ -268,7 +268,7 @@ rule <gtl_factor>
 {
   $no$
   expression = @gtlTerminal.new{
-    !.here !@gtlBool.new { !.here !false }
+    !.here !@gtlBool.new { !.here !emptylstring() !false }
   }
 }
 
@@ -281,7 +281,7 @@ rule <gtl_factor>
 {
   $signed_literal_integer_bigint$ ?let @lbigint literalInteger
   expression = @gtlTerminal.new{
-    !.here !@gtlInt.new { !.here ![literalInteger bigint] }
+    !.here !@gtlInt.new { !.here !emptylstring() ![literalInteger bigint] }
   }
 }
 
@@ -294,7 +294,7 @@ rule <gtl_factor>
 {
   $literal_double$ ?let @ldouble literalFloat
   expression = @gtlTerminal.new{
-    !.here !@gtlFloat.new { !.here ![literalFloat double] }
+    !.here !@gtlFloat.new { !.here !emptylstring() ![literalFloat double] }
   }
 }
 
@@ -307,7 +307,7 @@ rule <gtl_factor>
 {
   $string$ ?let @lstring literalString
   expression = @gtlTerminal.new{
-    !.here !@gtlString.new { !.here ![literalString string] }
+    !.here !@gtlString.new { !.here !emptylstring() ![literalString string] }
   }
 }
 
@@ -320,7 +320,7 @@ rule <gtl_factor>
 {
   $literal_char$ ?let @lchar literalChar
   expression = @gtlTerminal.new{
-    !.here !@gtlChar.new { !.here ![literalChar char] }
+    !.here !@gtlChar.new { !.here !emptylstring() ![literalChar char] }
   }
 }
 
@@ -425,6 +425,7 @@ rule <gtl_factor>
     !.here
     !@gtlBool.new { 
       !.here
+      !emptylstring()
       !true
     }
   }
@@ -440,6 +441,7 @@ rule <gtl_factor>
     !.here
     !@gtlBool.new { 
       !.here
+      !emptylstring()
       !false
     }
   }
@@ -456,6 +458,7 @@ rule <gtl_factor>
     !.here
     !@gtlEnum.new { 
       !.here
+      !emptylstring()
       !enumValue
     }
   }
@@ -469,14 +472,22 @@ rule <gtl_factor>
   $@$ $identifier$ ?let @lstring typeName
   @string name = [typeName string]
   @gtlType type
-  if    name == "int"    then type = .new { ![typeName location] !`@gtlInt }
-  elsif name == "float"  then type = .new { ![typeName location] !`@gtlFloat }
-  elsif name == "string" then type = .new { ![typeName location] !`@gtlString }
-  elsif name == "bool"   then type = .new { ![typeName location] !`@gtlBool }
-  elsif name == "struct" then type = .new { ![typeName location] !`@gtlStruct }
-  elsif name == "list"   then type = .new { ![typeName location] !`@gtlList }
-  elsif name == "map"    then type = .new { ![typeName location] !`@gtlMap }
-  elsif name == "enum"   then type = .new { ![typeName location] !`@gtlEnum }
+  if    name == "int"    then
+    type = .new { ![typeName location] !emptylstring() !`@gtlInt }
+  elsif name == "float"  then
+    type = .new { ![typeName location] !emptylstring() !`@gtlFloat }
+  elsif name == "string" then
+    type = .new { ![typeName location] !emptylstring() !`@gtlString }
+  elsif name == "bool"   then
+    type = .new { ![typeName location] !emptylstring() !`@gtlBool }
+  elsif name == "struct" then
+    type = .new { ![typeName location] !emptylstring() !`@gtlStruct }
+  elsif name == "list"   then
+    type = .new { ![typeName location] !emptylstring() !`@gtlList }
+  elsif name == "map"    then
+    type = .new { ![typeName location] !emptylstring() !`@gtlMap }
+  elsif name == "enum"   then
+    type = .new { ![typeName location] !emptylstring() !`@gtlEnum }
   else error .here : name + " does not name a type" : type
   end
   expression = @gtlTerminal.new { ![typeName location] !type }
@@ -493,6 +504,7 @@ rule <gtl_factor>
     !.here
     !@gtlList.new { 
       !.here
+      !emptylstring()
       !.emptyList
     }
   }
@@ -509,6 +521,7 @@ rule <gtl_factor>
     !.here
     !@gtlMap.new { 
       !.here
+      !emptylstring()
       !.emptyMap
     }
   }

@@ -79,7 +79,10 @@ override method @gtlLetUnconstructedInstruction execute
   ?!@library           lib
   ?!@string     unused outputString
 { 
-  [lValue set !?vars !lib !@gtlUnconstructed.new { ![[lValue itemAtIndex !0] location] } ]
+  [lValue set !?vars !lib !@gtlUnconstructed.new {
+      ![[lValue itemAtIndex !0] location] !emptylstring()
+    }
+  ]
 }
   
 #-----------------------------------------------------------------------------*
@@ -358,8 +361,16 @@ override method @gtlWriteToInstruction execute
   ?!@string unused outputString
 { 
   @string fullFileName = [[fileNameExpression eval !vars !lib] string]
-  @gtlString fileName = .new{!where ![fullFileName lastPathComponent]}
-  @gtlString filePath = .new{!where ![fullFileName nativePathWithUnixPath]}
+  @gtlString fileName = .new{
+    !where
+    !emptylstring()
+    ![fullFileName lastPathComponent]
+  }
+  @gtlString filePath = .new{
+    !where 
+    !emptylstring() 
+    ![fullFileName nativePathWithUnixPath]
+  }
   @string result = ""
   @gtlData varsCopy = vars
   # remove the current FILENAME and FILEPATH variable
@@ -419,7 +430,7 @@ override method @gtlTemplateInstruction execute
   [!?newContext setInputVars !.emptyList]
   if not isGlobal then
     # build the variable map for the template
-    localVars = @gtlStruct.new { !where !.emptyMap }
+    localVars = @gtlStruct.new { !where !emptylstring() !.emptyMap }
     for (argumentExpression) in arguments do
       @gtlData evaluedArg = [argumentExpression eval !vars !lib]
       [!?newContext addInputVariable !evaluedArg]
@@ -472,7 +483,7 @@ override method @gtlGetColumnInstruction execute
       value += " "
     end
   end
-  [destVariable set !?vars !lib !@gtlString.new{!where !value}]
+  [destVariable set !?vars !lib !@gtlString.new{!where !emptylstring() !value}]
 }
 
 #-----------------------------------------------------------------------------*
@@ -544,9 +555,11 @@ method @gtlForeachStatementInstruction iterateOnMap
   do (index)
     [!?vars setStructField !variableName !value]
     [!?vars setStructField
-      !keyName !@gtlString.new{!where ![lkey string]}]
+      !keyName !@gtlString.new { !where !emptylstring() ![lkey string] }
+    ]
     [!?vars setStructField
-      !indexName !@gtlInt.new{!where ![index bigint]}]
+      !indexName !@gtlInt.new { !where !emptylstring() ![index bigint] }
+    ]
     [doList execute !?context !?vars !?lib !?outputString]
   between
     [betweenList execute !?context !?vars !?lib !?outputString]
@@ -571,7 +584,8 @@ method @gtlForeachStatementInstruction iterateOnList
   do (index)
     [!?vars setStructField !variableName !value]
     [!?vars setStructField
-      !indexName !@gtlInt.new{!where ![index bigint]}]
+      !indexName !@gtlInt.new { !where !emptylstring() ![index bigint] }
+    ]
     [doList execute !?context !?vars !?lib !?outputString]
   between
     [betweenList execute !?context !?vars !?lib !?outputString]
@@ -621,7 +635,10 @@ override method @gtlForStatementInstruction execute
   do (index)
     @gtlData value = [expression eval !localMap !lib]
     [!?localMap setStructField !identifier !value]
-    [!?localMap setStructField !indexName !@gtlInt.new{!where ![index bigint]}]
+    [!?localMap setStructField
+      !indexName
+      !@gtlInt.new { !where !emptylstring() ![index bigint] } 
+    ]
     [doList execute !?context !?localMap !?lib !?outputString]
   between
     [betweenList execute !?context !?localMap !?lib !?outputString]
@@ -679,7 +696,9 @@ override method @gtlLoopStatementInstruction execute
     @uint count = [(stopVal - startVal) * direction + 1LS uint]
     loop (count)
       [!?localMap setStructField
-        !identifier !@gtlInt.new{![identifier location] !startVal}]
+        !identifier
+        !@gtlInt.new{![identifier location] !emptylstring() !startVal}
+      ]
       [doList execute !?context !?localMap !?lib !?outputString]
       startVal = startVal + stepVal
     while (stopVal - startVal) * direction >= 0_G do
@@ -841,7 +860,7 @@ abstract class @gtlAbstractSortInstruction : @gtlInstruction {
 abstract getter @gtlAbstractSortInstruction compare
   ?let @gtlData    s1
   ?let @gtlData    s2
-  ->@sint          result
+  ->@sint
 
 method @gtlAbstractSortInstruction swap
   ?!@list    aList
@@ -905,7 +924,7 @@ override method @gtlAbstractSortInstruction execute
     [variablePath set
       !?vars
       !lib
-      !@gtlList.new { !where !listToSort }
+      !@gtlList.new { !where !emptylstring() !listToSort }
     ]
   else
     [variablePath last ?@gtlVarItem lastComponent]

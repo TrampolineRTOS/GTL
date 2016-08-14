@@ -312,7 +312,7 @@ rule <gtl_template_instruction> !@gtlInstruction instruction
   $loop$ @location where = .here
 
   @gtlExpression step = @gtlTerminal.new {
-    !where !@gtlInt.new { !where !1_G }
+    !where !@gtlInt.new { !where !emptylstring() !1_G }
   }
 
   $identifier$ ?var  @lstring variableName
@@ -369,7 +369,9 @@ rule <gtl_template_instruction> !@gtlInstruction instruction
     <gtl_expression> ?limit
     $)$
   or
-    limit = @gtlTerminal.new { !.here !@gtlInt.new{ !.here ![@uint.max{} bigint] } }
+    limit = @gtlTerminal.new {
+      !.here !@gtlInt.new{ !.here !emptylstring() ![@uint.max{} bigint] }
+    }
   end
   <gtl_template_instruction_list> ?@gtlInstructionList continueList
   $while$
@@ -403,7 +405,7 @@ rule <gtl_file_name>
     $identifier$ ?let @lstring fileName
     expression = @gtlTerminal.new {
       !@location.here !@gtlString.new {
-        ![fileName location] ![fileName string]
+        ![fileName location] !emptylstring() ![fileName string]
       }
     }
   or

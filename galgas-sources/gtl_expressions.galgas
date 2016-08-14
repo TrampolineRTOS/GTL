@@ -30,14 +30,18 @@
 override getter @gtlStruct overrideMap
   -> @gtlStruct mapOverriden
 {
-  mapOverriden = .new { !where !@gtlVarMap.mapWithMapToOverride{!value} }
+  mapOverriden = .new {
+    !where 
+    !emptylstring() 
+    !@gtlVarMap.mapWithMapToOverride{!value} 
+  }
 }
 
 #-----------------------------------------------------------------------------*
 override getter @gtlStruct overriddenMap
   -> @gtlStruct overriddenMap
 {
-  overriddenMap = .new{ !where ![value overriddenMap] }
+  overriddenMap = .new{ !where !emptylstring() ![value overriddenMap] }
 }
 
 #-----------------------------------------------------------------------------*
@@ -49,7 +53,7 @@ func wantGtlStruct
   case == @gtlStruct inDataStruct:
     outData = inDataStruct
   else
-    outData = @gtlStruct.new { !inData !.emptyMap }
+    outData = @gtlStruct.new { !inData !emptylstring() !.emptyMap }
   end
 }
 
@@ -62,7 +66,7 @@ func wantGtlMap
   case == @gtlMap inDataMap:
     outData = inDataMap
   else
-    outData = @gtlMap.new { !inData !.emptyMap }
+    outData = @gtlMap.new { !inData !emptylstring() !.emptyMap }
   end
 }
 
@@ -75,7 +79,7 @@ func wantGtlList
   case == @gtlList inDataList:
     outData = inDataList
   else
-    outData = @gtlList.new { !inData !.emptyList }
+    outData = @gtlList.new { !inData !emptylstring() !.emptyList }
   end
 }
 
@@ -91,10 +95,10 @@ abstract class @gtlVarItem {}
 abstract getter @gtlVarItem stringPath
   ? let @gtlData vars
   ? let @library lib
-  -> @string result
+  -> @string
 
 abstract getter @gtlVarItem location 
-  -> @location loc
+  -> @location
 
 #-----------------------------------------------------------------------------*
 # abstract method to set a data in a context
@@ -114,7 +118,7 @@ abstract getter @gtlVarItem getInContext
   ? let @gtlData    vars
   ? let @library    lib
   ? let @gtlVarPath path
-  -> @gtlData result
+  -> @gtlData
   
 #-----------------------------------------------------------------------------*
 # abstact getter to test the existence of a field in a context
@@ -124,7 +128,7 @@ abstract getter @gtlVarItem existsInContext
   ? let @gtlData    vars
   ? let @library    lib
   ? let @gtlVarPath path
-  -> @bool result
+  -> @bool
   
 #-----------------------------------------------------------------------------*
 # abstact method to remove field in a context
@@ -839,7 +843,7 @@ abstract class @gtlBinaryExpression : @gtlExpression {
 abstract getter @gtlExpression eval
   ? let @gtlData vars
   ? let @library lib
-  -> @gtlData result
+  -> @gtlData
 
 #=============================================================================*
 # Expression list
@@ -1198,15 +1202,15 @@ func validateReturnValue
   @type returnedType = [returnedValue objectDynamicType]
   @location loc = [functionName location]
   if    returnedType == `@bigint then
-    result = @gtlInt.new    { !loc !returnedValue as @bigint }
+    result = @gtlInt.new    { !loc !emptylstring() !returnedValue as @bigint }
   elsif returnedType == `@double then
-    result = @gtlFloat.new  { !loc !returnedValue as @double }
+    result = @gtlFloat.new  { !loc !emptylstring() !returnedValue as @double }
   elsif returnedType == `@string then
-    result = @gtlString.new { !loc !returnedValue as @string }
+    result = @gtlString.new { !loc !emptylstring() !returnedValue as @string }
   elsif returnedType == `@bool   then
-    result = @gtlBool.new   { !loc !returnedValue as @bool   }
+    result = @gtlBool.new   { !loc !emptylstring() !returnedValue as @bool   }
   elsif returnedType == `@list   then
-    result = @gtlList.new   { !loc !returnedValue as @list   }
+    result = @gtlList.new   { !loc !emptylstring() !returnedValue as @list   }
   else
     error functionName
       : "this function does not return a compatible type" : result
@@ -1256,7 +1260,10 @@ override getter @gtlFunctionCallExpression eval
           [function invoke !arguments ![functionName location]]
         result = validateReturnValue(!functionName !returnedValue) 
       else
-        result = @gtlUnconstructed.new { ![functionName location] }
+        result = @gtlUnconstructed.new {
+          ![functionName location]
+          !emptylstring()
+        }
       end
     end
   else
@@ -1282,7 +1289,7 @@ override getter @gtlExistsExpression eval
   -> @gtlData result
 {
   result = @gtlBool.new {
-    !where ![variable exists !vars !lib]
+    !where !emptylstring() ![variable exists !vars !lib]
   }
 }
 
@@ -1320,7 +1327,7 @@ override getter @gtlTypeOfExpression eval
 {
   error .here : "" : result
   @gtlData variableValue = [variable get !vars !lib]
-  result = @gtlType.new { !where ![variableValue dynamicType] }
+  result = @gtlType.new { !where !emptylstring() ![variableValue dynamicType] }
 }
 
 #-----------------------------------------------------------------------------*
@@ -1338,7 +1345,11 @@ override getter @gtlMapOfStructExpression eval
   @gtlData expressionValue = [expression eval !vars !lib]
   cast expressionValue
   case == @gtlStruct expressionValueStruct:
-    result = @gtlMap.new { !where ![expressionValueStruct value] }
+    result = @gtlMap.new {
+      !where 
+      !emptylstring() 
+      ![expressionValueStruct value] 
+    }
   else
     error where : "struct expected" : result
   end
@@ -1377,7 +1388,7 @@ override getter @gtlMapOfListExpression eval
         error [expressionValue where] : "list of struct expected"
       end
     end
-    result = @gtlMap.new { !where !resultMap }
+    result = @gtlMap.new { !where !emptylstring() !resultMap }
   else
     error [expressionValue where] : "list expected" : result
   end
@@ -1402,7 +1413,7 @@ override getter @gtlListOfExpression eval
     for (key item) in [expressionValueMap value] do
       resultList += !item
     end
-    result = @gtlList.new { !where !resultList }
+    result = @gtlList.new { !where !emptylstring() !resultList }
   else
     error where : "map expected" : result
   end
@@ -1424,7 +1435,7 @@ override getter @gtlLiteralStructExpression eval
   for (key item) in value do
     [!?resultStruct put !key ![item eval !vars !lib]]
   end
-  result = @gtlStruct.new { !where !resultStruct }
+  result = @gtlStruct.new { !where !emptylstring() !resultStruct }
 }
 
 #-----------------------------------------------------------------------------*
@@ -1443,7 +1454,7 @@ override getter @gtlLiteralMapExpression eval
   for (key item) in value do
     [!?resultStruct put !key ![item eval !vars !lib]]
   end
-  result = @gtlMap.new { !where !resultStruct }
+  result = @gtlMap.new { !where !emptylstring() !resultStruct }
 }
 
 #-----------------------------------------------------------------------------*
@@ -1462,6 +1473,6 @@ override getter @gtlLiteralListExpression eval
   for (item) in value do
     resultList += ![item eval !vars !lib]
   end
-  result = @gtlList.new { !where !resultList }
+  result = @gtlList.new { !where !emptylstring() !resultList }
 }
 

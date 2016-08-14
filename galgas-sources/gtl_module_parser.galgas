@@ -305,7 +305,7 @@ rule <gtl_instruction>
   $loop$ @location where = .here
 
   @gtlExpression step = @gtlTerminal.new {
-    !where !@gtlInt.new { !where !1_G }
+    !where !@gtlInt.new { !where !emptylstring() !1_G }
   }
 
   $identifier$ ?var  @lstring variableName
@@ -365,7 +365,10 @@ rule <gtl_instruction>
     <gtl_expression> ?limit
     $)$
   or
-    limit = @gtlTerminal.new { !.here !@gtlInt.new{ !.here ![@uint.max{} bigint] } }
+    limit = @gtlTerminal.new {
+      !.here
+      !@gtlInt.new{ !.here !emptylstring() ![@uint.max{} bigint] }
+    }
   end
   <gtl_instruction_list> ?@gtlInstructionList continueList
   $while$

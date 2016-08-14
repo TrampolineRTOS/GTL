@@ -84,7 +84,7 @@ func listOfSize ?@bigint inSize -> @list result
   result = .emptyList
   loop ([inSize uint])
   while inSize > 0 do
-    result += !@gtlUnconstructed.new { !.here }
+    result += !@gtlUnconstructed.new { !.here !emptylstring() }
     inSize--
   end
 }

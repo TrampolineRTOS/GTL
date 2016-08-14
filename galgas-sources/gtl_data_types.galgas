@@ -156,39 +156,52 @@ private proc argumentsCheck
   end 
 }
 
-abstract class @gtlData { @location where %setter }
+func %once emptylstring ->@lstring result
+{
+  result = .new { !"" !.nowhere }
+}
+
+func lstring ?@string string ->@lstring result
+{
+  result = .new { !string !.nowhere }
+}
+
+abstract class @gtlData {
+  @location where %setter
+  @lstring  meta  %setter
+}
 
 getter @gtlData location -> @location result {
   result = where
 }
 
-abstract getter @gtlData desc ?let @uint tab -> @string result
-abstract getter @gtlData string  -> @string result
-abstract getter @gtlData lstring -> @lstring result
-abstract getter @gtlData bool    -> @bool result
-abstract getter @gtlData int     -> @bigint result
-abstract getter @gtlData float   -> @double result
-abstract getter @gtlData plusOp  -> @gtlData result
-abstract getter @gtlData minusOp -> @gtlData result
-abstract getter @gtlData notOp   -> @gtlData result
-abstract getter @gtlData addOp ?let @gtlData right -> @gtlData result
-abstract getter @gtlData subOp ?let @gtlData right -> @gtlData result
-abstract getter @gtlData mulOp ?let @gtlData right -> @gtlData result
-abstract getter @gtlData divOp ?let @gtlData right -> @gtlData result
-abstract getter @gtlData modOp ?let @gtlData right -> @gtlData result
-abstract getter @gtlData andOp ?let @gtlData right -> @gtlData result
-abstract getter @gtlData orOp  ?let @gtlData right -> @gtlData result
-abstract getter @gtlData xorOp ?let @gtlData right -> @gtlData result
-abstract getter @gtlData slOp  ?let @gtlData right -> @gtlData result
-abstract getter @gtlData srOp  ?let @gtlData right -> @gtlData result
-abstract getter @gtlData neqOp ?let @gtlData right -> @gtlData result
-abstract getter @gtlData eqOp  ?let @gtlData right -> @gtlData result
-abstract getter @gtlData ltOp  ?let @gtlData right -> @gtlData result
-abstract getter @gtlData leOp  ?let @gtlData right -> @gtlData result
-abstract getter @gtlData gtOp  ?let @gtlData right -> @gtlData result
-abstract getter @gtlData geOp  ?let @gtlData right -> @gtlData result
+abstract getter @gtlData desc ?let @uint tab -> @string
+abstract getter @gtlData string  -> @string
+abstract getter @gtlData lstring -> @lstring
+abstract getter @gtlData bool    -> @bool
+abstract getter @gtlData int     -> @bigint
+abstract getter @gtlData float   -> @double
+abstract getter @gtlData plusOp  -> @gtlData
+abstract getter @gtlData minusOp -> @gtlData
+abstract getter @gtlData notOp   -> @gtlData
+abstract getter @gtlData addOp ?let @gtlData right -> @gtlData
+abstract getter @gtlData subOp ?let @gtlData right -> @gtlData
+abstract getter @gtlData mulOp ?let @gtlData right -> @gtlData
+abstract getter @gtlData divOp ?let @gtlData right -> @gtlData
+abstract getter @gtlData modOp ?let @gtlData right -> @gtlData
+abstract getter @gtlData andOp ?let @gtlData right -> @gtlData
+abstract getter @gtlData orOp  ?let @gtlData right -> @gtlData
+abstract getter @gtlData xorOp ?let @gtlData right -> @gtlData
+abstract getter @gtlData slOp  ?let @gtlData right -> @gtlData
+abstract getter @gtlData srOp  ?let @gtlData right -> @gtlData
+abstract getter @gtlData neqOp ?let @gtlData right -> @gtlData
+abstract getter @gtlData eqOp  ?let @gtlData right -> @gtlData
+abstract getter @gtlData ltOp  ?let @gtlData right -> @gtlData
+abstract getter @gtlData leOp  ?let @gtlData right -> @gtlData
+abstract getter @gtlData gtOp  ?let @gtlData right -> @gtlData
+abstract getter @gtlData geOp  ?let @gtlData right -> @gtlData
 
-abstract getter @gtlData embeddedType -> @type result
+abstract getter @gtlData embeddedType -> @type
 
 abstract method @gtlData addMyValue ?!@objectlist objectList
 
@@ -200,7 +213,7 @@ abstract getter @gtlData performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
   ?let @library     lib
-  ->@gtlData        result
+  ->@gtlData       
 
 abstract setter @gtlData performSetter
   ?let @lstring     methodName
@@ -317,6 +330,12 @@ setter @gtlData deleteItemAtIndex
   error index : "a " + [[self dynamicType] typeName] + " is not a list"
 }
 
+setter @gtlData appendItem
+  ?let @gtlData item
+{
+  error item : "a " + [[self dynamicType] typeName] + " is not a list"
+}
+
 #-----------------------------------------------------------------------------*
 # unconstructed type and operations on unconstructed
 #-----------------------------------------------------------------------------*
@@ -430,12 +449,12 @@ override getter @gtlUnconstructed performGetter
   if "type"      == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !false
+      ![methodName location] !emptylstring() !false
     }
   elsif [lib getterExists !"unconstructed" !methodName] then
     result = [[lib getGetter !"unconstructed" !methodName] callGetter
@@ -537,14 +556,14 @@ override getter @gtlType srOp ?let @gtlData unused right -> @gtlData result  {
 }
 override getter @gtlType neqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlType then
-    result = @gtlBool.new { !where !type != [right as @gtlType type] }
+    result = @gtlBool.new { !where !emptylstring() !type != [right as @gtlType type] }
   else
     error [right where] : "type expected" : result
   end
 }
 override getter @gtlType eqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlType then
-    result = @gtlBool.new { !where !type == [right as @gtlType type] }
+    result = @gtlBool.new { !where !emptylstring() !type == [right as @gtlType type] }
   else
     error [right where] : "type expected" : result
   end
@@ -584,17 +603,17 @@ override getter @gtlType performGetter
   if    "string"    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![self string]
+      ![methodName location] !emptylstring() ![self string]
     }
   elsif "type"      == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !false
+      ![methodName location] !emptylstring() !false
     }
   elsif [lib getterExists !"type" !methodName] then
     result = [[lib getGetter !"type" !methodName] callGetter
@@ -702,14 +721,22 @@ override getter @gtlEnum srOp ?let @gtlData unused right -> @gtlData result  {
 }
 override getter @gtlEnum neqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlEnum then
-    result = @gtlBool.new { !where !value != [right as @gtlEnum value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value != [right as @gtlEnum value] 
+    }
   else
     error [right where] : "enum expected" : result
   end
 }
 override getter @gtlEnum eqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlEnum then
-    result = @gtlBool.new { !where !value == [right as @gtlEnum value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value == [right as @gtlEnum value] 
+    }
   else
     error [right where] : "enum expected" : result
   end
@@ -749,17 +776,17 @@ override getter @gtlEnum performGetter
   if    "string"    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![self string]
+      ![methodName location] !emptylstring() ![self string]
     }
   elsif "type"      == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !false
+      ![methodName location] !emptylstring() !false
     }
   elsif [lib getterExists !"enum" !methodName] then
     result = [[lib getGetter !"enum" !methodName] callGetter
@@ -880,7 +907,11 @@ override getter @gtlChar srOp ?let @gtlData unused right -> @gtlData result {
 
 override getter @gtlChar neqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlChar then
-    result = @gtlBool.new { !where !value != [right as @gtlChar value] }
+    result = @gtlBool.new {
+      !where
+      !emptylstring()
+      !value != [right as @gtlChar value]
+    }
   else
     error right : "char expected" : result
   end
@@ -888,7 +919,11 @@ override getter @gtlChar neqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlChar eqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlChar then
-    result = @gtlBool.new { !where !value == [right as @gtlChar value] }
+    result = @gtlBool.new {
+      !where
+      !emptylstring()
+      !value == [right as @gtlChar value]
+    }
   else
     error right : "char expected" : result
   end
@@ -896,7 +931,11 @@ override getter @gtlChar eqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlChar gtOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlChar then
-    result = @gtlBool.new { !where !value > [right as @gtlChar value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value > [right as @gtlChar value] 
+    }
   else
     error right : "char expected" : result
   end
@@ -904,7 +943,11 @@ override getter @gtlChar gtOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlChar geOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlChar then
-    result = @gtlBool.new { !where !value >= [right as @gtlChar value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value >= [right as @gtlChar value]
+    }
   else
     error [right where] : "char expected" : result
   end
@@ -912,7 +955,11 @@ override getter @gtlChar geOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlChar ltOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlChar then
-    result = @gtlBool.new { !where !value < [right as @gtlChar value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value < [right as @gtlChar value]
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -920,7 +967,11 @@ override getter @gtlChar ltOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlChar leOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlChar then
-    result = @gtlBool.new { !where !value <= [right as @gtlChar value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value <= [right as @gtlChar value]
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -948,52 +999,52 @@ override getter @gtlChar performGetter
   if    "string"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![self string]
+      ![methodName location] !emptylstring() ![self string]
     }
   elsif "isAlnum"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] ![value isalnum]
+      ![methodName location] !emptylstring() ![value isalnum]
     }
   elsif "isCntrl"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] ![value iscntrl]
+      ![methodName location] !emptylstring() ![value iscntrl]
     }
   elsif "isDigit"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] ![value isdigit]
+      ![methodName location] !emptylstring() ![value isdigit]
     }
   elsif "isAlpha"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] ![value isalpha]
+      ![methodName location] !emptylstring() ![value isalpha]
     }
   elsif "isLower"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] ![value islower]
+      ![methodName location] !emptylstring() ![value islower]
     }
   elsif "isUpper"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] ![value isupper]
+      ![methodName location] !emptylstring() ![value isupper]
     }
   elsif "isXDigit"                == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] ![value isxdigit]
+      ![methodName location] !emptylstring() ![value isxdigit]
     }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !false
+      ![methodName location] !emptylstring() !false
     }
   elsif [lib getterExists !"char" !methodName] then
     result = [[lib getGetter !"char" !methodName] callGetter
@@ -1062,13 +1113,21 @@ override getter @gtlInt float   -> @double result {
 
 override getter @gtlInt plusOp  -> @gtlData result { result = self }
 
-override getter @gtlInt minusOp -> @gtlData result { result = @gtlInt.new { !where !-value } }
+override getter @gtlInt minusOp -> @gtlData result { 
+  result = @gtlInt.new { !where !emptylstring() !-value }
+}
 
-override getter @gtlInt notOp   -> @gtlData result { result = @gtlInt.new { !where !~value } }
+override getter @gtlInt notOp   -> @gtlData result { 
+  result = @gtlInt.new { !where !emptylstring() !~value }
+}
 
 override getter @gtlInt addOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlInt.new { !where !value + [right as @gtlInt value] }
+    result = @gtlInt.new {
+      !where 
+      !emptylstring() 
+      !value + [right as @gtlInt value] 
+    }
   else
     error [right where] : "*int expected" : result
   end
@@ -1076,7 +1135,11 @@ override getter @gtlInt addOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt subOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlInt.new { !where !value - [right as @gtlInt value] }
+    result = @gtlInt.new { 
+      !where 
+      !emptylstring() 
+      !value - [right as @gtlInt value] 
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1084,7 +1147,11 @@ override getter @gtlInt subOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt mulOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlInt.new { !where !value * [right as @gtlInt value] }
+    result = @gtlInt.new { 
+      !where 
+      !emptylstring() 
+      !value * [right as @gtlInt value] 
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1092,7 +1159,11 @@ override getter @gtlInt mulOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt divOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlInt.new { !where !value / [right as @gtlInt value] }
+    result = @gtlInt.new {
+      !where 
+      !emptylstring() 
+      !value / [right as @gtlInt value] 
+    }
   else
     error [right where] : "int expected" : result
   end  
@@ -1100,7 +1171,11 @@ override getter @gtlInt divOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt modOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlInt.new { !where !value mod [right as @gtlInt value] }
+    result = @gtlInt.new { 
+      !where 
+      !emptylstring() 
+      !value mod [right as @gtlInt value] 
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1108,7 +1183,11 @@ override getter @gtlInt modOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt andOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlInt.new { !where !value & [right as @gtlInt value] }
+    result = @gtlInt.new { 
+      !where 
+      !emptylstring() 
+      !value & [right as @gtlInt value] 
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1116,7 +1195,11 @@ override getter @gtlInt andOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt orOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlInt.new { !where !value | [right as @gtlInt value] }
+    result = @gtlInt.new {
+      !where
+      !emptylstring()
+      !value | [right as @gtlInt value]
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1124,7 +1207,11 @@ override getter @gtlInt orOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt xorOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlInt.new { !where !value ^ [right as @gtlInt value] }
+    result = @gtlInt.new {
+      !where
+      !emptylstring()
+      !value ^ [right as @gtlInt value]
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1134,7 +1221,11 @@ override getter @gtlInt slOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
     @bigint r = [right as @gtlInt value];
     if r >= 0_G then 
-      result = @gtlInt.new { !where !value << [[right as @gtlInt value] uint] }
+      result = @gtlInt.new {
+        !where
+        !emptylstring()
+        !value << [[right as @gtlInt value] uint]
+      }
     else
       error [right where] : "positive int expected" : result
     end
@@ -1147,7 +1238,7 @@ override getter @gtlInt srOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
     @bigint r = [right as @gtlInt value];
     if r >= 0_G then 
-      result = @gtlInt.new { !where !value >> [r uint] }
+      result = @gtlInt.new { !where !emptylstring() !value >> [r uint] }
     else
       error [right where] : "positive int expected" : result
     end
@@ -1158,7 +1249,11 @@ override getter @gtlInt srOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt neqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlBool.new { !where !value != [right as @gtlInt value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value != [right as @gtlInt value] 
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1166,7 +1261,11 @@ override getter @gtlInt neqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt eqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlBool.new { !where !value == [right as @gtlInt value] }
+    result = @gtlBool.new {
+      !where
+      !emptylstring()
+      !value == [right as @gtlInt value] 
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1174,7 +1273,11 @@ override getter @gtlInt eqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt gtOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlBool.new { !where !value > [right as @gtlInt value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value > [right as @gtlInt value] 
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1182,7 +1285,11 @@ override getter @gtlInt gtOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt geOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlBool.new { !where !value >= [right as @gtlInt value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value >= [right as @gtlInt value] 
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1190,7 +1297,11 @@ override getter @gtlInt geOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt ltOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlBool.new { !where !value < [right as @gtlInt value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value < [right as @gtlInt value]
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1198,7 +1309,11 @@ override getter @gtlInt ltOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlInt leOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlInt then
-    result = @gtlBool.new { !where !value <= [right as @gtlInt value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value <= [right as @gtlInt value] 
+    }
   else
     error [right where] : "int expected" : result
   end
@@ -1226,118 +1341,138 @@ override getter @gtlInt performGetter
   if    "string"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![self string]
+      ![methodName location] !emptylstring() ![self string]
     }
   elsif "padded"                 == methodName then
     argumentsCheck(!methodName !intArgument() !arguments)
     @uint   fieldSize = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     result = @gtlString.new {
-      ![methodName location] ![[self string] stringByLeftAndRightPadding !fieldSize !' ']
+      ![methodName location]
+      !emptylstring()
+      ![[self string] stringByLeftAndRightPadding !fieldSize !' ']
     }
   elsif "leftPadded"             == methodName then
     argumentsCheck(!methodName !intArgument() !arguments)
     @uint   fieldSize = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     result = @gtlString.new {
-      ![methodName location] ![[self string] stringByLeftPadding !fieldSize !' ']
+      ![methodName location] 
+      !emptylstring() 
+      ![[self string] stringByLeftPadding !fieldSize !' ']
     }
   elsif "rightPadded"            == methodName then
     argumentsCheck(!methodName !intArgument() !arguments)
     @uint   fieldSize = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     result = @gtlString.new {
-      ![methodName location] ![[self string] stringByRightPadding !fieldSize !' ']
+      ![methodName location] 
+      !emptylstring() 
+      ![[self string] stringByRightPadding !fieldSize !' ']
     }
   elsif "hexString"              == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![value hexString]
+      ![methodName location] !emptylstring() ![value hexString]
     }
   elsif "xString"                == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![value xString]
+      ![methodName location] !emptylstring() ![value xString]
     }
   elsif "numberOfBytes"          == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
+      !emptylstring() 
       !([[value bitCountForUnsignedRepresentation] bigint] - 1) / 8 + 1
     }
   elsif "signedNumberOfBytes"    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
+      !emptylstring() 
       !([[value bitCountForSignedRepresentation] bigint] - 1) / 8 + 1
     }
   elsif "numberOfBits"           == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
+      !emptylstring() 
       ![[value bitCountForUnsignedRepresentation] bigint]
     }
   elsif "signedNumberOfBits"     == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
+      !emptylstring() 
       ![[value bitCountForSignedRepresentation] bigint]
     }
   elsif "sign"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
+      !emptylstring() 
       ![[value sign] bigint]
     }
   elsif "fitsUnsignedInByte"     == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring() 
       ![value bitCountForUnsignedRepresentation] <= 8
     }
   elsif "fitsSignedInByte"       == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring()
       ![value bitCountForSignedRepresentation] <= 8
     }
   elsif "fitsUnsignedInShort"    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring()
       ![value bitCountForUnsignedRepresentation] <= 16
     }
   elsif "fitsSignedInShort"      == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring()
       ![value bitCountForSignedRepresentation] <= 16
     }
   elsif "fitsUnsignedInLong"     == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring()
       ![value bitCountForUnsignedRepresentation] <= 32
     }
   elsif "fitsSignedInLong"       == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring()
       ![value bitCountForSignedRepresentation] <= 32
     }
   elsif "fitsUnsignedInLongLong" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring()
       ![value bitCountForUnsignedRepresentation] <= 64
     }
   elsif "fitsSignedInLongLong"   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring()
       ![value bitCountForSignedRepresentation] <= 64
     }
   elsif "abs"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
+      !emptylstring()
       ![value abs]
     }
   elsif "bitAtIndex"             == methodName then
@@ -1345,17 +1480,18 @@ override getter @gtlInt performGetter
     @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring()
       ![value bitAtIndex !index]
     }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !true
+      ![methodName location] !emptylstring() !true
     }
   elsif [lib getterExists !"int" !methodName] then
     result = [[lib getGetter !"int" !methodName] callGetter
@@ -1433,7 +1569,9 @@ override getter @gtlFloat float   -> @double result {
 
 override getter @gtlFloat plusOp  -> @gtlData result { result = self }
 
-override getter @gtlFloat minusOp -> @gtlData result { result = @gtlFloat.new { !where !-value } }
+override getter @gtlFloat minusOp -> @gtlData result {
+  result = @gtlFloat.new { !where !emptylstring() !-value }
+}
 
 override getter @gtlFloat notOp   -> @gtlData result {
   error where : "float forbidden" : result
@@ -1441,7 +1579,11 @@ override getter @gtlFloat notOp   -> @gtlData result {
 
 override getter @gtlFloat addOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlFloat then
-    result = @gtlFloat.new { !where !value + [right as @gtlFloat value] }
+    result = @gtlFloat.new {
+      !where
+      !emptylstring()
+      !value + [right as @gtlFloat value] 
+    }
   else
     error [right where] : "float expected" : result
   end
@@ -1449,7 +1591,11 @@ override getter @gtlFloat addOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlFloat subOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlFloat then
-    result = @gtlFloat.new { !where !value - [right as @gtlFloat value] }
+    result = @gtlFloat.new {
+      !where
+      !emptylstring()
+      !value - [right as @gtlFloat value] 
+    }
   else
     error [right where] : "float expected" : result
   end
@@ -1457,7 +1603,11 @@ override getter @gtlFloat subOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlFloat mulOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlFloat then
-    result = @gtlFloat.new { !where !value * [right as @gtlFloat value] }
+    result = @gtlFloat.new {
+      !where
+      !emptylstring() 
+      !value * [right as @gtlFloat value] 
+    }
   else
     error [right where] : "float expected" : result
   end
@@ -1465,7 +1615,11 @@ override getter @gtlFloat mulOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlFloat divOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlFloat then
-    result = @gtlFloat.new { !where !value / [right as @gtlFloat value] }
+    result = @gtlFloat.new {
+      !where
+      !emptylstring() 
+      !value / [right as @gtlFloat value]
+    }
   else
     error [right where] : "float expected" : result
   end
@@ -1497,7 +1651,11 @@ override getter @gtlFloat srOp ?let @gtlData unused right -> @gtlData result {
 
 override getter @gtlFloat neqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlFloat then
-    result = @gtlBool.new { !where !value != [right as @gtlFloat value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value != [right as @gtlFloat value] 
+    }
   else
     error [right where] : "float expected" : result
   end
@@ -1505,7 +1663,11 @@ override getter @gtlFloat neqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlFloat eqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlFloat then
-    result = @gtlBool.new { !where !value == [right as @gtlFloat value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring()
+      !value == [right as @gtlFloat value] 
+    }
   else
     error [right where] : "float expected" : result
   end
@@ -1513,7 +1675,11 @@ override getter @gtlFloat eqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlFloat gtOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlFloat then
-    result = @gtlBool.new { !where !value > [right as @gtlFloat value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value > [right as @gtlFloat value] 
+    }
   else
     error [right where] : "float expected" : result
   end
@@ -1521,7 +1687,11 @@ override getter @gtlFloat gtOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlFloat geOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlFloat then
-    result = @gtlBool.new { !where !value >= [right as @gtlFloat value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring()
+      !value >= [right as @gtlFloat value] 
+    }
   else
     error [right where] : "float expected" : result
   end
@@ -1529,7 +1699,11 @@ override getter @gtlFloat geOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlFloat ltOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlFloat then
-    result = @gtlBool.new { !where !value < [right as @gtlFloat value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value < [right as @gtlFloat value] 
+    }
   else
     error [right where] : "float expected" : result
   end
@@ -1537,7 +1711,11 @@ override getter @gtlFloat ltOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlFloat leOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlFloat then
-    result = @gtlBool.new { !where !value <= [right as @gtlFloat value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value <= [right as @gtlFloat value] 
+    }
   else
     error [right where] : "float expected" : result
   end
@@ -1565,83 +1743,83 @@ override getter @gtlFloat performGetter
   if    "string"                 == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![self string]
+      ![methodName location] !emptylstring() ![self string]
     }
   elsif "cos"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value cos]
+      ![methodName location] !emptylstring() ![value cos]
     }
   elsif "sin"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value sin]
+      ![methodName location] !emptylstring() ![value sin]
     }
   elsif "tan"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value tan]
+      ![methodName location] !emptylstring() ![value tan]
     }
   elsif "cosDegree"              == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value cosDegree]
+      ![methodName location] !emptylstring() ![value cosDegree]
     }
   elsif "sinDegree"              == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value sinDegree]
+      ![methodName location] !emptylstring() ![value sinDegree]
     }
   elsif "tanDegree"              == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value tanDegree]
+      ![methodName location] !emptylstring() ![value tanDegree]
     }
   elsif "exp"                    == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value exp]
+      ![methodName location] !emptylstring() ![value exp]
     }
   elsif "logn"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value logn]
+      ![methodName location] !emptylstring() ![value logn]
     }
   elsif "log2"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value log2]
+      ![methodName location] !emptylstring() ![value log2]
     }
   elsif "log10"                  == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value log10]
+      ![methodName location] !emptylstring() ![value log10]
     }
   elsif "sqrt"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlFloat.new {
-      ![methodName location] ![value sqrt]
+      ![methodName location] !emptylstring() ![value sqrt]
     }
   elsif "power"                  == methodName then
     argumentsCheck(!methodName !floatArgument() !arguments)
     @double power = [[arguments dataAtIndex !0] as @gtlFloat value]
     result = @gtlFloat.new {
-      ![methodName location] ![value power !power]
+      ![methodName location] !emptylstring() ![value power !power]
     }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !true
+      ![methodName location] !emptylstring() !true
     }
   elsif "int" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
-      ![methodName location] ![[value sint64] bigint]
+      ![methodName location] !emptylstring() ![[value sint64] bigint]
     }
   elsif [lib getterExists !"float" !methodName] then
     result = [[lib getGetter !"float" !methodName] callGetter
@@ -1720,7 +1898,11 @@ override getter @gtlString notOp   -> @gtlData result {
 
 override getter @gtlString addOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlString then
-    result = @gtlString.new { !where !value + [right as @gtlString value] }
+    result = @gtlString.new {
+      !where 
+      !emptylstring() 
+      !value + [right as @gtlString value] 
+    }
   else
     error [right where] : "string expected" : result
   end
@@ -1763,13 +1945,24 @@ override getter @gtlString srOp ?let @gtlData unused right -> @gtlData result {
 }
 
 override getter @gtlString neqOp ?let @gtlData right -> @gtlData result {
-  result = @gtlBool.new { !where !value != [right as @gtlString value] }
+  if right is == @gtlString then
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value != [right as @gtlString value] 
+    }
+  else
     error [right where] : "string expected" : result
+  end
 }
 
 override getter @gtlString eqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlString then
-    result = @gtlBool.new { !where !value == [right as @gtlString value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value == [right as @gtlString value] 
+    }
   else
     error [right where] : "string expected" : result
   end
@@ -1777,7 +1970,11 @@ override getter @gtlString eqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlString gtOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlString then
-    result = @gtlBool.new { !where !value > [right as @gtlString value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value > [right as @gtlString value] 
+    }
   else
     error [right where] : "string expected" : result
   end
@@ -1785,7 +1982,11 @@ override getter @gtlString gtOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlString geOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlString then
-    result = @gtlBool.new { !where !value >= [right as @gtlString value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value >= [right as @gtlString value] 
+    }
   else
     error [right where] : "string expected" : result
   end
@@ -1793,7 +1994,11 @@ override getter @gtlString geOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlString ltOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlString then
-    result = @gtlBool.new { !where !value < [right as @gtlString value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value < [right as @gtlString value] 
+    }
   else
     error [right where] : "string expected" : result
   end
@@ -1801,7 +2006,11 @@ override getter @gtlString ltOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlString leOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlString then
-    result = @gtlBool.new { !where !value <= [right as @gtlString value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value <= [right as @gtlString value] 
+    }
   else
     error [right where] : "string expected" : result
   end
@@ -1829,13 +2038,13 @@ override getter @gtlString performGetter
   if    [methodName string] == "string" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] !value
+      ![methodName location] !emptylstring() !value
     }
   elsif [methodName string] == "charAtIndex" then
     argumentsCheck(!methodName !intArgument() !arguments)
     @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     result = @gtlChar.new {
-      ![methodName location] ![value characterAtIndex !index]
+      ![methodName location] !emptylstring() ![value characterAtIndex !index]
     }
   elsif [methodName string] == "indexOfChar" then
     argumentsCheck(!methodName !charArgument() !arguments)
@@ -1852,7 +2061,9 @@ override getter @gtlString performGetter
       end
     end
     result = @gtlInt.new {
-      ![methodName location] !if found then [index bigint] else -1_G end
+      ![methodName location] 
+      !emptylstring() 
+      !if found then [index bigint] else -1_G end
     }
   elsif [methodName string] == "indexOfCharInRange" then
     argumentsCheck(!methodName !charCharArguments() !arguments)
@@ -1871,84 +2082,90 @@ override getter @gtlString performGetter
       end
     end
     result = @gtlInt.new {
-      ![methodName location] !if found then [index bigint] else -1_G end
+      ![methodName location]
+      !emptylstring()
+      !if found then [index bigint] else -1_G end
     }
   elsif [methodName string] == "containsChar" then
     argumentsCheck(!methodName !charArgument() !arguments)
     @char lookedUpChar = [[arguments dataAtIndex !0] as @gtlChar value]
     result = @gtlBool.new {
-      ![methodName location] ![value containsCharacter !lookedUpChar]
+      ![methodName location] 
+      !emptylstring() 
+      ![value containsCharacter !lookedUpChar]
     }
   elsif [methodName string] == "containsCharInRange" then
     argumentsCheck(!methodName !charCharArguments() !arguments)
     @char minChar = [[arguments dataAtIndex !0] as @gtlChar value]
     @char maxChar = [[arguments dataAtIndex !1] as @gtlChar value]
     result = @gtlBool.new {
-      ![methodName location] ![value containsCharacterInRange !minChar !maxChar]
+      ![methodName location] 
+      !emptylstring() 
+      ![value containsCharacterInRange !minChar !maxChar]
     }
   elsif [methodName string] == "HTMLRepresentation" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![value HTMLRepresentation]
+      ![methodName location] !emptylstring() ![value HTMLRepresentation]
     }
   elsif [methodName string] == "identifierRepresentation" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![value identifierRepresentation]
+      ![methodName location] !emptylstring() ![value identifierRepresentation]
     }
   elsif [methodName string] == "fileExists" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] ![value fileExists]
+      ![methodName location] !emptylstring() ![value fileExists]
     }
   elsif [methodName string] == "lowercaseString" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![value lowercaseString]
+      ![methodName location] !emptylstring() ![value lowercaseString]
     }
   elsif [methodName string] == "length" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
-      ![methodName location] ![[value length] bigint]
+      ![methodName location] !emptylstring() ![[value length] bigint]
     }
   elsif [methodName string] == "capitalized" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![value stringByCapitalizingFirstCharacter]
+      ![methodName location] !emptylstring() ![value stringByCapitalizingFirstCharacter]
     }
   elsif [methodName string] == "uppercaseString" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![value uppercaseString]
+      ![methodName location] !emptylstring() ![value uppercaseString]
     }
   elsif [methodName string] == "unsigned" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
-      ![methodName location] ![[value decimalUnsignedNumber] bigint]
+      ![methodName location] !emptylstring() ![[value decimalUnsignedNumber] bigint]
     }
   elsif [methodName string] == "leftSubString" then
     argumentsCheck(!methodName !intArgument() !arguments)
     @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     result = @gtlString.new {
-      ![methodName location] ![value leftSubString !index]
+      ![methodName location] !emptylstring() ![value leftSubString !index]
     }
   elsif [methodName string] == "rightSubString" then
     argumentsCheck(!methodName !intArgument() !arguments)
     @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     result = @gtlString.new {
-      ![methodName location] ![value rightSubString !index]
+      ![methodName location] !emptylstring() ![value rightSubString !index]
     }
   elsif [methodName string] == "subString" then
     argumentsCheck(!methodName !intIntArguments() !arguments)
     @uint start = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     @uint length = [[[arguments dataAtIndex !1] as @gtlInt value] uint]
     result = @gtlString.new {
-      ![methodName location] ![value subString !start !length]
+      ![methodName location] !emptylstring() ![value subString !start !length]
     }
   elsif [methodName string] == "reversedString" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
-      ![methodName location] ![value reversedString]
+      ![methodName location] !emptylstring() ![value reversedString]
     }
   elsif [methodName string] == "componentsSeparatedByString" then
     argumentsCheck(!methodName !stringArgument() !arguments)
@@ -1957,11 +2174,11 @@ override getter @gtlString performGetter
     @list components = .emptyList
     for (str) in stringlist do
       components += !@gtlString.new {
-        ![methodName location] !str
+        ![methodName location] !emptylstring() !str
       }
     end
     result = @gtlList.new {
-      ![methodName location] !components
+      ![methodName location] !emptylstring() !components
     }
   elsif [methodName string] == "interpretEscape" then
     warning methodName : "deprecated method"
@@ -1971,6 +2188,7 @@ override getter @gtlString performGetter
     @string prefix = [[arguments dataAtIndex !0] as @gtlString value]
     result = @gtlString.new {
       ![methodName location]
+      !emptylstring() 
       ![prefix + value stringByReplacingStringByString !"\n" !"\n" + prefix]
     }
   elsif [methodName string] == "wrap" then
@@ -1998,6 +2216,7 @@ override getter @gtlString performGetter
     end
     result = @gtlString.new {
       ![methodName location]
+      !emptylstring() 
       !@string.componentsJoinedByString { !resultParagraphs !"\n" }
     }
   elsif [methodName string] == "replaceString" then
@@ -2006,6 +2225,7 @@ override getter @gtlString performGetter
     @string rep  = [[arguments dataAtIndex !1] as @gtlString value]
     result = @gtlString.new {
       ![methodName location]
+      !emptylstring() 
       ![value stringByReplacingStringByString !find !rep]
     }
   elsif [methodName string] == "subStringExists" then
@@ -2024,29 +2244,32 @@ override getter @gtlString performGetter
     end
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring() 
       !exists
     }
   elsif [methodName string] == "envVarExists" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location]
+      !emptylstring()
       ![value doesEnvironmentVariableExist]
     }
   elsif [methodName string] == "envVar" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location]
+      !emptylstring()
       !@string.stringWithEnvironmentVariableOrEmpty { ! value }
     }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !false
+      ![methodName location] !emptylstring() !false
     }
   elsif [lib getterExists !"string" !methodName] then
     result = [[lib getGetter !"string" !methodName] callGetter
@@ -2128,7 +2351,7 @@ override getter @gtlBool minusOp -> @gtlData result {
 }
 
 override getter @gtlBool notOp   -> @gtlData result {
-  result = @gtlBool.new { !where !not value }
+  result = @gtlBool.new { !where !emptylstring() !not value }
 }
 
 override getter @gtlBool addOp ?let @gtlData unused right -> @gtlData result {
@@ -2153,7 +2376,11 @@ override getter @gtlBool modOp ?let @gtlData unused right -> @gtlData result {
 
 override getter @gtlBool andOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlBool then
-    result = @gtlBool.new { !where !value & [right as @gtlBool value] }
+    result = @gtlBool.new { 
+      !where 
+      !emptylstring() 
+      !value & [right as @gtlBool value] 
+    }
   else
     error [right where] : "bool expected" : result
   end
@@ -2161,7 +2388,11 @@ override getter @gtlBool andOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlBool orOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlBool then
-    result = @gtlBool.new { !where !value | [right as @gtlBool value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value | [right as @gtlBool value] 
+    }
   else
     error [right where] : "bool expected" : result
   end
@@ -2169,7 +2400,11 @@ override getter @gtlBool orOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlBool xorOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlBool then
-    result = @gtlBool.new { !where !value ^ [right as @gtlBool value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value ^ [right as @gtlBool value] 
+    }
   else
     error [right where] : "bool expected" : result
   end
@@ -2185,7 +2420,11 @@ override getter @gtlBool srOp ?let @gtlData unused right -> @gtlData result {
 
 override getter @gtlBool neqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlBool then
-    result = @gtlBool.new { !where !value != [right as @gtlBool value] }
+    result = @gtlBool.new { 
+      !where 
+      !emptylstring() 
+      !value != [right as @gtlBool value] 
+    }
   else
     error [right where] : "bool expected" : result
   end
@@ -2193,7 +2432,11 @@ override getter @gtlBool neqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlBool eqOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlBool then
-    result = @gtlBool.new { !where !value == [right as @gtlBool value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value == [right as @gtlBool value] 
+    }
   else
     error [right where] : "bool expected" : result
   end
@@ -2201,7 +2444,11 @@ override getter @gtlBool eqOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlBool gtOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlBool then
-    result = @gtlBool.new { !where !value > [right as @gtlBool value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value > [right as @gtlBool value] 
+    }
   else
     error [right where] : "bool expected" : result
   end
@@ -2209,7 +2456,11 @@ override getter @gtlBool gtOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlBool geOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlBool then
-    result = @gtlBool.new { !where !value >= [right as @gtlBool value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value >= [right as @gtlBool value] 
+    }
   else
     error [right where] : "bool expected" : result
   end
@@ -2217,7 +2468,11 @@ override getter @gtlBool geOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlBool ltOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlBool then
-    result = @gtlBool.new { !where !value < [right as @gtlBool value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value < [right as @gtlBool value] 
+    }
   else
     error [right where] : "bool expected" : result
   end
@@ -2225,7 +2480,11 @@ override getter @gtlBool ltOp ?let @gtlData right -> @gtlData result {
 
 override getter @gtlBool leOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlBool then
-    result = @gtlBool.new { !where !value <= [right as @gtlBool value] }
+    result = @gtlBool.new {
+      !where 
+      !emptylstring() 
+      !value <= [right as @gtlBool value] 
+    }
   else
     error [right where] : "bool expected" : result
   end
@@ -2254,47 +2513,53 @@ override getter @gtlBool performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location]
+      !emptylstring()
       !if value then "true" else "false" end
     }
   elsif  [methodName string] == "string" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location]
+      !emptylstring()
       ![self string]
     }
   elsif [methodName string] == "yesOrNo" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location]
+      !emptylstring()
       !if value then "yes" else "no" end
     }
   elsif [methodName string] == "TRUEOrFALSE" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location]
+      !emptylstring()
       !if value then "TRUE" else "FALSE" end
     }
   elsif [methodName string] == "YESOrNO" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location]
+      !emptylstring()
       !if value then "YES" else "NO" end
     }
   elsif [methodName string] == "int" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
+      !emptylstring()
       !if value then 1_G else 0_G end
     }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !false
+      ![methodName location] !emptylstring() !false
     }
   elsif [lib getterExists !"bool" !methodName] then
     result = [[lib getGetter !"bool" !methodName] callGetter
@@ -2444,7 +2709,7 @@ override getter @gtlStruct neqOp ?let @gtlData right -> @gtlData result {
         end
       end
     end
-    result = @gtlBool.new { !where !not equal }
+    result = @gtlBool.new { !where !emptylstring() !not equal }
   else
     error [right where] : "struct expected" : result
   end
@@ -2467,7 +2732,7 @@ override getter @gtlStruct eqOp ?let @gtlData right -> @gtlData result {
         end
       end
     end
-    result = @gtlBool.new { !where !equal }
+    result = @gtlBool.new { !where !emptylstring() !equal }
   else
     error [right where] : "struct expected" : result
   end
@@ -2509,17 +2774,18 @@ override getter @gtlStruct performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlMap.new {
       ![methodName location]
+      !emptylstring()
       !value
     }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !false
+      ![methodName location] !emptylstring() !false
     }
   elsif [lib getterExists !"struct" !methodName] then
     result = [[lib getGetter !"struct" !methodName] callGetter
@@ -2566,7 +2832,7 @@ override method @gtlStruct structField
   if [value hasKey !name] then
     [value get !name ?result]
   else
-    result = @gtlUnconstructed.new { !name }
+    result = @gtlUnconstructed.new { !name !emptylstring() }
   end
 }
 
@@ -2577,7 +2843,7 @@ override getter @gtlStruct resultField
   if [value hasKey !name] then
     [value get !name ?result]
   else
-    result = @gtlUnconstructed.new { !name }
+    result = @gtlUnconstructed.new { !name !emptylstring() }
   end
 }
 
@@ -2675,7 +2941,7 @@ override getter @gtlList notOp   -> @gtlData result {
 override getter @gtlList addOp ?let @gtlData right -> @gtlData result {
   @list res = value;
   res += !right
-  result = @gtlList.new { !where !res  }
+  result = @gtlList.new { !where !emptylstring() !res  }
 }
 
 override getter @gtlList subOp ?let @gtlData unused right -> @gtlData result {
@@ -2700,7 +2966,11 @@ override getter @gtlList andOp ?let @gtlData unused right -> @gtlData result {
 
 override getter @gtlList orOp ?let @gtlData right -> @gtlData result {
   if right is == @gtlList then
-    result = @gtlList.new { !where !value + [right as @gtlList value] }
+    result = @gtlList.new { 
+      !where 
+      !emptylstring() 
+      !value + [right as @gtlList value] 
+    }
   else
     error [right where] : "list expected" : result
   end
@@ -2730,7 +3000,7 @@ override getter @gtlList neqOp ?let @gtlData right -> @gtlData result {
         equal = equal & [left eqOp !right]
       end
     end
-    result = @gtlBool.new { !where !not equal }
+    result = @gtlBool.new { !where !emptylstring() !not equal }
   else
     error [right where] : "list expected" : result
   end
@@ -2748,7 +3018,7 @@ override getter @gtlList eqOp ?let @gtlData right -> @gtlData result {
         equal = equal & [left eqOp !right]
       end
     end
-    result = @gtlBool.new { !where !equal }
+    result = @gtlBool.new { !where !emptylstring() !equal }
   else
     error [right where] : "list expected" : result
   end
@@ -2793,6 +3063,7 @@ override getter @gtlList performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
+      !emptylstring()
       ![[value length] bigint]
     }
   elsif "first"                  == methodName then
@@ -2807,6 +3078,7 @@ override getter @gtlList performGetter
     if index < [value length] then
       result = @gtlList.new {
         !methodName
+        !emptylstring()
         ![value subListToIndex !index]
       }
     else
@@ -2818,11 +3090,13 @@ override getter @gtlList performGetter
     if index < [value length] then
       result = @gtlList.new {
         !methodName
+        !emptylstring()
         ![value subListFromIndex !index]
       }
     else
       result = @gtlList.new {
         !methodName
+        !emptylstring()
         !.emptyList
       }
     end
@@ -2836,11 +3110,13 @@ override getter @gtlList performGetter
       end
       result = @gtlList.new {
         !methodName
+        !emptylstring()
         ![value subListWithRange !@range.new { !start !length }]
       }
     else
       result = @gtlList.new {
         !methodName
+        !emptylstring()
         !.emptyList
       }
     end
@@ -2876,16 +3152,16 @@ override getter @gtlList performGetter
         error methodName : "list of struct expected"
       end
     end
-    result = @gtlMap.new { !where !resultMap }
+    result = @gtlMap.new { !where !emptylstring() !resultMap }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !false
+      ![methodName location] !emptylstring() !false
     }
   elsif [lib getterExists !"list" !methodName] then
     result = [[lib getGetter !"list" !methodName] callGetter
@@ -2962,6 +3238,12 @@ override getter @gtlList hasItemAtIndex
   ->@bool result
 {
   result = [value length] > [[index value] uint]
+}
+
+override setter @gtlList appendItem
+  ?let @gtlData item
+{
+  value += !item
 }
 
 #-----------------------------------------------------------------------------*
@@ -3072,7 +3354,7 @@ override getter @gtlMap neqOp ?let @gtlData right -> @gtlData result {
         end
       end
     end
-    result = @gtlBool.new { !where !not equal }
+    result = @gtlBool.new { !where !emptylstring() !not equal }
   else
     error [right where] : "struct expected" : result
   end
@@ -3095,7 +3377,7 @@ override getter @gtlMap eqOp ?let @gtlData right -> @gtlData result {
         end
       end
     end
-    result = @gtlBool.new { !where !equal }
+    result = @gtlBool.new { !where !emptylstring() !equal }
   else
     error [right where] : "struct expected" : result
   end
@@ -3140,17 +3422,18 @@ override getter @gtlMap performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
+      !emptylstring() 
       ![[value count] bigint]
     }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {
-      ![methodName location] ![self dynamicType]
+      ![methodName location] !emptylstring() ![self dynamicType]
     }
   elsif "isANumber" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
-      ![methodName location] !false
+      ![methodName location] !emptylstring() !false
     }
   elsif "list"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
@@ -3158,7 +3441,7 @@ override getter @gtlMap performGetter
     for (key item) in [self value] do
       resultList += !item
     end
-    result = @gtlList.new { !where !resultList }
+    result = @gtlList.new { !where !emptylstring() !resultList }
   elsif [lib getterExists !"map" !methodName] then
     result = [[lib getGetter !"map" !methodName] callGetter
       ![methodName location]
@@ -3217,7 +3500,7 @@ override method @gtlMap mapItem
   if [value hasKey !name] then
     [value get !name ?result]
   else
-    result = @gtlUnconstructed.new { !name }
+    result = @gtlUnconstructed.new { !name !emptylstring() }
   end
 }
 
