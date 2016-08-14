@@ -423,8 +423,9 @@ override method @gtlTemplateInstruction execute
     [!?newContext setPrefix ![prefix string]]
   end
 
-  @lstring templateFileName =
-    [[fileName eval !vars !lib] as @gtlString lstring]
+  @lstring templateFileName = [newContext fullTemplateFileName
+    ![[fileName eval !vars !lib] as @gtlString lstring]
+  ]
   
   @gtlData localVars
   [!?newContext setInputVars !.emptyList]
@@ -842,7 +843,9 @@ override method @gtlDisplayStatementInstruction execute
   ?!@string     unused outputString
 {
   @gtlData variable = [variablePath get !vars !lib]
-  message [variablePath stringPath !vars !lib] + " - " + [variable desc !0]
+  message [variablePath stringPath !vars !lib]
+        + " from " + [where locationString] + " - "
+        + [variable desc !0]
 }
 
 #-----------------------------------------------------------------------------*
@@ -952,21 +955,27 @@ getter @gtlSortStatementStructInstruction compareElements
   ->@sint          result
 {
   if [keyList length] > 0 then
-    @gtlStruct s1Struct = s1 as @gtlStruct
-      error [s1 location] : "struct expected" : s1Struct
-    @gtlStruct s2Struct = s2 as @gtlStruct
-      error [s2 location] : "struct expected" : s2Struct
-    [!?keyList popFirst ?@lstring field ?@lsint order]
-    [[s1Struct value] get !field ?@gtlData s1Field]
-    [[s2Struct value] get !field ?@gtlData s2Field]
-    if [s1Field ltOp !s2Field] then
-      result = -1S * order
-    else
-      if [s1Field gtOp !s2Field] then
-        result = 1S * order
+    if s1 is == @gtlStruct then
+      if s2 is == @gtlStruct then 
+        @gtlStruct s1Struct = s1 as @gtlStruct
+        @gtlStruct s2Struct = s2 as @gtlStruct
+        [!?keyList popFirst ?@lstring field ?@lsint order]
+        [[s1Struct value] get !field ?@gtlData s1Field]
+        [[s2Struct value] get !field ?@gtlData s2Field]
+        if [s1Field ltOp !s2Field] then
+          result = -1S * order
+        else
+          if [s1Field gtOp !s2Field] then
+            result = 1S * order
+          else
+            result = [self compareElements !s1 !s2 !keyList]
+          end
+        end
       else
-        result = [self compareElements !s1 !s2 !keyList]
+        error [s2 location] : "struct expected" : result
       end
+    else
+      error [s1 location] : "struct expected" : result
     end
   else
     result = 0S

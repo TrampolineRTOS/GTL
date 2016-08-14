@@ -456,6 +456,11 @@ override getter @gtlUnconstructed performGetter
     result = @gtlBool.new {
       ![methodName location] !emptylstring() !false
     }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
+    }
   elsif [lib getterExists !"unconstructed" !methodName] then
     result = [[lib getGetter !"unconstructed" !methodName] callGetter
       ![methodName location]
@@ -614,6 +619,11 @@ override getter @gtlType performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location] !emptylstring() !false
+    }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
     }
   elsif [lib getterExists !"type" !methodName] then
     result = [[lib getGetter !"type" !methodName] callGetter
@@ -787,6 +797,11 @@ override getter @gtlEnum performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location] !emptylstring() !false
+    }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
     }
   elsif [lib getterExists !"enum" !methodName] then
     result = [[lib getGetter !"enum" !methodName] callGetter
@@ -1045,6 +1060,11 @@ override getter @gtlChar performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location] !emptylstring() !false
+    }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
     }
   elsif [lib getterExists !"char" !methodName] then
     result = [[lib getGetter !"char" !methodName] callGetter
@@ -1493,6 +1513,11 @@ override getter @gtlInt performGetter
     result = @gtlBool.new {
       ![methodName location] !emptylstring() !true
     }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
+    }
   elsif [lib getterExists !"int" !methodName] then
     result = [[lib getGetter !"int" !methodName] callGetter
       ![methodName location]
@@ -1821,6 +1846,11 @@ override getter @gtlFloat performGetter
     result = @gtlInt.new {
       ![methodName location] !emptylstring() ![[value sint64] bigint]
     }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
+    }
   elsif [lib getterExists !"float" !methodName] then
     result = [[lib getGetter !"float" !methodName] callGetter
       ![methodName location]
@@ -2143,6 +2173,23 @@ override getter @gtlString performGetter
     result = @gtlInt.new {
       ![methodName location] !emptylstring() ![[value decimalUnsignedNumber] bigint]
     }
+  elsif [methodName string] == "subStringExists" then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @string subString = [[arguments dataAtIndex !0] as @gtlString value]
+    @uint subStringLength = [subString length]
+    @uint start = 0
+    @uint stop = [value length] - subStringLength
+    @bool exists = false 
+    loop ( [value length] )
+    while (not exists) && (start <= stop) do
+      if [value subString !start !subStringLength] == subString then
+        exists = true
+      end
+      start++
+    end        
+    result = @gtlBool.new {
+      ![methodName location] !emptylstring() !exists
+    }
   elsif [methodName string] == "leftSubString" then
     argumentsCheck(!methodName !intArgument() !arguments)
     @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
@@ -2270,6 +2317,11 @@ override getter @gtlString performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location] !emptylstring() !false
+    }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
     }
   elsif [lib getterExists !"string" !methodName] then
     result = [[lib getGetter !"string" !methodName] callGetter
@@ -2561,6 +2613,11 @@ override getter @gtlBool performGetter
     result = @gtlBool.new {
       ![methodName location] !emptylstring() !false
     }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
+    }
   elsif [lib getterExists !"bool" !methodName] then
     result = [[lib getGetter !"bool" !methodName] callGetter
       ![methodName location]
@@ -2786,6 +2843,11 @@ override getter @gtlStruct performGetter
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlBool.new {
       ![methodName location] !emptylstring() !false
+    }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
     }
   elsif [lib getterExists !"struct" !methodName] then
     result = [[lib getGetter !"struct" !methodName] callGetter
@@ -3163,6 +3225,11 @@ override getter @gtlList performGetter
     result = @gtlBool.new {
       ![methodName location] !emptylstring() !false
     }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
+    }
   elsif [lib getterExists !"list" !methodName] then
     result = [[lib getGetter !"list" !methodName] callGetter
       ![methodName location]
@@ -3442,6 +3509,11 @@ override getter @gtlMap performGetter
       resultList += !item
     end
     result = @gtlList.new { !where !emptylstring() !resultList }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
+    }
   elsif [lib getterExists !"map" !methodName] then
     result = [[lib getGetter !"map" !methodName] callGetter
       ![methodName location]

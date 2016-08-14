@@ -28,12 +28,12 @@
 # @gtlContext is used to store the execution context of a template
 #-----------------------------------------------------------------------------*
 class @gtlContext {
-  @string      prefix %setter
+  @string      prefix             %setter
   @string      path
-  @string      templateDirectory
-  @function    templatePathHelper
+  @string      templateDirectory  %setter
+  @function    templatePathHelper %setter
   @stringlist  importPath
-  @gtlDataList inputVars %setter
+  @gtlDataList inputVars          %setter
 }
 
 func voidFunc
@@ -80,6 +80,18 @@ setter @gtlContext popFirstInputArg
   else
     error where : "No input argument available" : result
   end
+}
+
+getter @gtlContext fullTemplateFileName
+  ?@lstring  simpleName
+  ->@lstring fullName
+{
+  @string prefixedTemplatePath =
+    [templateDirectory stringByAppendingPath !prefix]
+  fullName = .new {
+    ![prefixedTemplatePath stringByAppendingPath !simpleName]
+    !simpleName
+  }
 }
 
 getter @string stringByAppendingPath
@@ -199,7 +211,7 @@ setter @gtlTemplateMap getTemplate
       if ifExists then
         result = .new { !fullPath !.emptyList }
       else
-        error path : "template file not found" : result
+        error path : "template file not found at \"" + path + "\"" : result
       end
     end
   end
