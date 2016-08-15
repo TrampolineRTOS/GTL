@@ -139,6 +139,7 @@ rule <gtl_simple_expression>
     }
   while 
     $.$ @location opLocation = .here
+    warning opLocation : "'.' operator is deprecated" fixit { replace "+" }
     <gtl_term> ?@gtlExpression rightSon
     expression = @gtlAddExpression.new {
       !opLocation !expression !rightSon
