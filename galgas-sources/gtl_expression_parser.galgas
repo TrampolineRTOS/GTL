@@ -139,7 +139,9 @@ rule <gtl_simple_expression>
     }
   while 
     $.$ @location opLocation = .here
-    warning opLocation : "'.' operator is deprecated" fixit { replace "+" }
+    if [option gtl_options.warnDeprecated value] then
+      warning opLocation : "'.' operator is deprecated" fixit { replace "+" }
+    end
     <gtl_term> ?@gtlExpression rightSon
     expression = @gtlAddExpression.new {
       !opLocation !expression !rightSon
@@ -336,9 +338,11 @@ rule <gtl_factor>
   $[$
   <gtl_expression> ?@gtlExpression target
   $identifier$ ?let @lstring getterName
-  if "stringByCapitalizingFirstCharacter" == getterName then
-    warning getterName : "stringByCapitalizingFirstCharacter is deprecated"
-      fixit { replace "capitalized" }
+  if [option gtl_options.warnDeprecated value] then
+    if "stringByCapitalizingFirstCharacter" == getterName then
+      warning getterName : "stringByCapitalizingFirstCharacter is deprecated"
+        fixit { replace "capitalized" }
+    end
   end
   @gtlExpressionList argumentList = .emptyList
   select
@@ -503,7 +507,9 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $emptylist$
-  warning .here : "emptylist is deprecated" fixit { replace "@( )" }
+  if [option gtl_options.warnDeprecated value] then
+    warning .here : "emptylist is deprecated" fixit { replace "@( )" }
+  end
   expression = @gtlTerminal.new {
     !.here
     !@gtlList.new { 
@@ -520,7 +526,9 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $emptymap$
-  warning .here : "emptymap is deprecated" fixit { replace "@[ ]" }
+  if [option gtl_options.warnDeprecated value] then
+    warning .here : "emptymap is deprecated" fixit { replace "@[ ]" }
+  end
   expression = @gtlTerminal.new {
     !.here
     !@gtlMap.new { 
