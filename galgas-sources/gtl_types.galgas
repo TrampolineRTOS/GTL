@@ -105,17 +105,17 @@ getter @gtlContext fullTemplateFileName
         !simpleName
     ] + templateExtension
       
-    message "Search in " + fullPath + "... "    
+#    message "Search in " + fullPath + "... "    
     if [fullPath fileExists] then
-      message "found\n"
+#      message "found\n"
       rootPath = fullPath
       found = true
-    else
-      message "\n"
+#    else
+#      message "\n"
     end
     hierarchicalPath = [hierarchicalPath stringByDeletingLastPathComponent]
   end
-  message "#### Return " + rootPath + "\n"
+#  message "#### Return " + rootPath + "\n"
   fullName = .new {
     !rootPath
     !simpleName
@@ -346,7 +346,7 @@ setter @library getTemplate
   ! @bool           found
   ! @gtlTemplate    result
 {
-  message "**** Getting " + path + "\n"
+#  message "**** Getting " + path + "\n"
   [!?templateMap getTemplate
     !context
     !path
