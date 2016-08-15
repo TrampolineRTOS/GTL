@@ -419,11 +419,12 @@ override method @gtlTemplateInstruction execute
 {  
   @gtlContext newContext = context
 
-  if [prefix string] != "" then
-    [!?newContext setPrefix ![prefix string]]
+  if "" != prefix then
+    [!?newContext setPrefix !prefix]
   end
 
   @lstring templateFileName = [newContext fullTemplateFileName
+    !vars
     ![[fileName eval !vars !lib] as @gtlString lstring]
   ]
   
@@ -550,13 +551,19 @@ method @gtlForeachStatementInstruction iterateOnMap
   ?!@string     outputString
   ? let @gtlMap iterableMap
 {
+  @lstring actualKeyName = if "" == keyName then
+    .new { !"KEY" !keyName }
+  else
+    keyName
+  end
+  
   for () in [iterableMap value]
   before
     [beforeList execute !?context !?vars !?lib !?outputString]
   do (index)
     [!?vars setStructField !variableName !value]
     [!?vars setStructField
-      !keyName !@gtlString.new { !where !emptylstring() ![lkey string] }
+      !actualKeyName !@gtlString.new { !keyName !emptylstring() ![lkey string] }
     ]
     [!?vars setStructField
       !indexName !@gtlInt.new { !where !emptylstring() ![index bigint] }
@@ -1014,11 +1021,25 @@ override method @gtlTabStatementInstruction execute
   ?!@gtlContext unused context
   ?!@gtlData           vars
   ?!@library           lib
-  ?!@string     unused outputString
+  ?!@string            outputString
 {
   @gtlData tabValueData = [tabValue eval !vars !lib]
-  @gtlInt tabValueInt = tabValueData as @gtlInt
-    error [tabValueData location] : "int expected" : tabValueInt
+  if tabValueData is == @gtlInt then
+    @gtlInt tabValueInt = tabValueData as @gtlInt
+    @uint currentColumn = [outputString currentColumn]
+    if [tabValueInt value] >= 0_G then
+      @uint tabColumn = [[tabValueInt value] uint]
+      if tabColumn > currentColumn then
+        outputString += @string.stringWithSequenceOfCharacters{
+          !' '
+          !tabColumn - currentColumn - 1
+        }
+      end
+    end
+    
+  else
+    error tabValueData : "int expected"
+  end
 }
 
 #-----------------------------------------------------------------------------*

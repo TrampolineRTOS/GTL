@@ -2158,7 +2158,8 @@ override getter @gtlString performGetter
     result = @gtlInt.new {
       ![methodName location] !emptylstring() ![[value length] bigint]
     }
-  elsif [methodName string] == "capitalized" then
+  elsif [methodName string] == "capitalized"
+        || "stringByCapitalizingFirstCharacter" == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlString.new {
       ![methodName location] !emptylstring() ![value stringByCapitalizingFirstCharacter]

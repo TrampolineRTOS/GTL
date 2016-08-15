@@ -1325,7 +1325,6 @@ override getter @gtlTypeOfExpression eval
   ? let @library lib
   -> @gtlData result
 {
-  error .here : "" : result
   @gtlData variableValue = [variable get !vars !lib]
   result = @gtlType.new { !where !emptylstring() ![variableValue dynamicType] }
 }

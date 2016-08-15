@@ -59,7 +59,7 @@ list goilTemplateKeyWordList style keywordsStyle error message "the '%K' keyword
   "after", "before", "between", "by", "default", "display",
   "do", "down", "else", "elsif", "emptylist", "emptymap", "end", "error",
   "exists", "false", "for", "foreach", "from", "func", "here", "if", "in",
-  "import", "listof", "let", "loop", "mapof", "mod", "module", "no", "not", "or",
+  "import", "listof", "let", "loop", "mapof", "mod", "no", "not", "or",
   "print", "println", "repeat", "sort", "step", "tab", "template", 
   "then", "to", "true", "typeof", "up", "yes", "warning", "while", "write",
   "executable", "variables", "getter", "unlet", "setter", "libraries", "input"

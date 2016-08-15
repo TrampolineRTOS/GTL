@@ -335,6 +335,10 @@ rule <gtl_factor>
   $[$
   <gtl_expression> ?@gtlExpression target
   $identifier$ ?let @lstring getterName
+  if "stringByCapitalizingFirstCharacter" == getterName then
+    warning getterName : "stringByCapitalizingFirstCharacter is deprecated"
+      fixit { replace "capitalized" }
+  end
   @gtlExpressionList argumentList = .emptyList
   select
   or
@@ -498,7 +502,7 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $emptylist$
-  warning .here : "emptylist is deprecated, use @() instead"
+  warning .here : "emptylist is deprecated" fixit { replace "@( )" }
   expression = @gtlTerminal.new {
     !.here
     !@gtlList.new { 
@@ -515,7 +519,7 @@ rule <gtl_factor>
   !@gtlExpression expression
 {
   $emptymap$
-  warning .here : "emptymap is deprecated, use @[] instead"
+  warning .here : "emptymap is deprecated" fixit { replace "@[ ]" }
   expression = @gtlTerminal.new {
     !.here
     !@gtlMap.new { 

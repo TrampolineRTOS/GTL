@@ -28,29 +28,22 @@
 # @gtlContext is used to store the execution context of a template
 #-----------------------------------------------------------------------------*
 class @gtlContext {
-  @string      prefix             %setter
-  @string      path
+  @lstring     prefix             %setter
+  @string      path               %setter
   @string      templateDirectory  %setter
-  @function    templatePathHelper %setter
+  @string      templateExtension  %setter
   @stringlist  importPath
   @gtlDataList inputVars          %setter
-}
-
-func voidFunc
-  ?@lstring path
-  ->@lstring result
-{
-  result = .new { ![path string] + ".gtl" ![path location] }
 }
 
 func emptyContext
   ->@gtlContext context
 {
   context = .new {
+    !emptylstring()
     !""
     !""
-    !""
-    !.functionWithName { !"voidFunc" }
+    !".gtl"
     !.emptyList
     !.emptyList
   }
@@ -82,14 +75,49 @@ setter @gtlContext popFirstInputArg
   end
 }
 
+getter @gtlContext fullPrefix
+  ?let @gtlData unused vars
+  ->@lstring full
+{
+  full = prefix
+}  
+
 getter @gtlContext fullTemplateFileName
-  ?@lstring  simpleName
+  ?@gtlData vars
+  ?@lstring simpleName
   ->@lstring fullName
 {
   @string prefixedTemplatePath =
-    [templateDirectory stringByAppendingPath !prefix]
+    [templateDirectory stringByAppendingPath ![self fullPrefix !vars]]
+    
+  @string hierarchicalPath = path
+  @string rootPath =
+    [prefixedTemplatePath stringByAppendingPath !simpleName] + templateExtension
+  @bool found = false
+
+  loop ( [hierarchicalPath length] )
+  while not found && [hierarchicalPath length] > 0 do
+    @string fullPath = [
+      [prefixedTemplatePath stringByAppendingPath
+        !hierarchicalPath
+      ] 
+      stringByAppendingPath
+        !simpleName
+    ] + templateExtension
+      
+    message "Search in " + fullPath + "... "    
+    if [fullPath fileExists] then
+      message "found\n"
+      rootPath = fullPath
+      found = true
+    else
+      message "\n"
+    end
+    hierarchicalPath = [hierarchicalPath stringByDeletingLastPathComponent]
+  end
+  message "#### Return " + rootPath + "\n"
   fullName = .new {
-    ![prefixedTemplatePath stringByAppendingPath !simpleName]
+    !rootPath
     !simpleName
   }
 }
@@ -190,26 +218,22 @@ setter @gtlTemplateMap getTemplate
   ! @bool            found
   ! @gtlTemplate     result
 {
-  @objectlist helperArguments = .listWithValue{ ![path object] }
-  @lstring fullPath =
-    [[context templatePathHelper] invoke !helperArguments !.here] as @lstring
-        
-  if [self hasKey !fullPath] then
+  if [self hasKey !path] then
     found = true
-    [self get !fullPath ?result]
+    [self get !path ?result]
   else
-    if [fullPath fileExists] then
+    if [path fileExists] then
       found = true
-      grammar gtl_grammar in fullPath
+      grammar gtl_grammar in path
         !                    context
         !?                   lib
         ?@gtlInstructionList program
-      result = .new { !fullPath !program }
-      [!?self put !fullPath !result]
+      result = .new { !path !program }
+      [!?self put !path !result]
     else
       found = false
       if ifExists then
-        result = .new { !fullPath !.emptyList }
+        result = .new { !path !.emptyList }
       else
         error path : "template file not found at \"" + path + "\"" : result
       end
@@ -315,13 +339,14 @@ setter @library doImport
 } 
 
 setter @library getTemplate
-  ? @gtlContext  context
-  ? @lstring     path
-  ? @bool        ifExists
-  ?!@library     lib
-  ! @bool        found
-  ! @gtlTemplate result
+  ? let @gtlContext context
+  ? @lstring        path
+  ? @bool           ifExists
+  ?!@library        lib
+  ! @bool           found
+  ! @gtlTemplate    result
 {
+  message "**** Getting " + path + "\n"
   [!?templateMap getTemplate
     !context
     !path
