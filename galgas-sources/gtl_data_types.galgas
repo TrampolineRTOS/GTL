@@ -477,12 +477,28 @@ override getter @gtlUnconstructed performGetter
 # Performs a setter on a @gtlUnconstructed
 #-----------------------------------------------------------------------------*
 override setter @gtlUnconstructed performSetter
-  ?let @lstring            methodName
-  ?let @gtlDataList unused arguments
-  ?let @library            lib
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ?let @library     lib
 {
-  if [lib setterExists !"unconstructed" !methodName] then
-    # nothing to do, an unconstructed has no data
+  if "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif [lib setterExists !"unconstructed" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"unconstructed" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for unconstructed target"
   end
@@ -645,7 +661,15 @@ override setter @gtlType performSetter
   ?let @gtlDataList        arguments
   ?let @library            lib
 {
-  if [lib setterExists !"type" !methodName] then
+  if "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif [lib setterExists !"type" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"type" !methodName] callSetter
       ![methodName location]
@@ -654,6 +678,8 @@ override setter @gtlType performSetter
       !arguments
     ]
     type = [copy as @gtlType type]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for type target"
   end
@@ -823,7 +849,15 @@ override setter @gtlEnum performSetter
   ?let @gtlDataList arguments
   ?let @library     lib
 {
-  if [lib setterExists !"enum" !methodName] then
+  if "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif [lib setterExists !"enum" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"enum" !methodName] callSetter
       ![methodName location]
@@ -832,6 +866,8 @@ override setter @gtlEnum performSetter
       !arguments
     ]
     value = [copy as @gtlEnum value]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for enum target"
   end
@@ -1079,14 +1115,22 @@ override getter @gtlChar performGetter
 }
 
 #-----------------------------------------------------------------------------*
-# Performs a setter on a @gtlInt
+# Performs a setter on a @gtlChar
 #-----------------------------------------------------------------------------*
 override setter @gtlChar performSetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
   ?let @library     lib
 {
-  if [lib setterExists !"char" !methodName] then
+  if "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif [lib setterExists !"char" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"char" !methodName] callSetter
       ![methodName location]
@@ -1095,6 +1139,8 @@ override setter @gtlChar performSetter
       !arguments
     ]
     value = [copy as @gtlChar value]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for char target"
   end
@@ -1543,10 +1589,20 @@ override setter @gtlInt performSetter
     @bool bit = [[arguments dataAtIndex !0] as @gtlBool value]
     @uint index = [[[arguments dataAtIndex !1] as @gtlInt value] uint]
     [!?value setBitAtIndex !bit !index]
+    where = methodName
   elsif [methodName string] == "complementBitAtIndex" then
     argumentsCheck(!methodName !intArgument() !arguments)
     @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
     [!?value complementBitAtIndex !index]
+    where = methodName
+  elsif "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
   elsif [lib setterExists !"int" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"int" !methodName] callSetter
@@ -1556,6 +1612,8 @@ override setter @gtlInt performSetter
       !arguments
     ]
     value = [copy as @gtlInt value]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for int target"
   end
@@ -1871,7 +1929,15 @@ override setter @gtlFloat performSetter
   ?let @gtlDataList arguments
   ?let @library     lib
 {
-  if [lib setterExists !"float" !methodName] then
+  if "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif [lib setterExists !"float" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"float" !methodName] callSetter
       ![methodName location]
@@ -1880,6 +1946,8 @@ override setter @gtlFloat performSetter
       !arguments
     ]
     value = [copy as @gtlFloat value]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for float target"
   end
@@ -2345,11 +2413,20 @@ override setter @gtlString performSetter
   ?let @gtlDataList arguments
   ?let @library     lib
 {
-  if "setCharAtIndex" == methodName then
+  if    "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif          "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif "setCharAtIndex" == methodName then
     argumentsCheck(!methodName !charIntArguments() !arguments)
     @char charToSet = [[arguments dataAtIndex !0] as @gtlChar value]
     @uint index = [[[arguments dataAtIndex !1] as @gtlInt value] uint]
     [!?value setCharacterAtIndex !charToSet !index]
+    where = methodName
   elsif [lib setterExists !"string" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"string" !methodName] callSetter
@@ -2359,6 +2436,8 @@ override setter @gtlString performSetter
       !arguments
     ]
     value = [copy as @gtlString value]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for string target"
   end
@@ -2640,7 +2719,15 @@ override setter @gtlBool performSetter
   ?let @gtlDataList arguments
   ?let @library     lib
 {
-  if [lib setterExists !"bool" !methodName] then
+  if "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif [lib setterExists !"bool" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"bool" !methodName] callSetter
       ![methodName location]
@@ -2649,6 +2736,8 @@ override setter @gtlBool performSetter
       !arguments
     ]
     value = [copy as @gtlBool value]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for boolean target"
   end
@@ -2871,7 +2960,15 @@ override setter @gtlStruct performSetter
   ?let @gtlDataList arguments
   ?let @library     lib
 {
-  if [lib setterExists !"struct" !methodName] then
+  if "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif [lib setterExists !"struct" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"struct" !methodName] callSetter
       ![methodName location]
@@ -2880,6 +2977,8 @@ override setter @gtlStruct performSetter
       !arguments
     ]
     value = [copy as @gtlStruct value]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for struct target"
   end
@@ -3252,11 +3351,24 @@ override setter @gtlList performSetter
   ?let @gtlDataList arguments
   ?let @library     lib
 {
-  if    "insert" == methodName then
+  if "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif      "insert" == methodName then
     argumentsCheck(!methodName !intAnyArguments() !arguments)
     @uint insertIndex = [[arguments dataAtIndex !0] int]
     @gtlData node = [arguments dataAtIndex !1]
-    [!?value insertAtIndex !node !insertIndex]
+    if insertIndex < [value length] then
+      [!?value insertAtIndex !node !insertIndex]
+    else
+      value += !node
+    end
+    where = methodName
   elsif [lib setterExists !"list" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"list" !methodName] callSetter
@@ -3266,6 +3378,8 @@ override setter @gtlList performSetter
       !arguments
     ]
     value = [copy as @gtlList value]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for list target"
   end
@@ -3536,7 +3650,15 @@ override setter @gtlMap performSetter
   ?let @gtlDataList arguments
   ?let @library     lib
 {
-  if [lib setterExists !"map" !methodName] then
+  if "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif [lib setterExists !"map" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"map" !methodName] callSetter
       ![methodName location]
@@ -3545,6 +3667,8 @@ override setter @gtlMap performSetter
       !arguments
     ]
     value = [copy as @gtlMap value]
+    where = [copy where]
+    meta  = [copy meta]
   else
     error methodName : "unknown setter '" + methodName +"' for map target"
   end

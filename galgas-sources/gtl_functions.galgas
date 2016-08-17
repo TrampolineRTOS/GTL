@@ -165,3 +165,108 @@ func currentDateTime -> @string result
 {
   result = @string.stringWithCurrentDateTime
 }
+
+#-----------------------------------------------------------------------------*
+# Returns the max 8 bits unsigned integer
+#-----------------------------------------------------------------------------*
+func max8bitsUnsignedInt -> @bigint result
+{
+  result = [255 bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the max 8 bits signed integer
+#-----------------------------------------------------------------------------*
+func max8bitsSignedInt -> @bigint result
+{
+  result = [127 bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the min 8 bits signed integer
+#-----------------------------------------------------------------------------*
+func min8bitsSignedInt -> @bigint result
+{
+  result = [-128s bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the max 16 bits unsigned integer
+#-----------------------------------------------------------------------------*
+func max16bitsUnsignedInt -> @bigint result
+{
+  result = [65535 bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the max 16 bits signed integer
+#-----------------------------------------------------------------------------*
+func max16bitsSignedInt -> @bigint result
+{
+  result = [32767 bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the min 32 bits signed integer
+#-----------------------------------------------------------------------------*
+func min16bitsSignedInt -> @bigint result
+{
+  result = [-32768s bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the max 32 bits unsigned integer
+#-----------------------------------------------------------------------------*
+func max32bitsUnsignedInt -> @bigint result
+{
+  result = [@uint.max bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the max 32 bits signed integer
+#-----------------------------------------------------------------------------*
+func max32bitsSignedInt -> @bigint result
+{
+  result = [@sint.max bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the min 32 bits signed integer
+#-----------------------------------------------------------------------------*
+func min32bitsSignedInt -> @bigint result
+{
+  result = [@sint.min bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the max 32 bits unsigned integer
+#-----------------------------------------------------------------------------*
+func max64bitsUnsignedInt -> @bigint result
+{
+  result = [@uint64.max bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the max 32 bits signed integer
+#-----------------------------------------------------------------------------*
+func max64bitsSignedInt -> @bigint result
+{
+  result = [@sint64.max bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns the min 32 bits signed integer
+#-----------------------------------------------------------------------------*
+func min64bitsSignedInt -> @bigint result
+{
+  result = [@sint64.min bigint]
+}
+
+#-----------------------------------------------------------------------------*
+# Returns an approximation of pi
+#-----------------------------------------------------------------------------*
+func pi -> @double result
+{
+  result = @double.pi
+}
+

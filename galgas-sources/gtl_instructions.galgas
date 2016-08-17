@@ -851,7 +851,7 @@ override method @gtlDisplayStatementInstruction execute
 {
   @gtlData variable = [variablePath get !vars !lib]
   message [variablePath stringPath !vars !lib]
-        + " from " + [where locationString] + " - "
+        + " from " + [where locationString] + "\n  - "
         + [variable desc !0]
 }
 
