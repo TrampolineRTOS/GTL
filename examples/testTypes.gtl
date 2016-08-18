@@ -1,0 +1,194 @@
+%
+let c := 3
+if exists c then println "c exists" else println "c does not exist" end if
+unlet c
+if exists c then println "c exists" else println "c does not exist" end if
+
+let aList := @( 1, 2, 3 )
+let aSecondList := exists aList default ( @() )
+display aSecondList
+unlet aList
+let aSecondList := exists aList default ( @() )
+display aSecondList
+
+let a := 1
+let typeOfA := [a type]
+display typeOfA
+
+let b := 0
+let a := 1
+if [a isANumber] then
+  let b := a # if a is a number, it is copied in b
+else
+  let b := 0 # otherwise b is set to 0
+end if
+display b
+
+variables
+
+let b := [42 string]
+display b
+
+let a := [42 hexString]
+display a
+let b := [-20 hexString]
+display b
+
+let a := [42 xString]
+display a
+let b := [-20 xString]
+display b
+
+println [255 numberOfBytes]
+println [256 numberOfBytes]
+
+println [127 signedNumberOfBytes]
+println [128 signedNumberOfBytes]
+
+println [63 numberOfBits]
+println [64 numberOfBits]
+
+println [63 signedNumberOfBits]
+println [64 signedNumberOfBits]
+
+#
+# Initialize ALARMS with a list of 2 structs with a NAME field.
+#
+let ALARMS := @( @{ NAME: "alr1"}, @{ NAME: "alr2"} )
+
+%
+#define ALARM_COUNT % ![ALARMS length]
+
+foreach alr in ALARMS
+  before %
+tpl_time_obj *tpl_alarm_table[ALARM_COUNT] = {
+%
+  do %  &% !alr::NAME %_alarm_desc%
+  between %,
+%
+  after %
+};
+%
+end foreach
+
+let a := [1 bitAtIndex: 0]
+display a
+
+let a := 0
+[!a setBitAtIndex: true, 0]
+display a
+
+let a := 1
+[!a complementBitAtIndex: 1]
+display a
+
+let a := ["Hello" charAtIndex: 1]
+display a
+
+let a := ["Hello" indexOfChar: 'l']
+let b := ["Hello" indexOfChar: 'z']
+display a
+display b
+
+let a := ["Hello" indexOfCharInRange: 'a', 'e']
+display a
+
+let str := ["Hello World !" leftSubString : 5]
+display str
+
+let str := [["Hello World !" leftSubString : 11] rightSubString: 5]
+display str
+
+let firstStr := ["Hello World !" subString : 6, 5]
+display firstStr
+let secondStr := ["Hello" subString : 10, 3]
+display secondStr
+let thirdStr := ["Hello" subString : 2, 10]
+display thirdStr
+
+let str := ["Hello World !" reversedString]
+display str
+
+let componentList := ["Hello World !" componentsSeparatedByString : " "]
+display componentList
+
+let formattedStr := ["Hello\nWorld" columnPrefixedBy : "# "]
+println formattedStr
+
+let wrappedStr := ["Hello beautiful World.\nHow are you" wrap : 6, 2]
+println wrappedStr
+
+let a := "Hello"
+[!a setCharAtIndex: 'a', 1]
+display a
+
+println currentDateTime()
+
+println not true
+println not false
+
+let a := @{ a: 1, b: 2, c: 3 }
+let b := [a map]
+display a
+display b
+
+let aList := @( 1, 2, 3, 4 )
+let aList := [aList subListTo: 1]
+display aList
+
+let aList := @( 1, 2, 3, 4 )
+let aList := [aList subListFrom: 2]
+display aList
+
+let aList := @( 1, 2, 3, 4 )
+let aFirstList := [aList subList: 1, 5]
+display aFirstList
+let aSecondList := [aList subList: 2, 1]
+display aSecondList
+
+let aList := @( 1, 2, 3, 4 )
+[!aList insert: 1, "Hello"]
+[!aList insert: 10, "At the end"]
+display aList
+
+let aMap := @[ "age" : 29, "height" : 175, "name" : "John" ]
+let aList := [aMap list]
+display aList
+
+%This is the output of a template
+%
+foreach item in ["Hello World !" componentsSeparatedByString: " "]
+do
+  !item
+between%
+%
+end foreach%
+%
+
+let aList := @( 1, 2, 3, 4 )
+repeat ( [aList length] )
+while [aList length] > 0 do
+  println [aList first]
+  unlet aList[0]
+end repeat
+
+write to "/tmp/outputOfTemplate" :
+%Hello
+%
+end write 
+
+write to executable "/tmp/listfiles.sh" :
+%# /bin/sh
+ls -al
+%
+end write
+
+let a := 1
+println typeof a
+
+foreach a in @( "Does", "anybody", "remember", "Vera", "Lynn", '?' ) do
+  print a 
+  print " "
+end foreach
+println
+

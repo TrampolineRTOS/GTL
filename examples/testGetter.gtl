@@ -1,0 +1,7 @@
+%
+import "getterSetter"
+
+let b := [6 square]
+display b
+let b := [b square]
+display b

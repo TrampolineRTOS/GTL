@@ -10,7 +10,7 @@ end func
 #----------------------------------------------------------------
 # function with one argument
 #----------------------------------------------------------------
-func square(x) result
+func square(x : @int) result
   let result := x * x
 end func
 

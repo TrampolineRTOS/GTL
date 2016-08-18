@@ -1,0 +1,7 @@
+%
+loop a from 1 to 4 do
+  template helloTemplate
+  % % !a % %
+end loop
+%
+%

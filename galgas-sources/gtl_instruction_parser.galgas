@@ -145,11 +145,18 @@ rule <gtl_simple_instruction>
   !@gtlInstruction instruction
 {
   $println$ @location where = .here
-  <gtl_expression> ?@gtlExpression expression
-
-  instruction = @gtlPrintStatementInstruction.new {
-    !where !true !expression
-  }
+  select
+    <gtl_expression> ?@gtlExpression expression
+    instruction = @gtlPrintStatementInstruction.new {
+      !where !true !expression
+    }
+  or
+    instruction = @gtlPrintStatementInstruction.new {
+      !where
+      !true 
+      !@gtlTerminal.new { !where !@gtlString.new { !where !emptylstring() !"" } }
+    }    
+  end
 }
 
 #-----------------------------------------------------------------------------*

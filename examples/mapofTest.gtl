@@ -1,0 +1,29 @@
+%
+let aStruct := @{ a: 1, b: 2, c: 3 }
+display aStruct
+let aMap := mapof aStruct end
+display aMap
+
+let aList := @(
+  @{ age : 18, height : 180, name : "Arnold" },
+  @{ age : 22, height : 170, name : "Bob"    },
+  @{ age : 29, height : 175, name : "John"   }
+)
+let aMap := mapof aList by name
+display aMap
+
+let aList := @( "wish", "you", "where", "here" )
+sort aList >
+display aList
+sort aList <
+display aList
+
+let aList := @(
+  @{ age : 18, height : 180, name : "Arnold" },
+  @{ age : 22, height : 170, name : "Bob"    },
+  @{ age : 29, height : 175, name : "John"   }
+)
+sort aList by age >
+display aList
+sort aList by height <
+display aList

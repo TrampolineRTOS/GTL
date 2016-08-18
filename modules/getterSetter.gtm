@@ -60,3 +60,18 @@ getter @list isrOfCategory (category : @int) result
     end if
   end foreach
 end getter
+
+#----------------------------------------------------------------
+# setter : delete all list items which are struct and with the
+# field has the name age
+#----------------------------------------------------------------
+setter @list deleteAge()
+  let theList := self
+  let offset := 0
+  foreach element (index) in theList do
+    if exists element::age then
+      unlet self[index + offset]
+      let offset -= 1
+    end if
+  end foreach
+end setter

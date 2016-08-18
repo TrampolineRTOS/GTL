@@ -12,44 +12,32 @@ let c := [3.5 cube]
 display c
 
 let c := @(
-  @{
-    age : 18,
-    height : 180,
-    name : "Arnold"
-  },
-  @{
-    age : 22,
-    height : 170,
-    name : "Bob"
-  },
-  @{
-    age : 29,
-    height : 175,
-    name : "John"
-  }
+  @{ age : 18, height : 180, name : "Arnold" },
+  @{ age : 22, height : 170, name : "Bob"    },
+  @{ age : 29, height : 175, name : "John"   }
 )
 
-display c
-
 if [c alwaysHasField : "age"] then
-  println "List ok"
+  println "List 1 ok"
 else
-  println "One of the element does not have the age field"
+  println "List 1 ko"
 end if
 
 let c += @{ height : 150, name : "Sally" }
 
-display c
-
 if [c alwaysHasField : "age"] then
-  println "List ok"
+  println "List 2 ok"
 else
-  println "One of the element does not have the age field"
+  println "List 2 ko"
 end if
+
+display c
+[!c deleteAge]
+display c
 
 println [c[0] hasField: "age"]
 
-println [c[3] hasField: "age"]
+#println [c[3] hasField: "age"]
 
 let a := "OH"
 [!a thisIsAnA]

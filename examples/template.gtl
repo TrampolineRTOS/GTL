@@ -1,0 +1,9 @@
+%
+import "function"
+
+let b := psquare(6)
+display b
+let b := psquare(2.6)
+display b
+let b := psquare("Hello")
+display b
