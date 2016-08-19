@@ -162,7 +162,7 @@
 
 This document presents the syntax and the semantics of GTL 3, a template language used in Goil, the OIL compiler of Trampoline\footnote{An OSEK and AUTOSAR 4.2 compliant RTOS, check \url{https://github.com/TrampolineRTOS/trampoline}.}, to generate code from the OIL or arXML description of an OSEK/AUTOSAR application.
 
-GTL is written in GalGas 3\,\footnote{GalGas 3 is free software distributed under the GPL license and can be found at \url{http://galgas.rts-software.org}}, a lexical and syntactic analyzer, which is also a powerful domain specific language to write compilers and interpreters. GalGas 3 is developed by Pierre Molinaro from the Real-Time Systems Group of IRCCyN, a french laboratory from a joint of the University of Nantes, \'Ecole Centrale de Nantes, \'Ecole des Mines de Nantes and CNRS. The first version of the GTL interpreter was written by Pierre Molinaro too. As needs increases, more features was needed and this led to a major rewrite of the GTL interpreter; In fact no original code made its way in GTL 3.
+GTL is written in GalGas 3\,\footnote{GalGas 3 is free software distributed under the GPL license and can be found at \url{http://galgas.rts-software.org}}, a lexical and syntactic analyzer, which is also a powerful domain specific language to write compilers and interpreters. GalGas 3 is developed by Pierre Molinaro from the Real-Time Systems Group of IRCCyN, a french laboratory from a joint of the University of Nantes, \'Ecole Centrale de Nantes, \'Ecole des Mines de Nantes and CNRS. The first version of the GTL interpreter was written by Pierre Molinaro too. As needs have increased, more features was needed and this led to a major rewrite of the GTL interpreter; In fact no original code made its way in GTL 3.
 
 \section*{Convention}
 
@@ -199,6 +199,8 @@ GTL supports the following data types:
   {lists of data, may be accessed as a table}\\
  {map}&
   {map (aka dictionary) of data}\\
+ {set}&
+  {set of strings}\\
  {type}&
   {the type of a data}\\
  {unconstructed}&
@@ -320,7 +322,7 @@ The \gtlinline{typeof} operator takes a variable as argument an return its type.
 typeof var
 \end{gtl}
 
-\warning{The \gtlinline{typeof} is deprecated. Use the \gtlinline{type} getter instead. See \ref{sec:type}.}
+\warning{The \gtlinline{typeof} is deprecated. Use the \gtlinline{type} getter instead. See \ref{universalGetter:type}.}
 
 \subsection{The \texttt{mapof} operator}
 
@@ -432,9 +434,9 @@ listof var end
 \section{Getters applicable to any data type}
 
 \subsection{The \texttt{type} getter} 
-\label{sec:type}
+\label{universalGetter:type}
 
-The \gtlinline{type} getter returns the type of the expression. See the section \ref{sec:typetype}.
+The \gtlinline{type} getter returns the type of the expression. See the section \ref{sec:type}.
 
 \example
 
@@ -947,6 +949,42 @@ The \lstinline{char} data type supports the following operators:
 
 \gtlinline{isXDigit} returns a bool, \texttt{true} if the char expression is an ASCII hexadecimal digit: between \ccst{A} and \ccst{F} or between \ccst{a} and \ccst{f} or between \ccst{0} and \ccst{9}, \texttt{false} otherwise.
   
+\section{The \texttt{enum} data type}
+
+The \gtltype{enum} data type allow to store identifiers in variables. A literal enum begins with a \ccst{\$} followed with a name composed of ASCII letters, numbers and \ccst{\_}.
+
+\example
+\begin{gtl}
+let a := $auto
+display a
+\end{gtl}
+\begin{console}
+a from file '/Users/jlb/Develop/GTL/examples/enumTest.gtl', line 4:7
+    enum: auto
+\end{console}
+
+\subsection{The \texttt{enum} operators}
+
+\subsubsection{Comparison operators}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {!=}&
+  {bool $\leftarrow$ enum != enum}&
+  {Not equal}\\
+ {==}&
+  {bool $\leftarrow$ enum == enum}&
+  {Equal}\\
+\end{longtable}
+
+\subsection{The \texttt{enum} getters}
+
+\subsubsection{The \texttt{string} getter}
+
+\gtlinline{string} returns a string representation of the enum expression. \gtlinline{[@auto string]} returns string \scst{auto}.
+
 \section{The \texttt{float} data type}
 
 The \gtltype{float} data type is the standard IEEE784 64 bits floating point number.
@@ -1736,6 +1774,23 @@ myMap - map: @[
 ]
 \end{console}
 
+\subsubsection{The \texttt{set} getter}
+
+\gtlinline{set} assumes the list is a list of items convertible to string. If any of the list item is not convertible to a string, a runtime error occurs. \gtlinline{set} returns a set representation of the list.
+
+\example
+\begin{gtl}
+let aList := @( 1, 2, 4, "Hello", 4, 2, 1 )
+let aSet := [aList set]
+display aSet
+\end{gtl}
+\begin{console}
+aSet from file '/Users/jlb/Develop/GTL/examples/setTest.gtl', line 30:7
+    set: @!
+        1, 2, 4, Hello
+    !
+\end{console}
+
 \subsubsection{The \texttt{subListTo} getter}
 
 \gtlinline{subListTo} takes an int argument which is the stop \gtlarg{index} of the sublist. It returns a sublist which is a copy of target list ranging from 0 to the \gtlarg{index} included. If the \gtlarg{index} is greater than of equals the length of the target, the target is returned.
@@ -1895,16 +1950,206 @@ display aList
 \end{gtl}
 \begin{console}
 aList from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 144:7
-  - list: @(
-    0 :>
-        integer: 29
-    1 :>
-        integer: 175
-    2 :>
-        string: "John"
-)
+    list: @(
+        0 :>
+            integer: 29
+        1 :>
+            integer: 175
+        2 :>
+            string: "John"
+    )
 \end{console}
 
+\section{The \texttt{set} data type}
+
+The \gtltype{set} data type is a set of strings. Any data that can be converted to a string may be added to a set but the actual value stored in the set is the string representation of the data. Adding a data which is already in the set has no effect.
+
+A literal set is defined as follow.
+
+\begin{gtl}
+@! 1, 2, 3, 4, "Hello" !
+\end{gtl}
+
+A literal empty set is defined as follow.
+
+\begin{gtl}
+@! !
+\end{gtl}
+
+\subsection{The \texttt{set} operators}
+
+The \gtltype{set} data type supports the following operators:
+
+\subsubsection{Binary operators}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {+}&
+  {set $\leftarrow$ set + any}&
+  {add the string representation of \texttt{any} to the set}\\
+ {-}&
+  {set $\leftarrow$ set$_1$ - set$_2$}&
+  {remove from \texttt{set$_1$} all the element of \texttt{set$_2$}}\\
+ {|}&
+  {set $\leftarrow$ set | set}&
+  {does the union of sets}\\
+ {\&}&
+  {set $\leftarrow$ set \& set}&
+  {does the intersection of sets}\\
+\end{longtable}
+
+\subsubsection{Comparison operators}
+
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
+{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+\hline\endhead
+ {!=}&
+  {bool $\leftarrow$ set != set}&
+  {Not equal}\\
+ {==}&
+  {bool $\leftarrow$ set == set}&
+  {Equal}\\
+ {>}&
+  {bool $\leftarrow$ set$_1$ > set$_2$}&
+  {\texttt{set$_2$} strictly included in \texttt{set$_1$}}\\
+ {<}&
+  {bool $\leftarrow$ set$_1$ < set$_2$}&
+  {\texttt{set$_1$} strictly included in \texttt{set$_2$}}\\
+ {>=}&
+  {bool $\leftarrow$ set$_1$ >= set$_2$}&
+  {\texttt{set$_2$} included in or equal to \texttt{set$_1$}}\\
+ {<=}&
+  {bool $\leftarrow$ set$_1$ <= set$_2$}&
+  {\texttt{set$_1$} included in or equal to \texttt{set$_2$}}\\
+\end{longtable}
+
+\subsection{The \texttt{set} getters}
+
+\subsubsection{The \texttt{length} getter}
+
+\gtlinline{length} returns an \gtltype{int}, the number of elements in the set.
+
+\example
+\begin{gtl}
+let aSet := @! 1, 2, "yes", "no" !
+let len := [aSet length]
+display len
+\end{gtl}
+\begin{console}
+len from file '/Users/jlb/Develop/GTL/examples/setTest.gtl', line 32:7
+    integer: 4
+\end{console}
+
+\subsubsection{The \texttt{list} getter}
+
+\gtlinline{list} getter returns a list representation of the set. Each element of the returned list is a string. Elements of the list are sorted in the alphanumerical order.
+
+\example
+\begin{gtl}
+let aSet := @! 1, "yes", 2, "no" !
+let aList := [aSet list]
+display aList
+\end{gtl}
+\begin{console}
+aList from file '/Users/jlb/Develop/GTL/examples/setTest.gtl', line 36:7
+    list: @(
+        0 :>
+            string: "1"
+        1 :>
+            string: "2"
+        2 :>
+            string: "no"
+        3 :>
+            string: "yes"
+    )
+\end{console}
+
+\subsubsection{The \texttt{contains} getter}
+
+\gtlinline{contains} getter takes one argument, \gtlinline{item}, that must convertible to a string and returns a bool, \gtlinline{true} if \gtlinline{item} is in the set, \gtlinline{false} otherwise.
+
+\example
+\begin{gtl}
+let aSet := @! 1, "yes", 2, "no" !
+let ok := [aSet contains: "yes"]
+display ok
+\end{gtl}
+\begin{console}
+ok from file '/Users/jlb/Develop/GTL/examples/setTest.gtl', line 40:7
+    boolean: true
+\end{console}
+
+\subsection{The \texttt{set} setters}
+
+\subsubsection{The \texttt{add} setter}
+
+\gtlinline{add} takes one argument \gtlinline{element} and add it to the target set. \gtlinline{element} must be convertible to a string. If \gtlinline{element} is already in the set, \gtlinline{add} does nothing.
+
+The setter is redundant with the \gtlinline{+=} operator but more efficient because the set is not copied in the process.
+
+\example
+\begin{gtl}
+let a := @! 1, 2, "no" !
+[!a add: "yes"]
+display a
+\end{gtl}
+\begin{console}
+a from file '/Users/jlb/Develop/GTL/examples/setTest.gtl', line 5:7
+    set: @!
+        1, 2, no, yes
+    !
+\end{console}
+
+\subsubsection{The \texttt{remove} setter}
+
+\gtlinline{remove} takes one argument, \gtlinline{element}, and removes it from the target set. \gtlinline{element} must be convertible to a string. If \gtlinline{element} is not in the set, \gtlinline{remove} does nothing.
+
+The setter is redundant with the \gtlinline{+=} operator but more efficient because the set is not copied in the process.
+
+\example
+\begin{gtl}
+let a := @! 1, 2, "no" !
+[!a remove: 2]
+display a
+\end{gtl}
+\begin{console}
+a from file '/Users/jlb/Develop/GTL/examples/setTest.gtl', line 11:7
+    set: @!
+        1, no
+    !
+\end{console}
+
+\section{The \texttt{type} data type}
+\label{sec:type}
+
+The \gtltype{type} data type store the type of an expression. It can be used to check dynamically the type of the arguments passed to a function, a getter or a setter, see chapter \ref{chap:modules}.
+
+A set of constants corresponding to each type is define. These constants begin with a \ccst{@}: \gtlinline{@int}, \gtlinline{@char}, \gtlinline{@bool}, \gtlinline{@float}, \gtlinline{@string}, \gtlinline{@enum}, \gtlinline{@struct}, \gtlinline{@list}, \gtlinline{@map}, \gtlinline{@set} \gtlinline{@unconstructed} and \gtlinline{@type}.
+
+To get the type of any expression, use the \gtlinline{type} getter. See \ref{universalGetter:type}.
+
+\example
+\begin{gtl}
+let a := 4
+if [a type] == @int then
+  let a += 1
+end if
+display a
+let a := [a string]
+if [a type] == @string then
+  let a += "1"
+end if
+display a
+\end{gtl}
+\begin{console}
+a from file '/Users/jlb/Develop/GTL/examples/typeTest.gtl', line 14:7
+    integer: 5
+a from file '/Users/jlb/Develop/GTL/examples/typeTest.gtl', line 19:7
+    string: "51"
+\end{console}
 
 \chapter{GTL instructions}
 
@@ -2896,6 +3141,7 @@ integer: 3
 \end{console}
 
 \chapter{GTL modules}
+\label{chap:modules}
 
 GTL may be extended with functions, setters and getters. Definitions of these objects are done in  separates \texttt{\footnotesize .gtm} files called modules.
 

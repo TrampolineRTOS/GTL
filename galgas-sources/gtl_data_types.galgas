@@ -36,6 +36,8 @@ getter @type typeName
   elsif self == `@gtlList          then typeName = "list"
   elsif self == `@gtlMap           then typeName = "map"
   elsif self == `@gtlType          then typeName = "type"
+  elsif self == `@gtlEnum          then typeName = "enum"
+  elsif self == `@gtlSet           then typeName = "set"
   elsif self == `@gtlUnconstructed then typeName = "unconstructed"
   else typeName = "-unknown-" end
 }
@@ -53,6 +55,8 @@ getter @string gtlType
   elsif self == "list"          then type = `@gtlList
   elsif self == "map"           then type = `@gtlMap
   elsif self == "type"          then type = `@gtlType
+  elsif self == "enum"          then type = `@gtlEnum
+  elsif self == "set"           then type = `@gtlSet
   elsif self == "unconstructed" then type = `@gtlUnconstructed
   else error location : "unknown type" : type end
 }
@@ -70,6 +74,8 @@ getter @lstring gtlType
   elsif typeName == "list"          then type = `@gtlList
   elsif typeName == "map"           then type = `@gtlMap
   elsif typeName == "type"          then type = `@gtlType
+  elsif typeName == "enum"          then type = `@gtlEnum
+  elsif typeName == "set"           then type = `@gtlSet
   elsif typeName == "unconstructed" then type = `@gtlUnconstructed
   else error location : "unknown type" : type end
 }
@@ -133,6 +139,11 @@ private func %once intAnyArguments -> @gtlTypedArgumentList result
 {
   result = .listWithValue { !`@gtlInt }
   result += !`@gtlData
+}
+
+private func %once anyArgument     -> @gtlTypedArgumentList result
+{
+  result = .listWithValue { !`@gtlData }
 }
 
 private proc argumentsCheck
@@ -2676,7 +2687,7 @@ override getter @gtlBool performGetter
       !emptylstring()
       !if value then "YES" else "NO" end
     }
-  elsif [methodName string] == "int" then
+  elsif [methodName string] == "int" || [methodName string] == "unsigned" then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlInt.new {
       ![methodName location]
@@ -2747,6 +2758,287 @@ override setter @gtlBool performSetter
 # foundation types for collections
 #-----------------------------------------------------------------------------*
 list @list { @gtlData value %setter }
+
+#-----------------------------------------------------------------------------*
+# Set type and operations on set
+#-----------------------------------------------------------------------------*
+class @gtlSet : @gtlData { @stringset value %setter }
+
+override getter @gtlSet desc
+  ?let @uint tab
+  -> @string result
+{
+  result =  @string.stringWithSequenceOfCharacters{!' ' !tab} +
+    "set: @!\n" 
+  for () in value
+  before
+    result += @string.stringWithSequenceOfCharacters{!' ' !tab+4}
+  do
+    result += key
+  between
+    result += ", "
+  after
+    result += "\n"
+  end
+  result += @string.stringWithSequenceOfCharacters{!' ' !tab} + "!\n"
+}
+
+override getter @gtlSet string -> @string result {
+  error where : "cannot cast a set to a string" : result
+}
+
+override getter @gtlSet lstring -> @lstring result {
+  error where : "cannot cast a set to a lstring" : result
+}
+
+override getter @gtlSet bool   -> @bool result {
+  error where : "cannot cast a set to a bool" : result
+}
+
+override getter @gtlSet int    -> @bigint result {
+  error where : "cannot cast a set to an int" : result
+}
+
+override getter @gtlSet float  -> @double result {
+  error where : "cannot cast a set to a float" : result
+}
+
+override getter @gtlSet plusOp  -> @gtlData result {
+  error where : "set forbidden" : result
+}
+
+override getter @gtlSet minusOp -> @gtlData result {
+  error where : "set forbidden" : result
+}
+
+override getter @gtlSet notOp   -> @gtlData result {
+  error where : "set forbidden" : result
+}
+
+override getter @gtlSet addOp ?let @gtlData right -> @gtlData result {
+  @stringset set = value
+  set += ![right string]
+  result = @gtlSet.new { !where !emptylstring() !set }
+}
+
+override getter @gtlSet subOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlSet then
+    result = @gtlSet.new {
+      !where !emptylstring() !value - [right as @gtlSet value]
+    }
+  else
+    error right : "set expected" : result
+  end
+}
+
+override getter @gtlSet mulOp ?let @gtlData unused right -> @gtlData result {
+  error where : "set forbidden" : result
+}
+
+override getter @gtlSet divOp ?let @gtlData unused right -> @gtlData result {
+  error where : "set forbidden" : result
+}
+
+override getter @gtlSet modOp ?let @gtlData unused right -> @gtlData result {
+  error where : "set forbidden" : result
+}
+
+override getter @gtlSet andOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlSet then
+    result = @gtlSet.new {
+      !where !emptylstring() !value & [right as @gtlSet value]
+    }
+  else
+    error right : "set expected" : result
+  end
+}
+
+override getter @gtlSet orOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlSet then
+    result = @gtlSet.new {
+      !where !emptylstring() !value | [right as @gtlSet value]
+    }
+  else
+    error right : "set expected" : result
+  end
+}
+
+override getter @gtlSet xorOp ?let @gtlData unused right -> @gtlData result {
+  error where : "set forbidden" : result
+}
+
+override getter @gtlSet slOp ?let @gtlData unused right -> @gtlData result {
+  error where : "set forbidden" : result
+}
+
+override getter @gtlSet srOp ?let @gtlData unused right -> @gtlData result {
+  error where : "set forbidden" : result
+}
+
+override getter @gtlSet neqOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlSet then
+    result = @gtlBool.new {
+      !where !emptylstring() !value != [right as @gtlSet value]
+    }
+  else
+    error right : "set expected" : result
+  end
+}
+
+override getter @gtlSet eqOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlSet then
+    result = @gtlBool.new {
+      !where !emptylstring() !value == [right as @gtlSet value]
+    }
+  else
+    error right : "set expected" : result
+  end
+}
+
+override getter @gtlSet gtOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlSet then
+    result = @gtlBool.new {
+      !where !emptylstring() !value > [right as @gtlSet value]
+    }
+  else
+    error right : "set expected" : result
+  end
+}
+
+override getter @gtlSet geOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlSet then
+    result = @gtlBool.new {
+      !where !emptylstring() !value >= [right as @gtlSet value]
+    }
+  else
+    error right : "set expected" : result
+  end
+}
+
+override getter @gtlSet ltOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlSet then
+    result = @gtlBool.new {
+      !where !emptylstring() !value < [right as @gtlSet value]
+    }
+  else
+    error right : "set expected" : result
+  end
+}
+
+override getter @gtlSet leOp ?let @gtlData right -> @gtlData result {
+  if right is == @gtlSet then
+    result = @gtlBool.new {
+      !where !emptylstring() !value <= [right as @gtlSet value]
+    }
+  else
+    error right : "set expected" : result
+  end
+}
+
+override getter @gtlSet embeddedType -> @type result
+{
+  error where : "struct forbidden as built in function argument" : result
+}
+
+override method @gtlSet addMyValue ?!@objectlist objectList
+{
+  objectList += ![value object]
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a getter on a @gtlSet
+#-----------------------------------------------------------------------------*
+override getter @gtlSet performGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ?let @library     lib
+  ->@gtlData        result
+{
+  if    "length"                 == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlInt.new {
+      ![methodName location]
+      !emptylstring()
+      ![[value count] bigint]
+    }
+  elsif "list"                   == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlList.new {
+      ![methodName location] !emptylstring() !.emptyList
+    }
+    for () in value do
+      [!?result appendItem !@gtlString.new { !where !emptylstring() !key }]
+    end
+  elsif "contains"               == methodName then
+    argumentsCheck(!methodName !anyArgument() !arguments)
+    @string key = [[arguments dataAtIndex !0] string]
+    result = @gtlBool.new {
+      ![methodName location] !emptylstring() ![value hasKey !key]
+    }
+  elsif "isANumber" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlBool.new {
+      ![methodName location] !emptylstring() !false
+    }
+  elsif "description" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    result = @gtlString.new {
+      !meta !emptylstring() !meta
+    }
+  elsif [lib getterExists !"set" !methodName] then
+    result = [[lib getGetter !"set" !methodName] callGetter
+      ![methodName location]
+      !lib
+      !self
+      !arguments
+    ]
+  else
+    error methodName : "unknown getter '" + methodName +"' for set target"
+      : result
+  end
+}
+
+#-----------------------------------------------------------------------------*
+# Performs a setter on a @gtlStruct
+#-----------------------------------------------------------------------------*
+override setter @gtlSet performSetter
+  ?let @lstring     methodName
+  ?let @gtlDataList arguments
+  ?let @library     lib
+{
+  if "setDescription" == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @gtlString descriptionToSet = [arguments dataAtIndex !0] as @gtlString
+    [!?self setMeta !descriptionToSet]
+    where = methodName
+  elsif       "touch" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    where = methodName
+  elsif       "add"   == methodName then
+    argumentsCheck(!methodName !anyArgument() !arguments)
+    @string key = [[arguments dataAtIndex !0] string]
+    value += !key
+    where = methodName
+  elsif      "remove" == methodName then
+    argumentsCheck(!methodName !anyArgument() !arguments)
+    @string key = [[arguments dataAtIndex !0] string]
+    [!?value removeKey !key]
+    where = methodName
+  elsif [lib setterExists !"set" !methodName] then
+    @gtlData copy = self
+    [[lib getSetter !"set" !methodName] callSetter
+      ![methodName location]
+      !lib
+      !?copy
+      !arguments
+    ]
+    value = [copy as @gtlSet value]
+    where = [copy where]
+    meta  = [copy meta]
+  else
+    error methodName : "unknown setter '" + methodName +"' for set target"
+  end
+}
 
 #-----------------------------------------------------------------------------*
 # Struct type and operations on struct
@@ -3315,6 +3607,15 @@ override getter @gtlList performGetter
       end
     end
     result = @gtlMap.new { !where !emptylstring() !resultMap }
+  elsif "set"                    == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    @stringset resultSet = .emptySet
+    for (item) in value do
+      resultSet += ![item string]
+    end
+    result = @gtlSet.new {
+      !methodName !emptylstring() !resultSet
+    }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {

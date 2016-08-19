@@ -731,6 +731,8 @@ getter @gtlVarPath stringPath
   result = ""
   for (item) in self do
     result += [item stringPath !vars !lib]
+  between
+    result += "::"
   end
 }
 
@@ -1473,5 +1475,24 @@ override getter @gtlLiteralListExpression eval
     resultList += ![item eval !vars !lib]
   end
   result = @gtlList.new { !where !emptylstring() !resultList }
+}
+
+#-----------------------------------------------------------------------------*
+# @gtlLiteralSetExpression
+#-----------------------------------------------------------------------------*
+class @gtlLiteralSetExpression : @gtlExpression {
+  @gtlExpressionList value
+}
+
+override getter @gtlLiteralSetExpression eval
+  ? let @gtlData vars
+  ? let @library lib
+  -> @gtlData result
+{
+  @stringset resultSet = .emptySet
+  for (item) in value do
+    resultSet += ![[item eval !vars !lib] string]
+  end
+  result = @gtlSet.new { !where !emptylstring() !resultSet }
 }
 

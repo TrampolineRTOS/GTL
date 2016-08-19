@@ -496,6 +496,14 @@ rule <gtl_factor>
     type = .new { ![typeName location] !emptylstring() !`@gtlMap }
   elsif name == "enum"   then
     type = .new { ![typeName location] !emptylstring() !`@gtlEnum }
+  elsif name == "type"   then
+    type = .new { ![typeName location] !emptylstring() !`@gtlType }
+  elsif name == "set"   then
+    type = .new { ![typeName location] !emptylstring() !`@gtlSet }
+  elsif name == "char"   then
+    type = .new { ![typeName location] !emptylstring() !`@gtlChar }
+  elsif name == "unconstructed"   then
+    type = .new { ![typeName location] !emptylstring() !`@gtlUnconstructed }
   else error .here : name + " does not name a type" : type
   end
   expression = @gtlTerminal.new { ![typeName location] !type }
@@ -633,6 +641,25 @@ rule <gtl_factor>
   end
   $}$
   expression = @gtlLiteralStructExpression.new { !.here !expressionMap }
+}
+
+#------------------------------------------------------------------------------*
+
+rule <gtl_factor>
+  !@gtlExpression expression
+{
+  $@!$
+  @gtlExpressionList expressionList = .emptyList
+  select
+    repeat
+      <gtl_expression> ?@gtlExpression setElement
+      expressionList += !setElement
+    while $,$
+    end
+  or
+  end
+  $!$
+  expression = @gtlLiteralSetExpression.new { !.here !expressionList }
 }
 
 #------------------------------------------------------------------------------*

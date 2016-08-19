@@ -602,6 +602,36 @@ method @gtlForeachStatementInstruction iterateOnList
   end
 }
 
+method @gtlForeachStatementInstruction iterateOnSet
+  ?!@gtlContext context
+  ?!@gtlData    vars
+  ?!@library    lib
+  ?!@string     outputString
+  ? let @gtlSet iterableSet
+{
+  if "" != keyName then
+    warning keyName : "a key variable cannot be define when iterating on a set"
+  end
+  for () in [iterableSet value]
+  before
+    [beforeList execute !?context !?vars !?lib !?outputString]
+  do (index)
+    [!?vars setStructField
+      !variableName 
+      !@gtlString.new { !where !emptylstring() !key}
+    ]
+    [!?vars setStructField
+      !indexName !@gtlInt.new { !where !emptylstring() ![index bigint] }
+    ]
+    [doList execute !?context !?vars !?lib !?outputString]
+  between
+    [betweenList execute !?context !?vars !?lib !?outputString]
+  after
+    [afterList execute !?context !?vars !?lib !?outputString]
+  end
+
+}
+
 override method @gtlForeachStatementInstruction execute
   ?!@gtlContext context
   ?!@gtlData    vars
@@ -611,12 +641,14 @@ override method @gtlForeachStatementInstruction execute
   @gtlData localMap = [vars overrideMap]
   @gtlData iterableData = [iterable eval !localMap !lib]
   cast iterableData
-  case == @gtlMap iterableMap:
+  case == @gtlMap  iterableMap:
     [self iterateOnMap !?context !?localMap !?lib !?outputString !iterableMap]
   case == @gtlList iterableList:
     [self iterateOnList !?context !?localMap !?lib !?outputString !iterableList]
+  case == @gtlSet  iterableSet:
+    [self iterateOnSet !?context !?localMap !?lib !?outputString !iterableSet]
   else
-    error [iterable location] : "Map or List expected"
+    error [iterable location] : "Map, list or set expected"
   end 
   vars = [localMap overriddenMap]
 }
@@ -851,8 +883,8 @@ override method @gtlDisplayStatementInstruction execute
 {
   @gtlData variable = [variablePath get !vars !lib]
   message [variablePath stringPath !vars !lib]
-        + " from " + [where locationString] + "\n  - "
-        + [variable desc !0]
+        + " from " + [where locationString] + "\n"
+        + [variable desc !4]
 }
 
 #-----------------------------------------------------------------------------*

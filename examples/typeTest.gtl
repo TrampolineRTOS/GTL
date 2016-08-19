@@ -6,3 +6,14 @@ display b
 
 let b := [@int type]
 display b
+
+let a := 4
+if [a type] == @int then
+  let a += 1
+end if
+display a
+let a := [a string]
+if [a type] == @string then
+  let a += "1"
+end if
+display a
