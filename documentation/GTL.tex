@@ -60,6 +60,7 @@
 
 \definecolor{seagreen}{RGB}{64,100,120}
 \definecolor{darkpink}{RGB}{200,100,120}
+\definecolor{light-pink}{RGB}{250,190,255}
 \definecolor{light-gray}{gray}{0.85}
 \definecolor{medium-gray}{gray}{0.5}
 \definecolor{light-blue}{RGB}{240,240,255}
@@ -70,6 +71,7 @@
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
 \include{gtl-language-definition}
+\include{galgas-language-definition}
 
 \lstdefinelanguage{console}{
   breaklines=true,
@@ -94,6 +96,7 @@
 
 
 \lstnewenvironment{gtl}{\lstset{language=gtl}}{}
+\lstnewenvironment{galgas}{\lstset{language=galgas}}{}
 \lstnewenvironment{gtl-tmode}{\lstset{language=gtl-tmode}}{}
 \lstnewenvironment{console}{\lstset{language=console}}{}
 \lstnewenvironment{templateoutput}{\lstset{language=output}}{}
@@ -123,6 +126,8 @@
 \newcommand{\gtlarg}[1]{{\footnotesize\ttfamily\colorbox{light-blue}{#1}}}
 
 \newcommand{\gtlinline}[1]{\colorbox{light-blue}{\lstinline[language=gtl]{#1}}}
+\newcommand{\gginline}[1]{\colorbox{light-pink}{\lstinline[language=galgas]{#1}}}
+
 
 \newcommand{\example}{\vspace{.75em}\noindent\textbf{Example}\vspace{0em}}
 \newcommand{\examplen}[1]{\vspace{.75em}\noindent\textbf{Example #1}\vspace{0em}}
@@ -145,6 +150,7 @@
 \end{tabular}
 }
 
+\setlength{\itemsep}{1pt}
 
 \title{GTL Template language}
 \author{Jean-Luc B\'echennec}
@@ -162,7 +168,7 @@
 
 This document presents the syntax and the semantics of GTL 3, a template language used in Goil, the OIL compiler of Trampoline\footnote{An OSEK and AUTOSAR 4.2 compliant RTOS, check \url{https://github.com/TrampolineRTOS/trampoline}.}, to generate code from the OIL or arXML description of an OSEK/AUTOSAR application.
 
-GTL is written in GalGas 3\,\footnote{GalGas 3 is free software distributed under the GPL license and can be found at \url{http://galgas.rts-software.org}}, a lexical and syntactic analyzer, which is also a powerful domain specific language to write compilers and interpreters. GalGas 3 is developed by Pierre Molinaro from the Real-Time Systems Group of IRCCyN, a french laboratory from a joint of the University of Nantes, \'Ecole Centrale de Nantes, \'Ecole des Mines de Nantes and CNRS. The first version of the GTL interpreter was written by Pierre Molinaro too. As needs have increased, more features was needed and this led to a major rewrite of the GTL interpreter; In fact no original code made its way in GTL 3.
+GTL is written in GALGAS 3\,\footnote{GALGAS 3 is free software distributed under the GPL license and can be found at \url{http://galgas.rts-software.org}}, a lexical and syntactic analyzer, which is also a powerful domain specific language to write compilers and interpreters. GALGAS 3 is developed by Pierre Molinaro from the Real-Time Systems Group of IRCCyN, a french laboratory from a joint of the University of Nantes, \'Ecole Centrale de Nantes, \'Ecole des Mines de Nantes and CNRS. The first version of the GTL interpreter was written by Pierre Molinaro too. As needs have increased, more features was needed and this led to a major rewrite of the GTL interpreter; In fact no original code made its way in GTL 3.
 
 \section*{Convention} 
 
@@ -255,7 +261,7 @@ The following table gives all the operators available in GTL an their priority. 
  {4}&
   {* / mod}\\
  {5}&
-  {not \raisebox{-1mm}{\textasciitilde} - +}\\
+  {not \raisebox{-1mm}{\textasciitilde} - + typeof mapof listof exists}\\
 \end{longtable}
 
 \section{Special operators}
@@ -301,17 +307,17 @@ display aSecondList
 \end{gtl}
 \begin{console}
 aSecondList from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 9:7
-  - list: @(
-    0 :>
-        integer: 1
-    1 :>
-        integer: 2
-    2 :>
-        integer: 3
-)
+    list: @(
+        0 :>
+            integer: 1
+        1 :>
+            integer: 2
+        2 :>
+            integer: 3
+    )
 aSecondList from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 12:7
-  - list: @(
-)
+    list: @(
+    )
 \end{console}
 
 \subsection{The \texttt{typeof} operator}
@@ -347,23 +353,23 @@ display aMap
 \end{gtl}
 \begin{console}
 aStruct from file '/Users/jlb/Develop/GTL/examples/mapofTest.gtl', line 3:7
-  - struct: @{
-    a :>
-        integer: 1
-    b :>
-        integer: 2
-    c :>
-        integer: 3
-}
+    struct: @{
+        a :>
+            integer: 1
+        b :>
+            integer: 2
+        c :>
+            integer: 3
+    }
 aMap from file '/Users/jlb/Develop/GTL/examples/mapofTest.gtl', line 5:7
-  - map: @[
-    "a" :>
-        integer: 1
-    "b" :>
-        integer: 2
-    "c" :>
-        integer: 3
-]
+    map: @[
+        "a" :>
+            integer: 1
+        "b" :>
+            integer: 2
+        "c" :>
+            integer: 3
+    ]
 \end{console}
 
 \subsubsection{With a \texttt{list}}
@@ -388,35 +394,35 @@ display aMap
 \end{gtl}
 \begin{console}
 aMap from file '/Users/jlb/Develop/GTL/examples/mapofTest.gtl', line 13:7
-  - map: @[
-    "Arnold" :>
-        struct: @{
-            age :>
-                integer: 18
-            height :>
-                integer: 180
-            name :>
-                string: "Arnold"
-        }
-    "Bob" :>
-        struct: @{
-            age :>
-                integer: 22
-            height :>
-                integer: 170
-            name :>
-                string: "Bob"
-        }
-    "John" :>
-        struct: @{
-            age :>
-                integer: 29
-            height :>
-                integer: 175
-            name :>
-                string: "John"
-        }
-]
+    map: @[
+        "Arnold" :>
+            struct: @{
+                age :>
+                    integer: 18
+                height :>
+                    integer: 180
+                name :>
+                    string: "Arnold"
+            }
+        "Bob" :>
+            struct: @{
+                age :>
+                    integer: 22
+                height :>
+                    integer: 170
+                name :>
+                    string: "Bob"
+            }
+        "John" :>
+            struct: @{
+                age :>
+                    integer: 29
+                height :>
+                    integer: 175
+                name :>
+                    string: "John"
+            }
+    ]
 \end{console}
 
 \subsection{The \texttt{listof} operator}
@@ -427,7 +433,7 @@ The \gtlinline{listof} operator apply to a \gtltype{map} variable. It returns a 
 listof var end
 \end{gtl}
 
-\warning{\gtlinline{listof ... by} is deprecated, use the \gtlinline{list} getter on \gtltype{map} instead. See \ref{sec:listGetterOnMap}.}
+\warning{\gtlinline{listof ... end} is deprecated, use the \gtlinline{list} getter on \gtltype{map} instead. See \ref{sec:listGetterOnMap}.}
 
 
 %==============================================================================================
@@ -448,7 +454,7 @@ display typeOfA
 
 \begin{console}
 typeOfA from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 4:7
-  - type: int
+    type: int
 \end{console}
 
 \subsection{The \texttt{isANumber} getter} 
@@ -471,7 +477,7 @@ display b
 
 \begin{console}
 b from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 13:7
-  - integer: 1
+    integer: 1
 \end{console}
 
 
@@ -601,7 +607,7 @@ display b
 \end{gtl}
 \begin{console}
 b from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 18:7
-  - string: "42"
+    string: "42"
 \end{console}
 
 
@@ -618,9 +624,9 @@ display b
 \end{gtl}
 \begin{console}
 a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 21:7
-  - string: "0x2A"
+    string: "0x2A"
 b from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 23:7
-  - string: "-0x14"
+    string: "-0x14"
 \end{console}
 
 \subsubsection{the {\bfseries\ttfamily xString} getter}
@@ -636,9 +642,9 @@ display b
 \end{gtl}
 \begin{console}
 a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 26:7
-  - string: "2A"
+    string: "2A"
 b from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 28:7
-  - string: "-14"
+    string: "-14"
 \end{console}
 
 \subsubsection{The {\bfseries\ttfamily numberOfBytes} getter}
@@ -750,7 +756,7 @@ display a
 \end{gtl}
 \begin{console}
 a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 63:7
-  - boolean: true
+    boolean: true
 \end{console}
 
 \subsection{The \texttt{int} setters}
@@ -767,7 +773,7 @@ display a
 \end{gtl}
 \begin{console}
 a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 64:7
-  - integer: 1
+    integer: 1
 \end{console}
 
 \subsubsection{The \texttt{complementBitAtIndex} setter}
@@ -782,7 +788,7 @@ display a
 \end{gtl}
 \begin{console}
 a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 68:7
-  - integer: 3
+    integer: 3
 \end{console}
 
 \subsection{The \texttt{int} functions}
@@ -1210,7 +1216,7 @@ display a
 \end{gtl}
 \begin{console}
 a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 74:7
-  - char: e
+    char: e
 \end{console}
 
 
@@ -1227,9 +1233,9 @@ display b
 \end{gtl}
 \begin{console}
 a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 78:7
-  - integer: 2
+    integer: 2
 b from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 79:7
-  - integer: -1
+    integer: -1
 \end{console}
 
 \subsubsection{The \texttt{indexOfCharInRange} getter}
@@ -1243,7 +1249,7 @@ display a
 \end{gtl}
 \begin{console}
 a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 82:7
-  - integer: 1
+    integer: 1
 \end{console}
 
 \subsubsection{The \texttt{containsChar} getter}
@@ -1297,7 +1303,7 @@ display str
 \end{gtl}
 \begin{console}
 str from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 85:7
-  - string: "Hello"
+    string: "Hello"
 \end{console}
 
 \subsubsection{The \texttt{rightSubString} getter}
@@ -1311,7 +1317,7 @@ display str
 \end{gtl}
 \begin{console}
 str from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 88:7
-  - string: "World"
+    string: "World"
 \end{console}
 
 \subsubsection{The \texttt{subString} getter}
@@ -1329,11 +1335,11 @@ display thirdStr
 \end{gtl}
 \begin{console}
 firstStr from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 91:7
-  - string: "World"
+    string: "World"
 secondStr from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 93:7
-  - string: ""
+    string: ""
 thirdStr from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 95:7
-  - string: "llo"
+    string: "llo"
 \end{console}
 
 \subsubsection{The \texttt{reversedString} getter}
@@ -1347,7 +1353,7 @@ display str
 \end{gtl}
 \begin{console}
 str from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 98:7
-  - string: "! dlroW olleH"
+    string: "! dlroW olleH"
 \end{console}
 
 \subsubsection{The \texttt{componentsSeparatedByString} getter}
@@ -1361,14 +1367,14 @@ display componentList
 \end{gtl}
 \begin{console}
 componentList from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 101:7
-  - list: @(
-    0 :>
-        string: "Hello"
-    1 :>
-        string: "World"
-    2 :>
-        string: "!"
-)
+    list: @(
+        0 :>
+            string: "Hello"
+        1 :>
+            string: "World"
+        2 :>
+            string: "!"
+    )
 \end{console}
 
 \subsubsection{The \texttt{columnPrefixedBy} getter}
@@ -1433,7 +1439,7 @@ display a
 \end{gtl}
 \begin{console}
 a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 111:7
-  - string: "Hallo"
+    string: "Hallo"
 \end{console}
 
 \subsection{The \texttt{string} functions}
@@ -1639,23 +1645,23 @@ display b
 \end{gtl}
 \begin{console}
 a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 120:7
-  - struct: @{
-    a :>
-        integer: 1
-    b :>
-        integer: 2
-    c :>
-        integer: 3
-}
+    struct: @{
+        a :>
+            integer: 1
+        b :>
+            integer: 2
+        c :>
+            integer: 3
+    }
 b from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 121:7
-  - map: @[
-    "a" :>
-        integer: 1
-    "b" :>
-        integer: 2
-    "c" :>
-        integer: 3
-]
+    map: @[
+        "a" :>
+            integer: 1
+        "b" :>
+            integer: 2
+        "c" :>
+            integer: 3
+    ]
 \end{console}
 
 \section{The \texttt{list} data type}
@@ -1743,35 +1749,36 @@ let myMap := [myList mapBy : "name"]
 display myMap
 \end{gtl}
 \begin{console}
-myMap - map: @[
-    "Arnold" :>
-        struct: @{
-            age :>
-                integer: 18
-            height :>
-                integer: 180
-            name :>
-                string: "Arnold"
-        }
-    "Bob" :>
-        struct: @{
-            age :>
-                integer: 22
-            height :>
-                integer: 170
-            name :>
-                string: "Bob"
-        }
-    "John" :>
-        struct: @{
-            age :>
-                integer: 29
-            height :>
-                integer: 175
-            name :>
-                string: "John"
-        }
-]
+myMap from file '/Users/jlb/Develop/GTL/examples/dummy.gtl', line 9:7
+    map: @[
+        "Arnold" :>
+            struct: @{
+                age :>
+                    integer: 18
+                height :>
+                    integer: 180
+                name :>
+                    string: "Arnold"
+            }
+        "Bob" :>
+            struct: @{
+                age :>
+                    integer: 22
+                height :>
+                    integer: 170
+                name :>
+                    string: "Bob"
+            }
+        "John" :>
+            struct: @{
+                age :>
+                    integer: 29
+                height :>
+                    integer: 175
+                name :>
+                    string: "John"
+            }
+    ]
 \end{console}
 
 \subsubsection{The \texttt{set} getter}
@@ -1803,12 +1810,12 @@ display aList
 \end{gtl}
 \begin{console}
 aList from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 125:7
-  - list: @(
-    0 :>
-        integer: 1
-    1 :>
-        integer: 2
-)
+    list: @(
+        0 :>
+            integer: 1
+        1 :>
+            integer: 2
+    )
 \end{console}
 
 \subsubsection{The \texttt{subListFrom} getter}
@@ -1823,12 +1830,12 @@ display aList
 \end{gtl}
 \begin{console}
 aList from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 129:7
-  - list: @(
-    0 :>
-        integer: 3
-    1 :>
-        integer: 4
-)
+    list: @(
+        0 :>
+            integer: 3
+        1 :>
+            integer: 4
+    )
 \end{console}
 
 \subsubsection{The \texttt{subList} getter}
@@ -1845,19 +1852,19 @@ display aSecondList
 \end{gtl}
 \begin{console}
 aFirstList from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 133:7
-  - list: @(
-    0 :>
-        integer: 2
-    1 :>
-        integer: 3
-    2 :>
-        integer: 4
-)
+    list: @(
+        0 :>
+            integer: 2
+        1 :>
+            integer: 3
+        2 :>
+            integer: 4
+    )
 aSecondList from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 135:7
-  - list: @(
-    0 :>
-        integer: 3
-)
+    list: @(
+        0 :>
+            integer: 3
+    )
 \end{console}
 
 \subsubsection{The \texttt{list} setters}
@@ -1875,20 +1882,20 @@ display aList
 \end{gtl}
 \begin{console}
 aList from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 140:7
-  - list: @(
-    0 :>
-        integer: 1
-    1 :>
-        string: "Hello"
-    2 :>
-        integer: 2
-    3 :>
-        integer: 3
-    4 :>
-        integer: 4
-    5 :>
-        string: "At the end"
-)
+    list: @(
+        0 :>
+            integer: 1
+        1 :>
+            string: "Hello"
+        2 :>
+            integer: 2
+        3 :>
+            integer: 3
+        4 :>
+            integer: 4
+        5 :>
+            string: "At the end"
+    )
 \end{console}
 
 \section{The \texttt{map} data type}
@@ -2284,12 +2291,13 @@ display myStruct
 \end{gtl} 
 
 \begin{console}
-myStruct - struct: @{
-    b :>
-        integer: 2
-    c :>
-        integer: 3
-}
+myStruct from file '/Users/jlb/Develop/GTL/examples/dummy.gtl', line 18:7
+    struct: @{
+        b :>
+            integer: 2
+        c :>
+            integer: 3
+    }
 \end{console}
 
 \examplen{3}
@@ -2303,14 +2311,15 @@ display myList
 \end{gtl}
 
 \begin{console}
-myList - list: @(
-    0 :>
-        integer: 1
-    1 :>
-        integer: 2
-    2 :>
-        integer: 4
-)
+myList from file '/Users/jlb/Develop/GTL/examples/dummy.gtl', line 22:7
+    list: @(
+        0 :>
+            integer: 1
+        1 :>
+            integer: 2
+        2 :>
+            integer: 4
+    )
 \end{console}
 
 \examplen{4}
@@ -2324,16 +2333,16 @@ display myMap
 \end{gtl}
 
 \begin{console}
-myMap - map: @[
-    "a" :>
-        list: @(
-            0 :>
-                integer: 1
-            1 :>
-                integer: 2
-        )
-]
-
+myMap from file '/Users/jlb/Develop/GTL/examples/dummy.gtl', line 26:7
+    map: @[
+        "a" :>
+            list: @(
+                0 :>
+                    integer: 1
+                1 :>
+                    integer: 2
+            )
+    ]
 \end{console}
 
 \section{The \texttt{!} instruction}
@@ -2395,28 +2404,28 @@ sort aList <
 display aList
 \end{gtl}
 \begin{console}
-aList from file '/Users/jlb/Develop/GTL/examples/mapofTest.gtl', line 17:7
-  - list: @(
-    0 :>
-        string: "you"
-    1 :>
-        string: "wish"
-    2 :>
-        string: "where"
-    3 :>
-        string: "here"
-)
-aList from file '/Users/jlb/Develop/GTL/examples/mapofTest.gtl', line 19:7
-  - list: @(
-    0 :>
-        string: "here"
-    1 :>
-        string: "where"
-    2 :>
-        string: "wish"
-    3 :>
-        string: "you"
-)
+aList from file '/Users/jlb/Develop/GTL/examples/dummy.gtl', line 30:7
+    list: @(
+        0 :>
+            string: "you"
+        1 :>
+            string: "wish"
+        2 :>
+            string: "where"
+        3 :>
+            string: "here"
+    )
+aList from file '/Users/jlb/Develop/GTL/examples/dummy.gtl', line 32:7
+    list: @(
+        0 :>
+            string: "here"
+        1 :>
+            string: "where"
+        2 :>
+            string: "wish"
+        3 :>
+            string: "you"
+    )
 \end{console}
 
 If the elements of the list are \gtltype{struct}, a second form exists:
@@ -2441,66 +2450,66 @@ sort aList by height <
 display aList
 \end{gtl}
 \begin{console}
-aList from file '/Users/jlb/Develop/GTL/examples/mapofTest.gtl', line 27:7
-  - list: @(
-    0 :>
-        struct: @{
-            age :>
-                integer: 29
-            height :>
-                integer: 175
-            name :>
-                string: "John"
-        }
-    1 :>
-        struct: @{
-            age :>
-                integer: 22
-            height :>
-                integer: 170
-            name :>
-                string: "Bob"
-        }
-    2 :>
-        struct: @{
-            age :>
-                integer: 18
-            height :>
-                integer: 180
-            name :>
-                string: "Arnold"
-        }
-)
-aList from file '/Users/jlb/Develop/GTL/examples/mapofTest.gtl', line 29:7
-  - list: @(
-    0 :>
-        struct: @{
-            age :>
-                integer: 22
-            height :>
-                integer: 170
-            name :>
-                string: "Bob"
-        }
-    1 :>
-        struct: @{
-            age :>
-                integer: 29
-            height :>
-                integer: 175
-            name :>
-                string: "John"
-        }
-    2 :>
-        struct: @{
-            age :>
-                integer: 18
-            height :>
-                integer: 180
-            name :>
-                string: "Arnold"
-        }
-)
+aList from file '/Users/jlb/Develop/GTL/examples/dummy.gtl', line 40:7
+    list: @(
+        0 :>
+            struct: @{
+                age :>
+                    integer: 29
+                height :>
+                    integer: 175
+                name :>
+                    string: "John"
+            }
+        1 :>
+            struct: @{
+                age :>
+                    integer: 22
+                height :>
+                    integer: 170
+                name :>
+                    string: "Bob"
+            }
+        2 :>
+            struct: @{
+                age :>
+                    integer: 18
+                height :>
+                    integer: 180
+                name :>
+                    string: "Arnold"
+            }
+    )
+aList from file '/Users/jlb/Develop/GTL/examples/dummy.gtl', line 42:7
+    list: @(
+        0 :>
+            struct: @{
+                age :>
+                    integer: 22
+                height :>
+                    integer: 170
+                name :>
+                    string: "Bob"
+            }
+        1 :>
+            struct: @{
+                age :>
+                    integer: 29
+                height :>
+                    integer: 175
+                name :>
+                    string: "John"
+            }
+        2 :>
+            struct: @{
+                age :>
+                    integer: 18
+                height :>
+                    integer: 180
+                name :>
+                    string: "Arnold"
+            }
+    )
 \end{console}
 
 \section{The \texttt{if} instruction}
@@ -2579,7 +2588,6 @@ foreach key,var (index_var) in expression
     instruction_list
 end foreach
 \end{gtl}
-
 \gtlinline{key} may be used only when iterating on a map and allows to give a custom name to the default \gtlinline{KEY} variable. \gtlinline{(index_var)} may be used both for a list or a map and allows to give a custom name to the default \gtlinline{INDEX} variable.
 
 If the collection is not empty, the \gtlinline{before} section is executed once before the first execution of the \gtlinline{do} section. If the collection contains at least two elements, the \gtlinline{between} section is executed between the execution of the \gtlinline{do} section.  If the list is not empty, the \gtlinline{after} section is executed once after the last execution of the \gtlinline{do} section.
@@ -3027,54 +3035,54 @@ Does anybody remember Vera Lynn ?
 \example
 \begin{console}
 TASKS from file '/Users/jlb/Develop/trampoline-git-maintain/goil/templates/root.goilTemplate', line 1467:7
-  - list: @(
-    0 :>
-        struct: @{
-            ACTIVATION :>
-                integer: 1
-            AUTOSTART :>
-                boolean: false
-            KIND :>
-                string: "Task"
-            NAME :>
-                string: "blink"
-            NONPREEMPTABLE :>
-                boolean: false
-            PRIORITY :>
-                integer: 1
-            SCHEDULE :>
-                string: "FULL"
-            STACKSIZE :>
-                integer: 300
-            USEFLOAT :>
-                boolean: false
-            USEINTERNALRESOURCE :>
-                boolean: false
-        }
-    1 :>
-        struct: @{
-            ACTIVATION :>
-                integer: 1
-            AUTOSTART :>
-                boolean: false
-            KIND :>
-                string: "Task"
-            NAME :>
-                string: "read_button"
-            NONPREEMPTABLE :>
-                boolean: false
-            PRIORITY :>
-                integer: 2
-            SCHEDULE :>
-                string: "FULL"
-            STACKSIZE :>
-                integer: 300
-            USEFLOAT :>
-                boolean: false
-            USEINTERNALRESOURCE :>
-                boolean: false
-        }
-)
+    list: @(
+        0 :>
+            struct: @{
+                ACTIVATION :>
+                    integer: 1
+                AUTOSTART :>
+                    boolean: false
+                KIND :>
+                    string: "Task"
+                NAME :>
+                    string: "blink"
+                NONPREEMPTABLE :>
+                    boolean: false
+                PRIORITY :>
+                    integer: 1
+                SCHEDULE :>
+                    string: "FULL"
+                STACKSIZE :>
+                    integer: 300
+                USEFLOAT :>
+                    boolean: false
+                USEINTERNALRESOURCE :>
+                    boolean: false
+            }
+        1 :>
+            struct: @{
+                ACTIVATION :>
+                    integer: 1
+                AUTOSTART :>
+                    boolean: false
+                KIND :>
+                    string: "Task"
+                NAME :>
+                    string: "read_button"
+                NONPREEMPTABLE :>
+                    boolean: false
+                PRIORITY :>
+                    integer: 2
+                SCHEDULE :>
+                    string: "FULL"
+                STACKSIZE :>
+                    integer: 300
+                USEFLOAT :>
+                    boolean: false
+                USEINTERNALRESOURCE :>
+                    boolean: false
+            }
+    )
 \end{console}
 
 \section{The \texttt{variables} instruction}
@@ -3203,9 +3211,9 @@ display b
 \end{gtl}
 \begin{console}
 b from file '/Users/jlb/Develop/GTL/examples/template.gtl', line 5:7
-  - integer: 36
+    integer: 36
 b from file '/Users/jlb/Develop/GTL/examples/template.gtl', line 7:7
-  - float: 6.76
+    float: 6.76
 \end{console}
 
 \examplen{2}
@@ -3227,7 +3235,7 @@ display b
 \end{gtl}
 \begin{console}
 b from file '/Users/jlb/Develop/GTL/examples/template.gtl', line 5:7
-  - integer: 36
+    integer: 36
 /Users/jlb/Develop/GTL/examples/template.gtl:6:17:19:
 semantic error #1: int expected for x
 let b := square(2.6)
@@ -3259,9 +3267,9 @@ display b
 \end{gtl}
 \begin{console}
 b from file '/Users/jlb/Develop/GTL/examples/template.gtl', line 5:7
-  - integer: 36
+    integer: 36
 b from file '/Users/jlb/Develop/GTL/examples/template.gtl', line 7:7
-  - float: 6.76
+    float: 6.76
 /Users/jlb/Develop/GTL/examples/template.gtl:6:18:24:
 semantic error #1: int or float expected
 let b := psquare("Hello")
@@ -3307,9 +3315,9 @@ display b
 \end{gtl}
 \begin{console}
 b from file '/Users/jlb/Develop/GTL/examples/testGetter.gtl', line 5:7
-  - integer: 36
+    integer: 36
 b from file '/Users/jlb/Develop/GTL/examples/testGetter.gtl', line 7:7
-  - integer: 1296
+    integer: 1296
 \end{console}
 
 \examplen{2}
@@ -3413,15 +3421,103 @@ display c
 \end{gtl}
 \begin{console}
 c from file '/Users/jlb/Develop/GTL/examples/template.gtl', line 36:7
-  - list: @(
-    0 :>
-        struct: @{
-            height :>
-                integer: 150
-            name :>
-                string: "Sally"
-        }
-)
+    list: @(
+        0 :>
+            struct: @{
+                height :>
+                    integer: 150
+                name :>
+                    string: "Sally"
+            }
+    )
 \end{console}
+
+\chapter{Using GTL in a GALGAS project}
+
+It is quite simple to include GTL in a GALGAS project. In this chapter we will list the files you will use, how to invoke a template and how to populate the variables with data.
+
+\section{Needed files}
+
+The following files from the standalone GTL project are needed:
+\rowcolors{1}{white}{light-gray}
+\begin{longtable}{|>{\ttfamily\footnotesize}l|>{\footnotesize}l|}
+\hline
+{\bf File}&{\bf Content}\\
+\hline\endhead
+ {gtl_types.galgas}&
+  {Internal types of GTL}\\
+ {gtl_expressions.galgas}&
+  {Expression classes}\\
+ {gtl_data_types.galgas}&
+  {Types of GTL}\\
+ {gtl_scanner.galgas}&
+  {Lexical analyzer}\\
+ {gtl_parser.galgas}&
+  {Instructions parser for the template files}\\
+ {gtl_instruction_parser.galgas}&
+  {Instruction parser common to template and module files}\\
+ {gtl_module.galgas}&
+  {Module classes}\\
+ {gtl_module_parser.galgas}&
+  {Instruction parser for the module files}\\
+ {gtl_module_grammar.galgas}&
+  {Grammar of a module file}\\
+ {gtl_expression_parser.galgas}&
+  {Expression parser for template and module files}\\
+ {gtl_instructions.galgas}&
+  {Instruction classes}\\
+ {gtl_grammar.galgas}&
+  {Grammar of a template file}\\
+ {gtl_functions.galgas}&
+  {Built-in functions}\\
+ {gtl_options.galgas}&
+  {Options of GTL}\\
+\hline
+\end{longtable}
+
+Add them in your \texttt{\footnotesize galgas-sources} directory and reference them in your project file.
+
+\section{Invoking a template}
+
+The best way to invoke a template is to use the \gginline{invokeGTL} function. \gginline{invokeGTL} takes 3 arguments and returns the output string of the template. Arguments are:
+
+\subsection{The \texttt{rootTemplateFileName} argument}
+
+This argument is the file name of the GTL template to invoke. Its type is \gginline{@gtlString}. If your file name is in a \gginline{@lstring} use the \gginline{lstringToGtlString} function to build the \gginline{@gtlString}. If your file name is in a \gginline{@lstring} use the \gginline{stringToGtlString} function.
+
+\subsection{The \texttt{context} argument}
+
+This argument defines the execution context of GTL. It is an instance of the class \gginline{@gtlContext}, or a derived class if you want to customize it, that gathers the data of the context. Function \gginline{emptyContext} may be used to get a default context that may be completed after. The \gginline{@gtlContext} attributes may be changed by using the following setters
+
+
+% {gtl_expressions.galgas}&
+%  {Expression classes}\\
+% {gtl_data_types.galgas}&
+%  {Types of GTL}\\
+% {gtl_scanner.galgas}&
+%  {Lexical analyzer}\\
+% {gtl_parser.galgas}&
+%  {Instructions parser for the template files}\\
+% {gtl_instruction_parser.galgas}&
+%  {Instruction parser common to template and module files}\\
+% {gtl_module.galgas}&
+%  {Module classes}\\
+% {gtl_module_parser.galgas}&
+%  {Instruction parser for the module files}\\
+% {gtl_module_grammar.galgas}&
+%  {Grammar of a module file}\\
+% {gtl_expression_parser.galgas}&
+%  {Expression parser for template and module files}\\
+% {gtl_instructions.galgas}&
+%  {Instruction classes}\\
+% {gtl_grammar.galgas}&
+%  {Grammar of a template file}\\
+% {gtl_functions.galgas}&
+%  {Built-in functions}\\
+% {gtl_options.galgas}&
+%  {Options of GTL}\\
+%\hline
+%\end{longtable}
+
 
 \end{document}  

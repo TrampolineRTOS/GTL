@@ -1,4 +1,6 @@
 build/helpers
+build/cli-objects
+build/indexes
 documentation/*.log
 documentation/*.aux
 documentation/*.toc

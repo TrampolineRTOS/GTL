@@ -66,7 +66,6 @@
   <Unit filename="../build/libpm/all-libpm.cpp" />
   <Unit filename="../build/libpm/galgas2/all-galgas.cpp" />
   <Unit filename="../build/libpm/galgas2/C_galgas_quiet_option.cpp" />
-  <Unit filename="../build/output/all-declarations-5.cpp" />
   <Unit filename="../build/output/all-declarations-4.cpp" />
   <Unit filename="../build/output/all-declarations-3.cpp" />
   <Unit filename="../build/output/all-declarations-2.cpp" />
