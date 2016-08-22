@@ -1,4 +1,4 @@
-build
+build/helpers
 documentation/*.log
 documentation/*.aux
 documentation/*.toc
