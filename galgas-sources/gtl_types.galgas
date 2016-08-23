@@ -24,15 +24,6 @@
 #
 #-----------------------------------------------------------------------------*
 
-getter @string appendPath ?@string pathToAppend ->@string result
-{
-  if self == "" then
-    result = pathToAppend
-  else
-    result = [self stringByAppendingPath !pathToAppend]
-  end
-}
-
 #=============================================================================*
 # @gtlContext is used to store the execution context of a template
 #-----------------------------------------------------------------------------*
@@ -98,18 +89,21 @@ getter @gtlContext fullTemplateFileName
 {
   @gtlContext copy = self
   @lstring fullPref = [self fullPrefix !vars]
-  @string prefixedTemplatePath = [templateDirectory appendPath !fullPref]  
+  @string prefixedTemplatePath = 
+    [templateDirectory stringByAppendingPath !fullPref]  
   @string hierarchicalPath = path
   @string rootPath =
-    [prefixedTemplatePath appendPath ![simpleName string]] + templateExtension
+    [prefixedTemplatePath stringByAppendingPath
+      ![simpleName string]
+    ]
+    + templateExtension
   
   @bool found = false
 
   loop ( [hierarchicalPath length] )
   while not found && [hierarchicalPath length] > 0 do
     @string fullPath = [
-      [prefixedTemplatePath appendPath !hierarchicalPath] 
-      appendPath
+      [prefixedTemplatePath stringByAppendingPath !hierarchicalPath] stringByAppendingPath
         !simpleName
     ] + templateExtension
       
@@ -134,10 +128,14 @@ getter @string stringByAppendingPath
   ?let @string pathToAppend
   ->@string result
 {
-  if [self lastCharacter] == '/' then
-    result = self + pathToAppend
+  if self == "" then
+    result = pathToAppend
   else
-    result = self + '/' + pathToAppend
+    if [self lastCharacter] == '/' then
+      result = self + pathToAppend
+    else
+      result = self + '/' + pathToAppend
+    end
   end
 }
 

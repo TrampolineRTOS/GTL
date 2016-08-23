@@ -688,17 +688,6 @@ class GALGAS_location extensionGetter_location (const class GALGAS_gtlVarPath & 
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
-//                                 Extension getter '@string appendPath' (as function)                                 *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-class GALGAS_string extensionGetter_appendPath (const class GALGAS_string & inObject,
-                                                class GALGAS_string inArgument0,
-                                                class C_Compiler * inCompiler
-                                                COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
 //                                       Extension method '@gtlTemplate execute'                                       *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*

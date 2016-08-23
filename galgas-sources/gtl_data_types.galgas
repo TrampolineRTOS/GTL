@@ -3616,6 +3616,17 @@ override getter @gtlList performGetter
     result = @gtlSet.new {
       !methodName !emptylstring() !resultSet
     }
+  elsif "setBy"                    == methodName then
+    argumentsCheck(!methodName !stringArgument() !arguments)
+    @lstring key = [[arguments dataAtIndex !0] lstring]
+    @stringset resultSet = .emptySet
+    for (item) in value do
+      [item structField !key ?@gtlData field]
+      resultSet += ![field string]
+    end
+    result = @gtlSet.new {
+      !methodName !emptylstring() !resultSet
+    }
   elsif "type"                   == methodName then
     argumentsCheck(!methodName !noArgument() !arguments)
     result = @gtlType.new {

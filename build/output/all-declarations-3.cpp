@@ -3070,8 +3070,8 @@ static void extensionSetter_gtlContext_addModulePath (cPtr_gtlContext * inObject
                                                       COMMA_UNUSED_LOCATION_ARGS) {
   cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  GALGAS_string var_normalizedModulePath_1593 = constinArgument_modulePath.getter_absolutePathFromPath (constinArgument_rootPath COMMA_SOURCE_FILE ("gtl_types.galgas", 66)).getter_stringByStandardizingPath (SOURCE_FILE ("gtl_types.galgas", 66)) ;
-  object->mAttribute_importPath.addAssign_operation (var_normalizedModulePath_1593  COMMA_SOURCE_FILE ("gtl_types.galgas", 67)) ;
+  GALGAS_string var_normalizedModulePath_1407 = constinArgument_modulePath.getter_absolutePathFromPath (constinArgument_rootPath COMMA_SOURCE_FILE ("gtl_types.galgas", 57)).getter_stringByStandardizingPath (SOURCE_FILE ("gtl_types.galgas", 57)) ;
+  object->mAttribute_importPath.addAssign_operation (var_normalizedModulePath_1407  COMMA_SOURCE_FILE ("gtl_types.galgas", 58)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -3144,7 +3144,7 @@ static void extensionSetter_gtlContext_addInputVariable (cPtr_gtlContext * inObj
                                                          COMMA_UNUSED_LOCATION_ARGS) {
   cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  object->mAttribute_inputVars.addAssign_operation (inArgument_inputVariable  COMMA_SOURCE_FILE ("gtl_types.galgas", 73)) ;
+  object->mAttribute_inputVars.addAssign_operation (inArgument_inputVariable  COMMA_SOURCE_FILE ("gtl_types.galgas", 64)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -3220,14 +3220,14 @@ static void extensionSetter_gtlContext_popFirstInputArg (cPtr_gtlContext * inObj
                                                          COMMA_UNUSED_LOCATION_ARGS) {
   cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  const enumGalgasBool test_0 = GALGAS_bool (kIsStrictSup, object->mAttribute_inputVars.getter_length (SOURCE_FILE ("gtl_types.galgas", 80)).objectCompare (GALGAS_uint ((uint32_t) 0U))).boolEnum () ;
+  const enumGalgasBool test_0 = GALGAS_bool (kIsStrictSup, object->mAttribute_inputVars.getter_length (SOURCE_FILE ("gtl_types.galgas", 71)).objectCompare (GALGAS_uint ((uint32_t) 0U))).boolEnum () ;
   if (kBoolTrue == test_0) {
     {
-    object->mAttribute_inputVars.setter_popFirst (outArgument_result, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 81)) ;
+    object->mAttribute_inputVars.setter_popFirst (outArgument_result, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 72)) ;
     }
   }else if (kBoolFalse == test_0) {
     TC_Array <C_FixItDescription> fixItArray1 ;
-    inCompiler->emitSemanticError (inArgument_where, GALGAS_string ("No input argument available"), fixItArray1  COMMA_SOURCE_FILE ("gtl_types.galgas", 83)) ;
+    inCompiler->emitSemanticError (inArgument_where, GALGAS_string ("No input argument available"), fixItArray1  COMMA_SOURCE_FILE ("gtl_types.galgas", 74)) ;
     outArgument_result.drop () ; // Release error dropped variable
   }
 }
@@ -3394,42 +3394,42 @@ static GALGAS_lstring extensionGetter_gtlContext_fullTemplateFileName (const cPt
   const cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
   const GALGAS_gtlContext temp_0 = object ;
-  GALGAS_gtlContext var_copy_2249 = temp_0 ;
+  GALGAS_gtlContext var_copy_2063 = temp_0 ;
   const GALGAS_gtlContext temp_1 = object ;
-  GALGAS_lstring var_fullPref_2276 = callExtensionGetter_fullPrefix ((const cPtr_gtlContext *) temp_1.ptr (), inArgument_vars, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 100)) ;
-  GALGAS_string var_prefixedTemplatePath_2333 = extensionGetter_appendPath (object->mAttribute_templateDirectory, var_fullPref_2276.getter_string (SOURCE_FILE ("gtl_types.galgas", 101)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 101)) ;
-  GALGAS_string var_hierarchicalPath_2405 = object->mAttribute_path ;
-  GALGAS_string var_rootPath_2431 = extensionGetter_appendPath (var_prefixedTemplatePath_2333, inArgument_simpleName.getter_string (SOURCE_FILE ("gtl_types.galgas", 104)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 104)).add_operation (object->mAttribute_templateExtension, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 104)) ;
-  GALGAS_bool var_found_2529 = GALGAS_bool (false) ;
-  if (var_hierarchicalPath_2405.getter_length (SOURCE_FILE ("gtl_types.galgas", 108)).isValid ()) {
-    uint32_t variant_2545 = var_hierarchicalPath_2405.getter_length (SOURCE_FILE ("gtl_types.galgas", 108)).uintValue () ;
-    bool loop_2545 = true ;
-    while (loop_2545) {
-      GALGAS_bool test_2 = var_found_2529.operator_not (SOURCE_FILE ("gtl_types.galgas", 109)) ;
+  GALGAS_lstring var_fullPref_2090 = callExtensionGetter_fullPrefix ((const cPtr_gtlContext *) temp_1.ptr (), inArgument_vars, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 91)) ;
+  GALGAS_string var_prefixedTemplatePath_2147 = extensionGetter_stringByAppendingPath (object->mAttribute_templateDirectory, var_fullPref_2090.getter_string (SOURCE_FILE ("gtl_types.galgas", 93)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 93)) ;
+  GALGAS_string var_hierarchicalPath_2235 = object->mAttribute_path ;
+  GALGAS_string var_rootPath_2261 = extensionGetter_stringByAppendingPath (var_prefixedTemplatePath_2147, inArgument_simpleName.getter_string (SOURCE_FILE ("gtl_types.galgas", 97)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 96)).add_operation (object->mAttribute_templateExtension, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 98)) ;
+  GALGAS_bool var_found_2385 = GALGAS_bool (false) ;
+  if (var_hierarchicalPath_2235.getter_length (SOURCE_FILE ("gtl_types.galgas", 103)).isValid ()) {
+    uint32_t variant_2401 = var_hierarchicalPath_2235.getter_length (SOURCE_FILE ("gtl_types.galgas", 103)).uintValue () ;
+    bool loop_2401 = true ;
+    while (loop_2401) {
+      GALGAS_bool test_2 = var_found_2385.operator_not (SOURCE_FILE ("gtl_types.galgas", 104)) ;
       if (kBoolTrue == test_2.boolEnum ()) {
-        test_2 = GALGAS_bool (kIsStrictSup, var_hierarchicalPath_2405.getter_length (SOURCE_FILE ("gtl_types.galgas", 109)).objectCompare (GALGAS_uint ((uint32_t) 0U))) ;
+        test_2 = GALGAS_bool (kIsStrictSup, var_hierarchicalPath_2235.getter_length (SOURCE_FILE ("gtl_types.galgas", 104)).objectCompare (GALGAS_uint ((uint32_t) 0U))) ;
       }
-      loop_2545 = test_2.isValid () ;
-      if (loop_2545) {
-        loop_2545 = test_2.boolValue () ;
+      loop_2401 = test_2.isValid () ;
+      if (loop_2401) {
+        loop_2401 = test_2.boolValue () ;
       }
-      if (loop_2545 && (0 == variant_2545)) {
-        loop_2545 = false ;
-        inCompiler->loopRunTimeVariantError (SOURCE_FILE ("gtl_types.galgas", 108)) ;
+      if (loop_2401 && (0 == variant_2401)) {
+        loop_2401 = false ;
+        inCompiler->loopRunTimeVariantError (SOURCE_FILE ("gtl_types.galgas", 103)) ;
       }
-      if (loop_2545) {
-        variant_2545 -- ;
-        GALGAS_string var_fullPath_2650 = extensionGetter_appendPath (extensionGetter_appendPath (var_prefixedTemplatePath_2333, var_hierarchicalPath_2405, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 111)), inArgument_simpleName.getter_string (SOURCE_FILE ("gtl_types.galgas", 113)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 112)).add_operation (object->mAttribute_templateExtension, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 114)) ;
-        const enumGalgasBool test_3 = var_fullPath_2650.getter_fileExists (SOURCE_FILE ("gtl_types.galgas", 117)).boolEnum () ;
+      if (loop_2401) {
+        variant_2401 -- ;
+        GALGAS_string var_fullPath_2506 = extensionGetter_stringByAppendingPath (extensionGetter_stringByAppendingPath (var_prefixedTemplatePath_2147, var_hierarchicalPath_2235, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 106)), inArgument_simpleName.getter_string (SOURCE_FILE ("gtl_types.galgas", 107)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 106)).add_operation (object->mAttribute_templateExtension, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 108)) ;
+        const enumGalgasBool test_3 = var_fullPath_2506.getter_fileExists (SOURCE_FILE ("gtl_types.galgas", 111)).boolEnum () ;
         if (kBoolTrue == test_3) {
-          var_rootPath_2431 = var_fullPath_2650 ;
-          var_found_2529 = GALGAS_bool (true) ;
+          var_rootPath_2261 = var_fullPath_2506 ;
+          var_found_2385 = GALGAS_bool (true) ;
         }
-        var_hierarchicalPath_2405 = var_hierarchicalPath_2405.getter_stringByDeletingLastPathComponent (SOURCE_FILE ("gtl_types.galgas", 124)) ;
+        var_hierarchicalPath_2235 = var_hierarchicalPath_2235.getter_stringByDeletingLastPathComponent (SOURCE_FILE ("gtl_types.galgas", 118)) ;
       }
     }
   }
-  result_fullName = GALGAS_lstring::constructor_new (var_rootPath_2431, inArgument_simpleName.getter_location (SOURCE_FILE ("gtl_types.galgas", 129))  COMMA_SOURCE_FILE ("gtl_types.galgas", 127)) ;
+  result_fullName = GALGAS_lstring::constructor_new (var_rootPath_2261, inArgument_simpleName.getter_location (SOURCE_FILE ("gtl_types.galgas", 123))  COMMA_SOURCE_FILE ("gtl_types.galgas", 121)) ;
 //---
   return result_fullName ;
 }

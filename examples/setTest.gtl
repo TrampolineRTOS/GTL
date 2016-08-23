@@ -40,3 +40,13 @@ display aList
 let aSet := @! 1, "yes", 2, "no" !
 let ok := [aSet contains: "yes"]
 display ok
+
+let aList := @(
+  @{ a:"hello",     b:"goodbye" },
+  @{ a:"beautiful", b:"cruel"   }
+)
+
+let set1 := [aList setBy: "a"]
+let set2 := [aList setBy: "b"]
+display set1
+display set2

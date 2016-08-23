@@ -3124,7 +3124,7 @@ C_galgas_function_descriptor functionDescriptor_stringToGtlString ("stringToGtlS
 GALGAS_gtlContext function_emptyContext (C_Compiler * inCompiler
                                          COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_gtlContext result_context ; // Returned variable
-  result_context = GALGAS_gtlContext::constructor_new (function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 52)), GALGAS_string::makeEmptyString (), GALGAS_string::makeEmptyString (), GALGAS_string (".gtl"), GALGAS_stringlist::constructor_emptyList (SOURCE_FILE ("gtl_types.galgas", 56)), GALGAS_gtlDataList::constructor_emptyList (SOURCE_FILE ("gtl_types.galgas", 57))  COMMA_SOURCE_FILE ("gtl_types.galgas", 51)) ;
+  result_context = GALGAS_gtlContext::constructor_new (function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 43)), GALGAS_string::makeEmptyString (), GALGAS_string::makeEmptyString (), GALGAS_string (".gtl"), GALGAS_stringlist::constructor_emptyList (SOURCE_FILE ("gtl_types.galgas", 47)), GALGAS_gtlDataList::constructor_emptyList (SOURCE_FILE ("gtl_types.galgas", 48))  COMMA_SOURCE_FILE ("gtl_types.galgas", 42)) ;
 //---
   return result_context ;
 }
@@ -3164,7 +3164,7 @@ C_galgas_function_descriptor functionDescriptor_emptyContext ("emptyContext",
 GALGAS_library function_emptyLib (C_Compiler * /* inCompiler */
                                   COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_library result_result ; // Returned variable
-  result_result = GALGAS_library::constructor_new (GALGAS_gtlFuncMap::constructor_emptyMap (SOURCE_FILE ("gtl_types.galgas", 266)), GALGAS_gtlGetterMap::constructor_emptyMap (SOURCE_FILE ("gtl_types.galgas", 266)), GALGAS_gtlSetterMap::constructor_emptyMap (SOURCE_FILE ("gtl_types.galgas", 266)), GALGAS_gtlTemplateMap::constructor_emptyMap (SOURCE_FILE ("gtl_types.galgas", 266)), GALGAS_stringset::constructor_emptySet (SOURCE_FILE ("gtl_types.galgas", 266))  COMMA_SOURCE_FILE ("gtl_types.galgas", 266)) ;
+  result_result = GALGAS_library::constructor_new (GALGAS_gtlFuncMap::constructor_emptyMap (SOURCE_FILE ("gtl_types.galgas", 264)), GALGAS_gtlGetterMap::constructor_emptyMap (SOURCE_FILE ("gtl_types.galgas", 264)), GALGAS_gtlSetterMap::constructor_emptyMap (SOURCE_FILE ("gtl_types.galgas", 264)), GALGAS_gtlTemplateMap::constructor_emptyMap (SOURCE_FILE ("gtl_types.galgas", 264)), GALGAS_stringset::constructor_emptySet (SOURCE_FILE ("gtl_types.galgas", 264))  COMMA_SOURCE_FILE ("gtl_types.galgas", 264)) ;
 //---
   return result_result ;
 }
