@@ -1,8 +1,10 @@
-\documentclass[10pt,openright,twosides]{report}
+\documentclass[9pt,openright,obeyspaces,twosides]{report}
 \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
 \geometry{a4paper}                   % ... or a4paper or a5paper or ... 
 %\geometry{landscape}                % Activate for for rotated page geometry
 %\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage[T1]{fontenc}
+
 \usepackage[utf8]{inputenc}
 \usepackage{newunicodechar}
 \usepackage{graphicx}
@@ -25,9 +27,11 @@
 \usetikzlibrary{shapes.misc}
 \usetikzlibrary{arrows}
 
+\usepackage{inconsolata}
+
 %\usepackage{fontspec}
 %\setmainfont{Verdana}[Ligatures=TeX]
-%\setsansfont{Courier}[Ligatures=NoCommon]
+%\setsansfont{Menlo}[Ligatures=NoCommon]
 %\setmonofont{Menlo}[Ligatures=NoCommon]
 
 %
@@ -135,7 +139,7 @@
 \newcommand{\exampleof}[1]{\vspace{.5em}\noindent\textbf{Example of #1}\vspace{.5em}}
 \newcommand{\outputs}{\vspace{.5em}\noindent\textbf{prints}\vspace{.5em}}
 
-\renewcommand{\ttdefault}{pcr}
+%\renewcommand{\ttdefault}{pcr}
 
 \newcommand\Warning{%
  \makebox[1.4em][c]{%
@@ -151,6 +155,7 @@
 \end{tabular}
 }
 
+\renewcommand{\familydefault}{\sfdefault}
 
 \title{GTL Template language}
 \author{Jean-Luc B\'echennec}
@@ -217,7 +222,7 @@ Data embed a location, that is a file name, a line and a column. Each time a var
 
 Data embed a description string too. This allow to comment on the content of the data. See \ref{sec:description} and \ref{sec:setDescription}.
 
-Each type has its set of operators, getters and setters. The expression, for getters, or the variable, for setters, is called the {\em target}. Getters return a value related to the expression but do not change it. They are used to get information from a data or to convert it into another type.  Setters may only target a variable. Setters change the content of the variable and do not return anything. Getters and setters may have arguments. Syntax for getters without argument is as follow:
+Each type has its set of operators, getters and setters. The expression, for getters, or the variable, for setters, is called the {\em target}. Getters return a value related to the target but do not change it. They are used to do a computation with the target as input or to convert it into another type.  Setters may only target a variable. Setters change the content of the target and do not return anything. Getters and setters may have arguments. Syntax for getters without argument is as follow:
 
 \begin{gtl}
 [expression aGetter]
@@ -251,7 +256,7 @@ The following table gives all the operators available in GTL an their priority. 
 {\bf Priority}&{\bf Operators}\\
 \hline\endhead
  {0}&
-  {| \^{}}\\
+  {| \raisebox{-1mm}{\^{}}}\\
  {1}&
   {\&}\\
  {2}&
