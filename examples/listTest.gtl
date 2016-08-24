@@ -103,3 +103,13 @@ let aBigList := listOfSize(20)
 display aBigList
 let aBigList[0] := "Hello"
 display aBigList
+
+
+let myList := @(
+  @{ age : 18, height : 180, name : "Arnold" },
+  @{ age : 22, height : 170, name : "Bob"    },
+  @{ age : 29, height : 175, name : "John"   }
+)
+
+let mySet := [myList setBy: "height"]
+display mySet

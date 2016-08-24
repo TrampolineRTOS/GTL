@@ -17,6 +17,7 @@
 \usepackage{tikzpagenodes}
 \usepackage{eso-pic}
 \usepackage{hyperref}
+\usepackage{enumitem}
 
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
@@ -150,7 +151,6 @@
 \end{tabular}
 }
 
-\setlength{\itemsep}{1pt}
 
 \title{GTL Template language}
 \author{Jean-Luc B\'echennec}
@@ -173,7 +173,7 @@ GTL is written in GALGAS 3\,\footnote{GALGAS 3 is free software distributed unde
 \section*{Convention} 
 
 Code examples follow the following conventions:
-\begin{itemize}
+\begin{itemize}[noitemsep]
 \item GTL example code snippets are presented in \colorbox{light-blue}{light blue boxes}. In these examples, {\em Italic} writing are used for generic syntactic items. For instance, \gtlinline{expression} means any expression like \gtlinline{a + b} or \gtlinline{"a string"}. Boldface words are reserved words of GTL, like \gtlinline{foreach} or built-in functions, getters or setters like \gtlinline{setDescription}. Pieces of code delimited by \gtlinline{<} and \gtlinline{>} are optional.
 \item Standard output of examples are presented in \colorbox{light-yellow}{light yellow boxes}.
 \item Template string output of examples are presented in \colorbox{light-green}{light green boxes}.
@@ -1623,7 +1623,7 @@ The \lstinline{struct} data type supports the following operators:
 \end{longtable}
 
 Two structs are equal if:
-\begin{itemize}
+\begin{itemize}[noitemsep]
 \item they have the same number of field
 \item they have the same field names
 \item they have the same field values
@@ -1713,7 +1713,7 @@ The \gtltype{list} data type supports the following operators:
 \end{longtable}
 
 Two lists are equal if:
-\begin{itemize}
+\begin{itemize}[noitemsep]
 \item they have the same number of elements
 \item they have the same elements values
 \end{itemize}
@@ -1795,6 +1795,28 @@ display aSet
 aSet from file '/Users/jlb/Develop/GTL/examples/setTest.gtl', line 30:7
     set: @!
         1, 2, 4, Hello
+    !
+\end{console}
+
+\subsubsection{The \texttt{setBy} getter}
+
+\gtlinline{setBy} takes one string argument, \gtlinline{fieldName}. It assumes the list is a list of struct with a field named \gtlinline{fieldName} convertible to a string. This field is used to build the set. If any of the list item is not a struct or does not have the field named \gtlinline{fieldName} or the latter is not convertible to a string, a runtime error occurs. \gtlinline{set} returns a set representation of the list.
+
+\example
+\begin{gtl}
+let myList := @(
+  @{ age : 18, height : 180, name : "Arnold" },
+  @{ age : 22, height : 170, name : "Bob"    },
+  @{ age : 29, height : 175, name : "John"   }
+)
+
+let mySet := [myList setBy: "height"]
+display mySet
+\end{gtl}
+\begin{console}
+mySet from file '/Users/jlb/Develop/GTL/examples/listTest.gtl', line 115:7
+    set: @!
+        170, 175, 180
     !
 \end{console}
 
@@ -1930,7 +1952,7 @@ The \gtltype{map} data type supports the following operators:
 \end{longtable}
 
 Two maps are equal if:
-\begin{itemize}
+\begin{itemize}[noitemsep]
 \item they have the same number of items
 \item they have the same item keys
 \item they have the same item values
@@ -2552,7 +2574,7 @@ end if
 
 \section{The \texttt{foreach} instruction}
 
-This instruction iterates on the elements of a collection, a list or a map. The simplest form is the following one:
+This instruction iterates on the elements of a collection, a list, a map or a set. The simplest form is the following one:
 
 \begin{gtl}
 foreach var in expression do
@@ -2560,7 +2582,7 @@ foreach var in expression do
 end foreach
 \end{gtl}
 
-Here var takes the value of each of the elements of the collection. If the collection is a list, the elements are iterated in the order of the list. If the collection is a map, the element are iterated in the alphanumerical order of the keys. In both cases, a variable named \lstinline{INDEX} which contains the current iteration number is available inside the loop. \lstinline{INDEX} ranges from 0 to the number of elements in the list minus 1. If the collection is a map, a second variable, \lstinline{KEY}, which contains the key associated to the value of the current item, is available.
+Here var takes the value of each of the elements of the collection. If the collection is a list, the elements are iterated in the order of the list. If the collection is a map, the element are iterated in the alphanumerical order of the keys. If the collection is a set, the elements are iterated in the alphanumirical order. In all cases, a variable named \lstinline{INDEX} which contains the current iteration number is available inside the loop. \lstinline{INDEX} ranges from 0 to the number of elements in the list, map or set minus 1. If the collection is a map, a second variable, \lstinline{KEY}, which contains the key associated to the value of the current item, is available.
 
 In the following example, for each element in the \var{ALARMS} list, the text between the \lstinline{do} and the \lstinline{end foreach} is produced with the \var{NAME} attribute of the current element of the \var{ALARMS} list inserted at the specified location.
 
@@ -3169,7 +3191,7 @@ A module includes zero or more functions definitions, zero or more getter defini
 
 \subsection{The arguments}
 
-Arguments are passed by copy. Each formal argument of the list may be typed or not. If a formal argument is typed, GTL emit a runtime error if the passed argument does not have the same type. Here is a formal argument list with the second argument typed.
+Arguments are passed by copy. Each formal argument of the list may be typed or not. If a formal argument is typed, GTL emits a runtime error if the passed argument does not have the same type. Here is a formal argument list with the second argument typed.
 
 \begin{gtl}
 a, b : @int, c
