@@ -125,7 +125,6 @@
 
 - (void) actionOpenFromSelectionInNewWindow: (id) sender ;
 - (void) actionOpenFromSelection: (id) sender ;
-- (IBAction) revealInFinderAction: (id) inSender ;
 
 - (void) updateSearchResultForFile: (NSString *) inFilePath
          previousRange: (NSRange) inPreviousRange

@@ -43,6 +43,9 @@ void C_UIntSet::add (const uint32_t inNodeIndex) {
     mDefinition.addObject (0) ;
   }
   mDefinition (idx COMMA_HERE) |= ((uint64_t) 1) << (inNodeIndex & 63) ;
+  #ifndef DO_NOT_GENERATE_CHECKINGS
+    check () ;
+  #endif
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -55,6 +58,9 @@ void C_UIntSet::remove (const uint32_t inNodeIndex) {
       mDefinition.removeLastObject (HERE) ;
     }
   }
+  #ifndef DO_NOT_GENERATE_CHECKINGS
+    check () ;
+  #endif
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -140,6 +146,9 @@ void C_UIntSet::operator &= (const C_UIntSet & inOther) {
   while ((mDefinition.count () > 0) && (mDefinition.lastObject (HERE) == 0)) {
     mDefinition.removeLastObject (HERE) ;
   }
+  #ifndef DO_NOT_GENERATE_CHECKINGS
+    check () ;
+  #endif
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -151,6 +160,9 @@ void C_UIntSet::operator |= (const C_UIntSet & inOther) {
   for (int32_t i=0 ; i<inOther.mDefinition.count () ; i++) {
     mDefinition (i COMMA_HERE) |= inOther.mDefinition (i COMMA_HERE) ;
   }
+  #ifndef DO_NOT_GENERATE_CHECKINGS
+    check () ;
+  #endif
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -169,6 +181,9 @@ void C_UIntSet::operator -= (const C_UIntSet & inOther) {
   while ((mDefinition.count () > 0) && (mDefinition.lastObject (HERE) == 0)) {
     mDefinition.removeLastObject (HERE) ;
   }
+  #ifndef DO_NOT_GENERATE_CHECKINGS
+    check () ;
+  #endif
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -186,5 +201,15 @@ bool C_UIntSet::operator == (const C_UIntSet & inOther) const {
 bool C_UIntSet::operator != (const C_UIntSet & inOther) const {
   return ! (*this == inOther) ;
 }
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+#ifndef DO_NOT_GENERATE_CHECKINGS
+  void C_UIntSet::check (void) const {
+    if (mDefinition.count () > 0) {
+      MF_Assert (mDefinition.lastObject (HERE) != 0, "last entry of C_UIntSet is 0", 0, 0) ;
+    }
+  }
+#endif
 
 //---------------------------------------------------------------------------------------------------------------------*

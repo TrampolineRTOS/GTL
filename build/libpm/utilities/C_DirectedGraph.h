@@ -31,6 +31,10 @@
 
 //---------------------------------------------------------------------------------------------------------------------*
 
+//#define USE_NODE_NAMES_WITH_SUBGRAPH_COMPUTATION
+
+//---------------------------------------------------------------------------------------------------------------------*
+
 typedef struct {
   uint32_t mSource ;
   uint32_t mTarget ;
@@ -96,6 +100,9 @@ class C_DirectedGraph {
   public : C_DirectedGraph reversedGraph (void) const ;
   
   public : C_DirectedGraph subGraphFromNodes (const C_UIntSet & inStartNodes,
+                                              #ifdef USE_NODE_NAMES_WITH_SUBGRAPH_COMPUTATION
+                                                const TC_UniqueArray <C_String> & inNodeNames,
+                                              #endif
                                               const C_UIntSet & inNodesToExclude) const ;
   
   #ifndef DO_NOT_GENERATE_CHECKINGS
@@ -103,7 +110,7 @@ class C_DirectedGraph {
   #endif
 
 //--- Attributes
-  private : C_UIntSet mNodeDefinition ;
+  private : C_UIntSet mNodes ;
   private : TC_Array <C_UIntSet> mEdges ;
   private : TC_Array <C_UIntSet> mReverseEdges ;
 } ;

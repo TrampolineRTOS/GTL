@@ -74,6 +74,10 @@ class AC_GALGAS_graph : public AC_GALGAS_root {
 
   public : VIRTUAL_IN_DEBUG GALGAS_stringlist getter_undefinedNodeKeyList (LOCATION_ARGS) const ;
 
+  public : VIRTUAL_IN_DEBUG GALGAS_location getter_locationForKey (const GALGAS_string & inKey,
+                                                                   C_Compiler * inCompiler
+                                                                   COMMA_LOCATION_ARGS) const ;
+
 //--------------------------------- Setters
   public : VIRTUAL_IN_DEBUG void setter_addEdge (const GALGAS_lstring & inSourceNodeKey,
                                                  const GALGAS_lstring & inTargetNodeKey

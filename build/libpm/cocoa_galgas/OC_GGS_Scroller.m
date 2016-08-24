@@ -38,7 +38,7 @@
 //---------------------------------------------------------------------------------------------------------------------*
 
 - (id) initWithFrame: (NSRect) inFrame {
-  self = [super initWithFrame: (NSRect) inFrame] ;
+  self = [super initWithFrame:inFrame] ;
   if (self) {
     #ifdef DEBUG_MESSAGES
       NSLog (@"%s", __PRETTY_FUNCTION__) ;

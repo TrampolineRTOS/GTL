@@ -2955,7 +2955,7 @@ static const C_galgas_type_descriptor * functionArgs_invokeGTL [4] = {
 
 static GALGAS_object functionWithGenericHeader_invokeGTL (C_Compiler * inCompiler,
                                                           const cObjectArray & inEffectiveParameterArray,
-                                                          const GALGAS_location & /* §§ inErrorLocation */
+                                                          const GALGAS_location & /* inErrorLocation */
                                                           COMMA_LOCATION_ARGS) {
   const GALGAS_gtlString operand0 = GALGAS_gtlString::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                                      inCompiler
@@ -3050,7 +3050,7 @@ static const C_galgas_type_descriptor * functionArgs_lstringToGtlString [2] = {
 
 static GALGAS_object functionWithGenericHeader_lstringToGtlString (C_Compiler * inCompiler,
                                                                    const cObjectArray & inEffectiveParameterArray,
-                                                                   const GALGAS_location & /* §§ inErrorLocation */
+                                                                   const GALGAS_location & /* inErrorLocation */
                                                                    COMMA_LOCATION_ARGS) {
   const GALGAS_lstring operand0 = GALGAS_lstring::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                                  inCompiler
@@ -3097,7 +3097,7 @@ static const C_galgas_type_descriptor * functionArgs_stringToGtlString [2] = {
 
 static GALGAS_object functionWithGenericHeader_stringToGtlString (C_Compiler * inCompiler,
                                                                   const cObjectArray & inEffectiveParameterArray,
-                                                                  const GALGAS_location & /* §§ inErrorLocation */
+                                                                  const GALGAS_location & /* inErrorLocation */
                                                                   COMMA_LOCATION_ARGS) {
   const GALGAS_string operand0 = GALGAS_string::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                                inCompiler
@@ -4175,7 +4175,7 @@ static const C_galgas_type_descriptor * functionArgs_lstring [2] = {
 
 static GALGAS_object functionWithGenericHeader_lstring (C_Compiler * inCompiler,
                                                         const cObjectArray & inEffectiveParameterArray,
-                                                        const GALGAS_location & /* §§ inErrorLocation */
+                                                        const GALGAS_location & /* inErrorLocation */
                                                         COMMA_LOCATION_ARGS) {
   const GALGAS_string operand0 = GALGAS_string::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                                inCompiler
@@ -4227,7 +4227,7 @@ static const C_galgas_type_descriptor * functionArgs_trueFalse [2] = {
 
 static GALGAS_object functionWithGenericHeader_trueFalse (C_Compiler * inCompiler,
                                                           const cObjectArray & inEffectiveParameterArray,
-                                                          const GALGAS_location & /* §§ inErrorLocation */
+                                                          const GALGAS_location & /* inErrorLocation */
                                                           COMMA_LOCATION_ARGS) {
   const GALGAS_bool operand0 = GALGAS_bool::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                            inCompiler
@@ -4279,7 +4279,7 @@ static const C_galgas_type_descriptor * functionArgs_TrueFalse [2] = {
 
 static GALGAS_object functionWithGenericHeader_TrueFalse (C_Compiler * inCompiler,
                                                           const cObjectArray & inEffectiveParameterArray,
-                                                          const GALGAS_location & /* §§ inErrorLocation */
+                                                          const GALGAS_location & /* inErrorLocation */
                                                           COMMA_LOCATION_ARGS) {
   const GALGAS_bool operand0 = GALGAS_bool::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                            inCompiler
@@ -4331,7 +4331,7 @@ static const C_galgas_type_descriptor * functionArgs_yesNo [2] = {
 
 static GALGAS_object functionWithGenericHeader_yesNo (C_Compiler * inCompiler,
                                                       const cObjectArray & inEffectiveParameterArray,
-                                                      const GALGAS_location & /* §§ inErrorLocation */
+                                                      const GALGAS_location & /* inErrorLocation */
                                                       COMMA_LOCATION_ARGS) {
   const GALGAS_bool operand0 = GALGAS_bool::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                            inCompiler
@@ -4383,7 +4383,7 @@ static const C_galgas_type_descriptor * functionArgs_TRUEFALSE [2] = {
 
 static GALGAS_object functionWithGenericHeader_TRUEFALSE (C_Compiler * inCompiler,
                                                           const cObjectArray & inEffectiveParameterArray,
-                                                          const GALGAS_location & /* §§ inErrorLocation */
+                                                          const GALGAS_location & /* inErrorLocation */
                                                           COMMA_LOCATION_ARGS) {
   const GALGAS_bool operand0 = GALGAS_bool::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                            inCompiler
@@ -4449,7 +4449,7 @@ static const C_galgas_type_descriptor * functionArgs_listOfSize [2] = {
 
 static GALGAS_object functionWithGenericHeader_listOfSize (C_Compiler * inCompiler,
                                                            const cObjectArray & inEffectiveParameterArray,
-                                                           const GALGAS_location & /* §§ inErrorLocation */
+                                                           const GALGAS_location & /* inErrorLocation */
                                                            COMMA_LOCATION_ARGS) {
   const GALGAS_bigint operand0 = GALGAS_bigint::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                                inCompiler
@@ -5324,7 +5324,7 @@ static const C_galgas_type_descriptor * functionArgs_wantGtlStruct [2] = {
 
 static GALGAS_object functionWithGenericHeader_wantGtlStruct (C_Compiler * inCompiler,
                                                               const cObjectArray & inEffectiveParameterArray,
-                                                              const GALGAS_location & /* §§ inErrorLocation */
+                                                              const GALGAS_location & /* inErrorLocation */
                                                               COMMA_LOCATION_ARGS) {
   const GALGAS_gtlData operand0 = GALGAS_gtlData::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                                  inCompiler
@@ -5378,7 +5378,7 @@ static const C_galgas_type_descriptor * functionArgs_wantGtlMap [2] = {
 
 static GALGAS_object functionWithGenericHeader_wantGtlMap (C_Compiler * inCompiler,
                                                            const cObjectArray & inEffectiveParameterArray,
-                                                           const GALGAS_location & /* §§ inErrorLocation */
+                                                           const GALGAS_location & /* inErrorLocation */
                                                            COMMA_LOCATION_ARGS) {
   const GALGAS_gtlData operand0 = GALGAS_gtlData::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                                  inCompiler
@@ -5432,7 +5432,7 @@ static const C_galgas_type_descriptor * functionArgs_wantGtlList [2] = {
 
 static GALGAS_object functionWithGenericHeader_wantGtlList (C_Compiler * inCompiler,
                                                             const cObjectArray & inEffectiveParameterArray,
-                                                            const GALGAS_location & /* §§ inErrorLocation */
+                                                            const GALGAS_location & /* inErrorLocation */
                                                             COMMA_LOCATION_ARGS) {
   const GALGAS_gtlData operand0 = GALGAS_gtlData::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                                  inCompiler
@@ -5530,7 +5530,7 @@ static const C_galgas_type_descriptor * functionArgs_validateReturnValue [3] = {
 
 static GALGAS_object functionWithGenericHeader_validateReturnValue (C_Compiler * inCompiler,
                                                                     const cObjectArray & inEffectiveParameterArray,
-                                                                    const GALGAS_location & /* §§ inErrorLocation */
+                                                                    const GALGAS_location & /* inErrorLocation */
                                                                     COMMA_LOCATION_ARGS) {
   const GALGAS_lstring operand0 = GALGAS_lstring::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
                                                                  inCompiler

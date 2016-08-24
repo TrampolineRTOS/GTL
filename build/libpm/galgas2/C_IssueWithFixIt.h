@@ -32,7 +32,9 @@
 //---------------------------------------------------------------------------------------------------------------------*
 
 class GALGAS_stringlist ;
+class GALGAS_lstringlist ;
 class GALGAS_string ;
+class GALGAS_stringset ;
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -89,7 +91,19 @@ void appendFixItActions (TC_Array <C_FixItDescription> & ioArray,
 
 void appendFixItActions (TC_Array <C_FixItDescription> & ioArray,
                          const EnumFixItKind inKind,
+                         const GALGAS_lstringlist & inList) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void appendFixItActions (TC_Array <C_FixItDescription> & ioArray,
+                         const EnumFixItKind inKind,
                          const GALGAS_string & inString) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void appendFixItActions (TC_Array <C_FixItDescription> & ioArray,
+                         const EnumFixItKind inKind,
+                         const GALGAS_stringset & inStringSet) ;
 
 //---------------------------------------------------------------------------------------------------------------------*
 

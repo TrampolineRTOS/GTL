@@ -94,7 +94,7 @@ void cCollectionElement_stringset::description (C_String & ioString, const int32
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
-//  c S t r i n g s e t N o d e                                                *
+//  c S t r i n g s e t N o d e                                                                                        *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -841,14 +841,12 @@ GALGAS_stringset GALGAS_stringset::substract_operation (const GALGAS_stringset &
       inOperand2.checkStringset (HERE) ;
     #endif
     result = constructor_emptySet (THERE) ;
-    const uint32_t leftCount = (NULL == mSharedRoot) ? 0 : mSharedRoot->count () ;
-    TC_UniqueArray <C_String> leftList ((int32_t) leftCount COMMA_THERE) ;
-    if (NULL != mSharedRoot) {
-      mSharedRoot->buildOrderedKeyList (leftList) ;
-    }
-    for (uint32_t i=0 ; i<leftCount ; i++) {
-      if ((NULL != inOperand2.mSharedRoot) && ! inOperand2.mSharedRoot->hasKey (leftList ((int32_t) i COMMA_HERE))) {
-        result.addAssign_operation (GALGAS_string (leftList ((int32_t) i COMMA_HERE)) COMMA_HERE) ;
+    const int32_t leftCount = (int32_t) mSharedRoot->count () ;
+    TC_UniqueArray <C_String> leftList (leftCount COMMA_THERE) ;
+    mSharedRoot->buildOrderedKeyList (leftList) ;
+    for (int32_t i=0 ; i<leftCount ; i++) {
+      if (! inOperand2.mSharedRoot->hasKey (leftList (i COMMA_HERE))) {
+        result.addAssign_operation (GALGAS_string (leftList (i COMMA_HERE)) COMMA_HERE) ;
       }
     }
     #ifndef DO_NOT_GENERATE_CHECKINGS

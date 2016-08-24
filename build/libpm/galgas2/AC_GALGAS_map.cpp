@@ -1536,7 +1536,6 @@ void cSharedMapRoot::populateEnumerationArray (capCollectionElementArray & ioEnu
   case kENUMERATION_ENTER_ORDER :
   case kENUMERATION_REVERSE_ENTER_ORDER :
     MF_RunTimeError ("invalid inEnumerationOrder %lld", enumerationOrderValue (inEnumerationOrder), 0) ;
-    break ;
   }
   MF_Assert (mCount == ioEnumerationArray.count (), "mCount (%lld) != ioEnumerationArray.count () (%lld)", mCount, ioEnumerationArray.count ()) ;
 }

@@ -137,8 +137,8 @@ GALGAS_string GALGAS_data::getter_cStringRepresentation (UNUSED_LOCATION_ARGS) c
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_data::setter_appendByte (GALGAS_uint inArgument0,
-                                       C_Compiler * inCompiler
-                                       COMMA_LOCATION_ARGS) {
+                                     C_Compiler * inCompiler
+                                     COMMA_LOCATION_ARGS) {
   if (inArgument0.isValid ()) {
     if (inArgument0.uintValue () > 255) {
       inCompiler->onTheFlyRunTimeError ("'@data appendByte' modifier invoked with value greater than 255" COMMA_THERE) ;
@@ -152,8 +152,8 @@ void GALGAS_data::setter_appendByte (GALGAS_uint inArgument0,
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_data::setter_appendShortBE (GALGAS_uint inArgument0,
-                                          C_Compiler * inCompiler
-                                          COMMA_LOCATION_ARGS) {
+                                        C_Compiler * inCompiler
+                                        COMMA_LOCATION_ARGS) {
   if (inArgument0.isValid ()) {
     if (inArgument0.uintValue () > 0xFFFF) {
       inCompiler->onTheFlyRunTimeError ("'@data appendShortBE' modifier invoked with value greater than 0xFFFF" COMMA_THERE) ;
@@ -168,8 +168,8 @@ void GALGAS_data::setter_appendShortBE (GALGAS_uint inArgument0,
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_data::setter_appendShortLE (GALGAS_uint inArgument0,
-                                          C_Compiler * inCompiler
-                                          COMMA_LOCATION_ARGS) {
+                                        C_Compiler * inCompiler
+                                        COMMA_LOCATION_ARGS) {
   if (inArgument0.isValid ()) {
     if (inArgument0.uintValue () > 0xFFFF) {
       inCompiler->onTheFlyRunTimeError ("'@data appendShortLE' modifier invoked with value greater than 0xFFFF" COMMA_THERE) ;
@@ -184,7 +184,7 @@ void GALGAS_data::setter_appendShortLE (GALGAS_uint inArgument0,
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_data::setter_appendUIntBE (GALGAS_uint inArgument0
-                                         COMMA_UNUSED_LOCATION_ARGS) {
+                                       COMMA_UNUSED_LOCATION_ARGS) {
   if (inArgument0.isValid ()) {
     const uint32_t value = inArgument0.uintValue () ;
     mData.appendByte ((uint8_t) (value >> 24)) ;
@@ -197,7 +197,7 @@ void GALGAS_data::setter_appendUIntBE (GALGAS_uint inArgument0
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_data::setter_appendUIntLE (GALGAS_uint inArgument0
-                                         COMMA_UNUSED_LOCATION_ARGS) {
+                                       COMMA_UNUSED_LOCATION_ARGS) {
   if (inArgument0.isValid ()) {
     const uint32_t value = inArgument0.uintValue () ;
     mData.appendByte ((uint8_t) (value & 255)) ;
@@ -210,7 +210,7 @@ void GALGAS_data::setter_appendUIntLE (GALGAS_uint inArgument0
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_data::setter_appendUTF_38_String (GALGAS_string inString
-                                                COMMA_UNUSED_LOCATION_ARGS) {
+                                              COMMA_UNUSED_LOCATION_ARGS) {
   if (inString.isValid ()) {
     const C_String s = inString.stringValue () ;
     for (int32_t i=0 ; i<s.length () ; i++) {
@@ -228,7 +228,7 @@ void GALGAS_data::setter_appendUTF_38_String (GALGAS_string inString
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_data::setter_appendData (GALGAS_data inData
-                                       COMMA_UNUSED_LOCATION_ARGS) {
+                                     COMMA_UNUSED_LOCATION_ARGS) {
   if (inData.isValid ()) {
     mData.appendData (inData.mData) ;
   }
@@ -423,7 +423,7 @@ void cCollectionElement_data::description (C_String & ioString, const int32_t in
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
-//     cEnumerator_data class                                                  *
+//     cEnumerator_data class                                                                                          *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
