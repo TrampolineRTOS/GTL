@@ -8781,6 +8781,8 @@ class GALGAS_type extensionGetter_gtlType (const class GALGAS_lstring & inObject
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
+extern C_BoolCommandLineOption gOption_gtl_5F_options_debug ;
+
 extern C_BoolCommandLineOption gOption_gtl_5F_options_warnDeprecated ;
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8997,6 +8999,104 @@ class cParser_gtl_5F_parser {
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
+//                                               @debuggerContext class                                                *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_debuggerContext : public AC_GALGAS_class {
+//--- Constructor
+  public : GALGAS_debuggerContext (void) ;
+
+//--------------------------------- Default GALGAS constructor
+  public : static GALGAS_debuggerContext constructor_default (LOCATION_ARGS) ;
+
+//---
+  public : inline const class cPtr_debuggerContext * ptr (void) const { return (const cPtr_debuggerContext *) mObjectPtr ; }
+
+//--------------------------------- Constructor from pointer
+  public : GALGAS_debuggerContext (const cPtr_debuggerContext * inSourcePtr) ;
+
+//-- Start of generic part --*
+
+//--------------------------------- Object cloning
+  protected : virtual AC_GALGAS_root * clonedObject (void) const ;
+
+//--------------------------------- Object extraction
+  public : static GALGAS_debuggerContext extractObject (const GALGAS_object & inObject,
+                                                        C_Compiler * inCompiler
+                                                        COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- GALGAS constructors
+  public : static class GALGAS_debuggerContext constructor_new (const class GALGAS_bool & inOperand0,
+                                                                const class GALGAS_bool & inOperand1
+                                                                COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- Comparison
+  public : typeComparisonResult objectCompare (const GALGAS_debuggerContext & inOperand) const ;
+
+//--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_setBreakOnNext (class GALGAS_bool inArgument0
+                                                        COMMA_LOCATION_ARGS) ;
+
+  public : VIRTUAL_IN_DEBUG void setter_setDebugActive (class GALGAS_bool inArgument0
+                                                        COMMA_LOCATION_ARGS) ;
+
+
+//--------------------------------- Instance Methods
+//--------------------------------- Class Methods
+
+//--------------------------------- Getters
+  public : VIRTUAL_IN_DEBUG class GALGAS_bool getter_breakOnNext (LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG class GALGAS_bool getter_debugActive (LOCATION_ARGS) const ;
+
+
+//--------------------------------- Introspection
+  public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
+ 
+} ; // End of GALGAS_debuggerContext class
+
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_debuggerContext ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                      Pointer class for @debuggerContext class                                       *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cPtr_debuggerContext : public acPtr_class {
+//--- Attributes
+  public : GALGAS_bool mAttribute_debugActive ;
+  public : GALGAS_bool mAttribute_breakOnNext ;
+
+//--- Constructor
+  public : cPtr_debuggerContext (const GALGAS_bool & in_debugActive,
+                                 const GALGAS_bool & in_breakOnNext
+                                 COMMA_LOCATION_ARGS) ;
+
+//--- Duplication
+  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
+
+//--- Attribute accessors
+  public : VIRTUAL_IN_DEBUG GALGAS_bool getter_debugActive (LOCATION_ARGS) const ;
+  public : VIRTUAL_IN_DEBUG void setter_setDebugActive (GALGAS_bool inValue COMMA_LOCATION_ARGS) ;
+  public : VIRTUAL_IN_DEBUG GALGAS_bool getter_breakOnNext (LOCATION_ARGS) const ;
+  public : VIRTUAL_IN_DEBUG void setter_setBreakOnNext (GALGAS_bool inValue COMMA_LOCATION_ARGS) ;
+//--- Description
+  public : virtual void description (C_String & ioString,
+                                     const int32_t inIndentation) const ;
+
+  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
+
+  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
+
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
 //                                                  @gtlContext class                                                  *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9030,7 +9130,8 @@ class GALGAS_gtlContext : public AC_GALGAS_class {
                                                            const class GALGAS_string & inOperand2,
                                                            const class GALGAS_string & inOperand3,
                                                            const class GALGAS_stringlist & inOperand4,
-                                                           const class GALGAS_gtlDataList & inOperand5
+                                                           const class GALGAS_gtlDataList & inOperand5,
+                                                           const class GALGAS_debuggerContext & inOperand6
                                                            COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -9057,6 +9158,8 @@ class GALGAS_gtlContext : public AC_GALGAS_class {
 //--------------------------------- Class Methods
 
 //--------------------------------- Getters
+  public : VIRTUAL_IN_DEBUG class GALGAS_debuggerContext getter_debuggerContext (LOCATION_ARGS) const ;
+
   public : VIRTUAL_IN_DEBUG class GALGAS_stringlist getter_importPath (LOCATION_ARGS) const ;
 
   public : VIRTUAL_IN_DEBUG class GALGAS_gtlDataList getter_inputVars (LOCATION_ARGS) const ;
@@ -9094,6 +9197,7 @@ class cPtr_gtlContext : public acPtr_class {
   public : GALGAS_string mAttribute_templateExtension ;
   public : GALGAS_stringlist mAttribute_importPath ;
   public : GALGAS_gtlDataList mAttribute_inputVars ;
+  public : GALGAS_debuggerContext mAttribute_debuggerContext ;
 
 //--- Constructor
   public : cPtr_gtlContext (const GALGAS_lstring & in_prefix,
@@ -9101,7 +9205,8 @@ class cPtr_gtlContext : public acPtr_class {
                             const GALGAS_string & in_templateDirectory,
                             const GALGAS_string & in_templateExtension,
                             const GALGAS_stringlist & in_importPath,
-                            const GALGAS_gtlDataList & in_inputVars
+                            const GALGAS_gtlDataList & in_inputVars,
+                            const GALGAS_debuggerContext & in_debuggerContext
                             COMMA_LOCATION_ARGS) ;
 
 //--- Duplication
@@ -9119,6 +9224,7 @@ class cPtr_gtlContext : public acPtr_class {
   public : VIRTUAL_IN_DEBUG GALGAS_stringlist getter_importPath (LOCATION_ARGS) const ;
   public : VIRTUAL_IN_DEBUG GALGAS_gtlDataList getter_inputVars (LOCATION_ARGS) const ;
   public : VIRTUAL_IN_DEBUG void setter_setInputVars (GALGAS_gtlDataList inValue COMMA_LOCATION_ARGS) ;
+  public : VIRTUAL_IN_DEBUG GALGAS_debuggerContext getter_debuggerContext (LOCATION_ARGS) const ;
 //--- Description
   public : virtual void description (C_String & ioString,
                                      const int32_t inIndentation) const ;

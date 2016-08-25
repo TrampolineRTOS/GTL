@@ -34,6 +34,9 @@ func invokeGTL
 {  
   result = ""
   
+  [!?context setDebugger ![option gtl_options.debug value]]
+  [!?context setBreakOnNext]
+
   # Build a template instruction
   @gtlTemplateInstruction rootTemplateInstruction = .new {
     !.here
@@ -50,6 +53,7 @@ func invokeGTL
   
   # Execute the template
   @library    lib = emptyLib()
+
   [rootTemplateInstruction execute
     !?context
     !?vars

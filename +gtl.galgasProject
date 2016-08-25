@@ -56,5 +56,6 @@ project (3:0:0) -> "gtl" {
   "galgas-sources/gtl_expression_parser.galgas"
   "galgas-sources/gtl_grammar.galgas"
   "galgas-sources/gtl_module_grammar.galgas"
+  "galgas-sources/gtl_debugger.galgas"
 }
 

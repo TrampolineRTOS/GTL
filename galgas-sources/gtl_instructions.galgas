@@ -58,6 +58,12 @@ method @gtlInstructionList execute
 {
   for () in self do
     if @uint.errorCount == 0 then
+      if [context debugActive] then
+        if [context breakOnNext] then
+          [instruction display]
+          @string input = .newWithStdIn{}
+        end
+      end
       [instruction execute !?context !?vars !?lib !?outputString]
       if @uint.errorCount != 0 then
         error instruction : "runtime error"
@@ -84,7 +90,7 @@ override method @gtlLetUnconstructedInstruction execute
     }
   ]
 }
-  
+
 #-----------------------------------------------------------------------------*
 # let instructions base class
 #-----------------------------------------------------------------------------*
@@ -424,6 +430,7 @@ override method @gtlTemplateInstruction execute
   end
 
   @lstring templateFileName = [newContext fullTemplateFileName
+    !context
     !vars
     ![[fileName eval !vars !lib] as @gtlString lstring]
   ]

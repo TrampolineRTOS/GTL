@@ -39,16 +39,14 @@ grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
     [[inSourceFile string] stringByDeletingLastPathComponent]
   
   [!?context addModulePath !sourceFileDirectory !"../modules"]
-    
-  grammar gtl_grammar in inSourceFile
-    !context
-    !?lib
-    ?@gtlInstructionList program
   
   @gtlData vars = @gtlStruct.new { !.here !emptylstring() !.emptyMap }
-  @string result = ""
-  
-  [program execute !?context !?vars !?lib !?result]
+
+  @string result = invokeGTL(
+    !lstringToGtlString( !inSourceFile )
+    !context
+    !vars
+  )
   
   message "================================================================\n"
   message result
