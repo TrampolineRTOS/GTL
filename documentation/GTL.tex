@@ -1,9 +1,11 @@
-\documentclass[9pt,openright,obeyspaces,twosides]{report}
+\documentclass[10pt,openright,twosides,final]{memoir}
+
+\pagestyle{companion}
+
 \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
 \geometry{a4paper}                   % ... or a4paper or a5paper or ... 
 %\geometry{landscape}                % Activate for for rotated page geometry
 %\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
-\usepackage[T1]{fontenc}
 
 \usepackage[utf8]{inputenc}
 \usepackage{newunicodechar}
@@ -20,6 +22,7 @@
 \usepackage{eso-pic}
 \usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{blindtext}
 
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
@@ -27,7 +30,8 @@
 \usetikzlibrary{shapes.misc}
 \usetikzlibrary{arrows}
 
-\usepackage{inconsolata}
+\usepackage[default]{sourcecodepro}
+\usepackage[T1]{fontenc}
 
 %\usepackage{fontspec}
 %\setmainfont{Verdana}[Ligatures=TeX]
@@ -157,13 +161,40 @@
 
 \renewcommand{\familydefault}{\sfdefault}
 
-\title{GTL Template language}
+\makechapterstyle{box}{
+  \renewcommand*{\printchaptername}{}
+  \renewcommand*{\chapnumfont}{\normalfont\Huge\bfseries}
+  \renewcommand*{\printchapternum}{
+    \flushright
+    \begin{tikzpicture}
+      \draw[fill,color=black] (0,0) rectangle (2cm,2cm);
+      \draw[color=white] (1cm,1cm) node {\chapnumfont\thechapter};
+    \end{tikzpicture}
+  }
+  \renewcommand*{\chaptitlefont}{\normalfont\sffamily\Huge\bfseries}
+  \renewcommand*{\printchaptertitle}[1]{\flushright\chaptitlefont##1}
+}
+\chapterstyle{box}
+
+%----------------------------------------------------------------------------------------
+
+\title{The GTL Template language}
 \author{Jean-Luc B\'echennec}
 %\date{}                                           % Activate to display a given date or no date
 
 \begin{document}
 
-\maketitle
+\begin{titlingpage}\begin{tikzpicture}
+\node[fill=light-gray,minimum width=15cm,minimum height=1.8cm] at (5.8,12) {};
+\draw[color=white] (0,0) -- (-2,0) {};
+\draw (0,0) -- (0,.99\textheight);
+\draw (.5,12) node[right] {\Huge\bfseries\thetitle};
+\draw (.5,10.5) node[right] {\huge version 3};
+\draw (.5,7) node[right] {\Large\theauthor}; 
+\draw (.5,6.3) node[right] {\large\today}; 
+\end{tikzpicture}
+\end{titlingpage}
+
 %\section{}
 %\subsection{}
 
@@ -173,7 +204,7 @@
 
 This document presents the syntax and the semantics of GTL 3, a template language used in Goil, the OIL compiler of Trampoline\footnote{An OSEK and AUTOSAR 4.2 compliant RTOS, check \url{https://github.com/TrampolineRTOS/trampoline}.}, to generate code from the OIL or arXML description of an OSEK/AUTOSAR application.
 
-GTL is written in GALGAS 3\,\footnote{GALGAS 3 is free software distributed under the GPL license and can be found at \url{http://galgas.rts-software.org}}, a lexical and syntactic analyzer, which is also a powerful domain specific language to write compilers and interpreters. GALGAS 3 is developed by Pierre Molinaro from the Real-Time Systems Group of IRCCyN, a french laboratory from a joint of the University of Nantes, \'Ecole Centrale de Nantes, \'Ecole des Mines de Nantes and CNRS. The first version of the GTL interpreter was written by Pierre Molinaro too. As needs have increased, more features was needed and this led to a major rewrite of the GTL interpreter; In fact no original code made its way in GTL 3.
+GTL is written in GALGAS 3\,\footnote{GALGAS 3 is free software distributed under the GPL license and can be found at \url{http://galgas.rts-software.org}}, a lexical and syntactic analyzer, which is also a powerful domain specific language to write compilers and interpreters. GALGAS 3 is developed by Pierre Molinaro from the Real-Time Systems Group of IRCCyN, a french laboratory from a joint of the University of Nantes, \'Ecole Centrale de Nantes, \'Ecole des Mines de Nantes and CNRS. The first version of the GTL interpreter was written by Pierre Molinaro too. As needs have increased, more features was added and this led to a major rewrite of the GTL interpreter; In fact no original code made its way in GTL 3.
 
 \section*{Convention} 
 
@@ -190,7 +221,7 @@ Code examples follow the following conventions:
 GTL supports the following data types:
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\bfseries\ttfamily\small}l|l}
-{\bf type}&{\bf Description}\\
+{\bfseries type}&{\bfseries Description}\\
 \hline\endhead
  {int}&
   {arbitrary precision integer numbers. The GMP library is used}\\
@@ -253,7 +284,7 @@ The following table gives all the operators available in GTL an their priority. 
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{l|>{\ttfamily}l}
-{\bf Priority}&{\bf Operators}\\
+{\bfseries Priority}&{\bfseries Operators}\\
 \hline\endhead
  {0}&
   {| \raisebox{-1mm}{\^{}}}\\
@@ -515,7 +546,7 @@ The \lstinline{int} datatype supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {+}&
   {int $\leftarrow$ +int}&
@@ -532,7 +563,7 @@ The \lstinline{int} datatype supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {+}&
   {int $\leftarrow$ int + int}&
@@ -554,7 +585,7 @@ The \lstinline{int} datatype supports the following operators:
 \subsubsection{Binary bitwise operators}
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {\&}&
   {int $\leftarrow$ int \& int}&
@@ -577,7 +608,7 @@ The \lstinline{int} datatype supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {!=}&
   {bool $\leftarrow$ int != int}&
@@ -862,7 +893,7 @@ The following built-in functions return an int.
 
 \section{The \texttt{char} data type}
 
-The \lstinline{char} data type supports unicode characters. A literal char is delimited by a pair of \texttt{'}:
+The \lstinline{char} data type supports unicode characters. A literal char is delimited by a pair of \gtlinline{'}:
 
 \begin{gtl}
 let a := 'A'
@@ -872,7 +903,7 @@ Literal chars support escaped special characters:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|l}
-{\bf Escape sequence}&{\bf Corresponding character}\\
+{\bfseries Escape sequence}&{\bfseries Corresponding character}\\
 \hline\endhead
  {\textbackslash f}&
   {form feed}\\
@@ -904,7 +935,7 @@ The \lstinline{char} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {!=}&
   {bool $\leftarrow$ char != char}&
@@ -980,7 +1011,7 @@ a from file '/Users/jlb/Develop/GTL/examples/enumTest.gtl', line 4:7
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {!=}&
   {bool $\leftarrow$ enum != enum}&
@@ -1008,7 +1039,7 @@ The \gtltype{float} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {+}&
   {float $\leftarrow$ +float}&
@@ -1022,7 +1053,7 @@ The \gtltype{float} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {+}&
   {float $\leftarrow$ float + float}&
@@ -1042,7 +1073,7 @@ The \gtltype{float} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {!=}&
   {bool $\leftarrow$ float != float}&
@@ -1139,7 +1170,7 @@ Literal strings support escaped special characters:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|l}
-{\bf Escape sequence}&{\bf Corresponding character}\\
+{\bfseries Escape sequence}&{\bfseries Corresponding character}\\
 \hline\endhead
  {\textbackslash f}&
   {form feed}\\
@@ -1174,7 +1205,7 @@ The \gtltype{string} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {+}&
   {string $\leftarrow$ string + string}&
@@ -1185,7 +1216,7 @@ The \gtltype{string} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {!=}&
   {bool $\leftarrow$ string != string}&
@@ -1514,7 +1545,7 @@ The \gtltype{bool} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {\raisebox{-1.2mm}{\textasciitilde}}&
   {bool $\leftarrow$ bool}&
@@ -1528,7 +1559,7 @@ The \gtltype{bool} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {\&}&
   {bool $\leftarrow$ bool \& bool}&
@@ -1547,7 +1578,7 @@ For comparison operators, \gtlinline{false} is considered to be lower than \gtli
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {!=}&
   {bool $\leftarrow$ bool != bool}&
@@ -1617,7 +1648,7 @@ The \lstinline{struct} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|p{2.43in}}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {!=}&
   {bool $\leftarrow$ struct != struct}&
@@ -1693,7 +1724,7 @@ The \gtltype{list} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {+}&
   {list $\leftarrow$ list + any}&
@@ -1707,7 +1738,7 @@ The \gtltype{list} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {!=}&
   {bool $\leftarrow$ list != list}&
@@ -1946,7 +1977,7 @@ The \gtltype{map} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {!=}&
   {bool $\leftarrow$ map != map}&
@@ -2018,7 +2049,7 @@ The \gtltype{set} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {+}&
   {set $\leftarrow$ set + any}&
@@ -2038,7 +2069,7 @@ The \gtltype{set} data type supports the following operators:
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{>{\ttfamily}l|>{\ttfamily}l|l}
-{\bf Operator}&{\bf Expression type}&{\bf Meaning}\\
+{\bfseries Operator}&{\bfseries Expression type}&{\bfseries Meaning}\\
 \hline\endhead
  {!=}&
   {bool $\leftarrow$ set != set}&
@@ -2238,7 +2269,7 @@ The following table gives the available assignment operators and their meaning.
 
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|>{\ttfamily}c|}
-{\bf Assign.}&{\bf int}&{\bf float}&{\bf string}&{\bf bool}&{\bf struct}&{\bf list}&{\bf map}&{\bf uncons}\\
+{\bfseries Assign.}&{\bfseries int}&{\bfseries float}&{\bfseries string}&{\bfseries bool}&{\bfseries struct}&{\bfseries list}&{\bfseries map}&{\bfseries uncons}\\
 \hline\endhead
  {+=}&
   {+}&{+}&{\footnotesize concat}&{\na}&{\na}&{\footnotesize append}&{\na}&{\na}\\
@@ -2762,15 +2793,15 @@ The semantics of this instruction is shown at figure \ref{fig:repeat}
       node distance=7mm
     ]
     \node [cloud] (start) {\textsc{begin}} ;
-    \node [block] (affectationVariant) [below=of start] {count := {\tt \emph{limit_expression}}} ;
+    \node [block] (affectationVariant) [below=of start] {count := {\ttfamily\emph{limit_expression}}} ;
     \node [decision] (premierTest) [below=of affectationVariant]{count $> 0$ ?} ;
     \node [error] (loopVariantError) [right=of premierTest] {loop count error} ;
-    \node [block] (instructions1) [below=of premierTest] {\tt \emph{instructions\_list\_1}} ;
-    \node [decision] (expression) [below=of instructions1] {\tt \emph{condition} ?} ;
+    \node [block] (instructions1) [below=of premierTest] {\ttfamily\emph{instructions\_list\_1}} ;
+    \node [decision] (expression) [below=of instructions1] {\ttfamily\emph{condition} ?} ;
     \node [decision] (secondTest) [below=of expression] {count $> 0$ ?} ;
     \node [error] (loopVariantError2) [right=of secondTest] {loop count error} ;
     \node [block] (decVariant) [below=of secondTest] {count {-}{-}} ;
-    \node [block] (instructions2) [below=of decVariant] {\tt \emph{instructions\_list\_2}} ;
+    \node [block] (instructions2) [below=of decVariant] {\ttfamily\emph{instructions\_list\_2}} ;
     \node [cloud] (end) [below=of instructions2] {\textsc{end}} ;
     
     \draw [-stealth, thick] (start) -- (affectationVariant) ;
@@ -3316,7 +3347,7 @@ end getter
 
 \gtlinline{a_type} designates the data type on which the getter apply. It can be \gtlinline{@int},  \gtlinline{@char}, \gtlinline{@float}, \gtlinline{@bool}, \gtlinline{	@enum}, \gtlinline{@string}, \gtlinline{@struct}, \gtlinline{@list}, \gtlinline{@map}, \gtlinline{@type} or \gtlinline{@unconstructed}. \gtlinline{getter_name} is the name of the getter. The same name may be used for several types. The \gtlinline{formal_argument_list} follows the same rules as those exposed in \ref{sec:function}. \gtlinline{result_var} is the name of the variable used to store the result of the getter.
 
-Within the getter, variable \gtlinline{self} is a copy of the variable targeted by the getter. It can me modified but the target will not be touched.
+Within the getter, variable \gtlinline{self} is a copy of the variable targeted by the getter. It can be modified but the target will not be touched.
 
 \examplen{1}
 
@@ -3469,7 +3500,7 @@ The following files from the standalone GTL project are needed:
 \rowcolors{1}{white}{light-gray}
 \begin{longtable}{|>{\ttfamily\footnotesize}l|>{\footnotesize}l|}
 \hline
-{\bf File}&{\bf Content}\\
+{\bfseries File}&{\bfseries Content}\\
 \hline\endhead
  {gtl_types.galgas}&
   {Internal types of GTL}\\
