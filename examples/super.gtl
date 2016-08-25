@@ -1,0 +1,5 @@
+%
+let superplop := "Hello"
+display superplop
+template plop
+display superplop

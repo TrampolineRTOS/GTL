@@ -451,7 +451,9 @@ override method @gtlTemplateInstruction execute
   ]
   
   if found then
+    log vars
     [result execute !?newContext !?localVars !?lib !?outputString]
+    log vars
   else
     if ifExists then
       @gtlData localMap = [vars overrideMap]
