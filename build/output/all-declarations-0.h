@@ -815,6 +815,11 @@ class GALGAS_gtlInstructionList : public AC_GALGAS_list {
                                                        C_Compiler * inCompiler
                                                        COMMA_LOCATION_ARGS) ;
 
+  public : VIRTUAL_IN_DEBUG void setter_setInstructionAtIndex (class GALGAS_gtlInstruction constinArgument0,
+                                                               class GALGAS_uint constinArgument1,
+                                                               C_Compiler * inCompiler
+                                                               COMMA_LOCATION_ARGS) ;
+
 
 //--------------------------------- Instance Methods
   public : VIRTUAL_IN_DEBUG void method_first (class GALGAS_gtlInstruction & outArgument0,
@@ -906,6 +911,8 @@ class GALGAS_gtlInstruction : public AC_GALGAS_class {
 //--------------------------------- Class Methods
 
 //--------------------------------- Getters
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_signature (LOCATION_ARGS) const ;
+
   public : VIRTUAL_IN_DEBUG class GALGAS_location getter_where (LOCATION_ARGS) const ;
 
 
@@ -928,13 +935,16 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlInstruction ;
 class cPtr_gtlInstruction : public acPtr_class {
 //--- Attributes
   public : GALGAS_location mAttribute_where ;
+  public : GALGAS_string mAttribute_signature ;
 
 //--- Constructor
-  public : cPtr_gtlInstruction (const GALGAS_location & in_where
+  public : cPtr_gtlInstruction (const GALGAS_location & in_where,
+                                const GALGAS_string & in_signature
                                 COMMA_LOCATION_ARGS) ;
 
 //--- Attribute accessors
   public : VIRTUAL_IN_DEBUG GALGAS_location getter_where (LOCATION_ARGS) const ;
+  public : VIRTUAL_IN_DEBUG GALGAS_string getter_signature (LOCATION_ARGS) const ;
 //--- Description
   public : virtual void description (C_String & ioString,
                                      const int32_t inIndentation) const = 0 ;
@@ -8807,6 +8817,479 @@ extern C_BoolCommandLineOption gOption_gtl_5F_options_warnDeprecated ;
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
+//                                   Parser class 'gtl_debugger_parser' declaration                                    *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cParser_gtl_5F_debugger_5F_parser {
+//--- Virtual destructor
+  public : virtual ~ cParser_gtl_5F_debugger_5F_parser (void) {}
+
+//--- Non terminal declarations
+  protected : virtual void nt_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_ (class GALGAS_gtlInstruction & outArgument0,
+                                                                             class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
+
+  protected : virtual void nt_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_parse (class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
+
+  protected : virtual void nt_gtl_5F_expression_ (class GALGAS_gtlExpression & outArgument0,
+                                                  class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
+
+  protected : virtual void nt_gtl_5F_expression_parse (class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
+
+  protected : virtual void nt_gtl_5F_variable_ (class GALGAS_gtlVarPath & outArgument0,
+                                                class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
+
+  protected : virtual void nt_gtl_5F_variable_parse (class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
+
+
+//--- Rule declarations
+  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_i0_ (GALGAS_gtlInstruction & outArgument0,
+                                                                                                    C_Lexique_gtl_5F_scanner * inLexique) ;
+
+  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_i0_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
+
+
+
+//--- Select methods
+  protected : virtual int32_t select_gtl_5F_debugger_5F_parser_0 (C_Lexique_gtl_5F_scanner *) = 0 ;
+
+
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                        @gtlDisplayStatementInstruction class                                        *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_gtlDisplayStatementInstruction : public GALGAS_gtlInstruction {
+//--- Constructor
+  public : GALGAS_gtlDisplayStatementInstruction (void) ;
+
+//--------------------------------- Default GALGAS constructor
+  public : static GALGAS_gtlDisplayStatementInstruction constructor_default (LOCATION_ARGS) ;
+
+//---
+  public : inline const class cPtr_gtlDisplayStatementInstruction * ptr (void) const { return (const cPtr_gtlDisplayStatementInstruction *) mObjectPtr ; }
+
+//--------------------------------- Constructor from pointer
+  public : GALGAS_gtlDisplayStatementInstruction (const cPtr_gtlDisplayStatementInstruction * inSourcePtr) ;
+
+//-- Start of generic part --*
+
+//--------------------------------- Object cloning
+  protected : virtual AC_GALGAS_root * clonedObject (void) const ;
+
+//--------------------------------- Object extraction
+  public : static GALGAS_gtlDisplayStatementInstruction extractObject (const GALGAS_object & inObject,
+                                                                       C_Compiler * inCompiler
+                                                                       COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- GALGAS constructors
+  public : static class GALGAS_gtlDisplayStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
+                                                                               const class GALGAS_string & inOperand1,
+                                                                               const class GALGAS_gtlVarPath & inOperand2
+                                                                               COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- Comparison
+  public : typeComparisonResult objectCompare (const GALGAS_gtlDisplayStatementInstruction & inOperand) const ;
+
+//--------------------------------- Setters
+
+//--------------------------------- Instance Methods
+//--------------------------------- Class Methods
+
+//--------------------------------- Getters
+  public : VIRTUAL_IN_DEBUG class GALGAS_gtlVarPath getter_variablePath (LOCATION_ARGS) const ;
+
+
+//--------------------------------- Introspection
+  public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
+ 
+} ; // End of GALGAS_gtlDisplayStatementInstruction class
+
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlDisplayStatementInstruction ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                               Pointer class for @gtlDisplayStatementInstruction class                               *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cPtr_gtlDisplayStatementInstruction : public cPtr_gtlInstruction {
+//--- Attributes
+  public : GALGAS_gtlVarPath mAttribute_variablePath ;
+
+//--- Constructor
+  public : cPtr_gtlDisplayStatementInstruction (const GALGAS_location & in_where,
+                                                const GALGAS_string & in_signature,
+                                                const GALGAS_gtlVarPath & in_variablePath
+                                                COMMA_LOCATION_ARGS) ;
+
+//--- Duplication
+  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
+
+//--- Attribute accessors
+  public : VIRTUAL_IN_DEBUG GALGAS_gtlVarPath getter_variablePath (LOCATION_ARGS) const ;
+//--- Description
+  public : virtual void description (C_String & ioString,
+                                     const int32_t inIndentation) const ;
+
+  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
+
+  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
+
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                         @gtlPrintStatementInstruction class                                         *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_gtlPrintStatementInstruction : public GALGAS_gtlInstruction {
+//--- Constructor
+  public : GALGAS_gtlPrintStatementInstruction (void) ;
+
+//---
+  public : inline const class cPtr_gtlPrintStatementInstruction * ptr (void) const { return (const cPtr_gtlPrintStatementInstruction *) mObjectPtr ; }
+
+//--------------------------------- Constructor from pointer
+  public : GALGAS_gtlPrintStatementInstruction (const cPtr_gtlPrintStatementInstruction * inSourcePtr) ;
+
+//-- Start of generic part --*
+
+//--------------------------------- Object cloning
+  protected : virtual AC_GALGAS_root * clonedObject (void) const ;
+
+//--------------------------------- Object extraction
+  public : static GALGAS_gtlPrintStatementInstruction extractObject (const GALGAS_object & inObject,
+                                                                     C_Compiler * inCompiler
+                                                                     COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- GALGAS constructors
+  public : static class GALGAS_gtlPrintStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
+                                                                             const class GALGAS_string & inOperand1,
+                                                                             const class GALGAS_bool & inOperand2,
+                                                                             const class GALGAS_gtlExpression & inOperand3
+                                                                             COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- Comparison
+  public : typeComparisonResult objectCompare (const GALGAS_gtlPrintStatementInstruction & inOperand) const ;
+
+//--------------------------------- Setters
+
+//--------------------------------- Instance Methods
+//--------------------------------- Class Methods
+
+//--------------------------------- Getters
+  public : VIRTUAL_IN_DEBUG class GALGAS_bool getter_carriageReturn (LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG class GALGAS_gtlExpression getter_messageToPrint (LOCATION_ARGS) const ;
+
+
+//--------------------------------- Introspection
+  public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
+ 
+} ; // End of GALGAS_gtlPrintStatementInstruction class
+
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlPrintStatementInstruction ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                Pointer class for @gtlPrintStatementInstruction class                                *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cPtr_gtlPrintStatementInstruction : public cPtr_gtlInstruction {
+//--- Attributes
+  public : GALGAS_bool mAttribute_carriageReturn ;
+  public : GALGAS_gtlExpression mAttribute_messageToPrint ;
+
+//--- Constructor
+  public : cPtr_gtlPrintStatementInstruction (const GALGAS_location & in_where,
+                                              const GALGAS_string & in_signature,
+                                              const GALGAS_bool & in_carriageReturn,
+                                              const GALGAS_gtlExpression & in_messageToPrint
+                                              COMMA_LOCATION_ARGS) ;
+
+//--- Duplication
+  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
+
+//--- Attribute accessors
+  public : VIRTUAL_IN_DEBUG GALGAS_bool getter_carriageReturn (LOCATION_ARGS) const ;
+  public : VIRTUAL_IN_DEBUG GALGAS_gtlExpression getter_messageToPrint (LOCATION_ARGS) const ;
+//--- Description
+  public : virtual void description (C_String & ioString,
+                                     const int32_t inIndentation) const ;
+
+  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
+
+  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
+
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                              @gtlStepInstruction class                                              *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_gtlStepInstruction : public GALGAS_gtlInstruction {
+//--- Constructor
+  public : GALGAS_gtlStepInstruction (void) ;
+
+//--------------------------------- Default GALGAS constructor
+  public : static GALGAS_gtlStepInstruction constructor_default (LOCATION_ARGS) ;
+
+//---
+  public : inline const class cPtr_gtlStepInstruction * ptr (void) const { return (const cPtr_gtlStepInstruction *) mObjectPtr ; }
+
+//--------------------------------- Constructor from pointer
+  public : GALGAS_gtlStepInstruction (const cPtr_gtlStepInstruction * inSourcePtr) ;
+
+//-- Start of generic part --*
+
+//--------------------------------- Object cloning
+  protected : virtual AC_GALGAS_root * clonedObject (void) const ;
+
+//--------------------------------- Object extraction
+  public : static GALGAS_gtlStepInstruction extractObject (const GALGAS_object & inObject,
+                                                           C_Compiler * inCompiler
+                                                           COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- GALGAS constructors
+  public : static class GALGAS_gtlStepInstruction constructor_new (const class GALGAS_location & inOperand0,
+                                                                   const class GALGAS_string & inOperand1
+                                                                   COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- Comparison
+  public : typeComparisonResult objectCompare (const GALGAS_gtlStepInstruction & inOperand) const ;
+
+//--------------------------------- Setters
+
+//--------------------------------- Instance Methods
+//--------------------------------- Class Methods
+
+//--------------------------------- Getters
+
+//--------------------------------- Introspection
+  public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
+ 
+} ; // End of GALGAS_gtlStepInstruction class
+
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlStepInstruction ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                     Pointer class for @gtlStepInstruction class                                     *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cPtr_gtlStepInstruction : public cPtr_gtlInstruction {
+//--- Attributes
+
+//--- Constructor
+  public : cPtr_gtlStepInstruction (const GALGAS_location & in_where,
+                                    const GALGAS_string & in_signature
+                                    COMMA_LOCATION_ARGS) ;
+
+//--- Duplication
+  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
+
+//--- Attribute accessors
+//--- Description
+  public : virtual void description (C_String & ioString,
+                                     const int32_t inIndentation) const ;
+
+  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
+
+  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
+
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//  GRAMMAR gtl_debugger_grammar
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cGrammar_gtl_5F_debugger_5F_grammar : public cParser_gtl_5F_debugger_5F_parser,
+                                            public cParser_gtl_5F_expression_5F_parser {
+//------------------------------------- 'gtl_argument_list' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_argument_5F_list_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_argument_5F_list_ (GALGAS_gtlArgumentList & outArgument0,
+                                                     C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_debugger_parser_start_symbol' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_ (GALGAS_gtlInstruction & outArgument0,
+                                                                          C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//--- Start symbol
+  public : static void _performSourceFileParsing_ (C_Compiler * inCompiler,
+                                                   GALGAS_lstring inFileName,
+                                                   GALGAS_gtlInstruction & outArgument0
+                                                   COMMA_LOCATION_ARGS) ;
+
+  public : static void _performSourceStringParsing_ (C_Compiler * inCompiler,
+                                                     GALGAS_string inSourceString,
+                                                     GALGAS_string inNameString,
+                                                     GALGAS_gtlInstruction & outArgument0
+                                                     COMMA_LOCATION_ARGS) ;
+
+//--- Indexing
+  public : static void performIndexing (C_Compiler * inCompiler,
+                                        const C_String & inSourceFilePath) ;
+
+//--- Only lexical analysis
+  public : static void performOnlyLexicalAnalysis (C_Compiler * inCompiler,
+                                                   const C_String & inSourceFilePath) ;
+
+//--- Only syntax analysis
+  public : static void performOnlySyntaxAnalysis (C_Compiler * inCompiler,
+                                                  const C_String & inSourceFilePath) ;
+
+//------------------------------------- 'gtl_expression' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_expression_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_expression_ (GALGAS_gtlExpression & outArgument0,
+                                               C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_factor' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_factor_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_factor_ (GALGAS_gtlExpression & outArgument0,
+                                           C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_relation_factor' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_relation_5F_factor_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_relation_5F_factor_ (GALGAS_gtlExpression & outArgument0,
+                                                       C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_relation_term' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_relation_5F_term_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_relation_5F_term_ (GALGAS_gtlExpression & outArgument0,
+                                                     C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_simple_expression' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_simple_5F_expression_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_simple_5F_expression_ (GALGAS_gtlExpression & outArgument0,
+                                                         C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_term' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_term_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_term_ (GALGAS_gtlExpression & outArgument0,
+                                         C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_variable' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_variable_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_variable_ (GALGAS_gtlVarPath & outArgument0,
+                                             C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_variable_or_here' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_variable_5F_or_5F_here_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_variable_5F_or_5F_here_ (GALGAS_gtlVarPath & outArgument0,
+                                                           GALGAS_bool & outArgument1,
+                                                           C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+  public : virtual int32_t select_gtl_5F_debugger_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_1 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_2 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_3 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_4 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_5 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_6 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_7 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_8 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_9 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_10 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_11 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_12 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_13 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_14 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_15 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_16 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_17 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_18 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_19 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_20 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_21 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_22 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_23 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_24 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_25 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_26 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_27 (C_Lexique_gtl_5F_scanner *) ;
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
 //                                        Parser class 'gtl_parser' declaration                                        *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9263,7 +9746,8 @@ class GALGAS_gtlEmitInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlEmitInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                   const class GALGAS_gtlExpression & inOperand1
+                                                                   const class GALGAS_string & inOperand1,
+                                                                   const class GALGAS_gtlExpression & inOperand2
                                                                    COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -9300,6 +9784,7 @@ class cPtr_gtlEmitInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlEmitInstruction (const GALGAS_location & in_where,
+                                    const GALGAS_string & in_signature,
                                     const GALGAS_gtlExpression & in_rValue
                                     COMMA_LOCATION_ARGS) ;
 
@@ -9349,10 +9834,11 @@ class GALGAS_gtlForStatementInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlForStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                           const class GALGAS_lstring & inOperand1,
-                                                                           const class GALGAS_gtlExpressionList & inOperand2,
-                                                                           const class GALGAS_gtlInstructionList & inOperand3,
-                                                                           const class GALGAS_gtlInstructionList & inOperand4
+                                                                           const class GALGAS_string & inOperand1,
+                                                                           const class GALGAS_lstring & inOperand2,
+                                                                           const class GALGAS_gtlExpressionList & inOperand3,
+                                                                           const class GALGAS_gtlInstructionList & inOperand4,
+                                                                           const class GALGAS_gtlInstructionList & inOperand5
                                                                            COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -9398,6 +9884,7 @@ class cPtr_gtlForStatementInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlForStatementInstruction (const GALGAS_location & in_where,
+                                            const GALGAS_string & in_signature,
                                             const GALGAS_lstring & in_identifier,
                                             const GALGAS_gtlExpressionList & in_iterable,
                                             const GALGAS_gtlInstructionList & in_betweenList,
@@ -9450,14 +9937,15 @@ class GALGAS_gtlForeachStatementInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlForeachStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                               const class GALGAS_lstring & inOperand1,
+                                                                               const class GALGAS_string & inOperand1,
                                                                                const class GALGAS_lstring & inOperand2,
                                                                                const class GALGAS_lstring & inOperand3,
-                                                                               const class GALGAS_gtlExpression & inOperand4,
-                                                                               const class GALGAS_gtlInstructionList & inOperand5,
+                                                                               const class GALGAS_lstring & inOperand4,
+                                                                               const class GALGAS_gtlExpression & inOperand5,
                                                                                const class GALGAS_gtlInstructionList & inOperand6,
                                                                                const class GALGAS_gtlInstructionList & inOperand7,
-                                                                               const class GALGAS_gtlInstructionList & inOperand8
+                                                                               const class GALGAS_gtlInstructionList & inOperand8,
+                                                                               const class GALGAS_gtlInstructionList & inOperand9
                                                                                COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -9515,6 +10003,7 @@ class cPtr_gtlForeachStatementInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlForeachStatementInstruction (const GALGAS_location & in_where,
+                                                const GALGAS_string & in_signature,
                                                 const GALGAS_lstring & in_keyName,
                                                 const GALGAS_lstring & in_variableName,
                                                 const GALGAS_lstring & in_indexName,
@@ -9578,7 +10067,8 @@ class GALGAS_gtlGetColumnInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlGetColumnInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                        const class GALGAS_gtlVarPath & inOperand1
+                                                                        const class GALGAS_string & inOperand1,
+                                                                        const class GALGAS_gtlVarPath & inOperand2
                                                                         COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -9615,6 +10105,7 @@ class cPtr_gtlGetColumnInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlGetColumnInstruction (const GALGAS_location & in_where,
+                                         const GALGAS_string & in_signature,
                                          const GALGAS_gtlVarPath & in_destVariable
                                          COMMA_LOCATION_ARGS) ;
 
@@ -9664,8 +10155,9 @@ class GALGAS_gtlIfStatementInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlIfStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                          const class GALGAS_gtlThenElsifStatementList & inOperand1,
-                                                                          const class GALGAS_gtlInstructionList & inOperand2
+                                                                          const class GALGAS_string & inOperand1,
+                                                                          const class GALGAS_gtlThenElsifStatementList & inOperand2,
+                                                                          const class GALGAS_gtlInstructionList & inOperand3
                                                                           COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -9705,6 +10197,7 @@ class cPtr_gtlIfStatementInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlIfStatementInstruction (const GALGAS_location & in_where,
+                                           const GALGAS_string & in_signature,
                                            const GALGAS_gtlThenElsifStatementList & in_thenElsifList,
                                            const GALGAS_gtlInstructionList & in_elseList
                                            COMMA_LOCATION_ARGS) ;
@@ -9756,7 +10249,8 @@ class GALGAS_gtlInputStatementInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlInputStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                             const class GALGAS_gtlArgumentList & inOperand1
+                                                                             const class GALGAS_string & inOperand1,
+                                                                             const class GALGAS_gtlArgumentList & inOperand2
                                                                              COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -9793,6 +10287,7 @@ class cPtr_gtlInputStatementInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlInputStatementInstruction (const GALGAS_location & in_where,
+                                              const GALGAS_string & in_signature,
                                               const GALGAS_gtlArgumentList & in_formalArguments
                                               COMMA_LOCATION_ARGS) ;
 
@@ -9839,15 +10334,16 @@ class GALGAS_gtlLoopStatementInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLoopStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                            const class GALGAS_lstring & inOperand1,
-                                                                            const class GALGAS_gtlExpression & inOperand2,
+                                                                            const class GALGAS_string & inOperand1,
+                                                                            const class GALGAS_lstring & inOperand2,
                                                                             const class GALGAS_gtlExpression & inOperand3,
                                                                             const class GALGAS_gtlExpression & inOperand4,
-                                                                            const class GALGAS_sint_36__34_ & inOperand5,
-                                                                            const class GALGAS_gtlInstructionList & inOperand6,
+                                                                            const class GALGAS_gtlExpression & inOperand5,
+                                                                            const class GALGAS_sint_36__34_ & inOperand6,
                                                                             const class GALGAS_gtlInstructionList & inOperand7,
                                                                             const class GALGAS_gtlInstructionList & inOperand8,
-                                                                            const class GALGAS_gtlInstructionList & inOperand9
+                                                                            const class GALGAS_gtlInstructionList & inOperand9,
+                                                                            const class GALGAS_gtlInstructionList & inOperand10
                                                                             COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -9908,6 +10404,7 @@ class cPtr_gtlLoopStatementInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlLoopStatementInstruction (const GALGAS_location & in_where,
+                                             const GALGAS_string & in_signature,
                                              const GALGAS_lstring & in_identifier,
                                              const GALGAS_gtlExpression & in_start,
                                              const GALGAS_gtlExpression & in_stop,
@@ -9970,10 +10467,11 @@ class GALGAS_gtlRepeatStatementInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlRepeatStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                              const class GALGAS_gtlExpression & inOperand1,
+                                                                              const class GALGAS_string & inOperand1,
                                                                               const class GALGAS_gtlExpression & inOperand2,
-                                                                              const class GALGAS_gtlInstructionList & inOperand3,
-                                                                              const class GALGAS_gtlInstructionList & inOperand4
+                                                                              const class GALGAS_gtlExpression & inOperand3,
+                                                                              const class GALGAS_gtlInstructionList & inOperand4,
+                                                                              const class GALGAS_gtlInstructionList & inOperand5
                                                                               COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -10019,6 +10517,7 @@ class cPtr_gtlRepeatStatementInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlRepeatStatementInstruction (const GALGAS_location & in_where,
+                                               const GALGAS_string & in_signature,
                                                const GALGAS_gtlExpression & in_limit,
                                                const GALGAS_gtlExpression & in_condition,
                                                const GALGAS_gtlInstructionList & in_continueList,
@@ -10071,12 +10570,13 @@ class GALGAS_gtlTemplateInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlTemplateInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                       const class GALGAS_lstring & inOperand1,
-                                                                       const class GALGAS_gtlExpression & inOperand2,
-                                                                       const class GALGAS_bool & inOperand3,
+                                                                       const class GALGAS_string & inOperand1,
+                                                                       const class GALGAS_lstring & inOperand2,
+                                                                       const class GALGAS_gtlExpression & inOperand3,
                                                                        const class GALGAS_bool & inOperand4,
-                                                                       const class GALGAS_gtlExpressionList & inOperand5,
-                                                                       const class GALGAS_gtlInstructionList & inOperand6
+                                                                       const class GALGAS_bool & inOperand5,
+                                                                       const class GALGAS_gtlExpressionList & inOperand6,
+                                                                       const class GALGAS_gtlInstructionList & inOperand7
                                                                        COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -10128,6 +10628,7 @@ class cPtr_gtlTemplateInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlTemplateInstruction (const GALGAS_location & in_where,
+                                        const GALGAS_string & in_signature,
                                         const GALGAS_lstring & in_prefix,
                                         const GALGAS_gtlExpression & in_fileName,
                                         const GALGAS_bool & in_ifExists,
@@ -10187,7 +10688,8 @@ class GALGAS_gtlTemplateStringInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlTemplateStringInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                             const class GALGAS_string & inOperand1
+                                                                             const class GALGAS_string & inOperand1,
+                                                                             const class GALGAS_string & inOperand2
                                                                              COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -10224,6 +10726,7 @@ class cPtr_gtlTemplateStringInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlTemplateStringInstruction (const GALGAS_location & in_where,
+                                              const GALGAS_string & in_signature,
                                               const GALGAS_string & in_value
                                               COMMA_LOCATION_ARGS) ;
 
@@ -10270,9 +10773,10 @@ class GALGAS_gtlWriteToInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlWriteToInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                      const class GALGAS_gtlExpression & inOperand1,
-                                                                      const class GALGAS_bool & inOperand2,
-                                                                      const class GALGAS_gtlInstructionList & inOperand3
+                                                                      const class GALGAS_string & inOperand1,
+                                                                      const class GALGAS_gtlExpression & inOperand2,
+                                                                      const class GALGAS_bool & inOperand3,
+                                                                      const class GALGAS_gtlInstructionList & inOperand4
                                                                       COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -10315,6 +10819,7 @@ class cPtr_gtlWriteToInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlWriteToInstruction (const GALGAS_location & in_where,
+                                       const GALGAS_string & in_signature,
                                        const GALGAS_gtlExpression & in_fileNameExpression,
                                        const GALGAS_bool & in_isExecutable,
                                        const GALGAS_gtlInstructionList & in_instructions
@@ -10444,6 +10949,16 @@ class cPtr_library : public acPtr_class {
   public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
 
 } ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                                Function 'signature'                                                 *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_string function_signature (class GALGAS_location inArgument0,
+                                        class C_Compiler * inCompiler
+                                        COMMA_LOCATION_ARGS) ;
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
@@ -10583,92 +11098,6 @@ class cParser_gtl_5F_instruction_5F_parser {
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
-//                                        @gtlDisplayStatementInstruction class                                        *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-class GALGAS_gtlDisplayStatementInstruction : public GALGAS_gtlInstruction {
-//--- Constructor
-  public : GALGAS_gtlDisplayStatementInstruction (void) ;
-
-//--------------------------------- Default GALGAS constructor
-  public : static GALGAS_gtlDisplayStatementInstruction constructor_default (LOCATION_ARGS) ;
-
-//---
-  public : inline const class cPtr_gtlDisplayStatementInstruction * ptr (void) const { return (const cPtr_gtlDisplayStatementInstruction *) mObjectPtr ; }
-
-//--------------------------------- Constructor from pointer
-  public : GALGAS_gtlDisplayStatementInstruction (const cPtr_gtlDisplayStatementInstruction * inSourcePtr) ;
-
-//-- Start of generic part --*
-
-//--------------------------------- Object cloning
-  protected : virtual AC_GALGAS_root * clonedObject (void) const ;
-
-//--------------------------------- Object extraction
-  public : static GALGAS_gtlDisplayStatementInstruction extractObject (const GALGAS_object & inObject,
-                                                                       C_Compiler * inCompiler
-                                                                       COMMA_LOCATION_ARGS) ;
-
-//--------------------------------- GALGAS constructors
-  public : static class GALGAS_gtlDisplayStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                               const class GALGAS_gtlVarPath & inOperand1
-                                                                               COMMA_LOCATION_ARGS) ;
-
-//--------------------------------- Comparison
-  public : typeComparisonResult objectCompare (const GALGAS_gtlDisplayStatementInstruction & inOperand) const ;
-
-//--------------------------------- Setters
-
-//--------------------------------- Instance Methods
-//--------------------------------- Class Methods
-
-//--------------------------------- Getters
-  public : VIRTUAL_IN_DEBUG class GALGAS_gtlVarPath getter_variablePath (LOCATION_ARGS) const ;
-
-
-//--------------------------------- Introspection
-  public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
- 
-} ; // End of GALGAS_gtlDisplayStatementInstruction class
-
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlDisplayStatementInstruction ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                               Pointer class for @gtlDisplayStatementInstruction class                               *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-class cPtr_gtlDisplayStatementInstruction : public cPtr_gtlInstruction {
-//--- Attributes
-  public : GALGAS_gtlVarPath mAttribute_variablePath ;
-
-//--- Constructor
-  public : cPtr_gtlDisplayStatementInstruction (const GALGAS_location & in_where,
-                                                const GALGAS_gtlVarPath & in_variablePath
-                                                COMMA_LOCATION_ARGS) ;
-
-//--- Duplication
-  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
-
-//--- Attribute accessors
-  public : VIRTUAL_IN_DEBUG GALGAS_gtlVarPath getter_variablePath (LOCATION_ARGS) const ;
-//--- Description
-  public : virtual void description (C_String & ioString,
-                                     const int32_t inIndentation) const ;
-
-  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
-
-  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
-
-} ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
 //                                         @gtlErrorStatementInstruction class                                         *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
@@ -10695,9 +11124,10 @@ class GALGAS_gtlErrorStatementInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlErrorStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                             const class GALGAS_gtlVarPath & inOperand1,
-                                                                             const class GALGAS_bool & inOperand2,
-                                                                             const class GALGAS_gtlExpression & inOperand3
+                                                                             const class GALGAS_string & inOperand1,
+                                                                             const class GALGAS_gtlVarPath & inOperand2,
+                                                                             const class GALGAS_bool & inOperand3,
+                                                                             const class GALGAS_gtlExpression & inOperand4
                                                                              COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -10740,6 +11170,7 @@ class cPtr_gtlErrorStatementInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlErrorStatementInstruction (const GALGAS_location & in_where,
+                                              const GALGAS_string & in_signature,
                                               const GALGAS_gtlVarPath & in_identifier,
                                               const GALGAS_bool & in_hereInstead,
                                               const GALGAS_gtlExpression & in_errorMessage
@@ -10793,7 +11224,8 @@ class GALGAS_gtlLetUnconstructedInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetUnconstructedInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                               const class GALGAS_gtlVarPath & inOperand1
+                                                                               const class GALGAS_string & inOperand1,
+                                                                               const class GALGAS_gtlVarPath & inOperand2
                                                                                COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -10830,6 +11262,7 @@ class cPtr_gtlLetUnconstructedInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetUnconstructedInstruction (const GALGAS_location & in_where,
+                                                const GALGAS_string & in_signature,
                                                 const GALGAS_gtlVarPath & in_lValue
                                                 COMMA_LOCATION_ARGS) ;
 
@@ -10908,6 +11341,7 @@ class cPtr_gtlAssignInstruction : public cPtr_gtlLetUnconstructedInstruction {
 
 //--- Constructor
   public : cPtr_gtlAssignInstruction (const GALGAS_location & in_where,
+                                      const GALGAS_string & in_signature,
                                       const GALGAS_gtlVarPath & in_lValue,
                                       const GALGAS_gtlExpression & in_rValue
                                       COMMA_LOCATION_ARGS) ;
@@ -10952,8 +11386,9 @@ class GALGAS_gtlLetAddInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetAddInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                     const class GALGAS_gtlVarPath & inOperand1,
-                                                                     const class GALGAS_gtlExpression & inOperand2
+                                                                     const class GALGAS_string & inOperand1,
+                                                                     const class GALGAS_gtlVarPath & inOperand2,
+                                                                     const class GALGAS_gtlExpression & inOperand3
                                                                      COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -10987,6 +11422,7 @@ class cPtr_gtlLetAddInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetAddInstruction (const GALGAS_location & in_where,
+                                      const GALGAS_string & in_signature,
                                       const GALGAS_gtlVarPath & in_lValue,
                                       const GALGAS_gtlExpression & in_rValue
                                       COMMA_LOCATION_ARGS) ;
@@ -11033,8 +11469,9 @@ class GALGAS_gtlLetAndInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetAndInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                     const class GALGAS_gtlVarPath & inOperand1,
-                                                                     const class GALGAS_gtlExpression & inOperand2
+                                                                     const class GALGAS_string & inOperand1,
+                                                                     const class GALGAS_gtlVarPath & inOperand2,
+                                                                     const class GALGAS_gtlExpression & inOperand3
                                                                      COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11068,6 +11505,7 @@ class cPtr_gtlLetAndInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetAndInstruction (const GALGAS_location & in_where,
+                                      const GALGAS_string & in_signature,
                                       const GALGAS_gtlVarPath & in_lValue,
                                       const GALGAS_gtlExpression & in_rValue
                                       COMMA_LOCATION_ARGS) ;
@@ -11114,8 +11552,9 @@ class GALGAS_gtlLetDivideInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetDivideInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                        const class GALGAS_gtlVarPath & inOperand1,
-                                                                        const class GALGAS_gtlExpression & inOperand2
+                                                                        const class GALGAS_string & inOperand1,
+                                                                        const class GALGAS_gtlVarPath & inOperand2,
+                                                                        const class GALGAS_gtlExpression & inOperand3
                                                                         COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11149,6 +11588,7 @@ class cPtr_gtlLetDivideInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetDivideInstruction (const GALGAS_location & in_where,
+                                         const GALGAS_string & in_signature,
                                          const GALGAS_gtlVarPath & in_lValue,
                                          const GALGAS_gtlExpression & in_rValue
                                          COMMA_LOCATION_ARGS) ;
@@ -11195,8 +11635,9 @@ class GALGAS_gtlLetInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                  const class GALGAS_gtlVarPath & inOperand1,
-                                                                  const class GALGAS_gtlExpression & inOperand2
+                                                                  const class GALGAS_string & inOperand1,
+                                                                  const class GALGAS_gtlVarPath & inOperand2,
+                                                                  const class GALGAS_gtlExpression & inOperand3
                                                                   COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11230,6 +11671,7 @@ class cPtr_gtlLetInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetInstruction (const GALGAS_location & in_where,
+                                   const GALGAS_string & in_signature,
                                    const GALGAS_gtlVarPath & in_lValue,
                                    const GALGAS_gtlExpression & in_rValue
                                    COMMA_LOCATION_ARGS) ;
@@ -11276,8 +11718,9 @@ class GALGAS_gtlLetModuloInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetModuloInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                        const class GALGAS_gtlVarPath & inOperand1,
-                                                                        const class GALGAS_gtlExpression & inOperand2
+                                                                        const class GALGAS_string & inOperand1,
+                                                                        const class GALGAS_gtlVarPath & inOperand2,
+                                                                        const class GALGAS_gtlExpression & inOperand3
                                                                         COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11311,6 +11754,7 @@ class cPtr_gtlLetModuloInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetModuloInstruction (const GALGAS_location & in_where,
+                                         const GALGAS_string & in_signature,
                                          const GALGAS_gtlVarPath & in_lValue,
                                          const GALGAS_gtlExpression & in_rValue
                                          COMMA_LOCATION_ARGS) ;
@@ -11357,8 +11801,9 @@ class GALGAS_gtlLetMultiplyInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetMultiplyInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                          const class GALGAS_gtlVarPath & inOperand1,
-                                                                          const class GALGAS_gtlExpression & inOperand2
+                                                                          const class GALGAS_string & inOperand1,
+                                                                          const class GALGAS_gtlVarPath & inOperand2,
+                                                                          const class GALGAS_gtlExpression & inOperand3
                                                                           COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11392,6 +11837,7 @@ class cPtr_gtlLetMultiplyInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetMultiplyInstruction (const GALGAS_location & in_where,
+                                           const GALGAS_string & in_signature,
                                            const GALGAS_gtlVarPath & in_lValue,
                                            const GALGAS_gtlExpression & in_rValue
                                            COMMA_LOCATION_ARGS) ;
@@ -11438,8 +11884,9 @@ class GALGAS_gtlLetOrInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetOrInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                    const class GALGAS_gtlVarPath & inOperand1,
-                                                                    const class GALGAS_gtlExpression & inOperand2
+                                                                    const class GALGAS_string & inOperand1,
+                                                                    const class GALGAS_gtlVarPath & inOperand2,
+                                                                    const class GALGAS_gtlExpression & inOperand3
                                                                     COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11473,6 +11920,7 @@ class cPtr_gtlLetOrInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetOrInstruction (const GALGAS_location & in_where,
+                                     const GALGAS_string & in_signature,
                                      const GALGAS_gtlVarPath & in_lValue,
                                      const GALGAS_gtlExpression & in_rValue
                                      COMMA_LOCATION_ARGS) ;
@@ -11519,8 +11967,9 @@ class GALGAS_gtlLetShiftLeftInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetShiftLeftInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                           const class GALGAS_gtlVarPath & inOperand1,
-                                                                           const class GALGAS_gtlExpression & inOperand2
+                                                                           const class GALGAS_string & inOperand1,
+                                                                           const class GALGAS_gtlVarPath & inOperand2,
+                                                                           const class GALGAS_gtlExpression & inOperand3
                                                                            COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11554,6 +12003,7 @@ class cPtr_gtlLetShiftLeftInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetShiftLeftInstruction (const GALGAS_location & in_where,
+                                            const GALGAS_string & in_signature,
                                             const GALGAS_gtlVarPath & in_lValue,
                                             const GALGAS_gtlExpression & in_rValue
                                             COMMA_LOCATION_ARGS) ;
@@ -11600,8 +12050,9 @@ class GALGAS_gtlLetShiftRightInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetShiftRightInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                            const class GALGAS_gtlVarPath & inOperand1,
-                                                                            const class GALGAS_gtlExpression & inOperand2
+                                                                            const class GALGAS_string & inOperand1,
+                                                                            const class GALGAS_gtlVarPath & inOperand2,
+                                                                            const class GALGAS_gtlExpression & inOperand3
                                                                             COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11635,6 +12086,7 @@ class cPtr_gtlLetShiftRightInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetShiftRightInstruction (const GALGAS_location & in_where,
+                                             const GALGAS_string & in_signature,
                                              const GALGAS_gtlVarPath & in_lValue,
                                              const GALGAS_gtlExpression & in_rValue
                                              COMMA_LOCATION_ARGS) ;
@@ -11681,8 +12133,9 @@ class GALGAS_gtlLetSubstractInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetSubstractInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                           const class GALGAS_gtlVarPath & inOperand1,
-                                                                           const class GALGAS_gtlExpression & inOperand2
+                                                                           const class GALGAS_string & inOperand1,
+                                                                           const class GALGAS_gtlVarPath & inOperand2,
+                                                                           const class GALGAS_gtlExpression & inOperand3
                                                                            COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11716,6 +12169,7 @@ class cPtr_gtlLetSubstractInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetSubstractInstruction (const GALGAS_location & in_where,
+                                            const GALGAS_string & in_signature,
                                             const GALGAS_gtlVarPath & in_lValue,
                                             const GALGAS_gtlExpression & in_rValue
                                             COMMA_LOCATION_ARGS) ;
@@ -11762,8 +12216,9 @@ class GALGAS_gtlLetXorInstruction : public GALGAS_gtlAssignInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlLetXorInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                     const class GALGAS_gtlVarPath & inOperand1,
-                                                                     const class GALGAS_gtlExpression & inOperand2
+                                                                     const class GALGAS_string & inOperand1,
+                                                                     const class GALGAS_gtlVarPath & inOperand2,
+                                                                     const class GALGAS_gtlExpression & inOperand3
                                                                      COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11797,6 +12252,7 @@ class cPtr_gtlLetXorInstruction : public cPtr_gtlAssignInstruction {
 
 //--- Constructor
   public : cPtr_gtlLetXorInstruction (const GALGAS_location & in_where,
+                                      const GALGAS_string & in_signature,
                                       const GALGAS_gtlVarPath & in_lValue,
                                       const GALGAS_gtlExpression & in_rValue
                                       COMMA_LOCATION_ARGS) ;
@@ -11845,7 +12301,8 @@ class GALGAS_gtlLibrariesInstruction : public GALGAS_gtlInstruction {
                                                                 COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- GALGAS constructors
-  public : static class GALGAS_gtlLibrariesInstruction constructor_new (const class GALGAS_location & inOperand0
+  public : static class GALGAS_gtlLibrariesInstruction constructor_new (const class GALGAS_location & inOperand0,
+                                                                        const class GALGAS_string & inOperand1
                                                                         COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -11878,102 +12335,14 @@ class cPtr_gtlLibrariesInstruction : public cPtr_gtlInstruction {
 //--- Attributes
 
 //--- Constructor
-  public : cPtr_gtlLibrariesInstruction (const GALGAS_location & in_where
+  public : cPtr_gtlLibrariesInstruction (const GALGAS_location & in_where,
+                                         const GALGAS_string & in_signature
                                          COMMA_LOCATION_ARGS) ;
 
 //--- Duplication
   public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
 
 //--- Attribute accessors
-//--- Description
-  public : virtual void description (C_String & ioString,
-                                     const int32_t inIndentation) const ;
-
-  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
-
-  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
-
-} ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                         @gtlPrintStatementInstruction class                                         *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-class GALGAS_gtlPrintStatementInstruction : public GALGAS_gtlInstruction {
-//--- Constructor
-  public : GALGAS_gtlPrintStatementInstruction (void) ;
-
-//---
-  public : inline const class cPtr_gtlPrintStatementInstruction * ptr (void) const { return (const cPtr_gtlPrintStatementInstruction *) mObjectPtr ; }
-
-//--------------------------------- Constructor from pointer
-  public : GALGAS_gtlPrintStatementInstruction (const cPtr_gtlPrintStatementInstruction * inSourcePtr) ;
-
-//-- Start of generic part --*
-
-//--------------------------------- Object cloning
-  protected : virtual AC_GALGAS_root * clonedObject (void) const ;
-
-//--------------------------------- Object extraction
-  public : static GALGAS_gtlPrintStatementInstruction extractObject (const GALGAS_object & inObject,
-                                                                     C_Compiler * inCompiler
-                                                                     COMMA_LOCATION_ARGS) ;
-
-//--------------------------------- GALGAS constructors
-  public : static class GALGAS_gtlPrintStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                             const class GALGAS_bool & inOperand1,
-                                                                             const class GALGAS_gtlExpression & inOperand2
-                                                                             COMMA_LOCATION_ARGS) ;
-
-//--------------------------------- Comparison
-  public : typeComparisonResult objectCompare (const GALGAS_gtlPrintStatementInstruction & inOperand) const ;
-
-//--------------------------------- Setters
-
-//--------------------------------- Instance Methods
-//--------------------------------- Class Methods
-
-//--------------------------------- Getters
-  public : VIRTUAL_IN_DEBUG class GALGAS_bool getter_carriageReturn (LOCATION_ARGS) const ;
-
-  public : VIRTUAL_IN_DEBUG class GALGAS_gtlExpression getter_messageToPrint (LOCATION_ARGS) const ;
-
-
-//--------------------------------- Introspection
-  public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
- 
-} ; // End of GALGAS_gtlPrintStatementInstruction class
-
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlPrintStatementInstruction ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                Pointer class for @gtlPrintStatementInstruction class                                *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-class cPtr_gtlPrintStatementInstruction : public cPtr_gtlInstruction {
-//--- Attributes
-  public : GALGAS_bool mAttribute_carriageReturn ;
-  public : GALGAS_gtlExpression mAttribute_messageToPrint ;
-
-//--- Constructor
-  public : cPtr_gtlPrintStatementInstruction (const GALGAS_location & in_where,
-                                              const GALGAS_bool & in_carriageReturn,
-                                              const GALGAS_gtlExpression & in_messageToPrint
-                                              COMMA_LOCATION_ARGS) ;
-
-//--- Duplication
-  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
-
-//--- Attribute accessors
-  public : VIRTUAL_IN_DEBUG GALGAS_bool getter_carriageReturn (LOCATION_ARGS) const ;
-  public : VIRTUAL_IN_DEBUG GALGAS_gtlExpression getter_messageToPrint (LOCATION_ARGS) const ;
 //--- Description
   public : virtual void description (C_String & ioString,
                                      const int32_t inIndentation) const ;
@@ -12015,9 +12384,10 @@ class GALGAS_gtlSetterCallInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlSetterCallInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                         const class GALGAS_gtlVarPath & inOperand1,
-                                                                         const class GALGAS_lstring & inOperand2,
-                                                                         const class GALGAS_gtlExpressionList & inOperand3
+                                                                         const class GALGAS_string & inOperand1,
+                                                                         const class GALGAS_gtlVarPath & inOperand2,
+                                                                         const class GALGAS_lstring & inOperand3,
+                                                                         const class GALGAS_gtlExpressionList & inOperand4
                                                                          COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -12060,6 +12430,7 @@ class cPtr_gtlSetterCallInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlSetterCallInstruction (const GALGAS_location & in_where,
+                                          const GALGAS_string & in_signature,
                                           const GALGAS_gtlVarPath & in_target,
                                           const GALGAS_lstring & in_setterName,
                                           const GALGAS_gtlExpressionList & in_arguments
@@ -12142,6 +12513,7 @@ class cPtr_gtlAbstractSortInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlAbstractSortInstruction (const GALGAS_location & in_where,
+                                            const GALGAS_string & in_signature,
                                             const GALGAS_gtlVarPath & in_variablePath
                                             COMMA_LOCATION_ARGS) ;
 
@@ -12188,8 +12560,9 @@ class GALGAS_gtlSortStatementInstruction : public GALGAS_gtlAbstractSortInstruct
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlSortStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                            const class GALGAS_gtlVarPath & inOperand1,
-                                                                            const class GALGAS_lsint & inOperand2
+                                                                            const class GALGAS_string & inOperand1,
+                                                                            const class GALGAS_gtlVarPath & inOperand2,
+                                                                            const class GALGAS_lsint & inOperand3
                                                                             COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -12226,6 +12599,7 @@ class cPtr_gtlSortStatementInstruction : public cPtr_gtlAbstractSortInstruction 
 
 //--- Constructor
   public : cPtr_gtlSortStatementInstruction (const GALGAS_location & in_where,
+                                             const GALGAS_string & in_signature,
                                              const GALGAS_gtlVarPath & in_variablePath,
                                              const GALGAS_lsint & in_order
                                              COMMA_LOCATION_ARGS) ;
@@ -12276,8 +12650,9 @@ class GALGAS_gtlSortStatementStructInstruction : public GALGAS_gtlAbstractSortIn
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlSortStatementStructInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                                  const class GALGAS_gtlVarPath & inOperand1,
-                                                                                  const class GALGAS_sortingKeyList & inOperand2
+                                                                                  const class GALGAS_string & inOperand1,
+                                                                                  const class GALGAS_gtlVarPath & inOperand2,
+                                                                                  const class GALGAS_sortingKeyList & inOperand3
                                                                                   COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -12314,6 +12689,7 @@ class cPtr_gtlSortStatementStructInstruction : public cPtr_gtlAbstractSortInstru
 
 //--- Constructor
   public : cPtr_gtlSortStatementStructInstruction (const GALGAS_location & in_where,
+                                                   const GALGAS_string & in_signature,
                                                    const GALGAS_gtlVarPath & in_variablePath,
                                                    const GALGAS_sortingKeyList & in_sortingKey
                                                    COMMA_LOCATION_ARGS) ;
@@ -12361,7 +12737,8 @@ class GALGAS_gtlTabStatementInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlTabStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                           const class GALGAS_gtlExpression & inOperand1
+                                                                           const class GALGAS_string & inOperand1,
+                                                                           const class GALGAS_gtlExpression & inOperand2
                                                                            COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -12398,6 +12775,7 @@ class cPtr_gtlTabStatementInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlTabStatementInstruction (const GALGAS_location & in_where,
+                                            const GALGAS_string & in_signature,
                                             const GALGAS_gtlExpression & in_tabValue
                                             COMMA_LOCATION_ARGS) ;
 
@@ -12447,7 +12825,8 @@ class GALGAS_gtlUnletInstruction : public GALGAS_gtlLetUnconstructedInstruction 
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlUnletInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                    const class GALGAS_gtlVarPath & inOperand1
+                                                                    const class GALGAS_string & inOperand1,
+                                                                    const class GALGAS_gtlVarPath & inOperand2
                                                                     COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -12481,6 +12860,7 @@ class cPtr_gtlUnletInstruction : public cPtr_gtlLetUnconstructedInstruction {
 
 //--- Constructor
   public : cPtr_gtlUnletInstruction (const GALGAS_location & in_where,
+                                     const GALGAS_string & in_signature,
                                      const GALGAS_gtlVarPath & in_lValue
                                      COMMA_LOCATION_ARGS) ;
 
@@ -12528,7 +12908,8 @@ class GALGAS_gtlVariablesInstruction : public GALGAS_gtlInstruction {
                                                                 COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- GALGAS constructors
-  public : static class GALGAS_gtlVariablesInstruction constructor_new (const class GALGAS_location & inOperand0
+  public : static class GALGAS_gtlVariablesInstruction constructor_new (const class GALGAS_location & inOperand0,
+                                                                        const class GALGAS_string & inOperand1
                                                                         COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -12561,7 +12942,8 @@ class cPtr_gtlVariablesInstruction : public cPtr_gtlInstruction {
 //--- Attributes
 
 //--- Constructor
-  public : cPtr_gtlVariablesInstruction (const GALGAS_location & in_where
+  public : cPtr_gtlVariablesInstruction (const GALGAS_location & in_where,
+                                         const GALGAS_string & in_signature
                                          COMMA_LOCATION_ARGS) ;
 
 //--- Duplication
@@ -12606,9 +12988,10 @@ class GALGAS_gtlWarningStatementInstruction : public GALGAS_gtlInstruction {
 
 //--------------------------------- GALGAS constructors
   public : static class GALGAS_gtlWarningStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
-                                                                               const class GALGAS_gtlVarPath & inOperand1,
-                                                                               const class GALGAS_bool & inOperand2,
-                                                                               const class GALGAS_gtlExpression & inOperand3
+                                                                               const class GALGAS_string & inOperand1,
+                                                                               const class GALGAS_gtlVarPath & inOperand2,
+                                                                               const class GALGAS_bool & inOperand3,
+                                                                               const class GALGAS_gtlExpression & inOperand4
                                                                                COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Comparison
@@ -12651,6 +13034,7 @@ class cPtr_gtlWarningStatementInstruction : public cPtr_gtlInstruction {
 
 //--- Constructor
   public : cPtr_gtlWarningStatementInstruction (const GALGAS_location & in_where,
+                                                const GALGAS_string & in_signature,
                                                 const GALGAS_gtlVarPath & in_identifier,
                                                 const GALGAS_bool & in_hereInstead,
                                                 const GALGAS_gtlExpression & in_warningMessage
@@ -13360,295 +13744,4 @@ void callExtensionSetter_putSetter (class cPtr_library * inObject,
                                     C_Compiler * inCompiler
                                     COMMA_LOCATION_ARGS) ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//  GRAMMAR gtl_grammar
-//---------------------------------------------------------------------------------------------------------------------*
-
-class cGrammar_gtl_5F_grammar : public cParser_gtl_5F_parser,
-                                public cParser_gtl_5F_expression_5F_parser,
-                                public cParser_gtl_5F_instruction_5F_parser {
-//------------------------------------- 'gtl_argument_list' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_argument_5F_list_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_argument_5F_list_ (GALGAS_gtlArgumentList & outArgument0,
-                                                     C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_expression' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_expression_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_expression_ (GALGAS_gtlExpression & outArgument0,
-                                               C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_factor' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_factor_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_factor_ (GALGAS_gtlExpression & outArgument0,
-                                           C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_file_name' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_file_5F_name_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_file_5F_name_ (GALGAS_gtlExpression & outArgument0,
-                                                 C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_import' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_import_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_import_ (GALGAS_gtlContext inArgument0,
-                                           GALGAS_library & ioArgument1,
-                                           C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_relation_factor' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_relation_5F_factor_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_relation_5F_factor_ (GALGAS_gtlExpression & outArgument0,
-                                                       C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_relation_term' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_relation_5F_term_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_relation_5F_term_ (GALGAS_gtlExpression & outArgument0,
-                                                     C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_simple_expression' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_simple_5F_expression_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_simple_5F_expression_ (GALGAS_gtlExpression & outArgument0,
-                                                         C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_simple_instruction' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_simple_5F_instruction_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_simple_5F_instruction_ (GALGAS_gtlInstruction & outArgument0,
-                                                          C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_sorting_order' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_sorting_5F_order_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_sorting_5F_order_ (GALGAS_lsint & outArgument0,
-                                                     C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_start_symbol' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_start_5F_symbol_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_start_5F_symbol_ (GALGAS_gtlContext inArgument0,
-                                                    GALGAS_library & ioArgument1,
-                                                    GALGAS_gtlInstructionList & outArgument2,
-                                                    C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//--- Start symbol
-  public : static void _performSourceFileParsing_ (C_Compiler * inCompiler,
-                                                   GALGAS_lstring inFileName,
-                                                   GALGAS_gtlContext inArgument0,
-                                                   GALGAS_library & ioArgument1,
-                                                   GALGAS_gtlInstructionList & outArgument2
-                                                   COMMA_LOCATION_ARGS) ;
-
-  public : static void _performSourceStringParsing_ (C_Compiler * inCompiler,
-                                                     GALGAS_string inSourceString,
-                                                     GALGAS_string inNameString,
-                                                     GALGAS_gtlContext inArgument0,
-                                                     GALGAS_library & ioArgument1,
-                                                     GALGAS_gtlInstructionList & outArgument2
-                                                     COMMA_LOCATION_ARGS) ;
-
-//--- Indexing
-  public : static void performIndexing (C_Compiler * inCompiler,
-                                        const C_String & inSourceFilePath) ;
-
-//--- Only lexical analysis
-  public : static void performOnlyLexicalAnalysis (C_Compiler * inCompiler,
-                                                   const C_String & inSourceFilePath) ;
-
-//--- Only syntax analysis
-  public : static void performOnlySyntaxAnalysis (C_Compiler * inCompiler,
-                                                  const C_String & inSourceFilePath) ;
-
-//------------------------------------- 'gtl_template_instruction' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_template_5F_instruction_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_template_5F_instruction_ (GALGAS_gtlInstruction & outArgument0,
-                                                            C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_template_instruction_list' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_template_5F_instruction_5F_list_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_template_5F_instruction_5F_list_ (GALGAS_gtlInstructionList & outArgument0,
-                                                                    C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_term' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_term_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_term_ (GALGAS_gtlExpression & outArgument0,
-                                         C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_variable' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_variable_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_variable_ (GALGAS_gtlVarPath & outArgument0,
-                                             C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//------------------------------------- 'gtl_variable_or_here' non terminal
-//--- 'parse' label
-  public : virtual void nt_gtl_5F_variable_5F_or_5F_here_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-//----------- '' label
-  public : virtual void nt_gtl_5F_variable_5F_or_5F_here_ (GALGAS_gtlVarPath & outArgument0,
-                                                           GALGAS_bool & outArgument1,
-                                                           C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-  public : virtual int32_t select_gtl_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_1 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_2 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_3 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_4 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_5 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_6 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_7 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_8 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_9 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_10 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_11 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_12 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_13 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_14 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_15 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_16 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_17 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_18 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_19 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_20 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_21 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_22 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_23 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_24 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_parser_25 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_1 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_2 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_3 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_4 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_5 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_6 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_7 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_8 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_9 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_10 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_11 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_12 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_13 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_14 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_15 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_16 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_17 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_18 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_19 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_20 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_21 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_22 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_23 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_24 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_25 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_26 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_expression_5F_parser_27 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_instruction_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_instruction_5F_parser_1 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_instruction_5F_parser_2 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_instruction_5F_parser_3 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_instruction_5F_parser_4 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_instruction_5F_parser_5 (C_Lexique_gtl_5F_scanner *) ;
-
-  public : virtual int32_t select_gtl_5F_instruction_5F_parser_6 (C_Lexique_gtl_5F_scanner *) ;
-} ;
-
-//---------------------------------------------------------------------------------------------------------------------*
 #endif

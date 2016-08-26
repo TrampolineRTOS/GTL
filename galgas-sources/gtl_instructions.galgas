@@ -29,6 +29,7 @@
 #-----------------------------------------------------------------------------*
 abstract class @gtlInstruction {
   @location where
+  @string   signature
 }
 
 getter @gtlInstruction location
@@ -47,7 +48,7 @@ abstract method @gtlInstruction execute
 # instruction list
 #-----------------------------------------------------------------------------*
 list @gtlInstructionList {
-  @gtlInstruction instruction
+  @gtlInstruction instruction %setter
 }
 
 method @gtlInstructionList execute
@@ -60,8 +61,23 @@ method @gtlInstructionList execute
     if @uint.errorCount == 0 then
       if [context debugActive] then
         if [context breakOnNext] then
-          [instruction display]
-          @string input = .newWithStdIn{}
+          [instruction displayWithLocation]
+          @bool continueLoop = true
+          loop (@uint.max)
+            message "\ngtl> "
+            @string input = .newWithStdIn{}
+            message input + "\n"
+            grammar gtl_debugger_grammar in lstring(!"commands") 
+#            grammar gtl_debugger_grammar on (input,"Debugger command")
+              ?@gtlInstruction command
+            log command
+            if command is == @gtlStepInstruction then
+              continueLoop = false
+            else
+              [command execute !?context !?vars !?lib !?outputString]
+            end
+          while continueLoop do
+          end
         end
       end
       [instruction execute !?context !?vars !?lib !?outputString]
@@ -360,6 +376,7 @@ class @gtlWriteToInstruction : @gtlInstruction {
   @gtlInstructionList instructions
 }
 
+
 override method @gtlWriteToInstruction execute
   ?!@gtlContext    context
   ?!@gtlData       vars
@@ -422,17 +439,13 @@ override method @gtlTemplateInstruction execute
   ?!@gtlData    vars
   ?!@library    lib
   ?!@string     outputString
-{
-  # the invoked template context is a copy so that it can modify it without
-  # changing the behavior of the invoking template
+{  
   @gtlContext newContext = context
 
-  # set the new prefix if it exists
   if "" != prefix then
     [!?newContext setPrefix !prefix]
   end
 
-  # compute the full template filename
   @lstring templateFileName = [newContext fullTemplateFileName
     !context
     !vars
@@ -442,19 +455,16 @@ override method @gtlTemplateInstruction execute
   @gtlData localVars
   [!?newContext setInputVars !.emptyList]
   if not isGlobal then
-    # local template
-    # build the variable map for the template and add the arguments
+    # build the variable map for the template
     localVars = @gtlStruct.new { !where !emptylstring() !.emptyMap }
     for (argumentExpression) in arguments do
       @gtlData evaluedArg = [argumentExpression eval !vars !lib]
       [!?newContext addInputVariable !evaluedArg]
     end
   else
-    # global template. The variables are a copy of the invoking template
     localVars = vars
   end
   
-  # get the invoked template
   [!?lib getTemplate
     !newContext
     !templateFileName
@@ -465,11 +475,9 @@ override method @gtlTemplateInstruction execute
   ]
   
   if found then
-    # execute if it is found
     [result execute !?newContext !?localVars !?lib !?outputString]
   else
     if ifExists then
-      # if not found and if exists variant
       @gtlData localMap = [vars overrideMap]
       [instructionsIfNotFound execute !?context !?localMap !?lib !?outputString]
       vars = [localMap overriddenMap]
@@ -1261,3 +1269,15 @@ override method @gtlInputStatementInstruction execute
   end
 }
 
+#-----------------------------------------------------------------------------*
+# dummy internal instructions : step
+#-----------------------------------------------------------------------------*
+class @gtlStepInstruction : @gtlInstruction {}
+
+override method @gtlStepInstruction execute
+  ?!@gtlContext unused context
+  ?!@gtlData    unused vars
+  ?!@library    unused lib
+  ?!@string     unused outputString
+{
+}

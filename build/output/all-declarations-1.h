@@ -10,6 +10,297 @@
 #include "all-declarations-0.h"
 
 //---------------------------------------------------------------------------------------------------------------------*
+//  GRAMMAR gtl_grammar
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cGrammar_gtl_5F_grammar : public cParser_gtl_5F_parser,
+                                public cParser_gtl_5F_expression_5F_parser,
+                                public cParser_gtl_5F_instruction_5F_parser {
+//------------------------------------- 'gtl_argument_list' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_argument_5F_list_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_argument_5F_list_ (GALGAS_gtlArgumentList & outArgument0,
+                                                     C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_expression' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_expression_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_expression_ (GALGAS_gtlExpression & outArgument0,
+                                               C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_factor' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_factor_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_factor_ (GALGAS_gtlExpression & outArgument0,
+                                           C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_file_name' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_file_5F_name_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_file_5F_name_ (GALGAS_gtlExpression & outArgument0,
+                                                 C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_import' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_import_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_import_ (GALGAS_gtlContext inArgument0,
+                                           GALGAS_library & ioArgument1,
+                                           C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_relation_factor' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_relation_5F_factor_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_relation_5F_factor_ (GALGAS_gtlExpression & outArgument0,
+                                                       C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_relation_term' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_relation_5F_term_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_relation_5F_term_ (GALGAS_gtlExpression & outArgument0,
+                                                     C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_simple_expression' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_simple_5F_expression_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_simple_5F_expression_ (GALGAS_gtlExpression & outArgument0,
+                                                         C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_simple_instruction' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_simple_5F_instruction_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_simple_5F_instruction_ (GALGAS_gtlInstruction & outArgument0,
+                                                          C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_sorting_order' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_sorting_5F_order_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_sorting_5F_order_ (GALGAS_lsint & outArgument0,
+                                                     C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_start_symbol' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_start_5F_symbol_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_start_5F_symbol_ (GALGAS_gtlContext inArgument0,
+                                                    GALGAS_library & ioArgument1,
+                                                    GALGAS_gtlInstructionList & outArgument2,
+                                                    C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//--- Start symbol
+  public : static void _performSourceFileParsing_ (C_Compiler * inCompiler,
+                                                   GALGAS_lstring inFileName,
+                                                   GALGAS_gtlContext inArgument0,
+                                                   GALGAS_library & ioArgument1,
+                                                   GALGAS_gtlInstructionList & outArgument2
+                                                   COMMA_LOCATION_ARGS) ;
+
+  public : static void _performSourceStringParsing_ (C_Compiler * inCompiler,
+                                                     GALGAS_string inSourceString,
+                                                     GALGAS_string inNameString,
+                                                     GALGAS_gtlContext inArgument0,
+                                                     GALGAS_library & ioArgument1,
+                                                     GALGAS_gtlInstructionList & outArgument2
+                                                     COMMA_LOCATION_ARGS) ;
+
+//--- Indexing
+  public : static void performIndexing (C_Compiler * inCompiler,
+                                        const C_String & inSourceFilePath) ;
+
+//--- Only lexical analysis
+  public : static void performOnlyLexicalAnalysis (C_Compiler * inCompiler,
+                                                   const C_String & inSourceFilePath) ;
+
+//--- Only syntax analysis
+  public : static void performOnlySyntaxAnalysis (C_Compiler * inCompiler,
+                                                  const C_String & inSourceFilePath) ;
+
+//------------------------------------- 'gtl_template_instruction' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_template_5F_instruction_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_template_5F_instruction_ (GALGAS_gtlInstruction & outArgument0,
+                                                            C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_template_instruction_list' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_template_5F_instruction_5F_list_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_template_5F_instruction_5F_list_ (GALGAS_gtlInstructionList & outArgument0,
+                                                                    C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_term' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_term_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_term_ (GALGAS_gtlExpression & outArgument0,
+                                         C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_variable' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_variable_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_variable_ (GALGAS_gtlVarPath & outArgument0,
+                                             C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//------------------------------------- 'gtl_variable_or_here' non terminal
+//--- 'parse' label
+  public : virtual void nt_gtl_5F_variable_5F_or_5F_here_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+//----------- '' label
+  public : virtual void nt_gtl_5F_variable_5F_or_5F_here_ (GALGAS_gtlVarPath & outArgument0,
+                                                           GALGAS_bool & outArgument1,
+                                                           C_Lexique_gtl_5F_scanner * inCompiler) ;
+
+  public : virtual int32_t select_gtl_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_1 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_2 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_3 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_4 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_5 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_6 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_7 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_8 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_9 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_10 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_11 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_12 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_13 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_14 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_15 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_16 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_17 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_18 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_19 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_20 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_21 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_22 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_23 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_24 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_parser_25 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_1 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_2 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_3 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_4 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_5 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_6 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_7 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_8 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_9 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_10 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_11 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_12 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_13 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_14 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_15 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_16 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_17 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_18 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_19 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_20 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_21 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_22 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_23 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_24 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_25 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_26 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_expression_5F_parser_27 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_instruction_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_instruction_5F_parser_1 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_instruction_5F_parser_2 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_instruction_5F_parser_3 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_instruction_5F_parser_4 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_instruction_5F_parser_5 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_instruction_5F_parser_6 (C_Lexique_gtl_5F_scanner *) ;
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
 //                                                Function 'invokeGTL'                                                 *
 //                                                                                                                     *
@@ -626,35 +917,5 @@ class GALGAS_gtlData function_validateReturnValue (const class GALGAS_lstring & 
                                                    const class GALGAS_object & constinArgument1,
                                                    class C_Compiler * inCompiler
                                                    COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                        Pointer class for @gtlProcedure class                                        *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-class cPtr_gtlProcedure : public cPtr_gtlExecutableEntity {
-//--- Attributes
-
-//--- Constructor
-  public : cPtr_gtlProcedure (const GALGAS_location & in_where,
-                              const GALGAS_lstring & in_name,
-                              const GALGAS_gtlArgumentList & in_formalArguments,
-                              const GALGAS_gtlInstructionList & in_instructions
-                              COMMA_LOCATION_ARGS) ;
-
-//--- Duplication
-  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
-
-//--- Attribute accessors
-//--- Description
-  public : virtual void description (C_String & ioString,
-                                     const int32_t inIndentation) const ;
-
-  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
-
-  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
-
-} ;
 
 #endif

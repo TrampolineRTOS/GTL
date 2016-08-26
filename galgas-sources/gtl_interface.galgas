@@ -40,6 +40,7 @@ func invokeGTL
   # Build a template instruction
   @gtlTemplateInstruction rootTemplateInstruction = .new {
     !.here
+    !""
     !emptylstring()          # empty prefix
     !@gtlTerminal.new {      # literal gtlString to store the file name
       !.here
