@@ -33,7 +33,7 @@ func signature
       [[loc file] lastPathComponent]
       + ":"
       + [loc line]
-      message signatureString + "\n"
+#      message signatureString + "\n"
     result = [signatureString md5]
   else
     result = ""
@@ -557,7 +557,7 @@ method @gtlInstruction displayWithLocation
   message [self shortLocation] + " > "
   message "\u001B[94m\u001B[1m"
   [self display]
-  message "\u001B[0m"
+  message "\u001B[0m\n"
 }
 
 #=============================================================================*
@@ -665,3 +665,22 @@ override method @gtlEmitInstruction display
 {
   message "! " + [rValue stringRepresentation]
 }
+
+#=============================================================================*
+getter @gtlInstruction mayExecuteWithoutError
+  ?let @gtlData unused context
+  ?let @library unused lib
+  ->@bool may
+{
+  may = true
+}
+
+#-----------------------------------------------------------------------------*
+override getter @gtlDisplayStatementInstruction mayExecuteWithoutError
+  ?let @gtlData context
+  ?let @library lib
+  ->@bool may
+{
+  may =  [variablePath exists !context !lib]
+}
+

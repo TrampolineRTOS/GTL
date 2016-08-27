@@ -323,6 +323,31 @@ class GALGAS_bool callExtensionGetter_debugActive (const cPtr_gtlContext * inObj
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
+//                              Extension getter '@gtlInstruction mayExecuteWithoutError'                              *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef class GALGAS_bool (*enterExtensionGetter_gtlInstruction_mayExecuteWithoutError) (const class cPtr_gtlInstruction * inObject,
+                                                                                         const class GALGAS_gtlData & constinArgument0,
+                                                                                         const class GALGAS_library & constinArgument1,
+                                                                                         C_Compiler * inCompiler
+                                                                                         COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionGetter_mayExecuteWithoutError (const int32_t inClassIndex,
+                                                  enterExtensionGetter_gtlInstruction_mayExecuteWithoutError inGetter) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_bool callExtensionGetter_mayExecuteWithoutError (const cPtr_gtlInstruction * inObject,
+                                                              const GALGAS_gtlData & constin_context,
+                                                              const GALGAS_library & constin_lib,
+                                                              class C_Compiler * inCompiler
+                                                              COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
 //                               Extension method '@gtlInstruction displayWithLocation'                                *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*

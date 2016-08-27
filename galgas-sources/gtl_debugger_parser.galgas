@@ -32,40 +32,48 @@ rule <gtl_expression>
 rule <gtl_variable>
   !@gtlVarPath path
 
-rule <gtl_debugger_parser_start_symbol>
+rule <gtl_debugger_command>
   !@gtlInstruction instruction
 {
-  select
-    message "print !\n"
-    $print$ 
-    <gtl_expression> ?@gtlExpression expression
-    instruction = @gtlPrintStatementInstruction.new {
-      !.here
-      !""
-      !true
-      !expression
-    }
-    log instruction
-  or
-    $display$
-    <gtl_variable> ?@gtlVarPath variable  
-    instruction = @gtlDisplayStatementInstruction.new {
-      !.here
-      !""
-      !variable
-    }
-  or
-    $step$
-    instruction = @gtlStepInstruction.new {
-      !.here
-      !""
-    }
-#  or
-#    instruction = @gtlStepInstruction.new {
-#      !.here
-#      !""
-#    }
-  end
+  $print$ 
+  <gtl_expression> ?@gtlExpression expression
+  instruction = @gtlPrintStatementInstruction.new {
+    !.here
+    !""
+    !true
+    !expression
+  }
+}
+
+rule <gtl_debugger_command>
+  !@gtlInstruction instruction
+{
+  $display$
+  <gtl_variable> ?@gtlVarPath variable  
+  instruction = @gtlDisplayStatementInstruction.new {
+    !.here
+    !""
+    !variable
+  }
+}
+
+rule <gtl_debugger_command>
+  !@gtlInstruction instruction
+{
+  $step$
+  instruction = @gtlStepInstruction.new {
+    !.here
+    !""
+  }
+}
+
+rule <gtl_debugger_command>
+  !@gtlInstruction instruction
+{
+  instruction = @gtlStepInstruction.new {
+    !.here
+    !""
+  }
 }
 
 }

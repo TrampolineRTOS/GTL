@@ -57,32 +57,35 @@ method @gtlInstructionList execute
   ?!@library    lib
   ?!@string     outputString
 {
-  for () in self do
-    if @uint.errorCount == 0 then
-      if [context debugActive] then
-        if [context breakOnNext] then
-          [instruction displayWithLocation]
-          @bool continueLoop = true
-          loop (@uint.max)
-            message "\ngtl> "
-            @string input = .newWithStdIn{}
-            message input + "\n"
-            grammar gtl_debugger_grammar in lstring(!"commands") 
-#            grammar gtl_debugger_grammar on (input,"Debugger command")
-              ?@gtlInstruction command
-            log command
-            if command is == @gtlStepInstruction then
-              continueLoop = false
-            else
+  if [context debugActive] then
+    for () in self do
+      if [context breakOnNext] then
+        [instruction displayWithLocation]
+        @bool continueLoop = true
+        loop (@uint.max)
+          message "gtl> "
+          @string input = "%" + @string.newWithStdIn{}
+          grammar gtl_debugger_grammar on (input,"Debugger command")
+            ?@gtlInstruction command
+          if command is == @gtlStepInstruction then
+            continueLoop = false
+          else
+            if [command mayExecuteWithoutError !vars !lib] then
               [command execute !?context !?vars !?lib !?outputString]
             end
-          while continueLoop do
           end
+        while continueLoop do
         end
       end
       [instruction execute !?context !?vars !?lib !?outputString]
-      if @uint.errorCount != 0 then
-        error instruction : "runtime error"
+    end
+  else
+    for () in self do
+      if @uint.errorCount == 0 then
+        [instruction execute !?context !?vars !?lib !?outputString]
+        if @uint.errorCount != 0 then
+          error instruction : "runtime error"
+        end
       end
     end
   end

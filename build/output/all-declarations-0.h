@@ -8826,10 +8826,10 @@ class cParser_gtl_5F_debugger_5F_parser {
   public : virtual ~ cParser_gtl_5F_debugger_5F_parser (void) {}
 
 //--- Non terminal declarations
-  protected : virtual void nt_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_ (class GALGAS_gtlInstruction & outArgument0,
-                                                                             class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
+  protected : virtual void nt_gtl_5F_debugger_5F_command_ (class GALGAS_gtlInstruction & outArgument0,
+                                                           class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
 
-  protected : virtual void nt_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_parse (class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
+  protected : virtual void nt_gtl_5F_debugger_5F_command_parse (class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
 
   protected : virtual void nt_gtl_5F_expression_ (class GALGAS_gtlExpression & outArgument0,
                                                   class C_Lexique_gtl_5F_scanner * inLexique) = 0 ;
@@ -8843,16 +8843,29 @@ class cParser_gtl_5F_debugger_5F_parser {
 
 
 //--- Rule declarations
-  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_i0_ (GALGAS_gtlInstruction & outArgument0,
-                                                                                                    C_Lexique_gtl_5F_scanner * inLexique) ;
+  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_command_i0_ (GALGAS_gtlInstruction & outArgument0,
+                                                                                  C_Lexique_gtl_5F_scanner * inLexique) ;
 
-  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_i0_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
+  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_command_i0_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
+
+  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_command_i1_ (GALGAS_gtlInstruction & outArgument0,
+                                                                                  C_Lexique_gtl_5F_scanner * inLexique) ;
+
+  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_command_i1_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
+
+  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_command_i2_ (GALGAS_gtlInstruction & outArgument0,
+                                                                                  C_Lexique_gtl_5F_scanner * inLexique) ;
+
+  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_command_i2_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
+
+  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_command_i3_ (GALGAS_gtlInstruction & outArgument0,
+                                                                                  C_Lexique_gtl_5F_scanner * inLexique) ;
+
+  protected : void rule_gtl_5F_debugger_5F_parser_gtl_5F_debugger_5F_command_i3_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
 
 
 
 //--- Select methods
-  protected : virtual int32_t select_gtl_5F_debugger_5F_parser_0 (C_Lexique_gtl_5F_scanner *) = 0 ;
-
 
 } ;
 
@@ -9131,13 +9144,13 @@ class cGrammar_gtl_5F_debugger_5F_grammar : public cParser_gtl_5F_debugger_5F_pa
   public : virtual void nt_gtl_5F_argument_5F_list_ (GALGAS_gtlArgumentList & outArgument0,
                                                      C_Lexique_gtl_5F_scanner * inCompiler) ;
 
-//------------------------------------- 'gtl_debugger_parser_start_symbol' non terminal
+//------------------------------------- 'gtl_debugger_command' non terminal
 //--- 'parse' label
-  public : virtual void nt_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
+  public : virtual void nt_gtl_5F_debugger_5F_command_parse (C_Lexique_gtl_5F_scanner * inCompiler) ;
 
 //----------- '' label
-  public : virtual void nt_gtl_5F_debugger_5F_parser_5F_start_5F_symbol_ (GALGAS_gtlInstruction & outArgument0,
-                                                                          C_Lexique_gtl_5F_scanner * inCompiler) ;
+  public : virtual void nt_gtl_5F_debugger_5F_command_ (GALGAS_gtlInstruction & outArgument0,
+                                                        C_Lexique_gtl_5F_scanner * inCompiler) ;
 
 //--- Start symbol
   public : static void _performSourceFileParsing_ (C_Compiler * inCompiler,
@@ -9227,8 +9240,6 @@ class cGrammar_gtl_5F_debugger_5F_grammar : public cParser_gtl_5F_debugger_5F_pa
   public : virtual void nt_gtl_5F_variable_5F_or_5F_here_ (GALGAS_gtlVarPath & outArgument0,
                                                            GALGAS_bool & outArgument1,
                                                            C_Lexique_gtl_5F_scanner * inCompiler) ;
-
-  public : virtual int32_t select_gtl_5F_debugger_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
 
   public : virtual int32_t select_gtl_5F_expression_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
 
