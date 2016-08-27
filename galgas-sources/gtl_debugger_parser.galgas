@@ -38,19 +38,38 @@ rule <gtl_debugger_command>
   !@gtlInstruction instruction
 {
   $step$
+  instruction = @gtlStepInstruction.new {
+    !.here
+    !""
+  }
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_debugger_command>
+  !@gtlInstruction instruction
+{
+  
+  $do$
   select
-    $do$
     <gtl_step_do_command> ?@gtlInstruction instructionToStepDo
-    instruction = @gtlStepDoInstruction.new {
+    instruction = @gtlDoInstInstruction.new {
       !.here
       !""
       !instructionToStepDo
     }
   or
-    instruction = @gtlStepInstruction.new {
+    $no$
+    $signed_literal_integer_bigint$ ?let @lbigint num
+    instruction = @gtlDoNoInstruction.new {
       !.here
       !""
+      !num
     }
+  or
+    instruction = @gtlDoInstruction.new {
+      !.here
+      !""
+    }    
   end
 }
 

@@ -72,13 +72,56 @@ class @debuggerContext
   @string instructionFace    %setter
   @string outputColor        %setter
   @string outputFace         %setter
+  @string warningColor       %setter
+  @string warningFace        %setter
   @gtlInstructionList doList
 }
 
+#-----------------------------------------------------------------------------*
 setter @debuggerContext appendInstructionToStepDo
   ?@gtlInstruction instruction
 {
   doList += !instruction
+}
+
+#-----------------------------------------------------------------------------*
+setter @debuggerContext deleteStepDoInstruction
+  ?let @lbigint numToDelete
+{
+  if [numToDelete bigint] <= [@uint.max bigint] then
+    @uint numToDeleteUInt = [numToDelete uint]
+    if numToDeleteUInt < [doList length] then
+      [!?doList removeAtIndex ?@gtlInstruction instruction !numToDeleteUInt]
+      message "Command: "
+      message instructionColor + instructionFace
+      [instruction display]
+      message outputColor + outputFace
+      message " deleted\n"
+    else
+      message warningColor + warningFace
+      message "no do command at this index: " + [numToDelete bigint] + "\n"
+    end
+  else
+    message warningColor + warningFace
+    message "no do command at this index: " + [numToDelete bigint] + "\n"
+  end
+}
+
+#-----------------------------------------------------------------------------*
+method @debuggerContext listStepDoInstructions
+{
+  if [doList length] > 0 then
+    message "Step do commands:\n"
+    for (instruction) in doList do (index)
+      message [[index string] stringByLeftPadding !4 !' '] + ": "
+      message instructionColor + instructionFace
+      [instruction display]
+      message "\n"
+      message outputColor + outputFace
+    end
+  else
+    message "No step do commands\n"
+  end
 }
 
 #-----------------------------------------------------------------------------*
@@ -94,6 +137,8 @@ func defaultDebugSettings
     !bold()
     !darkgreen()
     !""
+    !darkyellow()
+    !bold()
     !.emptyList
   }
 }
@@ -146,6 +191,20 @@ setter @gtlContext appendInstructionToStepDo
   [!?debuggerContext appendInstructionToStepDo !instruction]
 }
 
+#-----------------------------------------------------------------------------*
+setter @gtlContext deleteStepDoInstruction
+  ?let @lbigint numToDelete
+{
+  [!?debuggerContext deleteStepDoInstruction !numToDelete]
+}
+
+#-----------------------------------------------------------------------------*
+method @gtlContext listStepDoInstructions
+{
+  [debuggerContext listStepDoInstructions]
+}
+
+#-----------------------------------------------------------------------------*
 method @gtlContext executeStepDoList
   ?!@gtlContext context
   ?!@gtlData    vars
@@ -773,6 +832,15 @@ override method @gtlWarningStatementInstruction display
 }
 
 #-----------------------------------------------------------------------------*
+override method @gtlErrorStatementInstruction display
+{
+  message "error "
+    + if hereInstead then "here" else [identifier stringRepresentation] end
+    + " : "
+    + [errorMessage stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
 override method @gtlDisplayStatementInstruction display
 {
   message "display " + [variablePath stringRepresentation]
@@ -865,18 +933,51 @@ override method @gtlStepInstruction execute
 }
 
 #-----------------------------------------------------------------------------*
-# Debugger instruction : step do
+# Debugger instruction : do <instruction>
 #-----------------------------------------------------------------------------*
-class @gtlStepDoInstruction : @gtlInstruction
+class @gtlDoInstInstruction : @gtlInstruction
 {
   @gtlInstruction instructionToDo
 }
 
-override method @gtlStepDoInstruction execute
+override method @gtlDoInstInstruction execute
   ?!@gtlContext        context
   ?!@gtlData    unused vars
   ?!@library    unused lib
   ?!@string     unused outputString
 {
   [!?context appendInstructionToStepDo !instructionToDo]
+}
+
+#-----------------------------------------------------------------------------*
+# Debugger instruction : do no <num>
+#-----------------------------------------------------------------------------*
+class @gtlDoNoInstruction : @gtlInstruction
+{
+  @lbigint numToDelete
+}
+
+override method @gtlDoNoInstruction execute
+  ?!@gtlContext        context
+  ?!@gtlData    unused vars
+  ?!@library    unused lib
+  ?!@string     unused outputString
+{
+  [!?context deleteStepDoInstruction !numToDelete]
+}
+
+#-----------------------------------------------------------------------------*
+# Debugger instruction : do
+#-----------------------------------------------------------------------------*
+class @gtlDoInstruction : @gtlInstruction
+{
+}
+
+override method @gtlDoInstruction execute
+  ?!@gtlContext        context
+  ?!@gtlData    unused vars
+  ?!@library    unused lib
+  ?!@string     unused outputString
+{
+  [context listStepDoInstructions]
 }

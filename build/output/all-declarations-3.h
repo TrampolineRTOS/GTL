@@ -2431,6 +2431,50 @@ void callExtensionSetter_appendInstructionToStepDo (class cPtr_debuggerContext *
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
+//                             Extension setter '@debuggerContext deleteStepDoInstruction'                             *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionSetterSignature_debuggerContext_deleteStepDoInstruction) (class cPtr_debuggerContext * inObject,
+                                                                                  const class GALGAS_lbigint constinArgument0,
+                                                                                  class C_Compiler * inCompiler
+                                                                                  COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionSetter_deleteStepDoInstruction (const int32_t inClassIndex,
+                                                   extensionSetterSignature_debuggerContext_deleteStepDoInstruction inModifier) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionSetter_deleteStepDoInstruction (class cPtr_debuggerContext * inObject,
+                                                  const GALGAS_lbigint constin_numToDelete,
+                                                  C_Compiler * inCompiler
+                                                  COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                             Extension method '@debuggerContext listStepDoInstructions'                              *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionMethodSignature_debuggerContext_listStepDoInstructions) (const class cPtr_debuggerContext * inObject,
+                                                                                 class C_Compiler * inCompiler
+                                                                                 COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionMethod_listStepDoInstructions (const int32_t inClassIndex,
+                                                  extensionMethodSignature_debuggerContext_listStepDoInstructions inMethod) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionMethod_listStepDoInstructions (const class cPtr_debuggerContext * inObject,
+                                                 C_Compiler * inCompiler
+                                                 COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
 //                              Abstract extension getter '@gtlData stringRepresentation'                              *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
@@ -2570,5 +2614,49 @@ void callExtensionSetter_appendInstructionToStepDo (class cPtr_gtlContext * inOb
                                                     GALGAS_gtlInstruction in_instruction,
                                                     C_Compiler * inCompiler
                                                     COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                               Extension setter '@gtlContext deleteStepDoInstruction'                                *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionSetterSignature_gtlContext_deleteStepDoInstruction) (class cPtr_gtlContext * inObject,
+                                                                             const class GALGAS_lbigint constinArgument0,
+                                                                             class C_Compiler * inCompiler
+                                                                             COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionSetter_deleteStepDoInstruction (const int32_t inClassIndex,
+                                                   extensionSetterSignature_gtlContext_deleteStepDoInstruction inModifier) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionSetter_deleteStepDoInstruction (class cPtr_gtlContext * inObject,
+                                                  const GALGAS_lbigint constin_numToDelete,
+                                                  C_Compiler * inCompiler
+                                                  COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                Extension method '@gtlContext listStepDoInstructions'                                *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionMethodSignature_gtlContext_listStepDoInstructions) (const class cPtr_gtlContext * inObject,
+                                                                            class C_Compiler * inCompiler
+                                                                            COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionMethod_listStepDoInstructions (const int32_t inClassIndex,
+                                                  extensionMethodSignature_gtlContext_listStepDoInstructions inMethod) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionMethod_listStepDoInstructions (const class cPtr_gtlContext * inObject,
+                                                 C_Compiler * inCompiler
+                                                 COMMA_LOCATION_ARGS) ;
 
 #endif

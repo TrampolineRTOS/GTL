@@ -10035,7 +10035,7 @@ C_galgas_function_descriptor functionDescriptor_endc ("endc",
 GALGAS_debuggerContext function_defaultDebugSettings (C_Compiler * inCompiler
                                                       COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_debuggerContext result_debugSettings ; // Returned variable
-  result_debugSettings = GALGAS_debuggerContext::constructor_new (GALGAS_bool (false), GALGAS_bool (false), function_red (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 91)), GALGAS_string::makeEmptyString (), function_blue (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 93)), function_bold (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 94)), function_darkgreen (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 95)), GALGAS_string::makeEmptyString (), GALGAS_gtlInstructionList::constructor_emptyList (SOURCE_FILE ("gtl_debugger.galgas", 97))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 88)) ;
+  result_debugSettings = GALGAS_debuggerContext::constructor_new (GALGAS_bool (false), GALGAS_bool (false), function_red (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 134)), GALGAS_string::makeEmptyString (), function_blue (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 136)), function_bold (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 137)), function_darkgreen (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 138)), GALGAS_string::makeEmptyString (), function_darkyellow (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 140)), function_bold (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 141)), GALGAS_gtlInstructionList::constructor_emptyList (SOURCE_FILE ("gtl_debugger.galgas", 142))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 131)) ;
 //---
   return result_debugSettings ;
 }
@@ -10099,6 +10099,12 @@ typeComparisonResult cPtr_debuggerContext::dynamicObjectCompare (const acPtr_cla
     result = mAttribute_outputFace.objectCompare (p->mAttribute_outputFace) ;
   }
   if (kOperandEqual == result) {
+    result = mAttribute_warningColor.objectCompare (p->mAttribute_warningColor) ;
+  }
+  if (kOperandEqual == result) {
+    result = mAttribute_warningFace.objectCompare (p->mAttribute_warningFace) ;
+  }
+  if (kOperandEqual == result) {
     result = mAttribute_doList.objectCompare (p->mAttribute_doList) ;
   }
   return result ;
@@ -10140,6 +10146,8 @@ GALGAS_debuggerContext GALGAS_debuggerContext::constructor_default (LOCATION_ARG
                                                   GALGAS_string::constructor_default (HERE),
                                                   GALGAS_string::constructor_default (HERE),
                                                   GALGAS_string::constructor_default (HERE),
+                                                  GALGAS_string::constructor_default (HERE),
+                                                  GALGAS_string::constructor_default (HERE),
                                                   GALGAS_gtlInstructionList::constructor_emptyList (HERE)
                                                   COMMA_THERE) ;
 }
@@ -10161,11 +10169,13 @@ GALGAS_debuggerContext GALGAS_debuggerContext::constructor_new (const GALGAS_boo
                                                                 const GALGAS_string & inAttribute_instructionFace,
                                                                 const GALGAS_string & inAttribute_outputColor,
                                                                 const GALGAS_string & inAttribute_outputFace,
+                                                                const GALGAS_string & inAttribute_warningColor,
+                                                                const GALGAS_string & inAttribute_warningFace,
                                                                 const GALGAS_gtlInstructionList & inAttribute_doList
                                                                 COMMA_LOCATION_ARGS) {
   GALGAS_debuggerContext result ;
-  if (inAttribute_debugActive.isValid () && inAttribute_breakOnNext.isValid () && inAttribute_promptColor.isValid () && inAttribute_promptFace.isValid () && inAttribute_instructionColor.isValid () && inAttribute_instructionFace.isValid () && inAttribute_outputColor.isValid () && inAttribute_outputFace.isValid () && inAttribute_doList.isValid ()) {
-    macroMyNew (result.mObjectPtr, cPtr_debuggerContext (inAttribute_debugActive, inAttribute_breakOnNext, inAttribute_promptColor, inAttribute_promptFace, inAttribute_instructionColor, inAttribute_instructionFace, inAttribute_outputColor, inAttribute_outputFace, inAttribute_doList COMMA_THERE)) ;
+  if (inAttribute_debugActive.isValid () && inAttribute_breakOnNext.isValid () && inAttribute_promptColor.isValid () && inAttribute_promptFace.isValid () && inAttribute_instructionColor.isValid () && inAttribute_instructionFace.isValid () && inAttribute_outputColor.isValid () && inAttribute_outputFace.isValid () && inAttribute_warningColor.isValid () && inAttribute_warningFace.isValid () && inAttribute_doList.isValid ()) {
+    macroMyNew (result.mObjectPtr, cPtr_debuggerContext (inAttribute_debugActive, inAttribute_breakOnNext, inAttribute_promptColor, inAttribute_promptFace, inAttribute_instructionColor, inAttribute_instructionFace, inAttribute_outputColor, inAttribute_outputFace, inAttribute_warningColor, inAttribute_warningFace, inAttribute_doList COMMA_THERE)) ;
   }
   return result ;
 }
@@ -10312,6 +10322,42 @@ GALGAS_string GALGAS_debuggerContext::getter_outputFace (UNUSED_LOCATION_ARGS) c
 
 GALGAS_string cPtr_debuggerContext::getter_outputFace (UNUSED_LOCATION_ARGS) const {
   return mAttribute_outputFace ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_string GALGAS_debuggerContext::getter_warningColor (UNUSED_LOCATION_ARGS) const {
+  GALGAS_string result ;
+  if (NULL != mObjectPtr) {
+    const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
+    macroValidSharedObject (p, cPtr_debuggerContext) ;
+    result = p->mAttribute_warningColor ;
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_string cPtr_debuggerContext::getter_warningColor (UNUSED_LOCATION_ARGS) const {
+  return mAttribute_warningColor ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_string GALGAS_debuggerContext::getter_warningFace (UNUSED_LOCATION_ARGS) const {
+  GALGAS_string result ;
+  if (NULL != mObjectPtr) {
+    const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
+    macroValidSharedObject (p, cPtr_debuggerContext) ;
+    result = p->mAttribute_warningFace ;
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_string cPtr_debuggerContext::getter_warningFace (UNUSED_LOCATION_ARGS) const {
+  return mAttribute_warningFace ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -10485,6 +10531,44 @@ void cPtr_debuggerContext::setter_setOutputFace (GALGAS_string inValue
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
+
+void GALGAS_debuggerContext::setter_setWarningColor (GALGAS_string inValue
+                                                     COMMA_LOCATION_ARGS) {
+  if (NULL != mObjectPtr) {
+    insulate (THERE) ;
+    cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
+    macroValidSharedObject (p, cPtr_debuggerContext) ;
+    p->mAttribute_warningColor = inValue ;
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void cPtr_debuggerContext::setter_setWarningColor (GALGAS_string inValue
+                                                   COMMA_UNUSED_LOCATION_ARGS) {
+  mAttribute_warningColor = inValue ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void GALGAS_debuggerContext::setter_setWarningFace (GALGAS_string inValue
+                                                    COMMA_LOCATION_ARGS) {
+  if (NULL != mObjectPtr) {
+    insulate (THERE) ;
+    cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
+    macroValidSharedObject (p, cPtr_debuggerContext) ;
+    p->mAttribute_warningFace = inValue ;
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void cPtr_debuggerContext::setter_setWarningFace (GALGAS_string inValue
+                                                  COMMA_UNUSED_LOCATION_ARGS) {
+  mAttribute_warningFace = inValue ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
 //                                      Pointer class for @debuggerContext class                                       *
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -10496,6 +10580,8 @@ cPtr_debuggerContext::cPtr_debuggerContext (const GALGAS_bool & in_debugActive,
                                             const GALGAS_string & in_instructionFace,
                                             const GALGAS_string & in_outputColor,
                                             const GALGAS_string & in_outputFace,
+                                            const GALGAS_string & in_warningColor,
+                                            const GALGAS_string & in_warningFace,
                                             const GALGAS_gtlInstructionList & in_doList
                                             COMMA_LOCATION_ARGS) :
 acPtr_class (THERE),
@@ -10507,6 +10593,8 @@ mAttribute_instructionColor (in_instructionColor),
 mAttribute_instructionFace (in_instructionFace),
 mAttribute_outputColor (in_outputColor),
 mAttribute_outputFace (in_outputFace),
+mAttribute_warningColor (in_warningColor),
+mAttribute_warningFace (in_warningFace),
 mAttribute_doList (in_doList) {
 }
 
@@ -10535,6 +10623,10 @@ void cPtr_debuggerContext::description (C_String & ioString,
   ioString << ", " ;
   mAttribute_outputFace.description (ioString, inIndentation+1) ;
   ioString << ", " ;
+  mAttribute_warningColor.description (ioString, inIndentation+1) ;
+  ioString << ", " ;
+  mAttribute_warningFace.description (ioString, inIndentation+1) ;
+  ioString << ", " ;
   mAttribute_doList.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
@@ -10543,7 +10635,7 @@ void cPtr_debuggerContext::description (C_String & ioString,
 
 acPtr_class * cPtr_debuggerContext::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_debuggerContext (mAttribute_debugActive, mAttribute_breakOnNext, mAttribute_promptColor, mAttribute_promptFace, mAttribute_instructionColor, mAttribute_instructionFace, mAttribute_outputColor, mAttribute_outputFace, mAttribute_doList COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_debuggerContext (mAttribute_debugActive, mAttribute_breakOnNext, mAttribute_promptColor, mAttribute_promptFace, mAttribute_instructionColor, mAttribute_instructionFace, mAttribute_outputColor, mAttribute_outputFace, mAttribute_warningColor, mAttribute_warningFace, mAttribute_doList COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -11876,198 +11968,6 @@ GALGAS_gtlFloat GALGAS_gtlFloat::extractObject (const GALGAS_object & inObject,
       result = *p ;
     }else{
       inCompiler->castError ("gtlFloat", p->dynamicTypeDescriptor () COMMA_THERE) ;
-    }  
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-//   Object comparison                                                                                                 *
-//---------------------------------------------------------------------------------------------------------------------*
-
-typeComparisonResult cPtr_gtlInt::dynamicObjectCompare (const acPtr_class * inOperandPtr) const {
-  typeComparisonResult result = kOperandEqual ;
-  const cPtr_gtlInt * p = (const cPtr_gtlInt *) inOperandPtr ;
-  macroValidSharedObject (p, cPtr_gtlInt) ;
-  if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
-  }
-  if (kOperandEqual == result) {
-    result = mAttribute_meta.objectCompare (p->mAttribute_meta) ;
-  }
-  if (kOperandEqual == result) {
-    result = mAttribute_value.objectCompare (p->mAttribute_value) ;
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-
-typeComparisonResult GALGAS_gtlInt::objectCompare (const GALGAS_gtlInt & inOperand) const {
-  typeComparisonResult result = kOperandNotValid ;
-  if (isValid () && inOperand.isValid ()) {
-    const int32_t mySlot = mObjectPtr->classDescriptor ()->mSlotID ;
-    const int32_t operandSlot = inOperand.mObjectPtr->classDescriptor ()->mSlotID ;
-    if (mySlot < operandSlot) {
-      result = kFirstOperandLowerThanSecond ;
-    }else if (mySlot > operandSlot) {
-      result = kFirstOperandGreaterThanSecond ;
-    }else{
-      result = mObjectPtr->dynamicObjectCompare (inOperand.mObjectPtr) ;
-    }
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_gtlInt::GALGAS_gtlInt (void) :
-GALGAS_gtlData () {
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_gtlInt GALGAS_gtlInt::constructor_default (LOCATION_ARGS) {
-  return GALGAS_gtlInt::constructor_new (GALGAS_location::constructor_nowhere (HERE),
-                                         GALGAS_lstring::constructor_default (HERE),
-                                         GALGAS_bigint::constructor_zero (HERE)
-                                         COMMA_THERE) ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_gtlInt::GALGAS_gtlInt (const cPtr_gtlInt * inSourcePtr) :
-GALGAS_gtlData (inSourcePtr) {
-  macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlInt) ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_gtlInt GALGAS_gtlInt::constructor_new (const GALGAS_location & inAttribute_where,
-                                              const GALGAS_lstring & inAttribute_meta,
-                                              const GALGAS_bigint & inAttribute_value
-                                              COMMA_LOCATION_ARGS) {
-  GALGAS_gtlInt result ;
-  if (inAttribute_where.isValid () && inAttribute_meta.isValid () && inAttribute_value.isValid ()) {
-    macroMyNew (result.mObjectPtr, cPtr_gtlInt (inAttribute_where, inAttribute_meta, inAttribute_value COMMA_THERE)) ;
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_bigint GALGAS_gtlInt::getter_value (UNUSED_LOCATION_ARGS) const {
-  GALGAS_bigint result ;
-  if (NULL != mObjectPtr) {
-    const cPtr_gtlInt * p = (const cPtr_gtlInt *) mObjectPtr ;
-    macroValidSharedObject (p, cPtr_gtlInt) ;
-    result = p->mAttribute_value ;
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_bigint cPtr_gtlInt::getter_value (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_value ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void GALGAS_gtlInt::setter_setValue (GALGAS_bigint inValue
-                                     COMMA_LOCATION_ARGS) {
-  if (NULL != mObjectPtr) {
-    insulate (THERE) ;
-    cPtr_gtlInt * p = (cPtr_gtlInt *) mObjectPtr ;
-    macroValidSharedObject (p, cPtr_gtlInt) ;
-    p->mAttribute_value = inValue ;
-  }
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void cPtr_gtlInt::setter_setValue (GALGAS_bigint inValue
-                                   COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_value = inValue ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                           Pointer class for @gtlInt class                                           *
-//---------------------------------------------------------------------------------------------------------------------*
-
-cPtr_gtlInt::cPtr_gtlInt (const GALGAS_location & in_where,
-                          const GALGAS_lstring & in_meta,
-                          const GALGAS_bigint & in_value
-                          COMMA_LOCATION_ARGS) :
-cPtr_gtlData (in_where, in_meta COMMA_THERE),
-mAttribute_value (in_value) {
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-const C_galgas_type_descriptor * cPtr_gtlInt::classDescriptor (void) const {
-  return & kTypeDescriptor_GALGAS_gtlInt ;
-}
-
-void cPtr_gtlInt::description (C_String & ioString,
-                               const int32_t inIndentation) const {
-  ioString << "[@gtlInt:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
-  ioString << ", " ;
-  mAttribute_meta.description (ioString, inIndentation+1) ;
-  ioString << ", " ;
-  mAttribute_value.description (ioString, inIndentation+1) ;
-  ioString << "]" ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-acPtr_class * cPtr_gtlInt::duplicate (LOCATION_ARGS) const {
-  acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlInt (mAttribute_where, mAttribute_meta, mAttribute_value COMMA_THERE)) ;
-  return ptr ;
-}
-
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @gtlInt type                                                     *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-const C_galgas_type_descriptor
-kTypeDescriptor_GALGAS_gtlInt ("gtlInt",
-                               & kTypeDescriptor_GALGAS_gtlData) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-const C_galgas_type_descriptor * GALGAS_gtlInt::staticTypeDescriptor (void) const {
-  return & kTypeDescriptor_GALGAS_gtlInt ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-AC_GALGAS_root * GALGAS_gtlInt::clonedObject (void) const {
-  AC_GALGAS_root * result = NULL ;
-  if (isValid ()) {
-    macroMyNew (result, GALGAS_gtlInt (*this)) ;
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_gtlInt GALGAS_gtlInt::extractObject (const GALGAS_object & inObject,
-                                            C_Compiler * inCompiler
-                                            COMMA_LOCATION_ARGS) {
-  GALGAS_gtlInt result ;
-  const GALGAS_gtlInt * p = (const GALGAS_gtlInt *) inObject.embeddedObject () ;
-  if (NULL != p) {
-    if (NULL != dynamic_cast <const GALGAS_gtlInt *> (p)) {
-      result = *p ;
-    }else{
-      inCompiler->castError ("gtlInt", p->dynamicTypeDescriptor () COMMA_THERE) ;
     }  
   }
   return result ;
