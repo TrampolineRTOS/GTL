@@ -40,20 +40,62 @@ func signature
   end
 }
 
+func %once bold        ->@string bold      { bold      = "\u001B[1m"  }
+func %once underline   ->@string underline { underline = "\u001B[4m"  }
+func %once blink       ->@string blink     { blink     = "\u001B[5m"  }
+func %once black       ->@string black     { black     = "\u001B[90m" }
+func %once red         ->@string red       { red       = "\u001B[91m" }
+func %once green       ->@string green     { green     = "\u001B[92m" }
+func %once yellow      ->@string yellow    { yellow    = "\u001B[93m" }
+func %once blue        ->@string blue      { blue      = "\u001B[94m" }
+func %once magenta     ->@string magenta   { magenta   = "\u001B[95m" }
+func %once cyan        ->@string cyan      { cyan      = "\u001B[96m" }
+func %once darkred     ->@string red       { red       = "\u001B[31m" }
+func %once darkgreen   ->@string green     { green     = "\u001B[32m" }
+func %once darkyellow  ->@string yellow    { yellow    = "\u001B[33m" }
+func %once darkblue    ->@string blue      { blue      = "\u001B[34m" }
+func %once darkmagenta ->@string magenta   { magenta   = "\u001B[35m" }
+func %once darkcyan    ->@string cyan      { cyan      = "\u001B[36m" }
+func %once white       ->@string white     { white     = "\u001B[97m" }
+func %once endc        ->@string endc      { endc      = "\u001B[0m"  }
+
 #=============================================================================*
 # @@debuggerContext is used to store the debugging context
 #-----------------------------------------------------------------------------*
 class @debuggerContext
 {
-  @bool debugActive %setter
-  @bool breakOnNext %setter
+  @bool debugActive          %setter
+  @bool breakOnNext          %setter
+  @string promptColor        %setter
+  @string promptFace         %setter
+  @string instructionColor   %setter
+  @string instructionFace    %setter
+  @string outputColor        %setter
+  @string outputFace         %setter
+  @gtlInstructionList doList
+}
+
+setter @debuggerContext appendInstructionToStepDo
+  ?@gtlInstruction instruction
+{
+  doList += !instruction
 }
 
 #-----------------------------------------------------------------------------*
 func defaultDebugSettings
   ->@debuggerContext debugSettings
 {
-  debugSettings = .new { !false !false }
+  debugSettings = .new {
+    !false
+    !false
+    !red()
+    !""
+    !blue()
+    !bold()
+    !darkgreen()
+    !""
+    !.emptyList
+  }
 }
 
 #-----------------------------------------------------------------------------*
@@ -81,6 +123,40 @@ getter @gtlContext breakOnNext
   ->@bool breakOnNext
 {
   breakOnNext = [debuggerContext breakOnNext]
+}
+
+#-----------------------------------------------------------------------------*
+getter @gtlContext promptStyle
+  ->@string result
+{
+  result = [debuggerContext promptColor] + [debuggerContext promptFace]
+}
+
+#-----------------------------------------------------------------------------*
+getter @gtlContext outputStyle
+  ->@string result
+{
+  result = [debuggerContext outputColor] + [debuggerContext outputFace]
+}
+
+#-----------------------------------------------------------------------------*
+setter @gtlContext appendInstructionToStepDo
+  ?@gtlInstruction instruction
+{
+  [!?debuggerContext appendInstructionToStepDo !instruction]
+}
+
+method @gtlContext executeStepDoList
+  ?!@gtlContext context
+  ?!@gtlData    vars
+  ?!@library    lib
+  ?!@string     outputString
+{
+  message [context outputStyle]
+  for (instruction) in [debuggerContext doList] do
+    [instruction execute !?context !?vars !?lib !?outputString]
+  end 
+  message endc()
 }
 
 #=============================================================================*
@@ -553,11 +629,12 @@ getter @gtlInstruction shortLocation
 
 #-----------------------------------------------------------------------------*
 method @gtlInstruction displayWithLocation
+  ?let @debuggerContext context
 {
   message [self shortLocation] + " > "
-  message "\u001B[94m\u001B[1m"
+  message [context instructionColor] + [context instructionFace]
   [self display]
-  message "\u001B[0m\n"
+  message endc() + "\n"
 }
 
 #=============================================================================*
@@ -578,6 +655,96 @@ override method @gtlLetInstruction display
   message "let "
     + [lValue stringRepresentation]
     + " := "
+    + [rValue stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLetAddInstruction display
+{
+  message "let "
+    + [lValue stringRepresentation]
+    + " += "
+    + [rValue stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLetSubstractInstruction display
+{
+  message "let "
+    + [lValue stringRepresentation]
+    + " -= "
+    + [rValue stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLetMultiplyInstruction display
+{
+  message "let "
+    + [lValue stringRepresentation]
+    + " *= "
+    + [rValue stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLetDivideInstruction display
+{
+  message "let "
+    + [lValue stringRepresentation]
+    + " /= "
+    + [rValue stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLetModuloInstruction display
+{
+  message "let "
+    + [lValue stringRepresentation]
+    + " mod= "
+    + [rValue stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLetShiftLeftInstruction display
+{
+  message "let "
+    + [lValue stringRepresentation]
+    + " <<= "
+    + [rValue stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLetShiftRightInstruction display
+{
+  message "let "
+    + [lValue stringRepresentation]
+    + " >>= "
+    + [rValue stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLetAndInstruction display
+{
+  message "let "
+    + [lValue stringRepresentation]
+    + " &= "
+    + [rValue stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLetOrInstruction display
+{
+  message "let "
+    + [lValue stringRepresentation]
+    + " |= "
+    + [rValue stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLetXorInstruction display
+{
+  message "let "
+    + [lValue stringRepresentation]
+    + " ^= "
     + [rValue stringRepresentation]
 }
 
@@ -684,3 +851,32 @@ override getter @gtlDisplayStatementInstruction mayExecuteWithoutError
   may =  [variablePath exists !context !lib]
 }
 
+#-----------------------------------------------------------------------------*
+# Debugger instruction : step
+#-----------------------------------------------------------------------------*
+class @gtlStepInstruction : @gtlInstruction {}
+
+override method @gtlStepInstruction execute
+  ?!@gtlContext unused context
+  ?!@gtlData    unused vars
+  ?!@library    unused lib
+  ?!@string     unused outputString
+{
+}
+
+#-----------------------------------------------------------------------------*
+# Debugger instruction : step do
+#-----------------------------------------------------------------------------*
+class @gtlStepDoInstruction : @gtlInstruction
+{
+  @gtlInstruction instructionToDo
+}
+
+override method @gtlStepDoInstruction execute
+  ?!@gtlContext        context
+  ?!@gtlData    unused vars
+  ?!@library    unused lib
+  ?!@string     unused outputString
+{
+  [!?context appendInstructionToStepDo !instructionToDo]
+}

@@ -306,6 +306,7 @@ rule <gtl_simple_instruction>
   instruction = @gtlVariablesInstruction.new {
     !where
     !signature(!where)
+    !false
   }
 }
 
