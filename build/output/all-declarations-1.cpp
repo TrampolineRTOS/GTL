@@ -6025,19 +6025,9 @@ GALGAS_string function_invokeGTL (GALGAS_gtlString inArgument_rootTemplateFileNa
                                   COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_string result_result ; // Returned variable
   result_result = GALGAS_string::makeEmptyString () ;
-  {
-  inArgument_context.insulate (HERE) ;
-  cPtr_gtlContext * ptr_1096 = (cPtr_gtlContext *) inArgument_context.ptr () ;
-  callExtensionSetter_setDebugger ((cPtr_gtlContext *) ptr_1096, GALGAS_bool (gOption_gtl_5F_options_debug.getter_value ()), inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 37)) ;
-  }
-  {
-  inArgument_context.insulate (HERE) ;
-  cPtr_gtlContext * ptr_1156 = (cPtr_gtlContext *) inArgument_context.ptr () ;
-  callExtensionSetter_setBreakOnNext ((cPtr_gtlContext *) ptr_1156, inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 38)) ;
-  }
-  GALGAS_gtlTemplateInstruction var_rootTemplateInstruction_1256 = GALGAS_gtlTemplateInstruction::constructor_new (GALGAS_location::constructor_here (inCompiler  COMMA_SOURCE_FILE ("gtl_interface.galgas", 42)), GALGAS_string::makeEmptyString (), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 44)), GALGAS_gtlTerminal::constructor_new (GALGAS_location::constructor_here (inCompiler  COMMA_SOURCE_FILE ("gtl_interface.galgas", 46)), inArgument_rootTemplateFileName  COMMA_SOURCE_FILE ("gtl_interface.galgas", 45)), GALGAS_bool (false), GALGAS_bool (true), GALGAS_gtlExpressionList::constructor_emptyList (SOURCE_FILE ("gtl_interface.galgas", 51)), GALGAS_gtlInstructionList::constructor_emptyList (SOURCE_FILE ("gtl_interface.galgas", 52))  COMMA_SOURCE_FILE ("gtl_interface.galgas", 41)) ;
-  GALGAS_library var_lib_1649 = function_emptyLib (inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 56)) ;
-  callExtensionMethod_execute ((const cPtr_gtlTemplateInstruction *) var_rootTemplateInstruction_1256.ptr (), inArgument_context, inArgument_vars, var_lib_1649, result_result, inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 58)) ;
+  GALGAS_gtlTemplateInstruction var_rootTemplateInstruction_1166 = GALGAS_gtlTemplateInstruction::constructor_new (GALGAS_location::constructor_here (inCompiler  COMMA_SOURCE_FILE ("gtl_interface.galgas", 39)), GALGAS_string::makeEmptyString (), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 41)), GALGAS_gtlTerminal::constructor_new (GALGAS_location::constructor_here (inCompiler  COMMA_SOURCE_FILE ("gtl_interface.galgas", 43)), inArgument_rootTemplateFileName  COMMA_SOURCE_FILE ("gtl_interface.galgas", 42)), GALGAS_bool (false), GALGAS_bool (true), GALGAS_gtlExpressionList::constructor_emptyList (SOURCE_FILE ("gtl_interface.galgas", 48)), GALGAS_gtlInstructionList::constructor_emptyList (SOURCE_FILE ("gtl_interface.galgas", 49))  COMMA_SOURCE_FILE ("gtl_interface.galgas", 38)) ;
+  GALGAS_library var_lib_1559 = function_emptyLib (inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 53)) ;
+  callExtensionMethod_execute ((const cPtr_gtlTemplateInstruction *) var_rootTemplateInstruction_1166.ptr (), inArgument_context, inArgument_vars, var_lib_1559, result_result, inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 55)) ;
 //---
   return result_result ;
 }
@@ -6093,7 +6083,7 @@ C_galgas_function_descriptor functionDescriptor_invokeGTL ("invokeGTL",
 GALGAS_gtlData function_emptyVarContainer (C_Compiler * inCompiler
                                            COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_gtlData result_result ; // Returned variable
-  result_result = GALGAS_gtlStruct::constructor_new (GALGAS_location::constructor_nowhere (SOURCE_FILE ("gtl_interface.galgas", 72)), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 72)), GALGAS_gtlVarMap::constructor_emptyMap (SOURCE_FILE ("gtl_interface.galgas", 72))  COMMA_SOURCE_FILE ("gtl_interface.galgas", 72)) ;
+  result_result = GALGAS_gtlStruct::constructor_new (GALGAS_location::constructor_nowhere (SOURCE_FILE ("gtl_interface.galgas", 69)), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 69)), GALGAS_gtlVarMap::constructor_emptyMap (SOURCE_FILE ("gtl_interface.galgas", 69))  COMMA_SOURCE_FILE ("gtl_interface.galgas", 69)) ;
 //---
   return result_result ;
 }
@@ -6134,7 +6124,7 @@ GALGAS_gtlString function_lstringToGtlString (GALGAS_lstring inArgument_input,
                                               C_Compiler * inCompiler
                                               COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_gtlString result_output ; // Returned variable
-  result_output = GALGAS_gtlString::constructor_new (inArgument_input.getter_location (SOURCE_FILE ("gtl_interface.galgas", 82)), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 82)), inArgument_input.getter_string (SOURCE_FILE ("gtl_interface.galgas", 82))  COMMA_SOURCE_FILE ("gtl_interface.galgas", 82)) ;
+  result_output = GALGAS_gtlString::constructor_new (inArgument_input.getter_location (SOURCE_FILE ("gtl_interface.galgas", 79)), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 79)), inArgument_input.getter_string (SOURCE_FILE ("gtl_interface.galgas", 79))  COMMA_SOURCE_FILE ("gtl_interface.galgas", 79)) ;
 //---
   return result_output ;
 }
@@ -6181,7 +6171,7 @@ GALGAS_gtlString function_stringToGtlString (GALGAS_string inArgument_input,
                                              C_Compiler * inCompiler
                                              COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_gtlString result_output ; // Returned variable
-  result_output = GALGAS_gtlString::constructor_new (GALGAS_location::constructor_nowhere (SOURCE_FILE ("gtl_interface.galgas", 92)), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 92)), inArgument_input  COMMA_SOURCE_FILE ("gtl_interface.galgas", 92)) ;
+  result_output = GALGAS_gtlString::constructor_new (GALGAS_location::constructor_nowhere (SOURCE_FILE ("gtl_interface.galgas", 89)), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_interface.galgas", 89)), inArgument_input  COMMA_SOURCE_FILE ("gtl_interface.galgas", 89)) ;
 //---
   return result_output ;
 }
@@ -10035,7 +10025,7 @@ C_galgas_function_descriptor functionDescriptor_endc ("endc",
 GALGAS_debuggerContext function_defaultDebugSettings (C_Compiler * inCompiler
                                                       COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_debuggerContext result_debugSettings ; // Returned variable
-  result_debugSettings = GALGAS_debuggerContext::constructor_new (GALGAS_bool (false), GALGAS_bool (false), function_red (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 134)), GALGAS_string::makeEmptyString (), function_blue (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 136)), function_bold (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 137)), function_darkgreen (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 138)), GALGAS_string::makeEmptyString (), function_darkyellow (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 140)), function_bold (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 141)), GALGAS_gtlInstructionList::constructor_emptyList (SOURCE_FILE ("gtl_debugger.galgas", 142))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 131)) ;
+  result_debugSettings = GALGAS_debuggerContext::constructor_new (GALGAS_bool (gOption_gtl_5F_options_debug.getter_value ()), GALGAS_bool (gOption_gtl_5F_options_debug.getter_value ()), GALGAS_bool (false), function_red (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 136)), GALGAS_string::makeEmptyString (), function_blue (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 138)), function_bold (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 139)), function_darkgreen (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 140)), GALGAS_string::makeEmptyString (), function_darkyellow (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 142)), function_bold (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 143)), GALGAS_gtlInstructionList::constructor_emptyList (SOURCE_FILE ("gtl_debugger.galgas", 144))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 132)) ;
 //---
   return result_debugSettings ;
 }
@@ -10079,6 +10069,9 @@ typeComparisonResult cPtr_debuggerContext::dynamicObjectCompare (const acPtr_cla
   }
   if (kOperandEqual == result) {
     result = mAttribute_breakOnNext.objectCompare (p->mAttribute_breakOnNext) ;
+  }
+  if (kOperandEqual == result) {
+    result = mAttribute_loopOnCommand.objectCompare (p->mAttribute_loopOnCommand) ;
   }
   if (kOperandEqual == result) {
     result = mAttribute_promptColor.objectCompare (p->mAttribute_promptColor) ;
@@ -10140,6 +10133,7 @@ AC_GALGAS_class () {
 GALGAS_debuggerContext GALGAS_debuggerContext::constructor_default (LOCATION_ARGS) {
   return GALGAS_debuggerContext::constructor_new (GALGAS_bool::constructor_default (HERE),
                                                   GALGAS_bool::constructor_default (HERE),
+                                                  GALGAS_bool::constructor_default (HERE),
                                                   GALGAS_string::constructor_default (HERE),
                                                   GALGAS_string::constructor_default (HERE),
                                                   GALGAS_string::constructor_default (HERE),
@@ -10163,6 +10157,7 @@ AC_GALGAS_class (inSourcePtr) {
 
 GALGAS_debuggerContext GALGAS_debuggerContext::constructor_new (const GALGAS_bool & inAttribute_debugActive,
                                                                 const GALGAS_bool & inAttribute_breakOnNext,
+                                                                const GALGAS_bool & inAttribute_loopOnCommand,
                                                                 const GALGAS_string & inAttribute_promptColor,
                                                                 const GALGAS_string & inAttribute_promptFace,
                                                                 const GALGAS_string & inAttribute_instructionColor,
@@ -10174,8 +10169,8 @@ GALGAS_debuggerContext GALGAS_debuggerContext::constructor_new (const GALGAS_boo
                                                                 const GALGAS_gtlInstructionList & inAttribute_doList
                                                                 COMMA_LOCATION_ARGS) {
   GALGAS_debuggerContext result ;
-  if (inAttribute_debugActive.isValid () && inAttribute_breakOnNext.isValid () && inAttribute_promptColor.isValid () && inAttribute_promptFace.isValid () && inAttribute_instructionColor.isValid () && inAttribute_instructionFace.isValid () && inAttribute_outputColor.isValid () && inAttribute_outputFace.isValid () && inAttribute_warningColor.isValid () && inAttribute_warningFace.isValid () && inAttribute_doList.isValid ()) {
-    macroMyNew (result.mObjectPtr, cPtr_debuggerContext (inAttribute_debugActive, inAttribute_breakOnNext, inAttribute_promptColor, inAttribute_promptFace, inAttribute_instructionColor, inAttribute_instructionFace, inAttribute_outputColor, inAttribute_outputFace, inAttribute_warningColor, inAttribute_warningFace, inAttribute_doList COMMA_THERE)) ;
+  if (inAttribute_debugActive.isValid () && inAttribute_breakOnNext.isValid () && inAttribute_loopOnCommand.isValid () && inAttribute_promptColor.isValid () && inAttribute_promptFace.isValid () && inAttribute_instructionColor.isValid () && inAttribute_instructionFace.isValid () && inAttribute_outputColor.isValid () && inAttribute_outputFace.isValid () && inAttribute_warningColor.isValid () && inAttribute_warningFace.isValid () && inAttribute_doList.isValid ()) {
+    macroMyNew (result.mObjectPtr, cPtr_debuggerContext (inAttribute_debugActive, inAttribute_breakOnNext, inAttribute_loopOnCommand, inAttribute_promptColor, inAttribute_promptFace, inAttribute_instructionColor, inAttribute_instructionFace, inAttribute_outputColor, inAttribute_outputFace, inAttribute_warningColor, inAttribute_warningFace, inAttribute_doList COMMA_THERE)) ;
   }
   return result ;
 }
@@ -10214,6 +10209,24 @@ GALGAS_bool GALGAS_debuggerContext::getter_breakOnNext (UNUSED_LOCATION_ARGS) co
 
 GALGAS_bool cPtr_debuggerContext::getter_breakOnNext (UNUSED_LOCATION_ARGS) const {
   return mAttribute_breakOnNext ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_bool GALGAS_debuggerContext::getter_loopOnCommand (UNUSED_LOCATION_ARGS) const {
+  GALGAS_bool result ;
+  if (NULL != mObjectPtr) {
+    const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
+    macroValidSharedObject (p, cPtr_debuggerContext) ;
+    result = p->mAttribute_loopOnCommand ;
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_bool cPtr_debuggerContext::getter_loopOnCommand (UNUSED_LOCATION_ARGS) const {
+  return mAttribute_loopOnCommand ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -10418,6 +10431,25 @@ void cPtr_debuggerContext::setter_setBreakOnNext (GALGAS_bool inValue
 
 //---------------------------------------------------------------------------------------------------------------------*
 
+void GALGAS_debuggerContext::setter_setLoopOnCommand (GALGAS_bool inValue
+                                                      COMMA_LOCATION_ARGS) {
+  if (NULL != mObjectPtr) {
+    insulate (THERE) ;
+    cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
+    macroValidSharedObject (p, cPtr_debuggerContext) ;
+    p->mAttribute_loopOnCommand = inValue ;
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void cPtr_debuggerContext::setter_setLoopOnCommand (GALGAS_bool inValue
+                                                    COMMA_UNUSED_LOCATION_ARGS) {
+  mAttribute_loopOnCommand = inValue ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
 void GALGAS_debuggerContext::setter_setPromptColor (GALGAS_string inValue
                                                     COMMA_LOCATION_ARGS) {
   if (NULL != mObjectPtr) {
@@ -10574,6 +10606,7 @@ void cPtr_debuggerContext::setter_setWarningFace (GALGAS_string inValue
 
 cPtr_debuggerContext::cPtr_debuggerContext (const GALGAS_bool & in_debugActive,
                                             const GALGAS_bool & in_breakOnNext,
+                                            const GALGAS_bool & in_loopOnCommand,
                                             const GALGAS_string & in_promptColor,
                                             const GALGAS_string & in_promptFace,
                                             const GALGAS_string & in_instructionColor,
@@ -10587,6 +10620,7 @@ cPtr_debuggerContext::cPtr_debuggerContext (const GALGAS_bool & in_debugActive,
 acPtr_class (THERE),
 mAttribute_debugActive (in_debugActive),
 mAttribute_breakOnNext (in_breakOnNext),
+mAttribute_loopOnCommand (in_loopOnCommand),
 mAttribute_promptColor (in_promptColor),
 mAttribute_promptFace (in_promptFace),
 mAttribute_instructionColor (in_instructionColor),
@@ -10610,6 +10644,8 @@ void cPtr_debuggerContext::description (C_String & ioString,
   mAttribute_debugActive.description (ioString, inIndentation+1) ;
   ioString << ", " ;
   mAttribute_breakOnNext.description (ioString, inIndentation+1) ;
+  ioString << ", " ;
+  mAttribute_loopOnCommand.description (ioString, inIndentation+1) ;
   ioString << ", " ;
   mAttribute_promptColor.description (ioString, inIndentation+1) ;
   ioString << ", " ;
@@ -10635,7 +10671,7 @@ void cPtr_debuggerContext::description (C_String & ioString,
 
 acPtr_class * cPtr_debuggerContext::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_debuggerContext (mAttribute_debugActive, mAttribute_breakOnNext, mAttribute_promptColor, mAttribute_promptFace, mAttribute_instructionColor, mAttribute_instructionFace, mAttribute_outputColor, mAttribute_outputFace, mAttribute_warningColor, mAttribute_warningFace, mAttribute_doList COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_debuggerContext (mAttribute_debugActive, mAttribute_breakOnNext, mAttribute_loopOnCommand, mAttribute_promptColor, mAttribute_promptFace, mAttribute_instructionColor, mAttribute_instructionFace, mAttribute_outputColor, mAttribute_outputFace, mAttribute_warningColor, mAttribute_warningFace, mAttribute_doList COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -10996,6 +11032,25 @@ void GALGAS_gtlContext::setter_setInputVars (GALGAS_gtlDataList inValue
 void cPtr_gtlContext::setter_setInputVars (GALGAS_gtlDataList inValue
                                            COMMA_UNUSED_LOCATION_ARGS) {
   mAttribute_inputVars = inValue ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void GALGAS_gtlContext::setter_setDebuggerContext (GALGAS_debuggerContext inValue
+                                                   COMMA_LOCATION_ARGS) {
+  if (NULL != mObjectPtr) {
+    insulate (THERE) ;
+    cPtr_gtlContext * p = (cPtr_gtlContext *) mObjectPtr ;
+    macroValidSharedObject (p, cPtr_gtlContext) ;
+    p->mAttribute_debuggerContext = inValue ;
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void cPtr_gtlContext::setter_setDebuggerContext (GALGAS_debuggerContext inValue
+                                                 COMMA_UNUSED_LOCATION_ARGS) {
+  mAttribute_debuggerContext = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*

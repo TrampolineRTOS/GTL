@@ -62,27 +62,26 @@ method @gtlInstructionList execute
       if [context breakOnNext] then
         [instruction displayWithLocation ![context debuggerContext]]
         [context executeStepDoList !?context !?vars !?lib !?outputString]
-        @bool continueLoop = true
+        [!?context setLoopOnCommand !true]
         loop (@uint.max)
           message [context promptStyle] + "gtl> " + endc()
           @string input = @string.newWithStdIn{}
           @gtlInstruction command
+          @uint currentErrorCount = @uint.errorCount
           if [input stringByTrimmingWhiteSpaces] == "" then
             command = @gtlStepInstruction.new { !.here !"" }
           else
             grammar gtl_debugger_grammar on ("%" + input,"Debugger command")
               ?command
           end
-          if command is == @gtlStepInstruction then
-            continueLoop = false
-          else
+          if  @uint.errorCount == currentErrorCount then
             if [command mayExecuteWithoutError !vars !lib] then
               message [context outputStyle]
               [command execute !?context !?vars !?lib !?outputString]
               message endc()
             end
           end
-        while continueLoop do
+        while [context loopOnCommand] do
         end
       end
       [instruction execute !?context !?vars !?lib !?outputString]
@@ -394,6 +393,7 @@ override method @gtlWriteToInstruction execute
   ?!@library       lib
   ?!@string unused outputString
 { 
+  @uint currentErrorCount = @uint.errorCount
   @string fullFileName = [[fileNameExpression eval !vars !lib] string]
   @gtlString fileName = .new{
     !where
@@ -419,9 +419,10 @@ override method @gtlWriteToInstruction execute
     !filePath
     !0
   ]
-  if (@uint.errorCount == 0) then
+  
+  if (currentErrorCount == @uint.errorCount) then
     [instructions execute !?context !?varsCopy !?lib !?result]
-    if (@uint.errorCount == 0) then
+    if (currentErrorCount == @uint.errorCount) then
       if isExecutable then
         @string directory = [fullFileName stringByDeletingLastPathComponent]
         if directory != "" then [directory makeDirectory] end
@@ -493,7 +494,9 @@ override method @gtlTemplateInstruction execute
       [instructionsIfNotFound execute !?context !?localMap !?lib !?outputString]
       vars = [localMap overriddenMap]
     end
-  end 
+  end
+  
+  [!?context setDebuggerContext ![newContext debuggerContext]] 
 }
 
 #-----------------------------------------------------------------------------*

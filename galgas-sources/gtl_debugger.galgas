@@ -66,6 +66,7 @@ class @debuggerContext
 {
   @bool debugActive          %setter
   @bool breakOnNext          %setter
+  @bool loopOnCommand        %setter
   @string promptColor        %setter
   @string promptFace         %setter
   @string instructionColor   %setter
@@ -129,7 +130,8 @@ func defaultDebugSettings
   ->@debuggerContext debugSettings
 {
   debugSettings = .new {
-    !false
+    ![option gtl_options.debug value]
+    ![option gtl_options.debug value]
     !false
     !red()
     !""
@@ -152,8 +154,9 @@ setter @gtlContext setDebugger
 
 #-----------------------------------------------------------------------------*
 setter @gtlContext setBreakOnNext
+  ?@bool break
 {
-  [!?debuggerContext setBreakOnNext !true]
+  [!?debuggerContext setBreakOnNext !break]
 }
 
 #-----------------------------------------------------------------------------*
@@ -216,6 +219,20 @@ method @gtlContext executeStepDoList
     [instruction execute !?context !?vars !?lib !?outputString]
   end 
   message endc()
+}
+
+#-----------------------------------------------------------------------------*
+setter @gtlContext setLoopOnCommand
+  ?@bool loopOnCommand
+{
+  [!?debuggerContext setLoopOnCommand !loopOnCommand]
+}
+
+#-----------------------------------------------------------------------------*
+getter @gtlContext loopOnCommand
+  ->@bool loopOnCommand
+{
+  loopOnCommand = [debuggerContext loopOnCommand]
 }
 
 #=============================================================================*
@@ -378,6 +395,17 @@ override getter @gtlExistsExpression stringRepresentation
   ->@string result
 {
   result = "exists " + [variable stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override getter @gtlExistsDefaultExpression stringRepresentation
+  ->@string result
+{
+  result = "exists "
+    + [variable stringRepresentation]
+    + " default ( "
+    + [defaultValue stringRepresentation]
+    + " )"
 }
 
 #-----------------------------------------------------------------------------*
@@ -901,6 +929,100 @@ override method @gtlEmitInstruction display
   message "! " + [rValue stringRepresentation]
 }
 
+#-----------------------------------------------------------------------------*
+override method @gtlIfStatementInstruction display
+{
+  message "if "
+    + [[thenElsifList conditionAtIndex !0] stringRepresentation]
+    + " then"
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlForStatementInstruction display
+{
+  message "for "
+    + identifier
+    + " in "
+    + [iterable stringRepresentation]
+    + " do"
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlForeachStatementInstruction display
+{
+  message "foreach "
+    + if "" == keyName then "" else [keyName string] + ", " end
+    + variableName
+    + " (" + indexName+ ") "
+    + " in "
+    + [iterable stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlGetColumnInstruction display
+{
+  message "? " + [destVariable stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlLibrariesInstruction display
+{
+  message "libraries"
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlRepeatStatementInstruction display
+{
+  message "repeat "
+  cast limit
+  case == @gtlTerminal term:
+    cast [term value]
+    case == @gtlInt intLimit:
+      if [[intLimit value] uint] != @uint.max then
+        message " (" + [intLimit string] + ")"
+      end
+    end
+  else
+    message " (" + [limit stringRepresentation] + ")"
+  end
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlSetterCallInstruction display
+{
+  message "[!"
+    + [target stringRepresentation]
+    + setterName
+    + if [arguments length] > 0 then
+        ": " + [arguments stringRepresentation] + "]"
+      else
+        "]"
+      end
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlVariablesInstruction display
+{
+  message "variables"
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlWriteToInstruction display
+{
+  message "write to "
+    + if isExecutable then "executable " else "" end
+    + [fileNameExpression stringRepresentation]
+    + " :"
+    
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlTabStatementInstruction display
+{
+  message "tab " + [tabValue stringRepresentation]
+    
+}
+
 #=============================================================================*
 getter @gtlInstruction mayExecuteWithoutError
   ?let @gtlData unused context
@@ -925,11 +1047,12 @@ override getter @gtlDisplayStatementInstruction mayExecuteWithoutError
 class @gtlStepInstruction : @gtlInstruction {}
 
 override method @gtlStepInstruction execute
-  ?!@gtlContext unused context
+  ?!@gtlContext context
   ?!@gtlData    unused vars
   ?!@library    unused lib
   ?!@string     unused outputString
 {
+  [!?context setLoopOnCommand !false]
 }
 
 #-----------------------------------------------------------------------------*
@@ -952,12 +1075,12 @@ override method @gtlDoInstInstruction execute
 #-----------------------------------------------------------------------------*
 # Debugger instruction : do no <num>
 #-----------------------------------------------------------------------------*
-class @gtlDoNoInstruction : @gtlInstruction
+class @gtlDoNotInstruction : @gtlInstruction
 {
   @lbigint numToDelete
 }
 
-override method @gtlDoNoInstruction execute
+override method @gtlDoNotInstruction execute
   ?!@gtlContext        context
   ?!@gtlData    unused vars
   ?!@library    unused lib
@@ -980,4 +1103,21 @@ override method @gtlDoInstruction execute
   ?!@string     unused outputString
 {
   [context listStepDoInstructions]
+}
+
+#-----------------------------------------------------------------------------*
+# Debugger instruction : continue
+#-----------------------------------------------------------------------------*
+class @gtlContinueInstruction : @gtlInstruction
+{
+}
+
+override method @gtlContinueInstruction execute
+  ?!@gtlContext        context
+  ?!@gtlData    unused vars
+  ?!@library    unused lib
+  ?!@string     unused outputString
+{
+  [!?context setBreakOnNext !false]
+  [!?context setLoopOnCommand !false]
 }
