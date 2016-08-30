@@ -59,7 +59,10 @@ method @gtlInstructionList execute
 {
   if [context debugActive] then
     for () in self do
-      if [context breakOnNext] then
+      if [context breakOnNext] | [context breakOn !instruction] then
+        if [context breakOn !instruction] then
+          [!?context setBreakOnNext !true]
+        end
         [instruction displayWithLocation ![context debuggerContext]]
         [context executeStepDoList !?context !?vars !?lib !?outputString]
         [!?context setLoopOnCommand !true]

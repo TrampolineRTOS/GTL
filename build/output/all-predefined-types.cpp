@@ -786,6 +786,49 @@ GALGAS_sint_36__34_ GALGAS_sint_36__34_::extractObject (const GALGAS_object & in
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
+//                                                     @uint type                                                      *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+const C_galgas_type_descriptor
+kTypeDescriptor_GALGAS_uint ("uint",
+                             NULL) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+const C_galgas_type_descriptor * GALGAS_uint::staticTypeDescriptor (void) const {
+  return & kTypeDescriptor_GALGAS_uint ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+AC_GALGAS_root * GALGAS_uint::clonedObject (void) const {
+  AC_GALGAS_root * result = NULL ;
+  if (isValid ()) {
+    macroMyNew (result, GALGAS_uint (*this)) ;
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_uint GALGAS_uint::extractObject (const GALGAS_object & inObject,
+                                        C_Compiler * inCompiler
+                                        COMMA_LOCATION_ARGS) {
+  GALGAS_uint result ;
+  const GALGAS_uint * p = (const GALGAS_uint *) inObject.embeddedObject () ;
+  if (NULL != p) {
+    if (NULL != dynamic_cast <const GALGAS_uint *> (p)) {
+      result = *p ;
+    }else{
+      inCompiler->castError ("uint", p->dynamicTypeDescriptor () COMMA_THERE) ;
+    }  
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
 //                                                  @application type                                                  *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1123,49 +1166,6 @@ GALGAS_timer GALGAS_timer::extractObject (const GALGAS_object & inObject,
       result = *p ;
     }else{
       inCompiler->castError ("timer", p->dynamicTypeDescriptor () COMMA_THERE) ;
-    }  
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                     @uint type                                                      *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-const C_galgas_type_descriptor
-kTypeDescriptor_GALGAS_uint ("uint",
-                             NULL) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-const C_galgas_type_descriptor * GALGAS_uint::staticTypeDescriptor (void) const {
-  return & kTypeDescriptor_GALGAS_uint ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-AC_GALGAS_root * GALGAS_uint::clonedObject (void) const {
-  AC_GALGAS_root * result = NULL ;
-  if (isValid ()) {
-    macroMyNew (result, GALGAS_uint (*this)) ;
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_uint GALGAS_uint::extractObject (const GALGAS_object & inObject,
-                                        C_Compiler * inCompiler
-                                        COMMA_LOCATION_ARGS) {
-  GALGAS_uint result ;
-  const GALGAS_uint * p = (const GALGAS_uint *) inObject.embeddedObject () ;
-  if (NULL != p) {
-    if (NULL != dynamic_cast <const GALGAS_uint *> (p)) {
-      result = *p ;
-    }else{
-      inCompiler->castError ("uint", p->dynamicTypeDescriptor () COMMA_THERE) ;
     }  
   }
   return result ;

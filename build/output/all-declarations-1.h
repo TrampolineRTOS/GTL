@@ -10,6 +10,190 @@
 #include "all-declarations-0.h"
 
 //---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                         Pointer class for @gtlGetter class                                          *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cPtr_gtlGetter : public cPtr_gtlFunction {
+//--- Attributes
+  public : GALGAS_type mAttribute_targetType ;
+
+//--- Constructor
+  public : cPtr_gtlGetter (const GALGAS_location & in_where,
+                           const GALGAS_lstring & in_name,
+                           const GALGAS_gtlArgumentList & in_formalArguments,
+                           const GALGAS_gtlInstructionList & in_instructions,
+                           const GALGAS_lstring & in_returnVariable,
+                           const GALGAS_type & in_targetType
+                           COMMA_LOCATION_ARGS) ;
+
+//--- Duplication
+  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
+
+//--- Attribute accessors
+  public : VIRTUAL_IN_DEBUG GALGAS_type getter_targetType (LOCATION_ARGS) const ;
+//--- Description
+  public : virtual void description (C_String & ioString,
+                                     const int32_t inIndentation) const ;
+
+  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
+
+  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
+
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                         Pointer class for @gtlSetter class                                          *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cPtr_gtlSetter : public cPtr_gtlExecutableEntity {
+//--- Attributes
+  public : GALGAS_type mAttribute_targetType ;
+
+//--- Constructor
+  public : cPtr_gtlSetter (const GALGAS_location & in_where,
+                           const GALGAS_lstring & in_name,
+                           const GALGAS_gtlArgumentList & in_formalArguments,
+                           const GALGAS_gtlInstructionList & in_instructions,
+                           const GALGAS_type & in_targetType
+                           COMMA_LOCATION_ARGS) ;
+
+//--- Duplication
+  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
+
+//--- Attribute accessors
+  public : VIRTUAL_IN_DEBUG GALGAS_type getter_targetType (LOCATION_ARGS) const ;
+//--- Description
+  public : virtual void description (C_String & ioString,
+                                     const int32_t inIndentation) const ;
+
+  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
+
+  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
+
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                       Extension getter '@gtlGetter typedName'                                       *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef class GALGAS_lstring (*enterExtensionGetter_gtlGetter_typedName) (const class cPtr_gtlGetter * inObject,
+                                                                          C_Compiler * inCompiler
+                                                                          COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionGetter_typedName (const int32_t inClassIndex,
+                                     enterExtensionGetter_gtlGetter_typedName inGetter) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_lstring callExtensionGetter_typedName (const cPtr_gtlGetter * inObject,
+                                                    class C_Compiler * inCompiler
+                                                    COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                       Extension getter '@gtlSetter typedName'                                       *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef class GALGAS_lstring (*enterExtensionGetter_gtlSetter_typedName) (const class cPtr_gtlSetter * inObject,
+                                                                          C_Compiler * inCompiler
+                                                                          COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionGetter_typedName (const int32_t inClassIndex,
+                                     enterExtensionGetter_gtlSetter_typedName inGetter) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_lstring callExtensionGetter_typedName (const cPtr_gtlSetter * inObject,
+                                                    class C_Compiler * inCompiler
+                                                    COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                       Extension setter '@library putFunction'                                       *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionSetterSignature_library_putFunction) (class cPtr_library * inObject,
+                                                              const class GALGAS_lstring constinArgument0,
+                                                              const class GALGAS_gtlFunction constinArgument1,
+                                                              class C_Compiler * inCompiler
+                                                              COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionSetter_putFunction (const int32_t inClassIndex,
+                                       extensionSetterSignature_library_putFunction inModifier) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionSetter_putFunction (class cPtr_library * inObject,
+                                      const GALGAS_lstring constin_name,
+                                      const GALGAS_gtlFunction constin_aFunction,
+                                      C_Compiler * inCompiler
+                                      COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                        Extension setter '@library putGetter'                                        *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionSetterSignature_library_putGetter) (class cPtr_library * inObject,
+                                                            const class GALGAS_lstring constinArgument0,
+                                                            const class GALGAS_gtlGetter constinArgument1,
+                                                            class C_Compiler * inCompiler
+                                                            COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionSetter_putGetter (const int32_t inClassIndex,
+                                     extensionSetterSignature_library_putGetter inModifier) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionSetter_putGetter (class cPtr_library * inObject,
+                                    const GALGAS_lstring constin_name,
+                                    const GALGAS_gtlGetter constin_aGetter,
+                                    C_Compiler * inCompiler
+                                    COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                        Extension setter '@library putSetter'                                        *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionSetterSignature_library_putSetter) (class cPtr_library * inObject,
+                                                            const class GALGAS_lstring constinArgument0,
+                                                            const class GALGAS_gtlSetter constinArgument1,
+                                                            class C_Compiler * inCompiler
+                                                            COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionSetter_putSetter (const int32_t inClassIndex,
+                                     extensionSetterSignature_library_putSetter inModifier) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionSetter_putSetter (class cPtr_library * inObject,
+                                    const GALGAS_lstring constin_name,
+                                    const GALGAS_gtlSetter constin_aSetter,
+                                    C_Compiler * inCompiler
+                                    COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
 //  GRAMMAR gtl_grammar
 //---------------------------------------------------------------------------------------------------------------------*
 
