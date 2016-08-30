@@ -433,24 +433,45 @@ void callExtensionMethod_executeStepDoList (const class cPtr_gtlContext * inObje
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
-//                               Extension method '@gtlInstruction displayWithLocation'                                *
+//                                  Extension setter '@gtlContext popInstructionList'                                  *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
-typedef void (*extensionMethodSignature_gtlInstruction_displayWithLocation) (const class cPtr_gtlInstruction * inObject,
-                                                                             const class GALGAS_debuggerContext constinArgument0,
-                                                                             class C_Compiler * inCompiler
-                                                                             COMMA_LOCATION_ARGS) ;
+typedef void (*extensionSetterSignature_gtlContext_popInstructionList) (class cPtr_gtlContext * inObject,
+                                                                        class C_Compiler * inCompiler
+                                                                        COMMA_LOCATION_ARGS) ;
 
 //---------------------------------------------------------------------------------------------------------------------*
 
-void enterExtensionMethod_displayWithLocation (const int32_t inClassIndex,
-                                               extensionMethodSignature_gtlInstruction_displayWithLocation inMethod) ;
+void enterExtensionSetter_popInstructionList (const int32_t inClassIndex,
+                                              extensionSetterSignature_gtlContext_popInstructionList inModifier) ;
 
 //---------------------------------------------------------------------------------------------------------------------*
 
-void callExtensionMethod_displayWithLocation (const class cPtr_gtlInstruction * inObject,
-                                              const GALGAS_debuggerContext constin_context,
+void callExtensionSetter_popInstructionList (class cPtr_gtlContext * inObject,
+                                             C_Compiler * inCompiler
+                                             COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                 Extension setter '@gtlContext pushInstructionList'                                  *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionSetterSignature_gtlContext_pushInstructionList) (class cPtr_gtlContext * inObject,
+                                                                         const class GALGAS_gtlInstructionList constinArgument0,
+                                                                         class C_Compiler * inCompiler
+                                                                         COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionSetter_pushInstructionList (const int32_t inClassIndex,
+                                               extensionSetterSignature_gtlContext_pushInstructionList inModifier) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionSetter_pushInstructionList (class cPtr_gtlContext * inObject,
+                                              const GALGAS_gtlInstructionList constin_instructionList,
                                               C_Compiler * inCompiler
                                               COMMA_LOCATION_ARGS) ;
 
@@ -499,6 +520,29 @@ void callExtensionSetter_setLoopOnCommand (class cPtr_gtlContext * inObject,
                                            GALGAS_bool in_loopOnCommand,
                                            C_Compiler * inCompiler
                                            COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                               Extension setter '@gtlContext setNextInstructionIndex'                                *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionSetterSignature_gtlContext_setNextInstructionIndex) (class cPtr_gtlContext * inObject,
+                                                                             class GALGAS_uint inArgument0,
+                                                                             class C_Compiler * inCompiler
+                                                                             COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionSetter_setNextInstructionIndex (const int32_t inClassIndex,
+                                                   extensionSetterSignature_gtlContext_setNextInstructionIndex inModifier) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionSetter_setNextInstructionIndex (class cPtr_gtlContext * inObject,
+                                                  GALGAS_uint in_index,
+                                                  C_Compiler * inCompiler
+                                                  COMMA_LOCATION_ARGS) ;
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
@@ -1140,6 +1184,29 @@ void enterExtensionGetter_shortLocation (const int32_t inClassIndex,
 class GALGAS_string callExtensionGetter_shortLocation (const cPtr_gtlInstruction * inObject,
                                                        class C_Compiler * inCompiler
                                                        COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                               Extension method '@gtlInstruction displayWithLocation'                                *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionMethodSignature_gtlInstruction_displayWithLocation) (const class cPtr_gtlInstruction * inObject,
+                                                                             const class GALGAS_debuggerContext constinArgument0,
+                                                                             class C_Compiler * inCompiler
+                                                                             COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionMethod_displayWithLocation (const int32_t inClassIndex,
+                                               extensionMethodSignature_gtlInstruction_displayWithLocation inMethod) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionMethod_displayWithLocation (const class cPtr_gtlInstruction * inObject,
+                                              const GALGAS_debuggerContext constin_context,
+                                              C_Compiler * inCompiler
+                                              COMMA_LOCATION_ARGS) ;
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
@@ -2739,6 +2806,29 @@ void callExtensionMethod_listBreakpoints (const class cPtr_debuggerContext * inO
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
+//                                Extension setter '@debuggerContext deleteBreakpoint'                                 *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionSetterSignature_debuggerContext_deleteBreakpoint) (class cPtr_debuggerContext * inObject,
+                                                                           const class GALGAS_lbigint constinArgument0,
+                                                                           class C_Compiler * inCompiler
+                                                                           COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionSetter_deleteBreakpoint (const int32_t inClassIndex,
+                                            extensionSetterSignature_debuggerContext_deleteBreakpoint inModifier) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionSetter_deleteBreakpoint (class cPtr_debuggerContext * inObject,
+                                           const GALGAS_lbigint constin_numToDelete,
+                                           C_Compiler * inCompiler
+                                           COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
 //                                     Extension getter '@debuggerContext breakOn'                                     *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
@@ -2762,6 +2852,71 @@ class GALGAS_bool callExtensionGetter_breakOn (const cPtr_debuggerContext * inOb
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
+//                                    Extension method '@debuggerContext hereWeAre'                                    *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionMethodSignature_debuggerContext_hereWeAre) (const class cPtr_debuggerContext * inObject,
+                                                                    class C_Compiler * inCompiler
+                                                                    COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionMethod_hereWeAre (const int32_t inClassIndex,
+                                     extensionMethodSignature_debuggerContext_hereWeAre inMethod) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionMethod_hereWeAre (const class cPtr_debuggerContext * inObject,
+                                    C_Compiler * inCompiler
+                                    COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                               Extension setter '@debuggerContext pushInstructionList'                               *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionSetterSignature_debuggerContext_pushInstructionList) (class cPtr_debuggerContext * inObject,
+                                                                              const class GALGAS_gtlInstructionList constinArgument0,
+                                                                              class C_Compiler * inCompiler
+                                                                              COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionSetter_pushInstructionList (const int32_t inClassIndex,
+                                               extensionSetterSignature_debuggerContext_pushInstructionList inModifier) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionSetter_pushInstructionList (class cPtr_debuggerContext * inObject,
+                                              const GALGAS_gtlInstructionList constin_instructions,
+                                              C_Compiler * inCompiler
+                                              COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                               Extension setter '@debuggerContext popInstructionList'                                *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+typedef void (*extensionSetterSignature_debuggerContext_popInstructionList) (class cPtr_debuggerContext * inObject,
+                                                                             class C_Compiler * inCompiler
+                                                                             COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void enterExtensionSetter_popInstructionList (const int32_t inClassIndex,
+                                              extensionSetterSignature_debuggerContext_popInstructionList inModifier) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void callExtensionSetter_popInstructionList (class cPtr_debuggerContext * inObject,
+                                             C_Compiler * inCompiler
+                                             COMMA_LOCATION_ARGS) ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
 //                              Abstract extension getter '@gtlData stringRepresentation'                              *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
@@ -2780,126 +2935,5 @@ void enterExtensionGetter_stringRepresentation (const int32_t inClassIndex,
 class GALGAS_string callExtensionGetter_stringRepresentation (const class cPtr_gtlData * inObject,
                                                               C_Compiler * inCompiler
                                                               COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                   Extension setter '@gtlContext addInputVariable'                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-typedef void (*extensionSetterSignature_gtlContext_addInputVariable) (class cPtr_gtlContext * inObject,
-                                                                      class GALGAS_gtlData inArgument0,
-                                                                      class C_Compiler * inCompiler
-                                                                      COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void enterExtensionSetter_addInputVariable (const int32_t inClassIndex,
-                                            extensionSetterSignature_gtlContext_addInputVariable inModifier) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void callExtensionSetter_addInputVariable (class cPtr_gtlContext * inObject,
-                                           GALGAS_gtlData in_inputVariable,
-                                           C_Compiler * inCompiler
-                                           COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                   Extension setter '@gtlContext popFirstInputArg'                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-typedef void (*extensionSetterSignature_gtlContext_popFirstInputArg) (class cPtr_gtlContext * inObject,
-                                                                      class GALGAS_location inArgument0,
-                                                                      class GALGAS_gtlData & outArgument1,
-                                                                      class C_Compiler * inCompiler
-                                                                      COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void enterExtensionSetter_popFirstInputArg (const int32_t inClassIndex,
-                                            extensionSetterSignature_gtlContext_popFirstInputArg inModifier) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void callExtensionSetter_popFirstInputArg (class cPtr_gtlContext * inObject,
-                                           GALGAS_location in_where,
-                                           GALGAS_gtlData & out_result,
-                                           C_Compiler * inCompiler
-                                           COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                      Extension getter '@gtlContext fullPrefix'                                      *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-typedef class GALGAS_lstring (*enterExtensionGetter_gtlContext_fullPrefix) (const class cPtr_gtlContext * inObject,
-                                                                            const class GALGAS_gtlData & constinArgument0,
-                                                                            C_Compiler * inCompiler
-                                                                            COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void enterExtensionGetter_fullPrefix (const int32_t inClassIndex,
-                                      enterExtensionGetter_gtlContext_fullPrefix inGetter) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-class GALGAS_lstring callExtensionGetter_fullPrefix (const cPtr_gtlContext * inObject,
-                                                     const GALGAS_gtlData & constin_vars,
-                                                     class C_Compiler * inCompiler
-                                                     COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                 Extension getter '@gtlContext fullTemplateFileName'                                 *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-typedef class GALGAS_lstring (*enterExtensionGetter_gtlContext_fullTemplateFileName) (const class cPtr_gtlContext * inObject,
-                                                                                      class GALGAS_gtlContext inArgument0,
-                                                                                      class GALGAS_gtlData inArgument1,
-                                                                                      class GALGAS_lstring inArgument2,
-                                                                                      C_Compiler * inCompiler
-                                                                                      COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void enterExtensionGetter_fullTemplateFileName (const int32_t inClassIndex,
-                                                enterExtensionGetter_gtlContext_fullTemplateFileName inGetter) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-class GALGAS_lstring callExtensionGetter_fullTemplateFileName (const cPtr_gtlContext * inObject,
-                                                               GALGAS_gtlContext in_context,
-                                                               GALGAS_gtlData in_vars,
-                                                               GALGAS_lstring in_simpleName,
-                                                               class C_Compiler * inCompiler
-                                                               COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                     Extension setter '@gtlContext setDebugger'                                      *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-typedef void (*extensionSetterSignature_gtlContext_setDebugger) (class cPtr_gtlContext * inObject,
-                                                                 class GALGAS_bool inArgument0,
-                                                                 class C_Compiler * inCompiler
-                                                                 COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void enterExtensionSetter_setDebugger (const int32_t inClassIndex,
-                                       extensionSetterSignature_gtlContext_setDebugger inModifier) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void callExtensionSetter_setDebugger (class cPtr_gtlContext * inObject,
-                                      GALGAS_bool in_debugOn,
-                                      C_Compiler * inCompiler
-                                      COMMA_LOCATION_ARGS) ;
 
 #endif
