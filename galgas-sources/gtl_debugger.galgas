@@ -64,21 +64,22 @@ func %once endc        ->@string endc      { endc      = "\u001B[0m"  }
 #-----------------------------------------------------------------------------*
 class @debuggerContext
 {
-  @bool                           debugActive          %setter
-  @bool                           breakOnNext          %setter
-  @bool                           loopOnCommand        %setter
-  @string                         promptColor          %setter
-  @string                         promptFace           %setter
-  @string                         instructionColor     %setter
-  @string                         instructionFace      %setter
-  @string                         outputColor          %setter
-  @string                         outputFace           %setter
-  @string                         warningColor         %setter
-  @string                         warningFace          %setter
+  @bool                           debugActive            %setter
+  @bool                           breakOnNext            %setter
+  @bool                           loopOnCommand          %setter
+  @string                         promptColor            %setter
+  @string                         promptFace             %setter
+  @string                         instructionColor       %setter
+  @string                         instructionFace        %setter
+  @string                         outputColor            %setter
+  @string                         outputFace             %setter
+  @string                         warningColor           %setter
+  @string                         warningFace            %setter
+  @bool                           executeDebuggerCommand %setter
   @gtlInstructionList             doList
   @gtlBreakpointList              breakpoints
-  @uint                           instructionWindow    %setter
-  @uint                           nextInstructionIndex %setter
+  @gtlExpressionList              watchpoints
+  @uint                           nextInstructionIndex   %setter
   @gtlInstructionList             instructionList      
   @gtlInstructionListContextStack contextStack
 }
@@ -188,6 +189,53 @@ setter @debuggerContext deleteBreakpoint
 }
 
 #-----------------------------------------------------------------------------*
+setter @debuggerContext setWatchpoint
+  ?let @gtlExpression watchExpression
+{
+  watchpoints += !watchExpression
+}
+
+#-----------------------------------------------------------------------------*
+method @debuggerContext listWatchpoints
+{
+  if [watchpoints length] > 0 then
+    message "Watchpoints:\n"
+    for (wp) in watchpoints do (index)
+      message [[index string] stringByLeftPadding !4 !' '] + ": "
+      message instructionColor + instructionFace
+      message [wp stringRepresentation]
+      message "\n"
+      message outputColor + outputFace
+    end  
+  else
+    message "No Watchpoint\n"
+  end
+}
+
+#-----------------------------------------------------------------------------*
+setter @debuggerContext deleteWatchpoint
+  ?let @lbigint numToDelete
+{
+  if [numToDelete bigint] <= [@uint.max bigint] then
+    @uint numToDeleteUInt = [numToDelete uint]
+    if numToDeleteUInt < [watchpoints length] then
+      [!?watchpoints removeAtIndex ?@gtlExpression wp !numToDeleteUInt]
+      message "Watchpoint: "
+      message instructionColor + instructionFace
+      message [wp stringRepresentation]
+      message outputColor + outputFace
+      message " deleted\n"
+    else
+      message warningColor + warningFace
+      message "no watchpoint at this index: " + [numToDelete bigint] + "\n"
+    end
+  else
+    message warningColor + warningFace
+    message "no watchpoint at this index: " + [numToDelete bigint] + "\n"
+  end
+}
+
+#-----------------------------------------------------------------------------*
 getter @debuggerContext breakOn
   ?let @gtlInstruction instruction
   ->@bool breakOn
@@ -201,7 +249,32 @@ getter @debuggerContext breakOn
 }
 
 #-----------------------------------------------------------------------------*
+getter @debuggerContext watchOn
+  ?let @gtlData    vars
+  ?let @library    lib
+  ->@bool watchOn
+{
+  watchOn = false
+  for (wp) in watchpoints do
+    @gtlData watchResult = [wp eval !vars !lib]
+    if watchResult is == @gtlBool then
+      @bool matchWatch = [watchResult as @gtlBool value]
+      if matchWatch then
+        message outputColor + outputFace
+        message "match "
+        message instructionColor + instructionFace
+        message [wp stringRepresentation]
+        message "\n"
+        message endc()
+        watchOn = true
+      end
+    end 
+  end
+}
+
+#-----------------------------------------------------------------------------*
 method @debuggerContext hereWeAre
+  ?let @uint window
 {
   @uint indentation = 0
   for (levelIndex levelList) in [contextStack subListFromIndex !1] do
@@ -214,13 +287,13 @@ method @debuggerContext hereWeAre
   @uint startIndex
   @uint displayLength
 
-  if nextInstructionIndex >= instructionWindow then
-    startIndex = nextInstructionIndex - instructionWindow
+  if nextInstructionIndex >= window then
+    startIndex = nextInstructionIndex - window
   else
     startIndex = 0
   end
-  if startIndex + (instructionWindow * 2) < [instructionList length] then
-    displayLength = 2 * instructionWindow
+  if startIndex + (window * 2) < [instructionList length] then
+    displayLength = 2 * window
   else
     displayLength = [instructionList length] - startIndex
   end
@@ -271,9 +344,10 @@ func defaultDebugSettings
     !""
     !darkyellow()
     !bold()
+    !false
     !.emptyList
     !.emptyList
-    !5
+    !.emptyList
     !0
     !.emptyList
     !.emptyList
@@ -317,6 +391,15 @@ getter @gtlContext breakOn
 }
 
 #-----------------------------------------------------------------------------*
+getter @gtlContext watchOn
+  ?let @gtlData    vars
+  ?let @library    lib
+  ->@bool watchOn
+{
+  watchOn = [debuggerContext watchOn !vars !lib]
+}
+
+#-----------------------------------------------------------------------------*
 getter @gtlContext promptStyle
   ->@string result
 {
@@ -351,7 +434,7 @@ method @gtlContext listStepDoInstructions
 }
 
 #-----------------------------------------------------------------------------*
-method @gtlContext executeStepDoList
+setter @gtlContext executeStepDoList
   ?!@gtlContext context
   ?!@gtlData    vars
   ?!@library    lib
@@ -386,6 +469,26 @@ setter @gtlContext deleteBreakpoint
 }
 
 #-----------------------------------------------------------------------------*
+setter @gtlContext setWatchpoint
+  ?let @gtlExpression watchExpression
+{
+  [!?debuggerContext setWatchpoint !watchExpression]
+}
+
+#-----------------------------------------------------------------------------*
+method @gtlContext listWatchpoints
+{
+  [debuggerContext listWatchpoints] 
+}
+
+#-----------------------------------------------------------------------------*
+setter @gtlContext deleteWatchpoint
+  ?let @lbigint numToDelete
+{
+  [!?debuggerContext deleteWatchpoint !numToDelete]
+}
+
+#-----------------------------------------------------------------------------*
 setter @gtlContext setLoopOnCommand
   ?@bool loopOnCommand
 {
@@ -401,8 +504,9 @@ getter @gtlContext loopOnCommand
 
 #-----------------------------------------------------------------------------*
 method @gtlContext hereWeAre
+  ?let @uint window
 {
-  [debuggerContext hereWeAre]
+  [debuggerContext hereWeAre !window]
 }
 
 #-----------------------------------------------------------------------------*
@@ -423,6 +527,13 @@ setter @gtlContext setNextInstructionIndex
   ?@uint index
 {
   [!?debuggerContext setNextInstructionIndex !index]
+}
+
+#-----------------------------------------------------------------------------*
+setter @gtlContext setExecuteDebuggerCommand
+  ?@bool debuggerCommand
+{
+  [!?debuggerContext setExecuteDebuggerCommand !debuggerCommand]
 }
 
 #=============================================================================*
@@ -1398,19 +1509,70 @@ override method @gtlBreakpointDeleteInstruction execute
 }
 
 #-----------------------------------------------------------------------------*
-# Debugger instruction : here
+# Debugger instruction : add a watchpoint
 #-----------------------------------------------------------------------------*
-class @gtlHereInstruction : @gtlInstruction
+class @gtlWatchpointInstruction : @gtlInstruction
 {
+  @gtlExpression watchExpression
 }
 
-override method @gtlHereInstruction execute
+override method @gtlWatchpointInstruction execute
   ?!@gtlContext        context
   ?!@gtlData    unused vars
   ?!@library    unused lib
   ?!@string     unused outputString
 {
-  [context hereWeAre]
+  [!?context setWatchpoint !watchExpression]
+}
+
+#-----------------------------------------------------------------------------*
+# Debugger instruction : list breakpoints
+#-----------------------------------------------------------------------------*
+class @gtlWatchpointListInstruction : @gtlInstruction
+{
+}
+
+override method @gtlWatchpointListInstruction execute
+  ?!@gtlContext        context
+  ?!@gtlData    unused vars
+  ?!@library    unused lib
+  ?!@string     unused outputString
+{
+  [context listWatchpoints]
+}
+
+#-----------------------------------------------------------------------------*
+# Debugger instruction : delete breakpoint
+#-----------------------------------------------------------------------------*
+class @gtlWatchpointDeleteInstruction : @gtlInstruction
+{
+  @lbigint numToDelete
+}
+
+override method @gtlWatchpointDeleteInstruction execute
+  ?!@gtlContext        context
+  ?!@gtlData    unused vars
+  ?!@library    unused lib
+  ?!@string     unused outputString
+{
+  [!?context deleteWatchpoint !numToDelete]
+}
+
+#-----------------------------------------------------------------------------*
+# Debugger instruction : here
+#-----------------------------------------------------------------------------*
+class @gtlListInstruction : @gtlInstruction
+{
+  @uint window
+}
+
+override method @gtlListInstruction execute
+  ?!@gtlContext        context
+  ?!@gtlData    unused vars
+  ?!@library    unused lib
+  ?!@string     unused outputString
+{
+  [context hereWeAre !window]
 }
 
 #-----------------------------------------------------------------------------*
@@ -1427,7 +1589,8 @@ override method @gtlHelpInstruction execute
   ?!@string     unused outputString
 {
   message "Available commands:\n"
-  message "  break <filename>:<line>        : set a breakpoint\n"
+  message "  break <filename>:<line>        : set a breakpoint at <line> in file <filename>\n"
+  message "  break <line>                   : set a breakpoint at <line> in the current file\n"
   message "  break                          : lists the breakpoints\n"
   message "  break not <num>                : delete breakpoint at index <num>\n"
   message "  cont                           : continue execution until the next breakpoint or the end\n"
@@ -1435,7 +1598,7 @@ override method @gtlHelpInstruction execute
   message "  do <command>                   : do a command each time a step is done\n"
   message "  do                             : list the do commands\n"
   message "  do not <num>                   : delete the do command at index <num>\n"
-  message "  here                           : lists instructions +/- 5 around current one\n"
+  message "  list                           : lists instructions +/- 5 around current one\n"
   message "  let <variable> := <expression> : compute <expression> and set <variable> to the result\n"
   message "  print <expression>             : prints the <expression>\n"
   message "  step                           : step one instruction\n"

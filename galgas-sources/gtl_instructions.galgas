@@ -62,11 +62,14 @@ method @gtlInstructionList execute
     @uint lastErrorCount = .errorCount
     for () in self do (index)
       @bool errorCountIncreased = (@uint.errorCount - lastErrorCount) > 0
-      if [context breakOnNext] | [context breakOn !instruction] | errorCountIncreased then
+      if [context breakOnNext] | [context breakOn !instruction]
+         | [context watchOn !vars !lib] | errorCountIncreased then
         [!?context setBreakOnNext !true]
         [!?context setNextInstructionIndex !index]
 #        [instruction displayWithLocation ![context debuggerContext]]
-        [context executeStepDoList !?context !?vars !?lib !?outputString]
+        [!?context setDebugger !false]
+        [!?context executeStepDoList !?context !?vars !?lib !?outputString]
+        [!?context setDebugger !true]
         [!?context setLoopOnCommand !true]
         loop (@uint.max)
           message [context promptStyle] + "gtl> " + endc()
@@ -76,13 +79,15 @@ method @gtlInstructionList execute
           if [input stringByTrimmingWhiteSpaces] == "" then
             command = @gtlStepInstruction.new { !.here !"" }
           else
-            grammar gtl_debugger_grammar on ("%" + input,"Debugger command")
+            grammar gtl_debugger_grammar on (input,"Debugger command")
               ?command
           end
           if  @uint.errorCount == currentErrorCount then
             if [command mayExecuteWithoutError !vars !lib] then
               message [context outputStyle]
+              [!?context setDebugger !false]
               [command execute !?context !?vars !?lib !?outputString]
+              [!?context setDebugger !true]
               message endc()
             end
           end

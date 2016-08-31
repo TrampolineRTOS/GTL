@@ -3575,7 +3575,7 @@ override getter @gtlList performGetter
       }
     end
   elsif "mapBy"                  == methodName then
-    argumentsCheck(!methodName !stringArgument() !arguments)
+    argumentsCheck(!methodName !anyArgument() !arguments)
     @lstring key = [[arguments dataAtIndex !0] lstring]
     @gtlVarMap resultMap = .emptyMap
     for (item) in [self value] do (index)
