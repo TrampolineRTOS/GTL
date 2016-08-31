@@ -6354,7 +6354,10 @@ static void extensionMethod_gtlHelpInstruction_execute (const cPtr_gtlInstructio
   inCompiler->printMessage (GALGAS_string ("  step                           : step one instruction\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1604)) ;
   inCompiler->printMessage (GALGAS_string ("  unlet <variable>               : delete <variable>\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1605)) ;
   inCompiler->printMessage (GALGAS_string ("  variables                      : display all variables in scope\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1606)) ;
-  inCompiler->printMessage (GALGAS_string ("  <return>                       : step one instruction\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1607)) ;
+  inCompiler->printMessage (GALGAS_string ("  watch <expression>             : set a watchpoint mathing the boolean <expression>\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1607)) ;
+  inCompiler->printMessage (GALGAS_string ("  watch                          : lists the watchpoints\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1608)) ;
+  inCompiler->printMessage (GALGAS_string ("  watch not <num>                : delete watchpoint at index <num>\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1609)) ;
+  inCompiler->printMessage (GALGAS_string ("  <return>                       : step one instruction\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1610)) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*

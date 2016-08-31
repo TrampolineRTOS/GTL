@@ -1604,5 +1604,8 @@ override method @gtlHelpInstruction execute
   message "  step                           : step one instruction\n"
   message "  unlet <variable>               : delete <variable>\n"
   message "  variables                      : display all variables in scope\n"
+  message "  watch <expression>             : set a watchpoint mathing the boolean <expression>\n"
+  message "  watch                          : lists the watchpoints\n"
+  message "  watch not <num>                : delete watchpoint at index <num>\n"
   message "  <return>                       : step one instruction\n"
 }
