@@ -73,7 +73,8 @@ method @gtlInstructionList execute
         [!?context setLoopOnCommand !true]
         loop (@uint.max)
           message [context promptStyle] + "gtl> " + endc()
-          @string input = @string.newWithStdIn{}
+          [!?context getCommand ?@string input]
+#          @string input = @string.newWithStdIn{}
           @gtlInstruction command
           @uint currentErrorCount = @uint.errorCount
           if [input stringByTrimmingWhiteSpaces] == "" then

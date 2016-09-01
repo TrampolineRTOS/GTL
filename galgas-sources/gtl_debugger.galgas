@@ -82,6 +82,7 @@ class @debuggerContext
   @uint                           nextInstructionIndex   %setter
   @gtlInstructionList             instructionList      
   @gtlInstructionListContextStack contextStack
+  @debugCommandInput              commandInput
 }
 
 #-----------------------------------------------------------------------------*
@@ -329,6 +330,13 @@ setter @debuggerContext popInstructionList
 }
 
 #-----------------------------------------------------------------------------*
+setter @debuggerContext getCommand
+  !@string command
+{
+  [!?commandInput getCommand ?command]
+}
+
+#-----------------------------------------------------------------------------*
 func defaultDebugSettings
   ->@debuggerContext debugSettings
 {
@@ -351,6 +359,7 @@ func defaultDebugSettings
     !0
     !.emptyList
     !.emptyList
+    !.new { !.emptyList }
   }
 }
 
@@ -534,6 +543,13 @@ setter @gtlContext setExecuteDebuggerCommand
   ?@bool debuggerCommand
 {
   [!?debuggerContext setExecuteDebuggerCommand !debuggerCommand]
+}
+
+#-----------------------------------------------------------------------------*
+setter @gtlContext getCommand
+  !@string command
+{
+  [!?debuggerContext getCommand ?command]
 }
 
 #=============================================================================*
@@ -1604,7 +1620,7 @@ override method @gtlHelpInstruction execute
   message "  step                           : step one instruction\n"
   message "  unlet <variable>               : delete <variable>\n"
   message "  variables                      : display all variables in scope\n"
-  message "  watch <expression>             : set a watchpoint mathing the boolean <expression>\n"
+  message "  watch (<expression>)           : set a watchpoint matching the boolean <expression>\n"
   message "  watch                          : lists the watchpoints\n"
   message "  watch not <num>                : delete watchpoint at index <num>\n"
   message "  <return>                       : step one instruction\n"
