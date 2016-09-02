@@ -1575,7 +1575,7 @@ override method @gtlWatchpointDeleteInstruction execute
 }
 
 #-----------------------------------------------------------------------------*
-# Debugger instruction : here
+# Debugger instruction : list
 #-----------------------------------------------------------------------------*
 class @gtlListInstruction : @gtlInstruction
 {
@@ -1589,6 +1589,22 @@ override method @gtlListInstruction execute
   ?!@string     unused outputString
 {
   [context hereWeAre !window]
+}
+
+#-----------------------------------------------------------------------------*
+# Debugger instruction : hist
+#-----------------------------------------------------------------------------*
+class @gtlHistoryInstruction : @gtlInstruction
+{
+}
+
+override method @gtlHistoryInstruction execute
+  ?!@gtlContext        context
+  ?!@gtlData    unused vars
+  ?!@library    unused lib
+  ?!@string     unused outputString
+{
+  [[[context debuggerContext] commandInput] listHistory]
 }
 
 #-----------------------------------------------------------------------------*

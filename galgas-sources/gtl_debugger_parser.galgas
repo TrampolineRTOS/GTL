@@ -74,6 +74,17 @@ rule <gtl_debugger_command>
 rule <gtl_debugger_command>
   !@gtlInstruction instruction
 {
+  $hist$
+  instruction = @gtlHistoryInstruction.new {
+    !.here
+    !""
+  }
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_debugger_command>
+  !@gtlInstruction instruction
+{
   $break$
   select
     $not$

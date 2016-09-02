@@ -161,5 +161,19 @@ setter @debugCommandInput getCommand
     end
   end
   message "\n"
-  [!?history insertAtIndex !command !0]
+  if [command stringByTrimmingWhiteSpaces] != "hist" then
+    [!?history insertAtIndex !command !0]
+  end
+}
+
+method @debugCommandInput listHistory
+{
+  if [history length] > 0 then
+    message "Command history:\n"
+    for (item) in history do (index)
+      message [[index string] stringByLeftPadding !4 !' '] + ": " + item + "\n"
+    end
+  else
+    message "Command history empty.\n"
+  end
 }
