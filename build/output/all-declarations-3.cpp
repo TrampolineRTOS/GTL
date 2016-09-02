@@ -61,27 +61,27 @@ static void extensionSetter_debuggerContext_deleteWatchpoint (cPtr_debuggerConte
                                                               COMMA_UNUSED_LOCATION_ARGS) {
   cPtr_debuggerContext * object = inObject ;
   macroValidSharedObject (object, cPtr_debuggerContext) ;
-  const enumGalgasBool test_0 = GALGAS_bool (kIsInfOrEqual, constinArgument_numToDelete.getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 220)).objectCompare (GALGAS_uint::constructor_max (SOURCE_FILE ("gtl_debugger.galgas", 220)).getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 220)))).boolEnum () ;
+  const enumGalgasBool test_0 = GALGAS_bool (kIsInfOrEqual, constinArgument_numToDelete.getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 219)).objectCompare (GALGAS_uint::constructor_max (SOURCE_FILE ("gtl_debugger.galgas", 219)).getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 219)))).boolEnum () ;
   if (kBoolTrue == test_0) {
-    GALGAS_uint var_numToDeleteUInt_7869 = constinArgument_numToDelete.mAttribute_bigint.getter_uint (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 221)) ;
-    const enumGalgasBool test_1 = GALGAS_bool (kIsStrictInf, var_numToDeleteUInt_7869.objectCompare (object->mAttribute_watchpoints.getter_length (SOURCE_FILE ("gtl_debugger.galgas", 222)))).boolEnum () ;
+    GALGAS_uint var_numToDeleteUInt_7831 = constinArgument_numToDelete.mAttribute_bigint.getter_uint (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 220)) ;
+    const enumGalgasBool test_1 = GALGAS_bool (kIsStrictInf, var_numToDeleteUInt_7831.objectCompare (object->mAttribute_watchpoints.getter_length (SOURCE_FILE ("gtl_debugger.galgas", 221)))).boolEnum () ;
     if (kBoolTrue == test_1) {
-      GALGAS_gtlExpression var_wp_7995 ;
+      GALGAS_gtlExpression var_wp_7957 ;
       {
-      object->mAttribute_watchpoints.setter_removeAtIndex (var_wp_7995, var_numToDeleteUInt_7869, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 223)) ;
+      object->mAttribute_watchpoints.setter_removeAtIndex (var_wp_7957, var_numToDeleteUInt_7831, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 222)) ;
       }
-      inCompiler->printMessage (GALGAS_string ("Watchpoint: ")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 224)) ;
-      inCompiler->printMessage (object->mAttribute_instructionColor.add_operation (object->mAttribute_instructionFace, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 225))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 225)) ;
-      inCompiler->printMessage (callExtensionGetter_stringRepresentation ((const cPtr_gtlExpression *) var_wp_7995.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 226))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 226)) ;
-      inCompiler->printMessage (object->mAttribute_outputColor.add_operation (object->mAttribute_outputFace, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 227))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 227)) ;
-      inCompiler->printMessage (GALGAS_string (" deleted\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 228)) ;
+      inCompiler->printMessage (GALGAS_string ("Watchpoint: ")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 223)) ;
+      inCompiler->printMessage (object->mAttribute_instructionColor.add_operation (object->mAttribute_instructionFace, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 224))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 224)) ;
+      inCompiler->printMessage (callExtensionGetter_stringRepresentation ((const cPtr_gtlExpression *) var_wp_7957.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 225))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 225)) ;
+      inCompiler->printMessage (object->mAttribute_outputColor.add_operation (object->mAttribute_outputFace, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 226))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 226)) ;
+      inCompiler->printMessage (GALGAS_string (" deleted\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 227)) ;
     }else if (kBoolFalse == test_1) {
-      inCompiler->printMessage (object->mAttribute_warningColor.add_operation (object->mAttribute_warningFace, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 230))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 230)) ;
-      inCompiler->printMessage (GALGAS_string ("no watchpoint at this index: ").add_operation (constinArgument_numToDelete.getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 231)).getter_string (SOURCE_FILE ("gtl_debugger.galgas", 231)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 231)).add_operation (GALGAS_string ("\n"), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 231))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 231)) ;
+      inCompiler->printMessage (object->mAttribute_warningColor.add_operation (object->mAttribute_warningFace, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 229))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 229)) ;
+      inCompiler->printMessage (GALGAS_string ("no watchpoint at this index: ").add_operation (constinArgument_numToDelete.getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 230)).getter_string (SOURCE_FILE ("gtl_debugger.galgas", 230)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 230)).add_operation (GALGAS_string ("\n"), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 230))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 230)) ;
     }
   }else if (kBoolFalse == test_0) {
-    inCompiler->printMessage (object->mAttribute_warningColor.add_operation (object->mAttribute_warningFace, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 234))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 234)) ;
-    inCompiler->printMessage (GALGAS_string ("no watchpoint at this index: ").add_operation (constinArgument_numToDelete.getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 235)).getter_string (SOURCE_FILE ("gtl_debugger.galgas", 235)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 235)).add_operation (GALGAS_string ("\n"), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 235))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 235)) ;
+    inCompiler->printMessage (object->mAttribute_warningColor.add_operation (object->mAttribute_warningFace, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 233))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 233)) ;
+    inCompiler->printMessage (GALGAS_string ("no watchpoint at this index: ").add_operation (constinArgument_numToDelete.getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 234)).getter_string (SOURCE_FILE ("gtl_debugger.galgas", 234)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 234)).add_operation (GALGAS_string ("\n"), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 234))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 234)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -162,13 +162,13 @@ static GALGAS_bool extensionGetter_debuggerContext_breakOn (const cPtr_debuggerC
   const cPtr_debuggerContext * object = inObject ;
   macroValidSharedObject (object, cPtr_debuggerContext) ;
   result_breakOn = GALGAS_bool (false) ;
-  cEnumerator_gtlBreakpointList enumerator_8671 (object->mAttribute_breakpoints, kEnumeration_up) ;
-  while (enumerator_8671.hasCurrentObject ()) {
-    const enumGalgasBool test_0 = GALGAS_bool (kIsEqual, constinArgument_instruction.getter_signature (SOURCE_FILE ("gtl_debugger.galgas", 246)).objectCompare (enumerator_8671.current_breakpoint (HERE).getter_signature (SOURCE_FILE ("gtl_debugger.galgas", 246)))).boolEnum () ;
+  cEnumerator_gtlBreakpointList enumerator_8633 (object->mAttribute_breakpoints, kEnumeration_up) ;
+  while (enumerator_8633.hasCurrentObject ()) {
+    const enumGalgasBool test_0 = GALGAS_bool (kIsEqual, constinArgument_instruction.getter_signature (SOURCE_FILE ("gtl_debugger.galgas", 245)).objectCompare (enumerator_8633.current_breakpoint (HERE).getter_signature (SOURCE_FILE ("gtl_debugger.galgas", 245)))).boolEnum () ;
     if (kBoolTrue == test_0) {
       result_breakOn = GALGAS_bool (true) ;
     }
-    enumerator_8671.gotoNextObject () ;
+    enumerator_8633.gotoNextObject () ;
   }
 //---
   return result_breakOn ;
@@ -211,6 +211,7 @@ void enterExtensionGetter_watchOn (const int32_t inClassIndex,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool callExtensionGetter_watchOn (const cPtr_debuggerContext * inObject,
+                                         const GALGAS_gtlContext & in_context,
                                          const GALGAS_gtlData & in_vars,
                                          const GALGAS_library & in_lib,
                                          C_Compiler * inCompiler
@@ -238,7 +239,7 @@ GALGAS_bool callExtensionGetter_watchOn (const cPtr_debuggerContext * inObject,
     if (NULL == f) {
       fatalError ("FATAL CATEGORY READER CALL ERROR", __FILE__, __LINE__) ;
     }else{
-      result = f (inObject, in_vars, in_lib, inCompiler COMMA_THERE) ;
+      result = f (inObject, in_context, in_vars, in_lib, inCompiler COMMA_THERE) ;
     }
   }
   return result ;
@@ -247,6 +248,7 @@ GALGAS_bool callExtensionGetter_watchOn (const cPtr_debuggerContext * inObject,
 //---------------------------------------------------------------------------------------------------------------------*
 
 static GALGAS_bool extensionGetter_debuggerContext_watchOn (const cPtr_debuggerContext * inObject,
+                                                            const GALGAS_gtlContext & constinArgument_context,
                                                             const GALGAS_gtlData & constinArgument_vars,
                                                             const GALGAS_library & constinArgument_lib,
                                                             C_Compiler * inCompiler
@@ -255,32 +257,32 @@ static GALGAS_bool extensionGetter_debuggerContext_watchOn (const cPtr_debuggerC
   const cPtr_debuggerContext * object = inObject ;
   macroValidSharedObject (object, cPtr_debuggerContext) ;
   result_watchOn = GALGAS_bool (false) ;
-  cEnumerator_gtlExpressionList enumerator_8989 (object->mAttribute_watchpoints, kEnumeration_up) ;
-  while (enumerator_8989.hasCurrentObject ()) {
-    GALGAS_gtlData var_watchResult_9017 = callExtensionGetter_eval ((const cPtr_gtlExpression *) enumerator_8989.current_expression (HERE).ptr (), constinArgument_vars, constinArgument_lib, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 260)) ;
-    const enumGalgasBool test_0 = GALGAS_bool (var_watchResult_9017.dynamicTypeDescriptor () == & kTypeDescriptor_GALGAS_gtlBool).boolEnum () ;
+  cEnumerator_gtlExpressionList enumerator_8978 (object->mAttribute_watchpoints, kEnumeration_up) ;
+  while (enumerator_8978.hasCurrentObject ()) {
+    GALGAS_gtlData var_watchResult_9006 = callExtensionGetter_eval ((const cPtr_gtlExpression *) enumerator_8978.current_expression (HERE).ptr (), constinArgument_context, constinArgument_vars, constinArgument_lib, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 260)) ;
+    const enumGalgasBool test_0 = GALGAS_bool (var_watchResult_9006.dynamicTypeDescriptor () == & kTypeDescriptor_GALGAS_gtlBool).boolEnum () ;
     if (kBoolTrue == test_0) {
       GALGAS_gtlBool temp_1 ;
-      if (var_watchResult_9017.isValid ()) {
-        if (NULL != dynamic_cast <const cPtr_gtlBool *> (var_watchResult_9017.ptr ())) {
-          temp_1 = (cPtr_gtlBool *) var_watchResult_9017.ptr () ;
+      if (var_watchResult_9006.isValid ()) {
+        if (NULL != dynamic_cast <const cPtr_gtlBool *> (var_watchResult_9006.ptr ())) {
+          temp_1 = (cPtr_gtlBool *) var_watchResult_9006.ptr () ;
         }else{
-          inCompiler->castError ("gtlBool", var_watchResult_9017.ptr ()->classDescriptor () COMMA_SOURCE_FILE ("gtl_debugger.galgas", 262)) ;
+          inCompiler->castError ("gtlBool", var_watchResult_9006.ptr ()->classDescriptor () COMMA_SOURCE_FILE ("gtl_debugger.galgas", 262)) ;
         }
       }
-      GALGAS_bool var_matchWatch_9102 = temp_1.getter_value (SOURCE_FILE ("gtl_debugger.galgas", 262)) ;
-      const enumGalgasBool test_2 = var_matchWatch_9102.boolEnum () ;
+      GALGAS_bool var_matchWatch_9100 = temp_1.getter_value (SOURCE_FILE ("gtl_debugger.galgas", 262)) ;
+      const enumGalgasBool test_2 = var_matchWatch_9100.boolEnum () ;
       if (kBoolTrue == test_2) {
         inCompiler->printMessage (object->mAttribute_outputColor.add_operation (object->mAttribute_outputFace, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 264))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 264)) ;
         inCompiler->printMessage (GALGAS_string ("match ")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 265)) ;
         inCompiler->printMessage (object->mAttribute_instructionColor.add_operation (object->mAttribute_instructionFace, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 266))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 266)) ;
-        inCompiler->printMessage (callExtensionGetter_stringRepresentation ((const cPtr_gtlExpression *) enumerator_8989.current_expression (HERE).ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 267))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 267)) ;
+        inCompiler->printMessage (callExtensionGetter_stringRepresentation ((const cPtr_gtlExpression *) enumerator_8978.current_expression (HERE).ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 267))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 267)) ;
         inCompiler->printMessage (GALGAS_string ("\n")  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 268)) ;
         inCompiler->printMessage (function_endc (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 269))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 269)) ;
         result_watchOn = GALGAS_bool (true) ;
       }
     }
-    enumerator_8989.gotoNextObject () ;
+    enumerator_8978.gotoNextObject () ;
   }
 //---
   return result_watchOn ;
@@ -360,46 +362,46 @@ static void extensionMethod_debuggerContext_hereWeAre (const cPtr_debuggerContex
                                                        COMMA_UNUSED_LOCATION_ARGS) {
   const cPtr_debuggerContext * object = inObject ;
   macroValidSharedObject (object, cPtr_debuggerContext) ;
-  GALGAS_uint var_indentation_9571 = GALGAS_uint ((uint32_t) 0U) ;
-  cEnumerator_gtlInstructionListContextStack enumerator_9642 (object->mAttribute_contextStack.getter_subListFromIndex (GALGAS_uint ((uint32_t) 1U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 281)), kEnumeration_up) ;
-  while (enumerator_9642.hasCurrentObject ()) {
-    inCompiler->printMessage (GALGAS_string::constructor_stringWithSequenceOfCharacters (GALGAS_char (TO_UNICODE (32)), var_indentation_9571  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 282))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 282)) ;
+  GALGAS_uint var_indentation_9569 = GALGAS_uint ((uint32_t) 0U) ;
+  cEnumerator_gtlInstructionListContextStack enumerator_9640 (object->mAttribute_contextStack.getter_subListFromIndex (GALGAS_uint ((uint32_t) 1U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 281)), kEnumeration_up) ;
+  while (enumerator_9640.hasCurrentObject ()) {
+    inCompiler->printMessage (GALGAS_string::constructor_stringWithSequenceOfCharacters (GALGAS_char (TO_UNICODE (32)), var_indentation_9569  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 282))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 282)) ;
     const GALGAS_debuggerContext temp_0 = object ;
-    callExtensionMethod_displayWithLocation ((const cPtr_gtlInstruction *) enumerator_9642.current_instructionList (HERE).getter_instructionAtIndex (enumerator_9642.current_nextInstructionIndex (HERE), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 283)).ptr (), temp_0, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 283)) ;
-    var_indentation_9571 = var_indentation_9571.add_operation (GALGAS_uint ((uint32_t) 4U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 284)) ;
-    enumerator_9642.gotoNextObject () ;
+    callExtensionMethod_displayWithLocation ((const cPtr_gtlInstruction *) enumerator_9640.current_instructionList (HERE).getter_instructionAtIndex (enumerator_9640.current_nextInstructionIndex (HERE), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 283)).ptr (), temp_0, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 283)) ;
+    var_indentation_9569 = var_indentation_9569.add_operation (GALGAS_uint ((uint32_t) 4U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 284)) ;
+    enumerator_9640.gotoNextObject () ;
   }
-  GALGAS_string var_identationString_9860 = GALGAS_string::constructor_stringWithSequenceOfCharacters (GALGAS_char (TO_UNICODE (32)), var_indentation_9571  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 287)) ;
-  GALGAS_uint var_startIndex_9934 ;
-  GALGAS_uint var_displayLength_9956 ;
+  GALGAS_string var_identationString_9858 = GALGAS_string::constructor_stringWithSequenceOfCharacters (GALGAS_char (TO_UNICODE (32)), var_indentation_9569  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 287)) ;
+  GALGAS_uint var_startIndex_9932 ;
+  GALGAS_uint var_displayLength_9954 ;
   const enumGalgasBool test_1 = GALGAS_bool (kIsSupOrEqual, object->mAttribute_nextInstructionIndex.objectCompare (constinArgument_window)).boolEnum () ;
   if (kBoolTrue == test_1) {
-    var_startIndex_9934 = object->mAttribute_nextInstructionIndex.substract_operation (constinArgument_window, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 292)) ;
+    var_startIndex_9932 = object->mAttribute_nextInstructionIndex.substract_operation (constinArgument_window, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 292)) ;
   }else if (kBoolFalse == test_1) {
-    var_startIndex_9934 = GALGAS_uint ((uint32_t) 0U) ;
+    var_startIndex_9932 = GALGAS_uint ((uint32_t) 0U) ;
   }
-  const enumGalgasBool test_2 = GALGAS_bool (kIsStrictInf, var_startIndex_9934.add_operation (constinArgument_window.multiply_operation (GALGAS_uint ((uint32_t) 2U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 296)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 296)).objectCompare (object->mAttribute_instructionList.getter_length (SOURCE_FILE ("gtl_debugger.galgas", 296)))).boolEnum () ;
+  const enumGalgasBool test_2 = GALGAS_bool (kIsStrictInf, var_startIndex_9932.add_operation (constinArgument_window.multiply_operation (GALGAS_uint ((uint32_t) 2U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 296)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 296)).objectCompare (object->mAttribute_instructionList.getter_length (SOURCE_FILE ("gtl_debugger.galgas", 296)))).boolEnum () ;
   if (kBoolTrue == test_2) {
-    var_displayLength_9956 = GALGAS_uint ((uint32_t) 2U).multiply_operation (constinArgument_window, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 297)) ;
+    var_displayLength_9954 = GALGAS_uint ((uint32_t) 2U).multiply_operation (constinArgument_window, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 297)) ;
   }else if (kBoolFalse == test_2) {
-    var_displayLength_9956 = object->mAttribute_instructionList.getter_length (SOURCE_FILE ("gtl_debugger.galgas", 299)).substract_operation (var_startIndex_9934, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 299)) ;
+    var_displayLength_9954 = object->mAttribute_instructionList.getter_length (SOURCE_FILE ("gtl_debugger.galgas", 299)).substract_operation (var_startIndex_9932, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 299)) ;
   }
   inCompiler->printMessage (function_endc (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 301))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 301)) ;
-  cEnumerator_gtlInstructionList enumerator_10364 (object->mAttribute_instructionList.getter_subListWithRange (GALGAS_range::constructor_new (var_startIndex_9934, var_displayLength_9956  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 303)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 303)), kEnumeration_up) ;
-  GALGAS_uint index_10265 ((uint32_t) 0) ;
-  while (enumerator_10364.hasCurrentObject ()) {
-    const enumGalgasBool test_3 = GALGAS_bool (kIsEqual, index_10265.add_operation (var_startIndex_9934, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 306)).objectCompare (object->mAttribute_nextInstructionIndex)).boolEnum () ;
+  cEnumerator_gtlInstructionList enumerator_10362 (object->mAttribute_instructionList.getter_subListWithRange (GALGAS_range::constructor_new (var_startIndex_9932, var_displayLength_9954  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 303)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 303)), kEnumeration_up) ;
+  GALGAS_uint index_10263 ((uint32_t) 0) ;
+  while (enumerator_10362.hasCurrentObject ()) {
+    const enumGalgasBool test_3 = GALGAS_bool (kIsEqual, index_10263.add_operation (var_startIndex_9932, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 306)).objectCompare (object->mAttribute_nextInstructionIndex)).boolEnum () ;
     if (kBoolTrue == test_3) {
       inCompiler->printMessage (function_red (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 307)).add_operation (function_bold (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 307)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 307))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 307)) ;
-      inCompiler->printMessage (var_identationString_9860.add_operation (GALGAS_string (">>> "), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 308))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 308)) ;
+      inCompiler->printMessage (var_identationString_9858.add_operation (GALGAS_string (">>> "), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 308))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 308)) ;
       inCompiler->printMessage (function_endc (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 309))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 309)) ;
     }else if (kBoolFalse == test_3) {
-      inCompiler->printMessage (var_identationString_9860.add_operation (GALGAS_string ("    "), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 311))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 311)) ;
+      inCompiler->printMessage (var_identationString_9858.add_operation (GALGAS_string ("    "), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 311))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 311)) ;
     }
     const GALGAS_debuggerContext temp_4 = object ;
-    callExtensionMethod_displayWithLocation ((const cPtr_gtlInstruction *) enumerator_10364.current_instruction (HERE).ptr (), temp_4, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 313)) ;
-    enumerator_10364.gotoNextObject () ;
-    index_10265.increment_operation (inCompiler  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 302)) ;
+    callExtensionMethod_displayWithLocation ((const cPtr_gtlInstruction *) enumerator_10362.current_instruction (HERE).ptr (), temp_4, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 313)) ;
+    enumerator_10362.gotoNextObject () ;
+    index_10263.increment_operation (inCompiler  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 302)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -624,8 +626,8 @@ static void extensionSetter_debuggerContext_getCommand (cPtr_debuggerContext * i
   macroValidSharedObject (object, cPtr_debuggerContext) ;
   {
   object->mAttribute_commandInput.insulate (HERE) ;
-  cPtr_debugCommandInput * ptr_11190 = (cPtr_debugCommandInput *) object->mAttribute_commandInput.ptr () ;
-  callExtensionSetter_getCommand ((cPtr_debugCommandInput *) ptr_11190, outArgument_command, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 336)) ;
+  cPtr_debugCommandInput * ptr_11188 = (cPtr_debugCommandInput *) object->mAttribute_commandInput.ptr () ;
+  callExtensionSetter_getCommand ((cPtr_debugCommandInput *) ptr_11188, outArgument_command, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 336)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -778,7 +780,7 @@ GALGAS_string extensionGetter_stringRepresentation (const GALGAS_lsint & inObjec
   GALGAS_string result_result ; // Returned variable
   const GALGAS_lsint temp_0 = inObject ;
   GALGAS_string temp_1 ;
-  const enumGalgasBool test_2 = GALGAS_bool (kIsStrictInf, GALGAS_sint ((int32_t) 0L).objectCompare (temp_0.getter_sint (SOURCE_FILE ("gtl_debugger.galgas", 1030)))).boolEnum () ;
+  const enumGalgasBool test_2 = GALGAS_bool (kIsStrictInf, GALGAS_sint ((int32_t) 0L).objectCompare (temp_0.getter_sint (SOURCE_FILE ("gtl_debugger.galgas", 1031)))).boolEnum () ;
   if (kBoolTrue == test_2) {
     temp_1 = GALGAS_string ("<") ;
   }else if (kBoolFalse == test_2) {
@@ -8454,6 +8456,7 @@ void enterExtensionGetter_watchOn (const int32_t inClassIndex,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool callExtensionGetter_watchOn (const cPtr_gtlContext * inObject,
+                                         const GALGAS_gtlContext & in_context,
                                          const GALGAS_gtlData & in_vars,
                                          const GALGAS_library & in_lib,
                                          C_Compiler * inCompiler
@@ -8481,7 +8484,7 @@ GALGAS_bool callExtensionGetter_watchOn (const cPtr_gtlContext * inObject,
     if (NULL == f) {
       fatalError ("FATAL CATEGORY READER CALL ERROR", __FILE__, __LINE__) ;
     }else{
-      result = f (inObject, in_vars, in_lib, inCompiler COMMA_THERE) ;
+      result = f (inObject, in_context, in_vars, in_lib, inCompiler COMMA_THERE) ;
     }
   }
   return result ;
@@ -8490,6 +8493,7 @@ GALGAS_bool callExtensionGetter_watchOn (const cPtr_gtlContext * inObject,
 //---------------------------------------------------------------------------------------------------------------------*
 
 static GALGAS_bool extensionGetter_gtlContext_watchOn (const cPtr_gtlContext * inObject,
+                                                       const GALGAS_gtlContext & constinArgument_context,
                                                        const GALGAS_gtlData & constinArgument_vars,
                                                        const GALGAS_library & constinArgument_lib,
                                                        C_Compiler * inCompiler
@@ -8497,7 +8501,7 @@ static GALGAS_bool extensionGetter_gtlContext_watchOn (const cPtr_gtlContext * i
   GALGAS_bool result_watchOn ; // Returned variable
   const cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  result_watchOn = callExtensionGetter_watchOn ((const cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr (), constinArgument_vars, constinArgument_lib, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 408)) ;
+  result_watchOn = callExtensionGetter_watchOn ((const cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr (), constinArgument_context, constinArgument_vars, constinArgument_lib, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 409)) ;
 //---
   return result_watchOn ;
 }
@@ -8578,7 +8582,7 @@ static GALGAS_string extensionGetter_gtlContext_promptStyle (const cPtr_gtlConte
   GALGAS_string result_result ; // Returned variable
   const cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  result_result = object->mAttribute_debuggerContext.getter_promptColor (SOURCE_FILE ("gtl_debugger.galgas", 415)).add_operation (object->mAttribute_debuggerContext.getter_promptFace (SOURCE_FILE ("gtl_debugger.galgas", 415)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 415)) ;
+  result_result = object->mAttribute_debuggerContext.getter_promptColor (SOURCE_FILE ("gtl_debugger.galgas", 416)).add_operation (object->mAttribute_debuggerContext.getter_promptFace (SOURCE_FILE ("gtl_debugger.galgas", 416)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 416)) ;
 //---
   return result_result ;
 }
@@ -8659,7 +8663,7 @@ static GALGAS_string extensionGetter_gtlContext_outputStyle (const cPtr_gtlConte
   GALGAS_string result_result ; // Returned variable
   const cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  result_result = object->mAttribute_debuggerContext.getter_outputColor (SOURCE_FILE ("gtl_debugger.galgas", 422)).add_operation (object->mAttribute_debuggerContext.getter_outputFace (SOURCE_FILE ("gtl_debugger.galgas", 422)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 422)) ;
+  result_result = object->mAttribute_debuggerContext.getter_outputColor (SOURCE_FILE ("gtl_debugger.galgas", 423)).add_operation (object->mAttribute_debuggerContext.getter_outputFace (SOURCE_FILE ("gtl_debugger.galgas", 423)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 423)) ;
 //---
   return result_result ;
 }
@@ -8738,8 +8742,8 @@ static void extensionSetter_gtlContext_appendInstructionToStepDo (cPtr_gtlContex
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
   object->mAttribute_debuggerContext.insulate (HERE) ;
-  cPtr_debuggerContext * ptr_13446 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
-  callExtensionSetter_appendInstructionToStepDo ((cPtr_debuggerContext *) ptr_13446, inArgument_instruction, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 429)) ;
+  cPtr_debuggerContext * ptr_13480 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
+  callExtensionSetter_appendInstructionToStepDo ((cPtr_debuggerContext *) ptr_13480, inArgument_instruction, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 430)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8815,8 +8819,8 @@ static void extensionSetter_gtlContext_deleteStepDoInstruction (cPtr_gtlContext 
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
   object->mAttribute_debuggerContext.insulate (HERE) ;
-  cPtr_debuggerContext * ptr_13663 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
-  callExtensionSetter_deleteStepDoInstruction ((cPtr_debuggerContext *) ptr_13663, constinArgument_numToDelete, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 436)) ;
+  cPtr_debuggerContext * ptr_13697 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
+  callExtensionSetter_deleteStepDoInstruction ((cPtr_debuggerContext *) ptr_13697, constinArgument_numToDelete, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 437)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8890,7 +8894,7 @@ static void extensionMethod_gtlContext_listStepDoInstructions (const cPtr_gtlCon
                                                                COMMA_UNUSED_LOCATION_ARGS) {
   const cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  callExtensionMethod_listStepDoInstructions ((const cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 442)) ;
+  callExtensionMethod_listStepDoInstructions ((const cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 443)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -8969,13 +8973,13 @@ static void extensionSetter_gtlContext_executeStepDoList (cPtr_gtlContext * inOb
                                                           COMMA_UNUSED_LOCATION_ARGS) {
   cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  inCompiler->printMessage (callExtensionGetter_outputStyle ((const cPtr_gtlContext *) ioArgument_context.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 452))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 452)) ;
-  cEnumerator_gtlInstructionList enumerator_14167 (object->mAttribute_debuggerContext.getter_doList (SOURCE_FILE ("gtl_debugger.galgas", 453)), kEnumeration_up) ;
-  while (enumerator_14167.hasCurrentObject ()) {
-    callExtensionMethod_execute ((const cPtr_gtlInstruction *) enumerator_14167.current_instruction (HERE).ptr (), ioArgument_context, ioArgument_vars, ioArgument_lib, ioArgument_outputString, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 454)) ;
-    enumerator_14167.gotoNextObject () ;
+  inCompiler->printMessage (callExtensionGetter_outputStyle ((const cPtr_gtlContext *) ioArgument_context.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 453))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 453)) ;
+  cEnumerator_gtlInstructionList enumerator_14201 (object->mAttribute_debuggerContext.getter_doList (SOURCE_FILE ("gtl_debugger.galgas", 454)), kEnumeration_up) ;
+  while (enumerator_14201.hasCurrentObject ()) {
+    callExtensionMethod_execute ((const cPtr_gtlInstruction *) enumerator_14201.current_instruction (HERE).ptr (), ioArgument_context, ioArgument_vars, ioArgument_lib, ioArgument_outputString, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 455)) ;
+    enumerator_14201.gotoNextObject () ;
   }
-  inCompiler->printMessage (function_endc (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 456))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 456)) ;
+  inCompiler->printMessage (function_endc (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 457))  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 457)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -9052,8 +9056,8 @@ static void extensionSetter_gtlContext_setBreakpoint (cPtr_gtlContext * inObject
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
   object->mAttribute_debuggerContext.insulate (HERE) ;
-  cPtr_debuggerContext * ptr_14444 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
-  callExtensionSetter_setBreakpoint ((cPtr_debuggerContext *) ptr_14444, constinArgument_fileName, constinArgument_lineNum, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 464)) ;
+  cPtr_debuggerContext * ptr_14478 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
+  callExtensionSetter_setBreakpoint ((cPtr_debuggerContext *) ptr_14478, constinArgument_fileName, constinArgument_lineNum, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 465)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9127,7 +9131,7 @@ static void extensionMethod_gtlContext_listBreakpoints (const cPtr_gtlContext * 
                                                         COMMA_UNUSED_LOCATION_ARGS) {
   const cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  callExtensionMethod_listBreakpoints ((const cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 470)) ;
+  callExtensionMethod_listBreakpoints ((const cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 471)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -9202,8 +9206,8 @@ static void extensionSetter_gtlContext_deleteBreakpoint (cPtr_gtlContext * inObj
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
   object->mAttribute_debuggerContext.insulate (HERE) ;
-  cPtr_debuggerContext * ptr_14805 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
-  callExtensionSetter_deleteBreakpoint ((cPtr_debuggerContext *) ptr_14805, constinArgument_numToDelete, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 477)) ;
+  cPtr_debuggerContext * ptr_14839 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
+  callExtensionSetter_deleteBreakpoint ((cPtr_debuggerContext *) ptr_14839, constinArgument_numToDelete, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 478)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9279,8 +9283,8 @@ static void extensionSetter_gtlContext_setWatchpoint (cPtr_gtlContext * inObject
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
   object->mAttribute_debuggerContext.insulate (HERE) ;
-  cPtr_debuggerContext * ptr_15013 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
-  callExtensionSetter_setWatchpoint ((cPtr_debuggerContext *) ptr_15013, constinArgument_watchExpression, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 484)) ;
+  cPtr_debuggerContext * ptr_15047 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
+  callExtensionSetter_setWatchpoint ((cPtr_debuggerContext *) ptr_15047, constinArgument_watchExpression, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 485)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9354,7 +9358,7 @@ static void extensionMethod_gtlContext_listWatchpoints (const cPtr_gtlContext * 
                                                         COMMA_UNUSED_LOCATION_ARGS) {
   const cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  callExtensionMethod_listWatchpoints ((const cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 490)) ;
+  callExtensionMethod_listWatchpoints ((const cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 491)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -9429,8 +9433,8 @@ static void extensionSetter_gtlContext_deleteWatchpoint (cPtr_gtlContext * inObj
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
   object->mAttribute_debuggerContext.insulate (HERE) ;
-  cPtr_debuggerContext * ptr_15372 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
-  callExtensionSetter_deleteWatchpoint ((cPtr_debuggerContext *) ptr_15372, constinArgument_numToDelete, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 497)) ;
+  cPtr_debuggerContext * ptr_15406 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
+  callExtensionSetter_deleteWatchpoint ((cPtr_debuggerContext *) ptr_15406, constinArgument_numToDelete, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 498)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9505,7 +9509,7 @@ static void extensionSetter_gtlContext_setLoopOnCommand (cPtr_gtlContext * inObj
   cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
-  object->mAttribute_debuggerContext.setter_setLoopOnCommand (inArgument_loopOnCommand COMMA_SOURCE_FILE ("gtl_debugger.galgas", 504)) ;
+  object->mAttribute_debuggerContext.setter_setLoopOnCommand (inArgument_loopOnCommand COMMA_SOURCE_FILE ("gtl_debugger.galgas", 505)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9583,7 +9587,7 @@ static GALGAS_bool extensionGetter_gtlContext_loopOnCommand (const cPtr_gtlConte
   GALGAS_bool result_loopOnCommand ; // Returned variable
   const cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  result_loopOnCommand = object->mAttribute_debuggerContext.getter_loopOnCommand (SOURCE_FILE ("gtl_debugger.galgas", 511)) ;
+  result_loopOnCommand = object->mAttribute_debuggerContext.getter_loopOnCommand (SOURCE_FILE ("gtl_debugger.galgas", 512)) ;
 //---
   return result_loopOnCommand ;
 }
@@ -9662,7 +9666,7 @@ static void extensionMethod_gtlContext_hereWeAre (const cPtr_gtlContext * inObje
                                                   COMMA_UNUSED_LOCATION_ARGS) {
   const cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
-  callExtensionMethod_hereWeAre ((const cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr (), constinArgument_window, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 518)) ;
+  callExtensionMethod_hereWeAre ((const cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr (), constinArgument_window, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 519)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -9737,8 +9741,8 @@ static void extensionSetter_gtlContext_pushInstructionList (cPtr_gtlContext * in
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
   object->mAttribute_debuggerContext.insulate (HERE) ;
-  cPtr_debuggerContext * ptr_16153 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
-  callExtensionSetter_pushInstructionList ((cPtr_debuggerContext *) ptr_16153, constinArgument_instructionList, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 525)) ;
+  cPtr_debuggerContext * ptr_16187 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
+  callExtensionSetter_pushInstructionList ((cPtr_debuggerContext *) ptr_16187, constinArgument_instructionList, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 526)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9812,8 +9816,8 @@ static void extensionSetter_gtlContext_popInstructionList (cPtr_gtlContext * inO
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
   object->mAttribute_debuggerContext.insulate (HERE) ;
-  cPtr_debuggerContext * ptr_16335 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
-  callExtensionSetter_popInstructionList ((cPtr_debuggerContext *) ptr_16335, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 531)) ;
+  cPtr_debuggerContext * ptr_16369 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
+  callExtensionSetter_popInstructionList ((cPtr_debuggerContext *) ptr_16369, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 532)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9888,7 +9892,7 @@ static void extensionSetter_gtlContext_setNextInstructionIndex (cPtr_gtlContext 
   cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
-  object->mAttribute_debuggerContext.setter_setNextInstructionIndex (inArgument_index COMMA_SOURCE_FILE ("gtl_debugger.galgas", 538)) ;
+  object->mAttribute_debuggerContext.setter_setNextInstructionIndex (inArgument_index COMMA_SOURCE_FILE ("gtl_debugger.galgas", 539)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9963,7 +9967,7 @@ static void extensionSetter_gtlContext_setExecuteDebuggerCommand (cPtr_gtlContex
   cPtr_gtlContext * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
-  object->mAttribute_debuggerContext.setter_setExecuteDebuggerCommand (inArgument_debuggerCommand COMMA_SOURCE_FILE ("gtl_debugger.galgas", 545)) ;
+  object->mAttribute_debuggerContext.setter_setExecuteDebuggerCommand (inArgument_debuggerCommand COMMA_SOURCE_FILE ("gtl_debugger.galgas", 546)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -10040,8 +10044,8 @@ static void extensionSetter_gtlContext_getCommand (cPtr_gtlContext * inObject,
   macroValidSharedObject (object, cPtr_gtlContext) ;
   {
   object->mAttribute_debuggerContext.insulate (HERE) ;
-  cPtr_debuggerContext * ptr_16926 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
-  callExtensionSetter_getCommand ((cPtr_debuggerContext *) ptr_16926, outArgument_command, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 552)) ;
+  cPtr_debuggerContext * ptr_16960 = (cPtr_debuggerContext *) object->mAttribute_debuggerContext.ptr () ;
+  callExtensionSetter_getCommand ((cPtr_debuggerContext *) ptr_16960, outArgument_command, inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 553)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*

@@ -3787,7 +3787,8 @@ void callExtensionMethod_addMyValue (const class cPtr_gtlData * inObject,
 typedef class GALGAS_gtlData (*enterExtensionGetter_gtlData_performGetter) (const class cPtr_gtlData * inObject,
                                                                             const class GALGAS_lstring & constinArgument0,
                                                                             const class GALGAS_gtlDataList & constinArgument1,
-                                                                            const class GALGAS_library & constinArgument2,
+                                                                            const class GALGAS_gtlContext & constinArgument2,
+                                                                            const class GALGAS_library & constinArgument3,
                                                                             class C_Compiler * inCompiler
                                                                             COMMA_LOCATION_ARGS) ;
 
@@ -3801,6 +3802,7 @@ void enterExtensionGetter_performGetter (const int32_t inClassIndex,
 class GALGAS_gtlData callExtensionGetter_performGetter (const class cPtr_gtlData * inObject,
                                                         const GALGAS_lstring & constin_methodName,
                                                         const GALGAS_gtlDataList & constin_arguments,
+                                                        const GALGAS_gtlContext & constin_context,
                                                         const GALGAS_library & constin_lib,
                                                         C_Compiler * inCompiler
                                                         COMMA_LOCATION_ARGS) ;
@@ -3814,7 +3816,8 @@ class GALGAS_gtlData callExtensionGetter_performGetter (const class cPtr_gtlData
 typedef void (*extensionSetterSignature_gtlData_performSetter) (class cPtr_gtlData * inObject,
                                                                 const class GALGAS_lstring constinArgument0,
                                                                 const class GALGAS_gtlDataList constinArgument1,
-                                                                const class GALGAS_library constinArgument2,
+                                                                const class GALGAS_gtlContext constinArgument2,
+                                                                const class GALGAS_library constinArgument3,
                                                                 class C_Compiler * inCompiler
                                                                 COMMA_LOCATION_ARGS) ;
 
@@ -3828,6 +3831,7 @@ void enterExtensionSetter_performSetter (const int32_t inClassIndex,
 void callExtensionSetter_performSetter (class cPtr_gtlData * inObject,
                                         const GALGAS_lstring constin_methodName,
                                         const GALGAS_gtlDataList constin_arguments,
+                                        const GALGAS_gtlContext constin_context,
                                         const GALGAS_library constin_lib,
                                         C_Compiler * inCompiler
                                         COMMA_LOCATION_ARGS) ;
