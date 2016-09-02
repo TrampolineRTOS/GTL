@@ -13896,6 +13896,12 @@ static const char * gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_elsif = "the 
 //--- Syntax error message for terminal '$hist$' :
 static const char * gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_hist = "the 'hist' keyword" ;
 
+//--- Syntax error message for terminal '$all$' :
+static const char * gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_all = "the 'all' keyword" ;
+
+//--- Syntax error message for terminal '$load$' :
+static const char * gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_load = "the 'load' keyword" ;
+
 //--- Syntax error message for terminal '$*$' :
 static const char * gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner__2A_ = "the '*' delimitor" ;
 
@@ -14036,7 +14042,7 @@ static const char * gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner__40__21_ = "t
 //---------------------------------------------------------------------------------------------------------------------*
 
 C_String C_Lexique_gtl_5F_debugger_5F_scanner::getMessageForTerminal (const int16_t inTerminalIndex) const {
-  static const char * syntaxErrorMessageArray [94] = {kEndOfSourceLexicalErrorMessage,
+  static const char * syntaxErrorMessageArray [96] = {kEndOfSourceLexicalErrorMessage,
     gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_identifier,
     gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_literal_5F_enum,
     gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_literal_5F_double,
@@ -14085,6 +14091,8 @@ C_String C_Lexique_gtl_5F_debugger_5F_scanner::getMessageForTerminal (const int1
     gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_else,
     gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_elsif,
     gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_hist,
+    gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_all,
+    gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner_load,
     gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner__2A_,
     gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner__7C_,
     gSyntaxErrorMessage_gtl_5F_debugger_5F_scanner__2C_,
@@ -14429,6 +14437,14 @@ static const utf32 kUnicodeString_gtl_5F_debugger_5F_scanner__5E__3D_ [] = {
   TO_UNICODE (0)
 } ;
 
+//--- Unicode string for '$all$'
+static const utf32 kUnicodeString_gtl_5F_debugger_5F_scanner_all [] = {
+  TO_UNICODE ('a'),
+  TO_UNICODE ('l'),
+  TO_UNICODE ('l'),
+  TO_UNICODE (0)
+} ;
+
 //--- Unicode string for '$break$'
 static const utf32 kUnicodeString_gtl_5F_debugger_5F_scanner_break [] = {
   TO_UNICODE ('b'),
@@ -14649,6 +14665,15 @@ static const utf32 kUnicodeString_gtl_5F_debugger_5F_scanner_listof [] = {
   TO_UNICODE ('t'),
   TO_UNICODE ('o'),
   TO_UNICODE ('f'),
+  TO_UNICODE (0)
+} ;
+
+//--- Unicode string for '$load$'
+static const utf32 kUnicodeString_gtl_5F_debugger_5F_scanner_load [] = {
+  TO_UNICODE ('l'),
+  TO_UNICODE ('o'),
+  TO_UNICODE ('a'),
+  TO_UNICODE ('d'),
   TO_UNICODE (0)
 } ;
 
@@ -14893,7 +14918,7 @@ int16_t C_Lexique_gtl_5F_debugger_5F_scanner::search_into_galgasDelimitorsList (
 //             Key words table 'goilTemplateKeyWordList'                            *
 //---------------------------------------------------------------------------------------------------------------------*
 
-static const int32_t ktable_size_gtl_5F_debugger_5F_scanner_goilTemplateKeyWordList = 37 ;
+static const int32_t ktable_size_gtl_5F_debugger_5F_scanner_goilTemplateKeyWordList = 39 ;
 
 static const C_unicode_lexique_table_entry ktable_for_gtl_5F_debugger_5F_scanner_goilTemplateKeyWordList [ktable_size_gtl_5F_debugger_5F_scanner_goilTemplateKeyWordList] = {
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_by, 2, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_by),
@@ -14901,6 +14926,7 @@ static const C_unicode_lexique_table_entry ktable_for_gtl_5F_debugger_5F_scanner
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_if, 2, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_if),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_no, 2, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_no),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_or, 2, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_or),
+  C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_all, 3, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_all),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_end, 3, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_end),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_let, 3, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_let),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_mod, 3, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_mod),
@@ -14911,6 +14937,7 @@ static const C_unicode_lexique_table_entry ktable_for_gtl_5F_debugger_5F_scanner
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_help, 4, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_help),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_hist, 4, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_hist),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_list, 4, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_list),
+  C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_load, 4, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_load),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_sort, 4, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_sort),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_step, 4, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_step),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_debugger_5F_scanner_then, 4, C_Lexique_gtl_5F_debugger_5F_scanner::kToken_then),
@@ -15204,6 +15231,16 @@ C_String C_Lexique_gtl_5F_debugger_5F_scanner::getCurrentTokenString (const cTok
     case kToken_hist:
       s.appendUnicodeCharacter (TO_UNICODE ('$') COMMA_HERE) ;
       s.appendCString ("hist") ;
+      s.appendUnicodeCharacter (TO_UNICODE ('$') COMMA_HERE) ;
+      break ;
+    case kToken_all:
+      s.appendUnicodeCharacter (TO_UNICODE ('$') COMMA_HERE) ;
+      s.appendCString ("all") ;
+      s.appendUnicodeCharacter (TO_UNICODE ('$') COMMA_HERE) ;
+      break ;
+    case kToken_load:
+      s.appendUnicodeCharacter (TO_UNICODE ('$') COMMA_HERE) ;
+      s.appendCString ("load") ;
       s.appendUnicodeCharacter (TO_UNICODE ('$') COMMA_HERE) ;
       break ;
     case kToken__2A_:
@@ -16215,6 +16252,8 @@ GALGAS_stringlist C_Lexique_gtl_5F_debugger_5F_scanner::symbols (LOCATION_ARGS) 
   result.addAssign_operation (GALGAS_string ("else") COMMA_THERE) ;
   result.addAssign_operation (GALGAS_string ("elsif") COMMA_THERE) ;
   result.addAssign_operation (GALGAS_string ("hist") COMMA_THERE) ;
+  result.addAssign_operation (GALGAS_string ("all") COMMA_THERE) ;
+  result.addAssign_operation (GALGAS_string ("load") COMMA_THERE) ;
   result.addAssign_operation (GALGAS_string ("*") COMMA_THERE) ;
   result.addAssign_operation (GALGAS_string ("|") COMMA_THERE) ;
   result.addAssign_operation (GALGAS_string (",") COMMA_THERE) ;
@@ -16331,6 +16370,7 @@ static void getKeywordsForIdentifier_gtl_5F_debugger_5F_scanner (const C_String 
     ioList.addObject ("if") ;
     ioList.addObject ("no") ;
     ioList.addObject ("or") ;
+    ioList.addObject ("all") ;
     ioList.addObject ("end") ;
     ioList.addObject ("let") ;
     ioList.addObject ("mod") ;
@@ -16341,6 +16381,7 @@ static void getKeywordsForIdentifier_gtl_5F_debugger_5F_scanner (const C_String 
     ioList.addObject ("help") ;
     ioList.addObject ("hist") ;
     ioList.addObject ("list") ;
+    ioList.addObject ("load") ;
     ioList.addObject ("sort") ;
     ioList.addObject ("step") ;
     ioList.addObject ("then") ;
@@ -16378,7 +16419,7 @@ __attribute__ ((unused)) (getKeywordLists_gtl_5F_debugger_5F_scanner, getKeyword
 //---------------------------------------------------------------------------------------------------------------------*
 
 uint32_t C_Lexique_gtl_5F_debugger_5F_scanner::styleIndexForTerminal (const int32_t inTerminalIndex) const {
-  static const uint32_t kTerminalSymbolStyles [94] = {0,
+  static const uint32_t kTerminalSymbolStyles [96] = {0,
     0 /* gtl_debugger_scanner_1_identifier */,
     0 /* gtl_debugger_scanner_1_literal_5F_enum */,
     5 /* gtl_debugger_scanner_1_literal_5F_double */,
@@ -16427,6 +16468,8 @@ uint32_t C_Lexique_gtl_5F_debugger_5F_scanner::styleIndexForTerminal (const int3
     1 /* gtl_debugger_scanner_1_else */,
     1 /* gtl_debugger_scanner_1_elsif */,
     1 /* gtl_debugger_scanner_1_hist */,
+    1 /* gtl_debugger_scanner_1_all */,
+    1 /* gtl_debugger_scanner_1_load */,
     2 /* gtl_debugger_scanner_1__2A_ */,
     2 /* gtl_debugger_scanner_1__7C_ */,
     2 /* gtl_debugger_scanner_1__2C_ */,

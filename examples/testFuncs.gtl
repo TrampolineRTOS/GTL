@@ -21,3 +21,5 @@ println currentDateTime()
 println homeDir()
 
 println currentDir()
+
+println red() + "Hello" + endc()
