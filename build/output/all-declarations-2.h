@@ -1523,8 +1523,9 @@ void callExtensionMethod_call (const class cPtr_gtlProcedure * inObject,
 
 typedef class GALGAS_gtlData (*enterExtensionGetter_gtlFunction_call) (const class cPtr_gtlFunction * inObject,
                                                                        const class GALGAS_location & constinArgument0,
-                                                                       class GALGAS_library inArgument1,
-                                                                       const class GALGAS_gtlDataList & constinArgument2,
+                                                                       class GALGAS_gtlContext inArgument1,
+                                                                       class GALGAS_library inArgument2,
+                                                                       const class GALGAS_gtlDataList & constinArgument3,
                                                                        C_Compiler * inCompiler
                                                                        COMMA_LOCATION_ARGS) ;
 
@@ -1537,18 +1538,10 @@ void enterExtensionGetter_call (const int32_t inClassIndex,
 
 class GALGAS_gtlData callExtensionGetter_call (const cPtr_gtlFunction * inObject,
                                                const GALGAS_location & constin_fromLocation,
+                                               GALGAS_gtlContext in_context,
                                                GALGAS_library in_lib,
                                                const GALGAS_gtlDataList & constin_actualArguments,
                                                class C_Compiler * inCompiler
-                                               COMMA_LOCATION_ARGS) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                               Function 'emptyContext'                                               *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-class GALGAS_gtlContext function_emptyContext (class C_Compiler * inCompiler
                                                COMMA_LOCATION_ARGS) ;
 
 //---------------------------------------------------------------------------------------------------------------------*

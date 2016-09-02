@@ -1347,7 +1347,7 @@ override getter @gtlFunctionCallExpression eval
     for () in functionArguments do
       arguments += ![expression eval !context !vars !lib]
     end
-    result = [function call ![functionName location] !lib !arguments]
+    result = [function call ![functionName location] !context !lib !arguments]
   end
 }
 

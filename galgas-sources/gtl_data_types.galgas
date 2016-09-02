@@ -635,7 +635,7 @@ override method @gtlType addMyValue ?!@objectlist objectList
 override getter @gtlType performGetter
   ?let @lstring     methodName
   ?let @gtlDataList arguments
-  ?    @gtlContext  context
+  ?let @gtlContext  context
   ?let @library     lib
   ->@gtlData        result
 {

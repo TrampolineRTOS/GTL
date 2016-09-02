@@ -102,9 +102,10 @@ class @gtlFunction : @gtlExecutableEntity
 }
 
 getter @gtlFunction call
-  ? let @location    fromLocation
-  ?     @library     lib
-  ? let @gtlDataList actualArguments
+  ?let @location    fromLocation
+  ?    @gtlContext  context
+  ?    @library     lib
+  ?let @gtlDataList actualArguments
   ->@gtlData        result
 {
   [self checkArguments
@@ -114,9 +115,8 @@ getter @gtlFunction call
     !@gtlUnconstructed.new{ ![returnVariable location] !emptylstring() }
   ]
   if ok then
-    @gtlContext functionContext = emptyContext()
     @string outputString = ""
-    [instructions execute !?functionContext !?funcVariableMap !?lib !?outputString]
+    [instructions execute !?context !?funcVariableMap !?lib !?outputString]
     result = [funcVariableMap resultField !returnVariable]
   else
    error fromLocation : "function call failed" : result

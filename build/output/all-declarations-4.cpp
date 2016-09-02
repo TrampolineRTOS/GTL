@@ -6113,7 +6113,7 @@ C_PrologueEpilogue gMethod_gtlType_addMyValue (defineExtensionMethod_gtlType_add
 static GALGAS_gtlData extensionGetter_gtlType_performGetter (const cPtr_gtlData * inObject,
                                                              const GALGAS_lstring & constinArgument_methodName,
                                                              const GALGAS_gtlDataList & constinArgument_arguments,
-                                                             GALGAS_gtlContext inArgument_context,
+                                                             const GALGAS_gtlContext & constinArgument_context,
                                                              const GALGAS_library & constinArgument_lib,
                                                              C_Compiler * inCompiler
                                                              COMMA_UNUSED_LOCATION_ARGS) {
@@ -6153,7 +6153,7 @@ static GALGAS_gtlData extensionGetter_gtlType_performGetter (const cPtr_gtlData 
           const enumGalgasBool test_6 = callExtensionGetter_getterExists ((const cPtr_library *) constinArgument_lib.ptr (), GALGAS_string ("type"), constinArgument_methodName, inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 662)).boolEnum () ;
           if (kBoolTrue == test_6) {
             const GALGAS_gtlType temp_7 = object ;
-            result_result = callExtensionGetter_callGetter ((const cPtr_gtlGetter *) callExtensionGetter_getGetter ((const cPtr_library *) constinArgument_lib.ptr (), GALGAS_string ("type"), constinArgument_methodName, inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 663)).ptr (), constinArgument_methodName.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 664)), inArgument_context, constinArgument_lib, temp_7, constinArgument_arguments, inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 663)) ;
+            result_result = callExtensionGetter_callGetter ((const cPtr_gtlGetter *) callExtensionGetter_getGetter ((const cPtr_library *) constinArgument_lib.ptr (), GALGAS_string ("type"), constinArgument_methodName, inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 663)).ptr (), constinArgument_methodName.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 664)), constinArgument_context, constinArgument_lib, temp_7, constinArgument_arguments, inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 663)) ;
           }else if (kBoolFalse == test_6) {
             TC_Array <C_FixItDescription> fixItArray8 ;
             inCompiler->emitSemanticError (constinArgument_methodName.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 671)), GALGAS_string ("unknown getter '").add_operation (constinArgument_methodName.getter_string (SOURCE_FILE ("gtl_data_types.galgas", 671)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 671)).add_operation (GALGAS_string ("' for type target"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 671)), fixItArray8  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 671)) ;
