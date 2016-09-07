@@ -855,7 +855,7 @@ void enterExtensionGetter_breakOn (const int32_t inClassIndex,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool callExtensionGetter_breakOn (const cPtr_debuggerContext * inObject,
-                                         const GALGAS_gtlInstruction & in_instruction,
+                                         const GALGAS_gtlInstruction in_instruction,
                                          C_Compiler * inCompiler
                                          COMMA_LOCATION_ARGS) {
   GALGAS_bool result ;
@@ -890,7 +890,7 @@ GALGAS_bool callExtensionGetter_breakOn (const cPtr_debuggerContext * inObject,
 //---------------------------------------------------------------------------------------------------------------------*
 
 static GALGAS_bool extensionGetter_debuggerContext_breakOn (const cPtr_debuggerContext * inObject,
-                                                            const GALGAS_gtlInstruction & constinArgument_instruction,
+                                                            const GALGAS_gtlInstruction constinArgument_instruction,
                                                             C_Compiler * /* inCompiler */
                                                             COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_bool result_breakOn ; // Returned variable
@@ -946,9 +946,9 @@ void enterExtensionGetter_watchOn (const int32_t inClassIndex,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool callExtensionGetter_watchOn (const cPtr_debuggerContext * inObject,
-                                         const GALGAS_gtlContext & in_context,
-                                         const GALGAS_gtlData & in_vars,
-                                         const GALGAS_library & in_lib,
+                                         const GALGAS_gtlContext in_context,
+                                         const GALGAS_gtlData in_vars,
+                                         const GALGAS_library in_lib,
                                          C_Compiler * inCompiler
                                          COMMA_LOCATION_ARGS) {
   GALGAS_bool result ;
@@ -983,9 +983,9 @@ GALGAS_bool callExtensionGetter_watchOn (const cPtr_debuggerContext * inObject,
 //---------------------------------------------------------------------------------------------------------------------*
 
 static GALGAS_bool extensionGetter_debuggerContext_watchOn (const cPtr_debuggerContext * inObject,
-                                                            const GALGAS_gtlContext & constinArgument_context,
-                                                            const GALGAS_gtlData & constinArgument_vars,
-                                                            const GALGAS_library & constinArgument_lib,
+                                                            const GALGAS_gtlContext constinArgument_context,
+                                                            const GALGAS_gtlData constinArgument_vars,
+                                                            const GALGAS_library constinArgument_lib,
                                                             C_Compiler * inCompiler
                                                             COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_bool result_watchOn ; // Returned variable
@@ -6440,7 +6440,7 @@ void enterExtensionGetter_fullPrefix (const int32_t inClassIndex,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_lstring callExtensionGetter_fullPrefix (const cPtr_gtlContext * inObject,
-                                               const GALGAS_gtlData & in_vars,
+                                               const GALGAS_gtlData in_vars,
                                                C_Compiler * inCompiler
                                                COMMA_LOCATION_ARGS) {
   GALGAS_lstring result ;
@@ -6475,7 +6475,7 @@ GALGAS_lstring callExtensionGetter_fullPrefix (const cPtr_gtlContext * inObject,
 //---------------------------------------------------------------------------------------------------------------------*
 
 static GALGAS_lstring extensionGetter_gtlContext_fullPrefix (const cPtr_gtlContext * inObject,
-                                                             const GALGAS_gtlData & /* constinArgument_vars */,
+                                                             const GALGAS_gtlData /* constinArgument_vars */,
                                                              C_Compiler * /* inCompiler */
                                                              COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_lstring result_full ; // Returned variable
@@ -9308,9 +9308,9 @@ void enterExtensionGetter_watchOn (const int32_t inClassIndex,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool callExtensionGetter_watchOn (const cPtr_gtlContext * inObject,
-                                         const GALGAS_gtlContext & in_context,
-                                         const GALGAS_gtlData & in_vars,
-                                         const GALGAS_library & in_lib,
+                                         const GALGAS_gtlContext in_context,
+                                         const GALGAS_gtlData in_vars,
+                                         const GALGAS_library in_lib,
                                          C_Compiler * inCompiler
                                          COMMA_LOCATION_ARGS) {
   GALGAS_bool result ;
@@ -9345,9 +9345,9 @@ GALGAS_bool callExtensionGetter_watchOn (const cPtr_gtlContext * inObject,
 //---------------------------------------------------------------------------------------------------------------------*
 
 static GALGAS_bool extensionGetter_gtlContext_watchOn (const cPtr_gtlContext * inObject,
-                                                       const GALGAS_gtlContext & constinArgument_context,
-                                                       const GALGAS_gtlData & constinArgument_vars,
-                                                       const GALGAS_library & constinArgument_lib,
+                                                       const GALGAS_gtlContext constinArgument_context,
+                                                       const GALGAS_gtlData constinArgument_vars,
+                                                       const GALGAS_library constinArgument_lib,
                                                        C_Compiler * inCompiler
                                                        COMMA_UNUSED_LOCATION_ARGS) {
   GALGAS_bool result_watchOn ; // Returned variable

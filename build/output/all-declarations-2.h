@@ -1522,10 +1522,10 @@ void callExtensionMethod_call (const class cPtr_gtlProcedure * inObject,
 //---------------------------------------------------------------------------------------------------------------------*
 
 typedef class GALGAS_gtlData (*enterExtensionGetter_gtlFunction_call) (const class cPtr_gtlFunction * inObject,
-                                                                       const class GALGAS_location & constinArgument0,
+                                                                       const class GALGAS_location constinArgument0,
                                                                        class GALGAS_gtlContext inArgument1,
                                                                        class GALGAS_library inArgument2,
-                                                                       const class GALGAS_gtlDataList & constinArgument3,
+                                                                       const class GALGAS_gtlDataList constinArgument3,
                                                                        C_Compiler * inCompiler
                                                                        COMMA_LOCATION_ARGS) ;
 
@@ -1537,10 +1537,10 @@ void enterExtensionGetter_call (const int32_t inClassIndex,
 //---------------------------------------------------------------------------------------------------------------------*
 
 class GALGAS_gtlData callExtensionGetter_call (const cPtr_gtlFunction * inObject,
-                                               const GALGAS_location & constin_fromLocation,
+                                               const GALGAS_location constin_fromLocation,
                                                GALGAS_gtlContext in_context,
                                                GALGAS_library in_lib,
-                                               const GALGAS_gtlDataList & constin_actualArguments,
+                                               const GALGAS_gtlDataList constin_actualArguments,
                                                class C_Compiler * inCompiler
                                                COMMA_LOCATION_ARGS) ;
 
@@ -1551,11 +1551,11 @@ class GALGAS_gtlData callExtensionGetter_call (const cPtr_gtlFunction * inObject
 //---------------------------------------------------------------------------------------------------------------------*
 
 typedef class GALGAS_gtlData (*enterExtensionGetter_gtlGetter_callGetter) (const class cPtr_gtlGetter * inObject,
-                                                                           const class GALGAS_location & constinArgument0,
+                                                                           const class GALGAS_location constinArgument0,
                                                                            class GALGAS_gtlContext inArgument1,
                                                                            class GALGAS_library inArgument2,
-                                                                           const class GALGAS_gtlData & constinArgument3,
-                                                                           const class GALGAS_gtlDataList & constinArgument4,
+                                                                           const class GALGAS_gtlData constinArgument3,
+                                                                           const class GALGAS_gtlDataList constinArgument4,
                                                                            C_Compiler * inCompiler
                                                                            COMMA_LOCATION_ARGS) ;
 
@@ -1567,11 +1567,11 @@ void enterExtensionGetter_callGetter (const int32_t inClassIndex,
 //---------------------------------------------------------------------------------------------------------------------*
 
 class GALGAS_gtlData callExtensionGetter_callGetter (const cPtr_gtlGetter * inObject,
-                                                     const GALGAS_location & constin_fromLocation,
+                                                     const GALGAS_location constin_fromLocation,
                                                      GALGAS_gtlContext in_context,
                                                      GALGAS_library in_lib,
-                                                     const GALGAS_gtlData & constin_target,
-                                                     const GALGAS_gtlDataList & constin_actualArguments,
+                                                     const GALGAS_gtlData constin_target,
+                                                     const GALGAS_gtlDataList constin_actualArguments,
                                                      class C_Compiler * inCompiler
                                                      COMMA_LOCATION_ARGS) ;
 
@@ -1793,9 +1793,9 @@ class GALGAS_location callExtensionGetter_location (const cPtr_gtlExpression * i
 //---------------------------------------------------------------------------------------------------------------------*
 
 typedef class GALGAS_gtlData (*enterExtensionGetter_gtlExpression_eval) (const class cPtr_gtlExpression * inObject,
-                                                                         const class GALGAS_gtlContext & constinArgument0,
-                                                                         const class GALGAS_gtlData & constinArgument1,
-                                                                         const class GALGAS_library & constinArgument2,
+                                                                         const class GALGAS_gtlContext constinArgument0,
+                                                                         const class GALGAS_gtlData constinArgument1,
+                                                                         const class GALGAS_library constinArgument2,
                                                                          class C_Compiler * inCompiler
                                                                          COMMA_LOCATION_ARGS) ;
 
@@ -1807,9 +1807,9 @@ void enterExtensionGetter_eval (const int32_t inClassIndex,
 //---------------------------------------------------------------------------------------------------------------------*
 
 class GALGAS_gtlData callExtensionGetter_eval (const class cPtr_gtlExpression * inObject,
-                                               const GALGAS_gtlContext & constin_context,
-                                               const GALGAS_gtlData & constin_vars,
-                                               const GALGAS_library & constin_lib,
+                                               const GALGAS_gtlContext constin_context,
+                                               const GALGAS_gtlData constin_vars,
+                                               const GALGAS_library constin_lib,
                                                C_Compiler * inCompiler
                                                COMMA_LOCATION_ARGS) ;
 

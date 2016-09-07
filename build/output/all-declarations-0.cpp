@@ -6151,8 +6151,8 @@ C_PrologueEpilogue gGetter_gtlAbstractSortInstruction_compare (NULL,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_sint callExtensionGetter_compare (const cPtr_gtlAbstractSortInstruction * inObject,
-                                         const GALGAS_gtlData & in_s_31_,
-                                         const GALGAS_gtlData & in_s_32_,
+                                         const GALGAS_gtlData in_s_31_,
+                                         const GALGAS_gtlData in_s_32_,
                                          C_Compiler * inCompiler
                                          COMMA_LOCATION_ARGS) {
   GALGAS_sint result ;
@@ -6667,8 +6667,8 @@ void enterExtensionGetter_compareElements (const int32_t inClassIndex,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_sint callExtensionGetter_compareElements (const cPtr_gtlSortStatementStructInstruction * inObject,
-                                                 const GALGAS_gtlData & in_s_31_,
-                                                 const GALGAS_gtlData & in_s_32_,
+                                                 const GALGAS_gtlData in_s_31_,
+                                                 const GALGAS_gtlData in_s_32_,
                                                  GALGAS_sortingKeyList in_keyList,
                                                  C_Compiler * inCompiler
                                                  COMMA_LOCATION_ARGS) {
@@ -6704,8 +6704,8 @@ GALGAS_sint callExtensionGetter_compareElements (const cPtr_gtlSortStatementStru
 //---------------------------------------------------------------------------------------------------------------------*
 
 static GALGAS_sint extensionGetter_gtlSortStatementStructInstruction_compareElements (const cPtr_gtlSortStatementStructInstruction * inObject,
-                                                                                      const GALGAS_gtlData & constinArgument_s_31_,
-                                                                                      const GALGAS_gtlData & constinArgument_s_32_,
+                                                                                      const GALGAS_gtlData constinArgument_s_31_,
+                                                                                      const GALGAS_gtlData constinArgument_s_32_,
                                                                                       GALGAS_sortingKeyList inArgument_keyList,
                                                                                       C_Compiler * inCompiler
                                                                                       COMMA_UNUSED_LOCATION_ARGS) {
@@ -8136,9 +8136,9 @@ C_PrologueEpilogue gGetter_gtlVarItem_stringPath (NULL,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string callExtensionGetter_stringPath (const cPtr_gtlVarItem * inObject,
-                                              const GALGAS_gtlContext & in_exeContext,
-                                              const GALGAS_gtlData & in_vars,
-                                              const GALGAS_library & in_lib,
+                                              const GALGAS_gtlContext in_exeContext,
+                                              const GALGAS_gtlData in_vars,
+                                              const GALGAS_library in_lib,
                                               C_Compiler * inCompiler
                                               COMMA_LOCATION_ARGS) {
   GALGAS_string result ;
@@ -8324,11 +8324,11 @@ C_PrologueEpilogue gGetter_gtlVarItem_getInContext (NULL,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlData callExtensionGetter_getInContext (const cPtr_gtlVarItem * inObject,
-                                                 const GALGAS_gtlContext & in_exeContext,
-                                                 const GALGAS_gtlData & in_context,
-                                                 const GALGAS_gtlData & in_vars,
-                                                 const GALGAS_library & in_lib,
-                                                 const GALGAS_gtlVarPath & in_path,
+                                                 const GALGAS_gtlContext in_exeContext,
+                                                 const GALGAS_gtlData in_context,
+                                                 const GALGAS_gtlData in_vars,
+                                                 const GALGAS_library in_lib,
+                                                 const GALGAS_gtlVarPath in_path,
                                                  C_Compiler * inCompiler
                                                  COMMA_LOCATION_ARGS) {
   GALGAS_gtlData result ;
@@ -8389,11 +8389,11 @@ C_PrologueEpilogue gGetter_gtlVarItem_existsInContext (NULL,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool callExtensionGetter_existsInContext (const cPtr_gtlVarItem * inObject,
-                                                 const GALGAS_gtlContext & in_exeContext,
-                                                 const GALGAS_gtlData & in_context,
-                                                 const GALGAS_gtlData & in_vars,
-                                                 const GALGAS_library & in_lib,
-                                                 const GALGAS_gtlVarPath & in_path,
+                                                 const GALGAS_gtlContext in_exeContext,
+                                                 const GALGAS_gtlData in_context,
+                                                 const GALGAS_gtlData in_vars,
+                                                 const GALGAS_library in_lib,
+                                                 const GALGAS_gtlVarPath in_path,
                                                  C_Compiler * inCompiler
                                                  COMMA_LOCATION_ARGS) {
   GALGAS_bool result ;

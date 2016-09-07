@@ -68,6 +68,7 @@
 
 
 \definecolor{seagreen}{RGB}{64,100,120}
+\definecolor{darkgreen}{RGB}{50,180,50}
 \definecolor{darkpink}{RGB}{200,100,120}
 \definecolor{light-pink}{RGB}{250,190,255}
 \definecolor{light-gray}{gray}{0.85}
@@ -184,7 +185,8 @@
 
 \begin{document}
 
-\begin{titlingpage}\begin{tikzpicture}
+\begin{titlingpage}
+\begin{tikzpicture}
 \node[fill=light-gray,minimum width=15cm,minimum height=1.8cm] at (5.8,12) {};
 \draw[color=white] (0,0) -- (-2,0) {};
 \draw (0,0) -- (0,.99\textheight);
@@ -3489,6 +3491,64 @@ c from file '/Users/jlb/Develop/GTL/examples/template.gtl', line 36:7
             }
     )
 \end{console}
+
+\chapter{The GTL debugger}
+
+GTL includes a debugger. To launch the debugger, invoke GTL with the {\ttfamily\footnotesize {-}-debug} command line option. The GTL program stops before executing the first instruction and the debugger displays its prompt:
+
+\vspace{1em}
+\noindent
+\fbox{%
+  \parbox{.975\textwidth}{\ttfamily\scriptsize%
+     Starting debugger, type help for command list\\
+     \color{red}{gtl>}
+  }
+}
+\vspace{1em}
+
+The debugger includes commands to display variables and expression, to set breakpoints and watchpoints, to execute the GTL program step by step and to execute a set of commands each time an instruction is executed in step by step mode.
+
+\section{The help command}
+
+The help command displays a help text:
+
+\vspace{1em}
+\noindent
+\fbox{%
+  \parbox{.975\textwidth}{\ttfamily\scriptsize%
+     Starting debugger, type help for command list\\
+     \color{red}{gtl>} help\\
+\color{darkgreen}{%
+\vspace{-2.25em}
+\begin{tabbing}
+Av\=ailable commands:~~~~~~~~~~~~~~\=\\
+\> break <filename>:<line>\>:~set a breakpoint at <line> in file <filename>\\
+\> break <line>\>:~set a breakpoint at <line> in the current file\\
+\> break\>:~lists the breakpoints\\
+\> break not <num>\>:~delete breakpoint at index <num>\\
+\> cont\>:~continue execution until the next breakpoint or the end\\
+\> display <variable>\>:~display variable <variable>\\
+\> do <command>\>:~do a command each time a step is done\\
+\> do\>:~list the do commands\\
+\> do not <num>\>:~delete the do command at index <num>\\
+\> list\>:~lists instructions +/- 5 around current one\\
+\> list <num>\>:~lists instructions +/- <num> around current one\\
+\> let <variable> := <expression>\>:~compute <expression> and set <variable> to the result\\
+\> print <expression>\>:~prints the <expression>\\
+\> step\>:~step one instruction\\
+\> unlet <variable>\>:~delete <variable>\\
+\> variables\>:~display all variables in scope\\
+\> watch (<expression>)\>:~set a watchpoint matching the boolean <expression>\\
+\> watch\>:~lists the watchpoints\\
+\> watch not <num>\>:~delete watchpoint at index <num>\\
+\> <return>\>:~step one instruction
+\end{tabbing}
+\vspace{-1em}
+}
+  }
+}
+\vspace{1em}
+
 
 \chapter{Using GTL in a GALGAS project}
 
