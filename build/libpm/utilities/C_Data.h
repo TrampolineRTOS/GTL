@@ -69,9 +69,12 @@ class C_Data {
   public : int32_t compareWithData (const C_Data & inData) const ;
 
 //---
-  public : void removeLengthFromStart (const uint32_t inLength) ;
+  public : void removeLengthFromStart (const uint32_t inLength COMMA_LOCATION_ARGS) ;
 
-//--- 
+//---
+  public : void removeLastByte (LOCATION_ARGS) ;
+
+//---
   public : bool operator == (const C_Data & inData) const ;
   public : bool operator != (const C_Data & inData) const ;
 } ;

@@ -1885,8 +1885,8 @@ void cGrammar_gtl_5F_module_5F_grammar::performIndexing (C_Compiler * /* inCompi
 void cGrammar_gtl_5F_module_5F_grammar::performOnlyLexicalAnalysis (C_Compiler * inCompiler,
              const C_String & inSourceFilePath) {
   C_Lexique_gtl_5F_scanner * scanner = NULL ;
-  macroMyNew (scanner, C_Lexique_gtl_5F_scanner (inCompiler, "", "", inSourceFilePath COMMA_HERE)) ;
-  if (scanner->sourceText () != NULL) {
+  macroMyNew (scanner, C_Lexique_gtl_5F_scanner (inCompiler, inSourceFilePath COMMA_HERE)) ;
+  if (scanner->sourceText ().isValid ()) {
     scanner->performLexicalAnalysis () ;
   }
   macroDetachSharedObject (scanner) ;
@@ -1895,8 +1895,8 @@ void cGrammar_gtl_5F_module_5F_grammar::performOnlyLexicalAnalysis (C_Compiler *
 void cGrammar_gtl_5F_module_5F_grammar::performOnlySyntaxAnalysis (C_Compiler * inCompiler,
              const C_String & inSourceFilePath) {
   C_Lexique_gtl_5F_scanner * scanner = NULL ;
-  macroMyNew (scanner, C_Lexique_gtl_5F_scanner (inCompiler, "", "", inSourceFilePath COMMA_HERE)) ;
-  if (scanner->sourceText () != NULL) {
+  macroMyNew (scanner, C_Lexique_gtl_5F_scanner (inCompiler, inSourceFilePath COMMA_HERE)) ;
+  if (scanner->sourceText ().isValid ()) {
     scanner->performTopDownParsing (gProductions_gtl_module_grammar, gProductionNames_gtl_module_grammar, gProductionIndexes_gtl_module_grammar,
                                     gFirstProductionIndexes_gtl_module_grammar, gDecision_gtl_module_grammar, gDecisionIndexes_gtl_module_grammar, 588) ;
   }
@@ -1922,8 +1922,8 @@ void cGrammar_gtl_5F_module_5F_grammar::_performSourceFileParsing_ (C_Compiler *
     }
     if (C_FileManager::fileExistsAtPath (filePath)) {
     C_Lexique_gtl_5F_scanner * scanner = NULL ;
-    macroMyNew (scanner, C_Lexique_gtl_5F_scanner (inCompiler, "", "", filePath COMMA_HERE)) ;
-    if (scanner->sourceText () != NULL) {
+    macroMyNew (scanner, C_Lexique_gtl_5F_scanner (inCompiler, filePath COMMA_HERE)) ;
+    if (scanner->sourceText ().isValid ()) {
       const bool ok = scanner->performTopDownParsing (gProductions_gtl_module_grammar, gProductionNames_gtl_module_grammar, gProductionIndexes_gtl_module_grammar,
                                                       gFirstProductionIndexes_gtl_module_grammar, gDecision_gtl_module_grammar, gDecisionIndexes_gtl_module_grammar, 588) ;
       if (ok && ! executionModeIsSyntaxAnalysisOnly ()) {

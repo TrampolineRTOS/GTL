@@ -80,3 +80,10 @@ else
 end if
 
 println "DUMMY: " + ["DUMMY" envVar]
+
+let aStr := "Hello World !"
+[!aStr removeCharAtIndex : 1]
+println aStr
+[!aStr insertCharAtIndex : 'e', 1]
+println aStr
+

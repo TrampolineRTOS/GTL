@@ -2467,6 +2467,17 @@ override setter @gtlString performSetter
     @uint index = [[[arguments dataAtIndex !1] as @gtlInt value] uint]
     [!?value setCharacterAtIndex !charToSet !index]
     where = methodName
+  elsif "insertCharAtIndex" == methodName then
+    argumentsCheck(!methodName !charIntArguments() !arguments)
+    @char charToInsert = [[arguments dataAtIndex !0] as @gtlChar value]
+    @uint index = [[[arguments dataAtIndex !1] as @gtlInt value] uint]
+    [!?value insertCharacterAtIndex !charToInsert !index]
+    where = methodName
+  elsif "removeCharAtIndex" == methodName then
+    argumentsCheck(!methodName !intArgument() !arguments)
+    @uint index = [[[arguments dataAtIndex !0] as @gtlInt value] uint]
+    [!?value removeCharacterAtIndex ?* !index]
+    where = methodName
   elsif [lib setterExists !"string" !methodName] then
     @gtlData copy = self
     [[lib getSetter !"string" !methodName] callSetter

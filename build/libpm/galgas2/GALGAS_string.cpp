@@ -28,6 +28,7 @@
 #include "strings/unicode_character_cpp.h"
 #include "galgas2/C_galgas_io.h"
 #include "files/C_FileManager.h"
+#include "files/C_BinaryFileWrite.h"
 #include "galgas2/F_verbose_output.h"
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1532,7 +1533,7 @@ void GALGAS_string::method_writeToFile (GALGAS_string inFilePath,
         inCompiler->onTheFlyRunTimeError (message COMMA_THERE) ;
       }
     }else{
-      ggs_printWarning (NULL, C_IssueWithFixIt (), C_String ("Need to write '") + inFilePath.mString + "'.\n" COMMA_THERE) ;
+      ggs_printWarning (C_SourceTextInString (), C_IssueWithFixIt (), C_String ("Need to write '") + inFilePath.mString + "'.\n" COMMA_THERE) ;
     }
   }
 }
@@ -1575,7 +1576,7 @@ void GALGAS_string::method_writeToFileWhenDifferentContents (GALGAS_string inFil
           }
         }
       }else{
-        ggs_printWarning (NULL, C_IssueWithFixIt (), C_String ("Need to write '") + inFilePath.mString + "'.\n" COMMA_THERE) ;
+        ggs_printWarning (C_SourceTextInString (), C_IssueWithFixIt (), C_String ("Need to write '") + inFilePath.mString + "'.\n" COMMA_THERE) ;
       }
     }
   }
@@ -1602,7 +1603,7 @@ void GALGAS_string::method_writeToExecutableFile (GALGAS_string inFilePath,
         inCompiler->onTheFlyRunTimeError (message COMMA_THERE) ;
       }
     }else{
-      ggs_printWarning (NULL, C_IssueWithFixIt (), C_String ("Need to write '") + inFilePath.mString + "'.\n" COMMA_THERE) ;
+      ggs_printWarning (C_SourceTextInString (), C_IssueWithFixIt (), C_String ("Need to write '") + inFilePath.mString + "'.\n" COMMA_THERE) ;
     }
   }
 }
@@ -1645,7 +1646,7 @@ void GALGAS_string::method_writeToExecutableFileWhenDifferentContents (GALGAS_st
           }
         }
       }else{
-        ggs_printWarning (NULL, C_IssueWithFixIt (), C_String ("Need to write '") + inFilePath.mString + "'.\n" COMMA_THERE) ;
+        ggs_printWarning (C_SourceTextInString (), C_IssueWithFixIt (), C_String ("Need to write '") + inFilePath.mString + "'.\n" COMMA_THERE) ;
       }
     }
   }
@@ -1803,7 +1804,7 @@ void GALGAS_string::class_method_deleteFile (GALGAS_string inFilePath,
                                              COMMA_LOCATION_ARGS) {
   if (inFilePath.isValid ()) {
     if (! C_Compiler::performGeneration ()) {
-      ggs_printWarning (NULL, C_IssueWithFixIt (), C_String ("Need to delete '") + inFilePath.mString + "'.\n" COMMA_THERE) ;
+      ggs_printWarning (C_SourceTextInString (), C_IssueWithFixIt (), C_String ("Need to delete '") + inFilePath.mString + "'.\n" COMMA_THERE) ;
     }else if (inFilePath.mString.length () == 0) {
       inCompiler->onTheFlyRunTimeError ("cannot perform file delete: file name is an empty string" COMMA_THERE) ;
     }else{
@@ -1836,7 +1837,7 @@ void GALGAS_string::class_method_removeEmptyDirectory (GALGAS_string inDirectory
                                                        COMMA_LOCATION_ARGS) {
   if (inDirectoryPath.isValid ()) {
     if (! C_Compiler::performGeneration ()) {
-      ggs_printWarning (NULL, C_IssueWithFixIt (), C_String ("Need to remove directory '") + inDirectoryPath.mString + "'.\n" COMMA_THERE) ;
+      ggs_printWarning (C_SourceTextInString (), C_IssueWithFixIt (), C_String ("Need to remove directory '") + inDirectoryPath.mString + "'.\n" COMMA_THERE) ;
     }else if (inDirectoryPath.mString.length () == 0) {
       inCompiler->onTheFlyRunTimeError ("cannot perform directory removing: directory path is an empty string" COMMA_THERE) ;
     }else{
@@ -1885,7 +1886,7 @@ void GALGAS_string::class_method_removeDirectoryRecursively (GALGAS_string inDir
                                                              COMMA_LOCATION_ARGS) {
   if (inDirectoryPath.isValid ()) {
     if (! C_Compiler::performGeneration ()) {
-      ggs_printWarning (NULL, C_IssueWithFixIt (), C_String ("Need to remove directory '") + inDirectoryPath.mString + "'.\n" COMMA_THERE) ;
+      ggs_printWarning (C_SourceTextInString (), C_IssueWithFixIt (), C_String ("Need to remove directory '") + inDirectoryPath.mString + "'.\n" COMMA_THERE) ;
     }else if (inDirectoryPath.mString.length () == 0) {
       inCompiler->onTheFlyRunTimeError ("cannot perform directory removing: directory path is an empty string" COMMA_THERE) ;
     }else{
@@ -1901,21 +1902,104 @@ void GALGAS_string::class_method_removeDirectoryRecursively (GALGAS_string inDir
 
 //---------------------------------------------------------------------------------------------------------------------*
 
+static bool writeFile (const C_String & inMessage,
+                       const C_String & inFullPathName,
+                       const C_Data & inContentData,
+                       C_Compiler * inCompiler) {
+  bool ok = true ;
+  if (inCompiler->performGeneration ()) {
+    const bool verboseOptionOn = verboseOutput () ;
+    const C_String directory = inFullPathName.stringByDeletingLastPathComponent () ;
+    C_FileManager::makeDirectoryIfDoesNotExist (directory) ;
+    C_BinaryFileWrite binaryFile (inFullPathName) ;
+    ok = binaryFile.isOpened () ;
+    if (! ok) {
+      C_String message ;
+      message << "Cannot open '" << inFullPathName << "' file in write mode." ;
+      inCompiler->onTheFlySemanticError (message COMMA_HERE) ;
+    }
+    binaryFile.appendData (inContentData) ;
+  //--- Close file
+    if (ok) {
+      ok = binaryFile.close () ;
+    }
+    if (ok && verboseOptionOn) {
+      ggs_printFileOperationSuccess (inMessage + " '" + inFullPathName + "'.\n") ;
+    }
+  }else{
+    ggs_printWarning (C_SourceTextInString(), C_IssueWithFixIt (), C_String ("Need to write '") + inFullPathName + "'.\n" COMMA_HERE) ;
+  }
+  return ok ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+static bool updateFile (const C_String & inFullPathName,
+                        const C_Data & inContentData,
+                        C_Compiler * inCompiler) {
+//--- Read file
+  bool needsToWriteFile = true ;
+  C_Data fileData ;
+  bool ok = C_FileManager::binaryDataWithContentOfFile (inFullPathName, fileData) ;
+  if (ok) {
+    needsToWriteFile = fileData != inContentData ;
+  }
+//--- File needs to be updated
+  if (ok && needsToWriteFile) {
+    ok = writeFile ("Updated", inFullPathName, inContentData, inCompiler) ;
+  }
+  return ok ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+static void generateFile (const C_String & inStartPath,
+                          const C_String & inFileName,
+                          const C_String & inContents,
+                          const bool inMakeExecutable,
+                          C_Compiler * inCompiler) {
+  bool ok = true ;
+//--- Current data
+  const C_Data currentData = inContents.utf8Data () ;
+//--- File exists ?
+  const TC_UniqueArray <C_String> directoriesToExclude ;
+  const C_String fullPathName = C_FileManager::findFileInDirectory (inStartPath, inFileName, directoriesToExclude) ;
+  if (fullPathName.length () == 0) { // No, does not exist
+    ok = writeFile ("Created", inStartPath + "/" + inFileName, currentData, inCompiler) ;
+  }else{ //--- File exists: read it
+    ok = updateFile (fullPathName, currentData, inCompiler) ;
+  }
+//--- Make file executable
+  if (ok && inMakeExecutable) {
+    #if COMPILE_FOR_WINDOWS == 0
+      struct stat fileStat ;
+      ::stat (fullPathName.cString (HERE), & fileStat) ;
+      // printf ("FILE MODE 0x%X\n", fileStat.st_mode) ;
+      ::chmod (fullPathName.cString (HERE), fileStat.st_mode | S_IXUSR | S_IXGRP | S_IXOTH) ;
+    #endif
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
 void GALGAS_string::class_method_generateFile (GALGAS_string inStartPath,
                                                GALGAS_string inFileName,
                                                GALGAS_string inContents,
                                                C_Compiler * inCompiler
                                                COMMA_UNUSED_LOCATION_ARGS) {
-  const bool built = (inStartPath.isValid ())
-    && (inFileName.isValid ())
-    && (inContents.isValid ())
-  ;
-  if (built) {
-    TC_UniqueArray <C_String> directoriesToExclude ;
-    inCompiler->generateFileFromPathes (inStartPath.mString,
-                                        directoriesToExclude,
-                                        inFileName.mString,
-                                        inContents.mString) ;
+//  const bool built = (inStartPath.isValid ())
+//    && (inFileName.isValid ())
+//    && (inContents.isValid ())
+//  ;
+//  if (built) {
+//    TC_UniqueArray <C_String> directoriesToExclude ;
+//    inCompiler->generateFileFromPathes (inStartPath.mString,
+//                                        directoriesToExclude,
+//                                        inFileName.mString,
+//                                        inContents.mString) ;
+//  }
+  if (inStartPath.isValid () && inFileName.isValid () && inContents.isValid ()) {
+    generateFile (inStartPath.mString, inFileName.mString, inContents.mString, false, inCompiler) ;
   }
 }
 

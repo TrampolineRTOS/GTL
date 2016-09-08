@@ -4,7 +4,7 @@
 //                                                                                                                     *
 //  This file is part of libpm library                                                                                 *
 //                                                                                                                     *
-//  Copyright (C) 1997, ..., 2014 Pierre Molinaro.                                                                     *
+//  Copyright (C) 1997, ..., 2016 Pierre Molinaro.                                                                     *
 //                                                                                                                     *
 //  e-mail : pierre.molinaro@irccyn.ec-nantes.fr                                                                       *
 //                                                                                                                     *
@@ -425,6 +425,23 @@ const char * C_String::cString (UNUSED_LOCATION_ARGS) const {
       mEmbeddedString->mEncodedCString [idx] = '\0' ;
     }
     result = mEmbeddedString->mEncodedCString ;
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+C_Data C_String::utf8Data (void) const {
+  C_Data result ;
+  if (NULL != mEmbeddedString) {
+    macroValidSharedObject (mEmbeddedString, cEmbeddedString) ;
+    for (uint32_t i=0 ; i<mEmbeddedString->mLength ; i++) {
+      char buffer [5] ;
+      const int32_t n = UTF8StringFromUTF32Character (mEmbeddedString->mString [i], buffer) ;
+      for (int32_t j=0 ; j<n ; j++) {
+        result.appendByte ((uint8_t) buffer [j]) ;
+      }
+    }
   }
   return result ;
 }

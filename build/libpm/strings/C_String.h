@@ -4,7 +4,7 @@
 //                                                                                                                     *
 //  This file is part of libpm library                                                                                 *
 //                                                                                                                     *
-//  Copyright (C) 1997, ..., 2014 Pierre Molinaro.                                                                     *
+//  Copyright (C) 1997, ..., 2016 Pierre Molinaro.                                                                     *
 //                                                                                                                     *
 //  e-mail : pierre.molinaro@irccyn.ec-nantes.fr                                                                       *
 //                                                                                                                     *
@@ -173,6 +173,9 @@ class C_String : public AC_OutputStream {
 //--- Get a string pointer
   public : const char * cString (LOCATION_ARGS) const ;
 
+//--- Get a string pointer
+  public : C_Data utf8Data (void) const ;
+
 //--- Get a UTF32 string pointer
   public : const utf32 * utf32String (LOCATION_ARGS) const ;
 
@@ -317,7 +320,7 @@ class C_String : public AC_OutputStream {
 
 const size_t kTextReadExceptionStringMaxLength = 1000 ;
 
-class C_TextReadException : public ::std::  exception {
+class C_TextReadException : public ::std::exception {
   public : C_TextReadException (const char * inFileName) ;
 
   private : char mErrorMessage [kTextReadExceptionStringMaxLength + 1] ;

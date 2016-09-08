@@ -56,6 +56,15 @@ class C_FileManager {
   public : static C_String stringWithContentOfFile (const C_String & inFilePath,
                                                     PMTextFileEncoding & outTextFileEncoding,
                                                     bool & outOk) ;
+//--- Update file
+  public : static void updateFile (const C_String & inStartPath,
+                                   const TC_UniqueArray <C_String> & inDirectoriesToExclude,
+                                   const C_String & inFileName,
+                                   const C_String & inContents,
+                                   const bool inMakeExecutable,
+                                   bool & outOk,
+                                   bool & outWritten) ;
+
 //--- Write string to file
   public : static bool writeStringToFile (const C_String & inString,
                                           const C_String & inFilePath) ;

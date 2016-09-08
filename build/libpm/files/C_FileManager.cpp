@@ -631,6 +631,59 @@ C_String C_FileManager::stringWithContentOfFile (const C_String & inFilePath) {
 //---------------------------------------------------------------------------------------------------------------------*
 
 #ifdef PRAGMA_MARK_ALLOWED
+  #pragma mark Update File
+#endif
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void C_FileManager::updateFile (const C_String & inStartPath,
+                                const TC_UniqueArray <C_String> & inDirectoriesToExclude,
+                                const C_String & inFileName,
+                                const C_String & inContents,
+                                const bool inMakeExecutable,
+                                bool & outOk,
+                                bool & outWritten) {
+  bool needsToWriteFile = true ;
+  outOk = true ;
+//--- Current data
+  const C_Data currentData = inContents.utf8Data () ;
+
+  C_String fullPathName = findFileInDirectory (inStartPath, inFileName, inDirectoriesToExclude) ;
+  if (fullPathName.length () == 0) {
+    fullPathName = inStartPath + "/" + inFileName ;
+  }else{
+  //--- Try to read file
+    C_Data fileData ;
+    outOk = binaryDataWithContentOfFile (fullPathName, fileData) ;
+    if (outOk) {
+      needsToWriteFile = fileData != currentData ;
+    }
+  }
+//--- File needs to be updated
+  if (outOk && needsToWriteFile) {
+    C_BinaryFileWrite binaryFile (fullPathName) ;
+    outOk = binaryFile.isOpened () ;
+    binaryFile.appendData (currentData) ;
+  //--- Close file
+    if (outOk) {
+      outOk = binaryFile.close () ;
+    }
+  }
+//--- Make file executable
+  if (outOk && inMakeExecutable) {
+    #if COMPILE_FOR_WINDOWS == 0
+      struct stat fileStat ;
+      ::stat (fullPathName.cString (HERE), & fileStat) ;
+      // printf ("FILE MODE 0x%X\n", fileStat.st_mode) ;
+      ::chmod (fullPathName.cString (HERE), fileStat.st_mode | S_IXUSR | S_IXGRP | S_IXOTH) ;
+    #endif
+  }
+  outWritten = needsToWriteFile ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+#ifdef PRAGMA_MARK_ALLOWED
   #pragma mark Write to File
 #endif
 
@@ -638,7 +691,7 @@ C_String C_FileManager::stringWithContentOfFile (const C_String & inFilePath) {
 
 bool C_FileManager::writeStringToFile (const C_String & inString,
                                        const C_String & inFilePath) {
-  C_FileManager::makeDirectoryIfDoesNotExist (inFilePath.stringByDeletingLastPathComponent ()) ;
+  makeDirectoryIfDoesNotExist (inFilePath.stringByDeletingLastPathComponent ()) ;
   C_TextFileWrite file (inFilePath) ;
   bool success = file.isOpened () ;
   file << inString ;
