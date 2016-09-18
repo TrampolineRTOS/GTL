@@ -431,23 +431,6 @@ const char * C_String::cString (UNUSED_LOCATION_ARGS) const {
 
 //---------------------------------------------------------------------------------------------------------------------*
 
-C_Data C_String::utf8Data (void) const {
-  C_Data result ;
-  if (NULL != mEmbeddedString) {
-    macroValidSharedObject (mEmbeddedString, cEmbeddedString) ;
-    for (uint32_t i=0 ; i<mEmbeddedString->mLength ; i++) {
-      char buffer [5] ;
-      const int32_t n = UTF8StringFromUTF32Character (mEmbeddedString->mString [i], buffer) ;
-      for (int32_t j=0 ; j<n ; j++) {
-        result.appendByte ((uint8_t) buffer [j]) ;
-      }
-    }
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
 const utf32 * C_String::utf32String (UNUSED_LOCATION_ARGS) const {
   const utf32 * result = kEmptyUTF32String ;
   if (NULL != mEmbeddedString) {
@@ -955,7 +938,7 @@ C_String C_String::stringByReplacingCharacterByString (const utf32 inCharacter,
 //---------------------------------------------------------------------------------------------------------------------*
 
 C_String C_String::stringByReplacingStringByString (const C_String inSearchedString,
-                                                    const C_String & inReplacementString,
+                                                    const C_String inReplacementString,
                                                     uint32_t & outReplacementCount,
                                                     bool & outOk) const {
   C_String result ;
@@ -986,6 +969,15 @@ C_String C_String::stringByReplacingStringByString (const C_String inSearchedStr
     //printf ("RESULT STRING: '%s'\n", result.cString (HERE)) ;
   }
   return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+C_String C_String::stringByReplacingStringByString (const C_String inSearchedString,
+                                                    const C_String inReplacementString) const {
+  uint32_t unusedReplacementCount = 0 ;
+  bool unusedOk = true ;
+  return stringByReplacingStringByString (inSearchedString, inReplacementString, unusedReplacementCount, unusedOk) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1556,7 +1548,12 @@ C_String C_String::lastPathComponentWithoutExtension (void) const {
 C_String C_String::md5 (void) const {
   C_String result ;
   uint8_t digest [16] ;
-  ::md5 ((uint8_t *) cString (HERE), (uint32_t) length (), digest);
+  MD5_CTX context ;
+  MD5_Init (&context) ;
+  MD5_Update(&context, (uint8_t *) cString (HERE), (uint32_t) length ()) ;
+  MD5_Final (digest, &context);
+
+//  ::md5 ((uint8_t *) cString (HERE), (uint32_t) length (), digest);
   char s [10] ;
   for (uint32_t i=0 ; i<16 ; i++) {
     sprintf (s, "%02X", digest [i]) ;

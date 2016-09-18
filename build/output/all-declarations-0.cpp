@@ -10882,7 +10882,7 @@ C_String C_Lexique_gtl_5F_scanner::getCurrentTokenString (const cToken * inToken
 //                           Template Delimiters                                                                       *
 //---------------------------------------------------------------------------------------------------------------------*
 
-static const cTemplateDelimiter kTemplateDefinitionArray [1] = {
+static const cTemplateDelimiter gtl_5F_scanner_kTemplateDefinitionArray [1] = {
   cTemplateDelimiter (kUnicodeString_gtl_5F_scanner__25_, 1, kUnicodeString_gtl_5F_scanner__25_, 1, NULL, true)
 } ;
 
@@ -10890,7 +10890,7 @@ static const cTemplateDelimiter kTemplateDefinitionArray [1] = {
 //                           Template Replacements                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
-static const cTemplateDelimiter kTemplateReplacementArray [3] = {
+static const cTemplateDelimiter gtl_5F_scanner_kTemplateReplacementArray [3] = {
   cTemplateDelimiter (kUnicodeString_gtl_5F_scanner__5C__25_, 2, kUnicodeString_gtl_5F_scanner__25_, 1, NULL, true),
   cTemplateDelimiter (kUnicodeString_gtl_5F_scanner__5C_n, 2, kUnicodeString_gtl_5F_scanner__A_, 1, NULL, true),
   cTemplateDelimiter (kUnicodeString_gtl_5F_scanner__5C__5C_, 2, kUnicodeString_gtl_5F_scanner__5C_, 1, NULL, true)
@@ -10900,7 +10900,7 @@ static const cTemplateDelimiter kTemplateReplacementArray [3] = {
 //            Terminal Symbols as end of script in template mark                                                       *
 //---------------------------------------------------------------------------------------------------------------------*
 
-static const bool kEndOfScriptInTemplateArray [112] = {
+static const bool gtl_5F_scanner_kEndOfScriptInTemplateArray [112] = {
   false /* identifier */,
   false /* literal_enum */,
   false /* literal_double */,
@@ -11026,10 +11026,10 @@ bool C_Lexique_gtl_5F_scanner::parseLexicalToken (void) {
   token.mTokenCode = -1 ;
   while ((token.mTokenCode < 0) && (UNICODE_VALUE (mCurrentChar) != '\0')) {
     if ((mMatchedTemplateDelimiterIndex >= 0)
-     && (kTemplateDefinitionArray [mMatchedTemplateDelimiterIndex].mEndStringLength > 0)
+     && (gtl_5F_scanner_kTemplateDefinitionArray [mMatchedTemplateDelimiterIndex].mEndStringLength > 0)
      && (UNICODE_VALUE (mCurrentChar) != '\0')) {
-      const bool foundEndDelimitor = testForInputUTF32String (kTemplateDefinitionArray [mMatchedTemplateDelimiterIndex].mEndString,
-                                                              kTemplateDefinitionArray [mMatchedTemplateDelimiterIndex].mEndStringLength,
+      const bool foundEndDelimitor = testForInputUTF32String (gtl_5F_scanner_kTemplateDefinitionArray [mMatchedTemplateDelimiterIndex].mEndString,
+                                                              gtl_5F_scanner_kTemplateDefinitionArray [mMatchedTemplateDelimiterIndex].mEndStringLength,
                                                               true) ;
       if (foundEndDelimitor) {
         mMatchedTemplateDelimiterIndex = -1 ;
@@ -11038,23 +11038,23 @@ bool C_Lexique_gtl_5F_scanner::parseLexicalToken (void) {
     while ((mMatchedTemplateDelimiterIndex < 0) && (UNICODE_VALUE (mCurrentChar) != '\0')) {
       int32_t replacementIndex = 0 ;
       while (replacementIndex >= 0) {
-        replacementIndex = findTemplateDelimiterIndex (kTemplateReplacementArray, 3) ;
+        replacementIndex = findTemplateDelimiterIndex (gtl_5F_scanner_kTemplateReplacementArray, 3) ;
         if (replacementIndex >= 0) {
-          if (kTemplateReplacementArray [replacementIndex].mReplacementFunction == NULL) {
-            token.mTemplateStringBeforeToken << kTemplateReplacementArray [replacementIndex].mEndString ;
+          if (gtl_5F_scanner_kTemplateReplacementArray [replacementIndex].mReplacementFunction == NULL) {
+            token.mTemplateStringBeforeToken << gtl_5F_scanner_kTemplateReplacementArray [replacementIndex].mEndString ;
           }else{
             C_String s ;
-            while (notTestForInputUTF32String (kTemplateReplacementArray [replacementIndex].mEndString,
-                                               kTemplateReplacementArray [replacementIndex].mEndStringLength,
+            while (notTestForInputUTF32String (gtl_5F_scanner_kTemplateReplacementArray [replacementIndex].mEndString,
+                                               gtl_5F_scanner_kTemplateReplacementArray [replacementIndex].mEndStringLength,
                                                kEndOfSourceLexicalErrorMessage
                                                COMMA_HERE)) {
               s.appendUnicodeCharacter (previousChar () COMMA_HERE) ;
             }
-            kTemplateReplacementArray [replacementIndex].mReplacementFunction (*this, s, token.mTemplateStringBeforeToken) ;
+            gtl_5F_scanner_kTemplateReplacementArray [replacementIndex].mReplacementFunction (*this, s, token.mTemplateStringBeforeToken) ;
           }
         }
       }
-      mMatchedTemplateDelimiterIndex = findTemplateDelimiterIndex (kTemplateDefinitionArray, 1) ;
+      mMatchedTemplateDelimiterIndex = findTemplateDelimiterIndex (gtl_5F_scanner_kTemplateDefinitionArray, 1) ;
       if (mMatchedTemplateDelimiterIndex < 0) {
         token.mTemplateStringBeforeToken.appendUnicodeCharacter (mCurrentChar COMMA_HERE) ;
         advance () ;
@@ -11583,7 +11583,7 @@ bool C_Lexique_gtl_5F_scanner::parseLexicalToken (void) {
       advance () ; // ... go throught unknown character
     }
     }
-    if ((token.mTokenCode > 0) && kEndOfScriptInTemplateArray [token.mTokenCode - 1]) {
+    if ((token.mTokenCode > 0) && gtl_5F_scanner_kEndOfScriptInTemplateArray [token.mTokenCode - 1]) {
       mMatchedTemplateDelimiterIndex = -1 ;
     }
   

@@ -1022,7 +1022,7 @@ static GALGAS_gtlData extensionGetter_gtlString_performGetter (const cPtr_gtlDat
         if (kBoolTrue == test_8) {
           temp_7 = var_index_67260.getter_bigint (SOURCE_FILE ("gtl_data_types.galgas", 2202)) ;
         }else if (kBoolFalse == test_8) {
-          temp_7 = GALGAS_bigint ("1", inCompiler  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 2202)).operator_unary_minus (inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 2202)) ;
+          temp_7 = GALGAS_bigint ("-1", inCompiler  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 2202)) ;
         }
         result_result = GALGAS_gtlInt::constructor_new (constinArgument_methodName.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 2200)), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 2201)), temp_7  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 2199)) ;
       }else if (kBoolFalse == test_3) {
@@ -1089,7 +1089,7 @@ static GALGAS_gtlData extensionGetter_gtlString_performGetter (const cPtr_gtlDat
           if (kBoolTrue == test_16) {
             temp_15 = var_index_67916.getter_bigint (SOURCE_FILE ("gtl_data_types.galgas", 2223)) ;
           }else if (kBoolFalse == test_16) {
-            temp_15 = GALGAS_bigint ("1", inCompiler  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 2223)).operator_unary_minus (inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 2223)) ;
+            temp_15 = GALGAS_bigint ("-1", inCompiler  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 2223)) ;
           }
           result_result = GALGAS_gtlInt::constructor_new (constinArgument_methodName.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 2221)), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 2222)), temp_15  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 2220)) ;
         }else if (kBoolFalse == test_9) {
@@ -9876,7 +9876,7 @@ static void extensionMethod_gtlLoopStatementInstruction_execute (const cPtr_gtlI
   GALGAS_bigint var_direction_23641 = GALGAS_bigint ("1", inCompiler  COMMA_SOURCE_FILE ("gtl_instructions.galgas", 799)) ;
   const enumGalgasBool test_9 = GALGAS_bool (kIsStrictInf, var_stepVal_23179.objectCompare (GALGAS_bigint ("0", inCompiler  COMMA_SOURCE_FILE ("gtl_instructions.galgas", 800)))).boolEnum () ;
   if (kBoolTrue == test_9) {
-    var_direction_23641 = GALGAS_bigint ("1", inCompiler  COMMA_SOURCE_FILE ("gtl_instructions.galgas", 800)).operator_unary_minus (inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 800)) ;
+    var_direction_23641 = GALGAS_bigint ("-1", inCompiler  COMMA_SOURCE_FILE ("gtl_instructions.galgas", 800)) ;
   }
   const enumGalgasBool test_10 = GALGAS_bool (kIsSupOrEqual, var_stopVal_23161.substract_operation (var_startVal_23143, inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 801)).multiply_operation (var_direction_23641, inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 801)).objectCompare (GALGAS_bigint ("0", inCompiler  COMMA_SOURCE_FILE ("gtl_instructions.galgas", 801)))).boolEnum () ;
   if (kBoolTrue == test_10) {

@@ -173,9 +173,6 @@ class C_String : public AC_OutputStream {
 //--- Get a string pointer
   public : const char * cString (LOCATION_ARGS) const ;
 
-//--- Get a string pointer
-  public : C_Data utf8Data (void) const ;
-
 //--- Get a UTF32 string pointer
   public : const utf32 * utf32String (LOCATION_ARGS) const ;
 
@@ -204,9 +201,12 @@ class C_String : public AC_OutputStream {
 
 //--- Substitute 'inSearchedString' by 'inReplacementString'
   public : C_String stringByReplacingStringByString (const C_String inSearchedString,
-                                                     const C_String & inReplacementString,
+                                                     const C_String inReplacementString,
                                                      uint32_t & outReplacementCount,
                                                      bool & outOk) const ;
+
+  public : C_String stringByReplacingStringByString (const C_String inSearchedString,
+                                                     const C_String inReplacementString) const ;
 
 //--- Get character last occurrence (returns -1 if not found)
   public : int32_t lastOccurrenceIndexOfChar (const utf32 inChar) const ;

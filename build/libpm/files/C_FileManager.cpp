@@ -631,59 +631,6 @@ C_String C_FileManager::stringWithContentOfFile (const C_String & inFilePath) {
 //---------------------------------------------------------------------------------------------------------------------*
 
 #ifdef PRAGMA_MARK_ALLOWED
-  #pragma mark Update File
-#endif
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void C_FileManager::updateFile (const C_String & inStartPath,
-                                const TC_UniqueArray <C_String> & inDirectoriesToExclude,
-                                const C_String & inFileName,
-                                const C_String & inContents,
-                                const bool inMakeExecutable,
-                                bool & outOk,
-                                bool & outWritten) {
-  bool needsToWriteFile = true ;
-  outOk = true ;
-//--- Current data
-  const C_Data currentData = inContents.utf8Data () ;
-
-  C_String fullPathName = findFileInDirectory (inStartPath, inFileName, inDirectoriesToExclude) ;
-  if (fullPathName.length () == 0) {
-    fullPathName = inStartPath + "/" + inFileName ;
-  }else{
-  //--- Try to read file
-    C_Data fileData ;
-    outOk = binaryDataWithContentOfFile (fullPathName, fileData) ;
-    if (outOk) {
-      needsToWriteFile = fileData != currentData ;
-    }
-  }
-//--- File needs to be updated
-  if (outOk && needsToWriteFile) {
-    C_BinaryFileWrite binaryFile (fullPathName) ;
-    outOk = binaryFile.isOpened () ;
-    binaryFile.appendData (currentData) ;
-  //--- Close file
-    if (outOk) {
-      outOk = binaryFile.close () ;
-    }
-  }
-//--- Make file executable
-  if (outOk && inMakeExecutable) {
-    #if COMPILE_FOR_WINDOWS == 0
-      struct stat fileStat ;
-      ::stat (fullPathName.cString (HERE), & fileStat) ;
-      // printf ("FILE MODE 0x%X\n", fileStat.st_mode) ;
-      ::chmod (fullPathName.cString (HERE), fileStat.st_mode | S_IXUSR | S_IXGRP | S_IXOTH) ;
-    #endif
-  }
-  outWritten = needsToWriteFile ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-#ifdef PRAGMA_MARK_ALLOWED
   #pragma mark Write to File
 #endif
 
@@ -1192,6 +1139,28 @@ C_DateTime C_FileManager::fileModificationTime (const C_String & inFilePath) {
   }
 //--- Return modification date
   return C_DateTime (modificationTime)  ;
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+#ifdef PRAGMA_MARK_ALLOWED
+  #pragma mark Files Modification Time
+#endif
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+uint64_t C_FileManager::fileSize (const C_String & inFilePath) {
+  uint64_t result = 0 ;
+  const C_String nativePath = nativePathWithUnixPath (inFilePath) ;
+  if (nativePath.length () > 0) {
+    struct stat fileProperties ;
+    const int err = ::stat (nativePath.cString (HERE), & fileProperties) ;
+    if ((err == 0) && ((fileProperties.st_mode & S_IFREG) != 0)) {
+      result = (uint64_t) fileProperties.st_size ;
+    }
+  }
+  return result ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*

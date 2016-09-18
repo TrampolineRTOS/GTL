@@ -1904,7 +1904,7 @@ void GALGAS_string::class_method_removeDirectoryRecursively (GALGAS_string inDir
 
 static bool writeFile (const C_String & inMessage,
                        const C_String & inFullPathName,
-                       const C_Data & inContentData,
+                       const C_Data & inCurrentData,
                        C_Compiler * inCompiler) {
   bool ok = true ;
   if (inCompiler->performGeneration ()) {
@@ -1918,7 +1918,7 @@ static bool writeFile (const C_String & inMessage,
       message << "Cannot open '" << inFullPathName << "' file in write mode." ;
       inCompiler->onTheFlySemanticError (message COMMA_HERE) ;
     }
-    binaryFile.appendData (inContentData) ;
+    binaryFile.appendData (inCurrentData) ;
   //--- Close file
     if (ok) {
       ok = binaryFile.close () ;
@@ -1935,18 +1935,24 @@ static bool writeFile (const C_String & inMessage,
 //---------------------------------------------------------------------------------------------------------------------*
 
 static bool updateFile (const C_String & inFullPathName,
-                        const C_Data & inContentData,
+                        const C_String & inContents,
                         C_Compiler * inCompiler) {
+  C_Data currentData ; currentData.appendString (inContents) ;
+//--- Compare file length
+  const uint64_t fileSize = C_FileManager::fileSize (inFullPathName) ;
+  bool needsToWriteFile = fileSize != (uint64_t) currentData.length () ;
+  bool ok = true ;
 //--- Read file
-  bool needsToWriteFile = true ;
-  C_Data fileData ;
-  bool ok = C_FileManager::binaryDataWithContentOfFile (inFullPathName, fileData) ;
-  if (ok) {
-    needsToWriteFile = fileData != inContentData ;
+  if (! needsToWriteFile) {
+    C_Data fileData ;
+    ok = C_FileManager::binaryDataWithContentOfFile (inFullPathName, fileData) ;
+    if (ok) {
+      needsToWriteFile = fileData != currentData ;
+    }
   }
 //--- File needs to be updated
   if (ok && needsToWriteFile) {
-    ok = writeFile ("Updated", inFullPathName, inContentData, inCompiler) ;
+    ok = writeFile ("Updated", inFullPathName, currentData, inCompiler) ;
   }
   return ok ;
 }
@@ -1959,15 +1965,14 @@ static void generateFile (const C_String & inStartPath,
                           const bool inMakeExecutable,
                           C_Compiler * inCompiler) {
   bool ok = true ;
-//--- Current data
-  const C_Data currentData = inContents.utf8Data () ;
 //--- File exists ?
   const TC_UniqueArray <C_String> directoriesToExclude ;
   const C_String fullPathName = C_FileManager::findFileInDirectory (inStartPath, inFileName, directoriesToExclude) ;
   if (fullPathName.length () == 0) { // No, does not exist
+    C_Data currentData ; currentData.appendString (inContents) ;
     ok = writeFile ("Created", inStartPath + "/" + inFileName, currentData, inCompiler) ;
   }else{ //--- File exists: read it
-    ok = updateFile (fullPathName, currentData, inCompiler) ;
+    ok = updateFile (fullPathName, inContents, inCompiler) ;
   }
 //--- Make file executable
   if (ok && inMakeExecutable) {
@@ -1987,21 +1992,73 @@ void GALGAS_string::class_method_generateFile (GALGAS_string inStartPath,
                                                GALGAS_string inContents,
                                                C_Compiler * inCompiler
                                                COMMA_UNUSED_LOCATION_ARGS) {
-//  const bool built = (inStartPath.isValid ())
-//    && (inFileName.isValid ())
-//    && (inContents.isValid ())
-//  ;
-//  if (built) {
-//    TC_UniqueArray <C_String> directoriesToExclude ;
-//    inCompiler->generateFileFromPathes (inStartPath.mString,
-//                                        directoriesToExclude,
-//                                        inFileName.mString,
-//                                        inContents.mString) ;
-//  }
   if (inStartPath.isValid () && inFileName.isValid () && inContents.isValid ()) {
     generateFile (inStartPath.mString, inFileName.mString, inContents.mString, false, inCompiler) ;
   }
 }
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+/*static void generateFileWithCache (const C_String & inStartPath,
+                                   const C_String & inFileName,
+                                   const C_String & inContents,
+                                   const C_String & inCacheDirectory,
+                                   const bool inMakeExecutable,
+                                   C_Compiler * inCompiler) {
+  bool ok = true ;
+//--- File exists ?
+  const TC_UniqueArray <C_String> directoriesToExclude ;
+  C_String fullPathName = C_FileManager::findFileInDirectory (inStartPath, inFileName, directoriesToExclude) ;
+  if (fullPathName.length () == 0) { // No, does not exist
+    fullPathName = inStartPath + "/" + inFileName ;
+  }
+  const C_String cacheFile = inCacheDirectory + "/" + fullPathName.stringByReplacingStringByString ("/", "+") + ".md5.text" ;
+  // co << "CACHE '" << cacheFile << "'\n" ;
+//--- Cache file
+  bool writeCacheFile = true ;
+  C_Data md5ContentsData ; md5ContentsData.appendString (inContents.md5 ()) ;
+//---
+  if (!C_FileManager::fileExistsAtPath (fullPathName)) { // No, does not exist
+    C_Data currentData ; currentData.appendString (inContents) ;
+    ok = writeFile ("Created", fullPathName, currentData, inCompiler) ;
+  }else if (C_FileManager::fileExistsAtPath (cacheFile)) { //--- Cache file exists: compare cache files
+    C_Data cacheFileData ;
+    ok = C_FileManager::binaryDataWithContentOfFile (cacheFile, cacheFileData) ;
+    if (ok && (cacheFileData == md5ContentsData)) {
+      writeCacheFile = false ;
+    }else{
+      ok = updateFile (fullPathName, inContents, inCompiler) ;
+    }
+  }else{
+    ok = updateFile (fullPathName, inContents, inCompiler) ;
+  }
+//--- Make file executable
+  if (ok && inMakeExecutable) {
+    #if COMPILE_FOR_WINDOWS == 0
+      struct stat fileStat ;
+      ::stat (fullPathName.cString (HERE), & fileStat) ;
+      // printf ("FILE MODE 0x%X\n", fileStat.st_mode) ;
+      ::chmod (fullPathName.cString (HERE), fileStat.st_mode | S_IXUSR | S_IXGRP | S_IXOTH) ;
+    #endif
+  }
+//--- Write cache ?
+  if (ok && writeCacheFile) {
+    writeFile ("Written", cacheFile, md5ContentsData, inCompiler) ;
+  }
+} */
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+//void GALGAS_string::class_method_generateFileWithCache (GALGAS_string inStartPath,
+//                                                        GALGAS_string inFileName,
+//                                                        GALGAS_string inContents,
+//                                                        GALGAS_string inCacheDirectory,
+//                                                        C_Compiler * inCompiler
+//                                                        COMMA_UNUSED_LOCATION_ARGS) {
+//  if (inStartPath.isValid () && inFileName.isValid () && inContents.isValid () && inCacheDirectory.isValid ()) {
+//    generateFileWithCache (inStartPath.mString, inFileName.mString, inContents.mString, inCacheDirectory.mString, false, inCompiler) ;
+//  }
+//}
 
 //---------------------------------------------------------------------------------------------------------------------*
 
