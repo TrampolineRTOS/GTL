@@ -30,6 +30,7 @@
 
 //---------------------------------------------------------------------------------------------------------------------*
 
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
@@ -148,7 +149,6 @@ cEmbeddedString::~cEmbeddedString (void) {
 
 #ifndef DO_NOT_GENERATE_CHECKINGS
   void cEmbeddedString::checkEmbeddedString (LOCATION_ARGS) const {
-    MF_Assert (retainCount () >= 1, "retainCount () == %lld < 1", retainCount (), 0) ;
     if (mCapacity == 0) {
       MF_AssertThere (UNICODE_VALUE (mString [0]) == '\0', "mString [0] (%lld) != '\\0'",
                       (int32_t) UNICODE_VALUE (mString [0]), '\0') ;
@@ -452,7 +452,7 @@ void C_String::insulateEmbeddedString (const uint32_t inNewCapacity) const {
     macroMyNew (mEmbeddedString, cEmbeddedString (inNewCapacity COMMA_HERE)) ;
   }else{
     macroValidSharedObject (mEmbeddedString, cEmbeddedString) ;
-    if (mEmbeddedString->retainCount () == 1) {
+    if (mEmbeddedString->isUniquelyReferenced ()) {
       macroMyDeletePODArray (mEmbeddedString->mEncodedCString) ;
       mEmbeddedString->reallocEmbeddedString (inNewCapacity) ;
     }else{
@@ -477,7 +477,7 @@ void C_String::setLengthToZero (void) {
     checkString (HERE) ;
   #endif
   if (mEmbeddedString != NULL) {
-    if (mEmbeddedString->retainCount () == 1) {
+    if (mEmbeddedString->isUniquelyReferenced ()) {
       macroMyDeletePODArray (mEmbeddedString->mEncodedCString) ;
       mEmbeddedString->mLength = 0 ;
       mEmbeddedString->mString [0] = TO_UNICODE ('\0') ;
@@ -522,7 +522,7 @@ void C_String::setCapacity (const uint32_t inNewCapacity) {
   if (mEmbeddedString != NULL) {
     macroMyDeletePODArray (mEmbeddedString->mEncodedCString) ;
     if ((mEmbeddedString->mLength < inNewCapacity) && (mEmbeddedString->mCapacity < inNewCapacity)) {
-      if (mEmbeddedString->retainCount () == 1) {
+      if (mEmbeddedString->isUniquelyReferenced ()) {
         macroMyDeletePODArray (mEmbeddedString->mEncodedCString) ;
         mEmbeddedString->reallocEmbeddedString (inNewCapacity) ;
       }else{
@@ -558,7 +558,7 @@ void C_String::performActualUnicodeArrayOutput (const utf32 * inUTF32CharArray,
   if (inArrayCount > 0) {
     const int32_t kNewLength = length () + inArrayCount ;
     insulateEmbeddedString ((uint32_t) (kNewLength + 1)) ;
-    MF_Assert (mEmbeddedString->retainCount () == 1, "mEmbeddedString->retainCount () == (%lld) != 1", mEmbeddedString->retainCount () == 1, 0) ;
+    MF_Assert (mEmbeddedString->isUniquelyReferenced (), "mEmbeddedString->isUniquelyReferenced () is false", 0, 0) ;
     for (int32_t i=0 ; i<inArrayCount ; i++) {
       mEmbeddedString->mString [mEmbeddedString->mLength + (uint32_t) i] = inUTF32CharArray [i] ;
     }
@@ -718,7 +718,7 @@ void C_String::linesArray (TC_UniqueArray <C_String> & outStringArray) const {
   const int32_t currentStringLength = length () ;
   if (currentStringLength > 0) {
     int32_t index = outStringArray.count () ;
-    outStringArray.addObject (C_String ()) ;
+    outStringArray.appendObject (C_String ()) ;
     typedef enum {kAppendToCurrentLine, kGotCarriageReturn, kGotLineFeed} enumState ;
     enumState state = kAppendToCurrentLine ;
     for (int32_t i=0 ; i<currentStringLength ; i++) {
@@ -742,11 +742,11 @@ void C_String::linesArray (TC_UniqueArray <C_String> & outStringArray) const {
           state = kGotLineFeed ;
           break ;
         case '\r' : // CR
-          outStringArray.addObject (C_String ()) ;
+          outStringArray.appendObject (C_String ()) ;
           index ++ ;
           break ;
         default: // Other character
-          outStringArray.addObject (C_String ()) ;
+          outStringArray.appendObject (C_String ()) ;
           index ++ ;
           outStringArray (index COMMA_HERE).appendUnicodeCharacter (c COMMA_HERE) ;
           state = kAppendToCurrentLine ;
@@ -755,16 +755,16 @@ void C_String::linesArray (TC_UniqueArray <C_String> & outStringArray) const {
       case kGotLineFeed :
         switch (UNICODE_VALUE (c)) {
         case '\n' : // LF
-          outStringArray.addObject (C_String ()) ;
+          outStringArray.appendObject (C_String ()) ;
           index ++ ;
           break ;
         case '\r' : // CR
-          outStringArray.addObject (C_String ()) ;
+          outStringArray.appendObject (C_String ()) ;
           index ++ ;
           state = kGotCarriageReturn ;
           break ;
         default: // Other character
-          outStringArray.addObject (C_String ()) ;
+          outStringArray.appendObject (C_String ()) ;
           index ++ ;
           outStringArray (index COMMA_HERE).appendUnicodeCharacter (c COMMA_HERE) ;
           state = kAppendToCurrentLine ;
@@ -837,7 +837,7 @@ void C_String::componentsSeparatedByString (const C_String & inSeparatorString,
   outResult.setCountToZero () ;
   const utf32 * sourcePtr = utf32String (HERE) ;
   if (sourcePtr == NULL) {
-    outResult.addObject (C_String ()) ;
+    outResult.appendObject (C_String ()) ;
   }else{
     const int32_t splitStringLength = inSeparatorString.length () ;
     const utf32 * separator = inSeparatorString.utf32String (HERE) ;
@@ -846,12 +846,12 @@ void C_String::componentsSeparatedByString (const C_String & inSeparatorString,
       while (p != NULL) {
         C_String s ;
         s.genericUnicodeArrayOutput (sourcePtr, (int32_t) ((p - sourcePtr) & INT32_MAX)) ;
-        outResult.addObject (s) ;
+        outResult.appendObject (s) ;
         sourcePtr = p + splitStringLength ;
         p = ::utf32_strstr (sourcePtr, separator) ;
       }
     }
-    outResult.addObject (C_String (sourcePtr)) ;
+    outResult.appendObject (C_String (sourcePtr)) ;
   }
 }
 
@@ -891,6 +891,21 @@ C_String C_String::stringByDeletingTailFromString (const C_String & inSearchedSt
       result.setLengthToZero () ;
       result.genericUnicodeArrayOutput (sourcePtr, (int32_t) ((p - sourcePtr) & INT32_MAX)) ;
     }
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//   endsWithString                                                                                                    *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+bool C_String::endsWithString (const C_String & inString) const {
+  const int32_t offset = length () - inString.length () ;
+  bool result = offset >= 0 ;
+  for (int32_t i=0 ; (i<inString.length ()) && result ; i++) {
+    result = this->operator () (i + offset COMMA_HERE) == inString (i COMMA_HERE) ;
   }
   return result ;
 }
@@ -1174,6 +1189,199 @@ C_String C_String::stringWithRepeatedCharacter (const utf32 inRepeatedCharacter,
     result.appendUnicodeCharacter (inRepeatedCharacter COMMA_HERE) ;
   }
   return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void C_String::convertToUInt32 (uint32_t & outResult,
+                                bool & outOk) const {
+  outResult = 0 ;
+  outOk = length () > 0 ;
+  int32_t idx = 0 ;
+  while ((idx < length ()) && outOk) {
+    const utf32 c = (*this) (idx COMMA_HERE) ;
+    idx ++ ;
+    const uint32_t r = outResult ;
+    outResult = outResult * 10 + (UNICODE_VALUE (c) - '0') ;
+    outOk = (UNICODE_VALUE (c) >= '0') && (UNICODE_VALUE (c) <= '9') && (r <= outResult) ;
+  }
+  if (outOk) {
+    outOk = idx == length () ;
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void C_String::convertToUInt64 (uint64_t & outResult,
+                                bool & outOk) const {
+  outResult = 0 ;
+  outOk = length () > 0 ;
+  int32_t idx = 0 ;
+  while ((idx < length ()) && outOk) {
+    const utf32 c = (*this) (idx COMMA_HERE) ;
+    idx ++ ;
+    const uint64_t r = outResult ;
+    outResult = outResult * 10 + (UNICODE_VALUE (c) - '0') ;
+    outOk = (UNICODE_VALUE (c) >= '0') && (UNICODE_VALUE (c) <= '9') && (r <= outResult) ;
+  }
+  if (outOk) {
+    outOk = idx == length () ;
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void C_String::convertToSInt32 (int32_t & outResult,
+                                bool & outOk) const {
+  bool isPositive = true ;
+  int32_t idx = 0 ;
+  if (length () > 0) {
+    const utf32 c = (*this) (0 COMMA_HERE) ;
+    if (UNICODE_VALUE (c) == '-') {
+      isPositive = false ;
+      idx = 1 ;
+    }else if (UNICODE_VALUE (c) == '+') {
+      idx = 1 ;
+    }
+  }
+  uint32_t decimalUnsignedValue = 0 ;
+  outOk = length () > 0 ;
+  while ((idx < length ()) && outOk) {
+    const utf32 c = (*this) (idx COMMA_HERE) ;
+    idx ++ ;
+    const uint32_t r = decimalUnsignedValue ;
+    decimalUnsignedValue = decimalUnsignedValue * 10 + (UNICODE_VALUE (c) - '0') ;
+    outOk = r < decimalUnsignedValue ;
+  }
+  if (outOk) {
+    outOk = idx == length () ;
+  }
+  if (outOk) {
+    if (isPositive) {
+      outOk = decimalUnsignedValue <= (uint32_t) INT32_MAX ;
+      if (outOk) {
+        outResult = (int32_t) decimalUnsignedValue ;
+      }
+    }else{
+      outOk = decimalUnsignedValue <= ((uint32_t) INT32_MAX) + 1 ;
+      if (outOk) {
+        outResult = - (int32_t) decimalUnsignedValue ;
+      }
+    }
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void C_String::convertToSInt64 (int64_t & outResult,
+                                bool & outOk) const {
+  bool isPositive = true ;
+  int32_t idx = 0 ;
+  if (length () > 0) {
+    const utf32 c = (*this) (0 COMMA_HERE) ;
+    if (UNICODE_VALUE (c) == '-') {
+      isPositive = false ;
+      idx = 1 ;
+    }else if (UNICODE_VALUE (c) == '+') {
+      idx = 1 ;
+    }
+  }
+  uint64_t decimalUnsignedValue = 0 ;
+  outOk = length () > 0 ;
+  while ((idx < length ()) && outOk) {
+    const utf32 c = (*this) (idx COMMA_HERE) ;
+    idx ++ ;
+    const uint64_t r = decimalUnsignedValue ;
+    decimalUnsignedValue = decimalUnsignedValue * 10 + (UNICODE_VALUE (c) - '0') ;
+    outOk = r < decimalUnsignedValue ;
+  }
+  if (outOk) {
+    outOk = idx == length () ;
+  }
+  if (outOk) {
+    if (isPositive) {
+      outOk = decimalUnsignedValue <= (uint64_t) INT64_MAX ;
+      if (outOk) {
+        outResult = (int64_t) decimalUnsignedValue ;
+      }
+    }else{
+      outOk = decimalUnsignedValue <= ((uint64_t) INT64_MAX) + 1 ;
+      if (outOk) {
+        outResult = - (int64_t) decimalUnsignedValue ;
+      }
+    }
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+void C_String::convertToDouble (double & outDoubleValue,
+                                bool & outOk) const {
+  outDoubleValue = 0.0 ; // strtod (mString.cString (HERE)) ;
+  int32_t idx = 0 ;
+//--- Sign
+  bool positive = true ;
+  if (idx < length ()) {
+    const utf32 c = this->operator () (idx COMMA_HERE) ;
+    if (UNICODE_VALUE (c) == '-') {
+      positive = false ;
+      idx ++ ;
+    }else if (UNICODE_VALUE (c) == '+') {
+      idx ++ ;
+    }
+  }
+//--- Mantissa
+  while ((idx < length ()) && isdigit ((int) UNICODE_VALUE (this->operator () (idx COMMA_HERE)))) {
+    outDoubleValue *= 10.0 ;
+    outDoubleValue += (double) (UNICODE_VALUE (this->operator () (idx COMMA_HERE)) - '0') ;
+    idx ++ ;
+  }
+//--- Fractional part
+  double divisor = 1.0 ;
+  if ((idx < length ()) && (UNICODE_VALUE (this->operator () (idx COMMA_HERE)) == '.')) { // Dot
+    idx ++ ;
+    while ((idx < length ()) && isdigit ((int) UNICODE_VALUE (this->operator () (idx COMMA_HERE)))) {
+      divisor *= 10.0 ;
+      outDoubleValue *= 10.0 ;
+      outDoubleValue += (double) (UNICODE_VALUE (this->operator () (idx COMMA_HERE)) - '0') ;
+      idx ++ ;
+    }
+  }
+  outDoubleValue /= divisor ;
+//--- Exponent ?
+  if (idx < length ()) {
+    switch (UNICODE_VALUE (this->operator () (idx COMMA_HERE))) {
+    case 'E' : case 'e' : case 'd' : case 'D' : {
+      idx ++ ;
+    //--- Exponent sign
+      bool exponentIsPositive = true ;
+      if (idx < length ()) {
+        const utf32 c = this->operator () (idx COMMA_HERE) ;
+        if (UNICODE_VALUE (c) == '-') {
+          exponentIsPositive = false ;
+          idx ++ ;
+        }else if (UNICODE_VALUE (c) == '+') {
+          idx ++ ;
+        }
+      }
+      double exponentValue = 0.0 ;
+      while ((idx < length ()) && isdigit ((int) UNICODE_VALUE (this->operator () (idx COMMA_HERE)))) {
+        exponentValue *= 10.0 ;
+        exponentValue += (double) (UNICODE_VALUE (this->operator () (idx COMMA_HERE)) - '0') ;
+        idx ++ ;
+      }
+      outDoubleValue *= ::pow (10.0, exponentIsPositive ? exponentValue : - exponentValue) ;
+    }
+    break ;
+    default :
+    break ;
+    }
+  }
+  if (!positive) {
+    outDoubleValue = - outDoubleValue ;
+  }
+//--- Reached end of string ?
+  outOk = idx == length () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*

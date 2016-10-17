@@ -33,6 +33,7 @@
 
 //---------------------------------------------------------------------------------------------------------------------*
 
+#include <math.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
@@ -136,7 +137,7 @@ AC_OutputStream & operator << (AC_OutputStream & inStream,
 
 AC_OutputStream & operator << (AC_OutputStream & inStream,
                                const GALGAS_lstring & inString) {
-  inStream << inString.mAttribute_string.stringValue () ;
+  inStream << inString.mProperty_string.stringValue () ;
   return inStream ;
 }
 
@@ -320,7 +321,7 @@ GALGAS_string GALGAS_string::constructor_componentsJoinedByString (const GALGAS_
   if ((inComponents.isValid ()) && (inSeparator.isValid ())) {
     bool first = true ;
     C_String s ;
-    cEnumerator_stringlist current (inComponents, kEnumeration_up) ;
+    cEnumerator_stringlist current (inComponents, kENUMERATION_UP) ;
     while (current.hasCurrentObject ()) {
       if (first) {
         first = false ;
@@ -442,8 +443,8 @@ GALGAS_string GALGAS_string::getter_HTMLRepresentation (UNUSED_LOCATION_ARGS) co
 GALGAS_lstring GALGAS_string::getter_nowhere (LOCATION_ARGS) const {
   GALGAS_lstring result ;
   if (isValid ()) {
-    result.mAttribute_string = * this ;
-    result.mAttribute_location = GALGAS_location::constructor_nowhere (THERE) ;
+    result.mProperty_string = * this ;
+    result.mProperty_location = GALGAS_location::constructor_nowhere (THERE) ;
   }
   return result ;
 }
@@ -453,8 +454,8 @@ GALGAS_lstring GALGAS_string::getter_nowhere (LOCATION_ARGS) const {
 GALGAS_lstring GALGAS_string::getter_here (C_Compiler * inCompiler COMMA_LOCATION_ARGS) const {
   GALGAS_lstring result ;
   if (isValid ()) {
-    result.mAttribute_string = * this ;
-    result.mAttribute_location = GALGAS_location::constructor_here (inCompiler COMMA_THERE) ;
+    result.mProperty_string = * this ;
+    result.mProperty_location = GALGAS_location::constructor_here (inCompiler COMMA_THERE) ;
   }
   return result ;
 }
@@ -1130,7 +1131,7 @@ static void recursiveSearchForRegularFiles (const C_String & inUnixStartPath,
         }else if (C_FileManager::fileExistsAtPath (name)) {
           const C_String extension = name.pathExtension () ;
           bool extensionFound = false ;
-          cEnumerator_stringlist currentExtension (inExtensionList, kEnumeration_up) ;
+          cEnumerator_stringlist currentExtension (inExtensionList, kENUMERATION_UP) ;
           while (currentExtension.hasCurrentObject () && ! extensionFound) {
             extensionFound = currentExtension.current_mValue (HERE).stringValue () == extension ;
             currentExtension.gotoNextObject () ;
@@ -1185,7 +1186,7 @@ static void recursiveSearchForDirectories (const C_String & inUnixStartPath,
         //--- Look for extension
           const C_String extension = name.pathExtension () ;
           bool extensionFound = false ;
-          cEnumerator_stringlist currentExtension (inExtensionList, kEnumeration_up) ;
+          cEnumerator_stringlist currentExtension (inExtensionList, kENUMERATION_UP) ;
           while (currentExtension.hasCurrentObject () && ! extensionFound) {
             extensionFound = currentExtension.current_mValue (HERE).stringValue () == extension ;
             currentExtension.gotoNextObject () ;
@@ -1216,7 +1217,7 @@ GALGAS_stringlist GALGAS_string::getter_directoriesWithExtensions (const GALGAS_
                                                                    const GALGAS_stringlist & inExtensionList
                                                                    COMMA_LOCATION_ARGS) const {
   GALGAS_stringlist result ;
-  if ((inRecursiveSearch.isValid ()) && (inExtensionList.isValid ())) {
+  if (isValid () && inRecursiveSearch.isValid () && inExtensionList.isValid ()) {
     result = GALGAS_stringlist::constructor_emptyList (THERE) ;
     if (C_FileManager::directoryExists (mString)) {
       recursiveSearchForDirectories (mString,
@@ -1232,54 +1233,215 @@ GALGAS_stringlist GALGAS_string::getter_directoriesWithExtensions (const GALGAS_
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool GALGAS_string::getter_doesEnvironmentVariableExist (UNUSED_LOCATION_ARGS) const {
-  return GALGAS_bool (::getenv (mString.cString (HERE)) != NULL) ;
+  GALGAS_bool result ;
+  if (isValid ()) {
+    result = GALGAS_bool (::getenv (mString.cString (HERE)) != NULL) ;
+  }
+  return result ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_uint GALGAS_string::getter_capacity (UNUSED_LOCATION_ARGS) const {
-  return GALGAS_uint ((uint32_t) mString.capacity ()) ;
+  GALGAS_uint result ;
+  if (isValid ()) {
+    result = GALGAS_uint ((uint32_t) mString.capacity ())  ;
+  }
+  return result ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool GALGAS_string::getter_isDecimalUnsignedNumber (UNUSED_LOCATION_ARGS) const {
-  bool isDecimalUnsignedNumber = true ;
-  for (int32_t i=0 ; (i<mString.length ()) && isDecimalUnsignedNumber ; i++) {
-    const utf32 c = mString (i COMMA_HERE) ;
-    isDecimalUnsignedNumber = (UNICODE_VALUE (c) >= '0') && (UNICODE_VALUE (c) <= '9') ;
+  GALGAS_bool result ;
+  if (isValid ()) {
+    uint32_t r = 0 ;
+    bool ok = false ;
+    mString.convertToUInt32 (r, ok) ;
+    result = GALGAS_bool (ok) ;
   }
-  return GALGAS_bool (isDecimalUnsignedNumber) ;
+  return result ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_uint GALGAS_string::getter_decimalUnsignedNumber (C_Compiler * inCompiler
                                                          COMMA_LOCATION_ARGS) const {
-  bool ok = true ;
-  const uint32_t max = UINT32_MAX / 10 ;
-  uint32_t decimalUnsignedValue = 0 ;
-  for (int32_t i=0 ; (i<mString.length ()) && ok ; i++) {
-    const utf32 c = mString (i COMMA_HERE) ;
-    if ((UNICODE_VALUE (c) < '0') || (UNICODE_VALUE (c) > '9')) {
-      inCompiler->onTheFlyRunTimeError ("cannot convert a string to a decimal number: it contains a non-digit character" COMMA_THERE) ;
-      ok = false ;
+  GALGAS_uint result ;
+  if (isValid ()) {
+    uint32_t r = 0 ;
+    bool ok = false ;
+    mString.convertToUInt32 (r, ok) ;
+    if (ok) {
+      result = GALGAS_uint (r) ;
     }else{
-      const uint32_t digit = UNICODE_VALUE (c) - '0' ;
-      if (decimalUnsignedValue > max) {
-        inCompiler->onTheFlyRunTimeError ("cannot convert a string to a decimal number: number is > 2**32 - 1" COMMA_THERE) ;
-        ok = false ;
-      }else if ((decimalUnsignedValue == max) && (digit > (UINT32_MAX % 10))) {
-        inCompiler->onTheFlyRunTimeError ("cannot convert a string to a decimal number: number is > 2**32 - 1" COMMA_THERE) ;
-        ok = false ;
-      }else{
-        decimalUnsignedValue = decimalUnsignedValue * 10 + digit ;
-      }
+      inCompiler->onTheFlyRunTimeError ("cannot convert a string to a decimal @uint number" COMMA_THERE) ;
     }
   }
-  GALGAS_uint result ;
-  if (ok) {
-    result = GALGAS_uint (decimalUnsignedValue) ;
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_bool GALGAS_string::getter_isDecimalUnsigned_36__34_Number (UNUSED_LOCATION_ARGS) const {
+  GALGAS_bool result ;
+  if (isValid ()) {
+    uint64_t r = 0 ;
+    bool ok = false ;
+    mString.convertToUInt64 (r, ok) ;
+    result = GALGAS_bool (ok) ;
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_uint_36__34_ GALGAS_string::getter_decimalUnsigned_36__34_Number (C_Compiler * inCompiler
+                                                                         COMMA_LOCATION_ARGS) const {
+  GALGAS_uint_36__34_ result ;
+  if (isValid ()) {
+    uint64_t r = 0 ;
+    bool ok = false ;
+    mString.convertToUInt64 (r, ok) ;
+    if (ok) {
+      result = GALGAS_uint_36__34_ (r) ;
+    }else{
+      inCompiler->onTheFlyRunTimeError ("cannot convert a string to a decimal @uint64 number" COMMA_THERE) ;
+    }
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_bool GALGAS_string::getter_isDecimalSignedNumber (UNUSED_LOCATION_ARGS) const {
+  GALGAS_bool result ;
+  if (isValid ()) {
+    int32_t r = 0 ;
+    bool ok = false ;
+    mString.convertToSInt32 (r, ok) ;
+    result = GALGAS_bool (ok) ;
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_sint GALGAS_string::getter_decimalSignedNumber (C_Compiler * inCompiler
+                                                       COMMA_LOCATION_ARGS) const {
+  GALGAS_sint result ;
+  if (isValid ()) {
+    int32_t r = 0 ;
+    bool ok = false ;
+    mString.convertToSInt32 (r, ok) ;
+    if (ok) {
+      result = GALGAS_sint (r) ;
+    }else{
+      inCompiler->onTheFlyRunTimeError ("cannot convert a string to a decimal @sint number" COMMA_THERE) ;
+    }
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_bool GALGAS_string::getter_isDecimalSigned_36__34_Number (UNUSED_LOCATION_ARGS) const {
+  GALGAS_bool result ;
+  if (isValid ()) {
+    int64_t r = 0 ;
+    bool ok = false ;
+    mString.convertToSInt64 (r, ok) ;
+    result = GALGAS_bool (ok) ;
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_sint_36__34_ GALGAS_string::getter_decimalSigned_36__34_Number (C_Compiler * inCompiler
+                                                                       COMMA_LOCATION_ARGS) const {
+  GALGAS_sint_36__34_ result ;
+  if (isValid ()) {
+    int64_t r = 0 ;
+    bool ok = false ;
+    mString.convertToSInt64 (r, ok) ;
+    if (ok) {
+      result = GALGAS_sint_36__34_ (r) ;
+    }else{
+      inCompiler->onTheFlyRunTimeError ("cannot convert a string to a decimal @sint64 number" COMMA_THERE) ;
+    }
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_bool GALGAS_string::getter_isDecimalSignedBigInt (UNUSED_LOCATION_ARGS) const {
+  GALGAS_bool result ;
+  if (isValid ()) {
+    bool ok = mString.length () > 0 ;
+  //--- Sign
+    int32_t idx = 0 ;
+    if (ok) {
+      const utf32 c = mString (0 COMMA_HERE) ;
+      if ((UNICODE_VALUE (c) == '+') || (UNICODE_VALUE (c) == '-')) {
+        idx = 1 ;
+      }
+    }
+    while ((idx < mString.length ()) && ok) {
+      const utf32 c = mString (idx COMMA_HERE) ;
+      idx ++ ;
+      ok = (UNICODE_VALUE (c) >= '0') || (UNICODE_VALUE (c) <= '9') ;
+    }
+    result = GALGAS_bool (ok) ;
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_bigint GALGAS_string::getter_decimalSignedBigInt (C_Compiler * inCompiler
+                                                         COMMA_LOCATION_ARGS) const {
+  GALGAS_bigint result ;
+  if (isValid ()) {
+    bool ok = false ;
+    C_BigInt bigint (mString.cString (HERE), 10, ok) ;
+    if (ok) {
+      result = GALGAS_bigint (bigint) ;
+    }else{
+      inCompiler->onTheFlyRunTimeError ("cannot convert a string to a decimal @bigint number" COMMA_THERE) ;
+    }
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_double GALGAS_string::getter_doubleNumber (C_Compiler * inCompiler
+                                                  COMMA_LOCATION_ARGS) const {
+  GALGAS_double result ;
+  if (isValid ()) {
+    double doubleValue = 0.0 ;
+    bool ok = true ;
+    mString.convertToDouble (doubleValue, ok) ;
+    if (ok) {
+      result = GALGAS_double (doubleValue) ;
+    }else{
+      inCompiler->onTheFlyRunTimeError ("cannot convert a string to a double number: it contains invalid character" COMMA_THERE) ;
+    }
+  }
+  return result ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_bool GALGAS_string::getter_isDoubleNumber (UNUSED_LOCATION_ARGS) const {
+  GALGAS_bool result ;
+  if (isValid ()) {
+    double doubleValue = 0.0 ;
+    bool ok = true ;
+    mString.convertToDouble (doubleValue, ok) ;
+    result = GALGAS_bool (ok) ;
   }
   return result ;
 }
