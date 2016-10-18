@@ -8710,7 +8710,7 @@ static void extensionMethod_gtlTemplate_execute (const cPtr_gtlTemplate * inObje
                                                  COMMA_UNUSED_LOCATION_ARGS) {
   const cPtr_gtlTemplate * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlTemplate) ;
-  extensionMethod_execute (object->mProperty_program, ioArgument_context, ioArgument_vars, ioArgument_lib, ioArgument_outputString, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 225)) ;
+  extensionMethod_execute (object->mProperty_program, ioArgument_context, ioArgument_vars, ioArgument_lib, ioArgument_outputString, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 227)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -9054,7 +9054,7 @@ static GALGAS_bool extensionGetter_library_functionExists (const cPtr_library * 
   GALGAS_bool result_exists ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  result_exists = object->mProperty_funcMap.getter_hasKey (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 286)) COMMA_SOURCE_FILE ("gtl_types.galgas", 286)) ;
+  result_exists = object->mProperty_funcMap.getter_hasKey (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 288)) COMMA_SOURCE_FILE ("gtl_types.galgas", 288)) ;
 //---
   return result_exists ;
 }
@@ -9137,7 +9137,7 @@ static GALGAS_gtlFunction extensionGetter_library_getFunction (const cPtr_librar
   GALGAS_gtlFunction result_aFunction ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  object->mProperty_funcMap.method_get (constinArgument_name, result_aFunction, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 293)) ;
+  object->mProperty_funcMap.method_get (constinArgument_name, result_aFunction, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 295)) ;
 //---
   return result_aFunction ;
 }
@@ -9217,7 +9217,7 @@ static void extensionSetter_library_putFunction (cPtr_library * inObject,
   cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
   {
-  object->mProperty_funcMap.setter_put (constinArgument_name, constinArgument_aFunction, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 300)) ;
+  object->mProperty_funcMap.setter_put (constinArgument_name, constinArgument_aFunction, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 302)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9299,7 +9299,7 @@ static GALGAS_bool extensionGetter_library_getterExists (const cPtr_library * in
   GALGAS_bool result_exists ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  result_exists = object->mProperty_getterMap.getter_hasKey (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 308)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 308)) COMMA_SOURCE_FILE ("gtl_types.galgas", 308)) ;
+  result_exists = object->mProperty_getterMap.getter_hasKey (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 310)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 310)) COMMA_SOURCE_FILE ("gtl_types.galgas", 310)) ;
 //---
   return result_exists ;
 }
@@ -9384,7 +9384,7 @@ static GALGAS_gtlGetter extensionGetter_library_getGetter (const cPtr_library * 
   GALGAS_gtlGetter result_aGetter ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  object->mProperty_getterMap.method_get (GALGAS_lstring::constructor_new (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 316)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 316)), constinArgument_name.getter_location (SOURCE_FILE ("gtl_types.galgas", 316))  COMMA_SOURCE_FILE ("gtl_types.galgas", 316)), result_aGetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 316)) ;
+  object->mProperty_getterMap.method_get (GALGAS_lstring::constructor_new (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 318)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 318)), constinArgument_name.getter_location (SOURCE_FILE ("gtl_types.galgas", 318))  COMMA_SOURCE_FILE ("gtl_types.galgas", 318)), result_aGetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 318)) ;
 //---
   return result_aGetter ;
 }
@@ -9464,7 +9464,7 @@ static void extensionSetter_library_putGetter (cPtr_library * inObject,
   cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
   {
-  object->mProperty_getterMap.setter_put (constinArgument_name, constinArgument_aGetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 323)) ;
+  object->mProperty_getterMap.setter_put (constinArgument_name, constinArgument_aGetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 325)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9546,7 +9546,7 @@ static GALGAS_bool extensionGetter_library_setterExists (const cPtr_library * in
   GALGAS_bool result_exists ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  result_exists = object->mProperty_setterMap.getter_hasKey (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 331)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 331)) COMMA_SOURCE_FILE ("gtl_types.galgas", 331)) ;
+  result_exists = object->mProperty_setterMap.getter_hasKey (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 333)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 333)) COMMA_SOURCE_FILE ("gtl_types.galgas", 333)) ;
 //---
   return result_exists ;
 }
@@ -9631,7 +9631,7 @@ static GALGAS_gtlSetter extensionGetter_library_getSetter (const cPtr_library * 
   GALGAS_gtlSetter result_aSetter ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  object->mProperty_setterMap.method_get (GALGAS_lstring::constructor_new (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 339)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 339)), constinArgument_name.getter_location (SOURCE_FILE ("gtl_types.galgas", 339))  COMMA_SOURCE_FILE ("gtl_types.galgas", 339)), result_aSetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 339)) ;
+  object->mProperty_setterMap.method_get (GALGAS_lstring::constructor_new (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 341)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 341)), constinArgument_name.getter_location (SOURCE_FILE ("gtl_types.galgas", 341))  COMMA_SOURCE_FILE ("gtl_types.galgas", 341)), result_aSetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 341)) ;
 //---
   return result_aSetter ;
 }
@@ -9711,7 +9711,7 @@ static void extensionSetter_library_putSetter (cPtr_library * inObject,
   cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
   {
-  object->mProperty_setterMap.setter_put (constinArgument_name, constinArgument_aSetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 346)) ;
+  object->mProperty_setterMap.setter_put (constinArgument_name, constinArgument_aSetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 348)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9791,7 +9791,7 @@ static GALGAS_bool extensionGetter_library_hasImport (const cPtr_library * inObj
   GALGAS_bool result_result ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  result_result = object->mProperty_doneImports.getter_hasKey (constinArgument_importPath COMMA_SOURCE_FILE ("gtl_types.galgas", 353)) ;
+  result_result = object->mProperty_doneImports.getter_hasKey (constinArgument_importPath COMMA_SOURCE_FILE ("gtl_types.galgas", 355)) ;
 //---
   return result_result ;
 }
@@ -9868,7 +9868,7 @@ static void extensionSetter_library_doImport (cPtr_library * inObject,
                                               COMMA_UNUSED_LOCATION_ARGS) {
   cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  object->mProperty_doneImports.addAssign_operation (constinArgument_importPath  COMMA_SOURCE_FILE ("gtl_types.galgas", 359)) ;
+  object->mProperty_doneImports.addAssign_operation (constinArgument_importPath  COMMA_SOURCE_FILE ("gtl_types.galgas", 361)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -9954,7 +9954,7 @@ static void extensionSetter_library_getTemplate (cPtr_library * inObject,
   cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
   {
-  extensionSetter_getTemplate (object->mProperty_templateMap, constinArgument_context, inArgument_path, inArgument_ifExists, ioArgument_lib, outArgument_found, outArgument_result, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 371)) ;
+  extensionSetter_getTemplate (object->mProperty_templateMap, constinArgument_context, inArgument_path, inArgument_ifExists, ioArgument_lib, outArgument_found, outArgument_result, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 373)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -12008,9 +12008,11 @@ void enterExtensionMethod_structField (const int32_t inClassIndex,
 void callExtensionMethod_structField (const cPtr_gtlData * inObject,
                                       const GALGAS_lstring constin_name,
                                       GALGAS_gtlData & out_result,
+                                      GALGAS_bool & out_found,
                                       C_Compiler * inCompiler
                                       COMMA_LOCATION_ARGS) {
   out_result.drop () ;
+  out_found.drop () ;
   if (NULL != inObject) {
     macroValidSharedObject (inObject, cPtr_gtlData) ;
     const C_galgas_type_descriptor * info = inObject->classDescriptor () ;
@@ -12032,7 +12034,7 @@ void callExtensionMethod_structField (const cPtr_gtlData * inObject,
     if (NULL == f) {
       fatalError ("FATAL CATEGORY METHOD CALL ERROR", __FILE__, __LINE__) ;
     }else{
-      f (inObject, constin_name, out_result, inCompiler COMMA_THERE) ;
+      f (inObject, constin_name, out_result, out_found, inCompiler COMMA_THERE) ;
     }
   }
 }
@@ -12042,14 +12044,16 @@ void callExtensionMethod_structField (const cPtr_gtlData * inObject,
 static void extensionMethod_gtlData_structField (const cPtr_gtlData * inObject,
                                                  const GALGAS_lstring constinArgument_name,
                                                  GALGAS_gtlData & outArgument_result,
+                                                 GALGAS_bool & outArgument_found,
                                                  C_Compiler * inCompiler
                                                  COMMA_UNUSED_LOCATION_ARGS) {
   const cPtr_gtlData * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 240)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 240)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 240)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 240)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 240)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 240)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 241)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 241)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 241)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 241)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 241)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 241)) ;
   outArgument_result.drop () ; // Release error dropped variable
+  outArgument_found.drop () ; // Release error dropped variable
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -12130,7 +12134,7 @@ static GALGAS_gtlData extensionGetter_gtlData_resultField (const cPtr_gtlData * 
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 247)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 247)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 247)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 247)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 247)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 247)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 248)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 248)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 248)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 248)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 248)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 248)) ;
   result_result.drop () ; // Release error dropped variable
 //---
   return result_result ;
@@ -12212,7 +12216,7 @@ static void extensionSetter_gtlData_setStructField (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 255)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 255)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 255)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 255)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 255)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 255)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 256)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 256)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 256)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 256)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 256)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 256)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -12291,7 +12295,7 @@ static void extensionSetter_gtlData_setStructFieldAtLevel (cPtr_gtlData * inObje
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 264)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 264)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 264)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 264)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 264)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 264)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 265)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 265)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 265)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 265)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 265)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 265)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -12366,7 +12370,7 @@ static void extensionSetter_gtlData_deleteStructField (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 270)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 270)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 270)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 270)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 270)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 270)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 271)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 271)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 271)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 271)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 271)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 271)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -12526,7 +12530,7 @@ static GALGAS_gtlStruct extensionGetter_gtlData_overrideMap (const cPtr_gtlData 
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) temp_0.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 283)), GALGAS_string ("INTERNAL ERROR : a variable map should be a @gtlStruct"), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 283)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) temp_0.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 284)), GALGAS_string ("INTERNAL ERROR : a variable map should be a @gtlStruct"), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 284)) ;
   result_mapOverriden.drop () ; // Release error dropped variable
 //---
   return result_mapOverriden ;
@@ -12610,7 +12614,7 @@ static GALGAS_gtlStruct extensionGetter_gtlData_overriddenMap (const cPtr_gtlDat
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) temp_0.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 289)), GALGAS_string ("INTERNAL ERROR : a variable map should be a @gtlStruct"), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 289)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) temp_0.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 290)), GALGAS_string ("INTERNAL ERROR : a variable map should be a @gtlStruct"), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 290)) ;
   result_overriddenMap.drop () ; // Release error dropped variable
 //---
   return result_overriddenMap ;
@@ -12695,7 +12699,7 @@ static void extensionMethod_gtlData_mapItem (const cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 296)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 296)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 296)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 296)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 296)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 296)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 297)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 297)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 297)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 297)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 297)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 297)) ;
   outArgument_result.drop () ; // Release error dropped variable
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -12854,7 +12858,7 @@ static void extensionSetter_gtlData_setMapItem (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 310)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 310)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 310)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 310)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 310)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 310)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 311)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 311)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 311)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 311)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 311)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 311)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -12929,7 +12933,7 @@ static void extensionSetter_gtlData_deleteMapItem (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 316)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 316)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 316)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 316)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 316)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 316)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 317)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 317)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 317)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 317)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 317)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 317)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -13009,7 +13013,7 @@ static void extensionMethod_gtlData_itemAtIndex (const cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 323)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 323)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 323)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 323)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 323)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 323)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 324)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 324)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 324)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 324)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 324)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 324)) ;
   outArgument_result.drop () ; // Release error dropped variable
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -13168,7 +13172,7 @@ static void extensionSetter_gtlData_setItemAtIndex (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 337)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 337)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 337)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 337)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 337)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 337)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 338)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 338)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 338)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 338)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 338)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 338)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -13243,7 +13247,7 @@ static void extensionSetter_gtlData_deleteItemAtIndex (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 343)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 343)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 343)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 343)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 343)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 343)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 344)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 344)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 344)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 344)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 344)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 344)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -13318,7 +13322,7 @@ static void extensionSetter_gtlData_appendItem (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) constinArgument_item.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 349)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 349)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 349)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 349)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 349)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 349)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) constinArgument_item.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 350)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 350)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 350)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 350)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 350)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 350)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -14008,198 +14012,6 @@ GALGAS_gtlChar GALGAS_gtlChar::extractObject (const GALGAS_object & inObject,
       result = *p ;
     }else{
       inCompiler->castError ("gtlChar", p->dynamicTypeDescriptor () COMMA_THERE) ;
-    }  
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-//   Object comparison                                                                                                 *
-//---------------------------------------------------------------------------------------------------------------------*
-
-typeComparisonResult cPtr_gtlInt::dynamicObjectCompare (const acPtr_class * inOperandPtr) const {
-  typeComparisonResult result = kOperandEqual ;
-  const cPtr_gtlInt * p = (const cPtr_gtlInt *) inOperandPtr ;
-  macroValidSharedObject (p, cPtr_gtlInt) ;
-  if (kOperandEqual == result) {
-    result = mProperty_where.objectCompare (p->mProperty_where) ;
-  }
-  if (kOperandEqual == result) {
-    result = mProperty_meta.objectCompare (p->mProperty_meta) ;
-  }
-  if (kOperandEqual == result) {
-    result = mProperty_value.objectCompare (p->mProperty_value) ;
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-
-typeComparisonResult GALGAS_gtlInt::objectCompare (const GALGAS_gtlInt & inOperand) const {
-  typeComparisonResult result = kOperandNotValid ;
-  if (isValid () && inOperand.isValid ()) {
-    const int32_t mySlot = mObjectPtr->classDescriptor ()->mSlotID ;
-    const int32_t operandSlot = inOperand.mObjectPtr->classDescriptor ()->mSlotID ;
-    if (mySlot < operandSlot) {
-      result = kFirstOperandLowerThanSecond ;
-    }else if (mySlot > operandSlot) {
-      result = kFirstOperandGreaterThanSecond ;
-    }else{
-      result = mObjectPtr->dynamicObjectCompare (inOperand.mObjectPtr) ;
-    }
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_gtlInt::GALGAS_gtlInt (void) :
-GALGAS_gtlData () {
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_gtlInt GALGAS_gtlInt::constructor_default (LOCATION_ARGS) {
-  return GALGAS_gtlInt::constructor_new (GALGAS_location::constructor_nowhere (HERE),
-                                         GALGAS_lstring::constructor_default (HERE),
-                                         GALGAS_bigint::constructor_zero (HERE)
-                                         COMMA_THERE) ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_gtlInt::GALGAS_gtlInt (const cPtr_gtlInt * inSourcePtr) :
-GALGAS_gtlData (inSourcePtr) {
-  macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlInt) ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_gtlInt GALGAS_gtlInt::constructor_new (const GALGAS_location & inAttribute_where,
-                                              const GALGAS_lstring & inAttribute_meta,
-                                              const GALGAS_bigint & inAttribute_value
-                                              COMMA_LOCATION_ARGS) {
-  GALGAS_gtlInt result ;
-  if (inAttribute_where.isValid () && inAttribute_meta.isValid () && inAttribute_value.isValid ()) {
-    macroMyNew (result.mObjectPtr, cPtr_gtlInt (inAttribute_where, inAttribute_meta, inAttribute_value COMMA_THERE)) ;
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_bigint GALGAS_gtlInt::getter_value (UNUSED_LOCATION_ARGS) const {
-  GALGAS_bigint result ;
-  if (NULL != mObjectPtr) {
-    const cPtr_gtlInt * p = (const cPtr_gtlInt *) mObjectPtr ;
-    macroValidSharedObject (p, cPtr_gtlInt) ;
-    result = p->mProperty_value ;
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_bigint cPtr_gtlInt::getter_value (UNUSED_LOCATION_ARGS) const {
-  return mProperty_value ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void GALGAS_gtlInt::setter_setValue (GALGAS_bigint inValue
-                                     COMMA_LOCATION_ARGS) {
-  if (NULL != mObjectPtr) {
-    insulate (THERE) ;
-    cPtr_gtlInt * p = (cPtr_gtlInt *) mObjectPtr ;
-    macroValidSharedObject (p, cPtr_gtlInt) ;
-    p->mProperty_value = inValue ;
-  }
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-void cPtr_gtlInt::setter_setValue (GALGAS_bigint inValue
-                                   COMMA_UNUSED_LOCATION_ARGS) {
-  mProperty_value = inValue ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                           Pointer class for @gtlInt class                                           *
-//---------------------------------------------------------------------------------------------------------------------*
-
-cPtr_gtlInt::cPtr_gtlInt (const GALGAS_location & in_where,
-                          const GALGAS_lstring & in_meta,
-                          const GALGAS_bigint & in_value
-                          COMMA_LOCATION_ARGS) :
-cPtr_gtlData (in_where, in_meta COMMA_THERE),
-mProperty_value (in_value) {
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-const C_galgas_type_descriptor * cPtr_gtlInt::classDescriptor (void) const {
-  return & kTypeDescriptor_GALGAS_gtlInt ;
-}
-
-void cPtr_gtlInt::description (C_String & ioString,
-                               const int32_t inIndentation) const {
-  ioString << "[@gtlInt:" ;
-  mProperty_where.description (ioString, inIndentation+1) ;
-  ioString << ", " ;
-  mProperty_meta.description (ioString, inIndentation+1) ;
-  ioString << ", " ;
-  mProperty_value.description (ioString, inIndentation+1) ;
-  ioString << "]" ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-acPtr_class * cPtr_gtlInt::duplicate (LOCATION_ARGS) const {
-  acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlInt (mProperty_where, mProperty_meta, mProperty_value COMMA_THERE)) ;
-  return ptr ;
-}
-
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @gtlInt type                                                     *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-const C_galgas_type_descriptor
-kTypeDescriptor_GALGAS_gtlInt ("gtlInt",
-                               & kTypeDescriptor_GALGAS_gtlData) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-const C_galgas_type_descriptor * GALGAS_gtlInt::staticTypeDescriptor (void) const {
-  return & kTypeDescriptor_GALGAS_gtlInt ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-AC_GALGAS_root * GALGAS_gtlInt::clonedObject (void) const {
-  AC_GALGAS_root * result = NULL ;
-  if (isValid ()) {
-    macroMyNew (result, GALGAS_gtlInt (*this)) ;
-  }
-  return result ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-GALGAS_gtlInt GALGAS_gtlInt::extractObject (const GALGAS_object & inObject,
-                                            C_Compiler * inCompiler
-                                            COMMA_LOCATION_ARGS) {
-  GALGAS_gtlInt result ;
-  const GALGAS_gtlInt * p = (const GALGAS_gtlInt *) inObject.embeddedObject () ;
-  if (NULL != p) {
-    if (NULL != dynamic_cast <const GALGAS_gtlInt *> (p)) {
-      result = *p ;
-    }else{
-      inCompiler->castError ("gtlInt", p->dynamicTypeDescriptor () COMMA_THERE) ;
     }  
   }
   return result ;
