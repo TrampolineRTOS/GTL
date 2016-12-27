@@ -26,7 +26,7 @@
 //---------------------------------------------------------------------------------------------------------------------*
 
 #include "utilities/M_SourceLocation.h"
-#include "collections/TC_Array.h"
+#include "collections/TC_UniqueArray.h"
 #include "utilities/M_machine.h"
 #include "streams/C_ConsoleOut.h"
 #include "utilities/C_Data.h"
@@ -274,6 +274,9 @@ class C_String : public AC_OutputStream {
 //--- Return string, with all letters in lower case
   public : C_String lowercaseString (void) const ;
 
+//--- Check if the receiver ends with inString
+  public : bool endsWithString (const C_String & inString) const ;
+
 //--- Return reversed string
   public : C_String reversedString (void) const ;
   public : void reverseStringInPlace (void) ;
@@ -289,6 +292,22 @@ class C_String : public AC_OutputStream {
 //    - first, convert Windows Path to Unix Path (on windows only)
 //    - Reduce empty components and references to the current directory (that is, the sequences "//" and "/./") to single path separators
   public : C_String stringByStandardizingPath (void) const ;
+
+//--- Convert string to double
+  public : void convertToDouble (double & outDoubleValue,
+                                 bool & outOk) const ;
+
+  public : void convertToUInt32 (uint32_t & outResult,
+                                 bool & outOk) const ;
+
+  public : void convertToSInt32 (int32_t & outResult,
+                                 bool & outOk) const ;
+
+  public : void convertToUInt64 (uint64_t & outResult,
+                                 bool & outOk) const ;
+
+  public : void convertToSInt64 (int64_t & outResult,
+                                 bool & outOk) const ;
 
 //---------------- Virtual output stream methods --------------
   protected : virtual void performActualCharArrayOutput (const char * inCharArray,

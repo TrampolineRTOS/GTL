@@ -112,9 +112,9 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlBreakpoint ;
 
 class cPtr_gtlBreakpoint : public acPtr_class {
 //--- Attributes
-  public : GALGAS_string mAttribute_fileName ;
-  public : GALGAS_uint mAttribute_lineNum ;
-  public : GALGAS_string mAttribute_signature ;
+  public : GALGAS_string mProperty_fileName ;
+  public : GALGAS_uint mProperty_lineNum ;
+  public : GALGAS_string mProperty_signature ;
 
 //--- Constructor
   public : cPtr_gtlBreakpoint (const GALGAS_string & in_fileName,
@@ -147,7 +147,7 @@ class cPtr_gtlBreakpoint : public acPtr_class {
 
 class GALGAS_gtlBreakpointList_2D_element : public AC_GALGAS_root {
 //--------------------------------- Public data members
-  public : GALGAS_gtlBreakpoint mAttribute_breakpoint ;
+  public : GALGAS_gtlBreakpoint mProperty_breakpoint ;
 
 
 //--------------------------------- Accessors
@@ -213,8 +213,8 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlBreakpointList_2
 
 class GALGAS_gtlInstructionListContextStack_2D_element : public AC_GALGAS_root {
 //--------------------------------- Public data members
-  public : GALGAS_uint mAttribute_nextInstructionIndex ;
-  public : GALGAS_gtlInstructionList mAttribute_instructionList ;
+  public : GALGAS_uint mProperty_nextInstructionIndex ;
+  public : GALGAS_gtlInstructionList mProperty_instructionList ;
 
 
 //--------------------------------- Accessors
@@ -506,7 +506,7 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlDoInstInstructio
 
 class cPtr_gtlDoInstInstruction : public cPtr_gtlInstruction {
 //--- Attributes
-  public : GALGAS_gtlInstruction mAttribute_instructionToDo ;
+  public : GALGAS_gtlInstruction mProperty_instructionToDo ;
 
 //--- Constructor
   public : cPtr_gtlDoInstInstruction (const GALGAS_location & in_where,
@@ -843,8 +843,8 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlBreakpointInstru
 
 class cPtr_gtlBreakpointInstruction : public cPtr_gtlInstruction {
 //--- Attributes
-  public : GALGAS_string mAttribute_fileName ;
-  public : GALGAS_uint mAttribute_lineNum ;
+  public : GALGAS_string mProperty_fileName ;
+  public : GALGAS_uint mProperty_lineNum ;
 
 //--- Constructor
   public : cPtr_gtlBreakpointInstruction (const GALGAS_location & in_where,
@@ -1016,7 +1016,7 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlBreakpointDelete
 
 class cPtr_gtlBreakpointDeleteInstruction : public cPtr_gtlInstruction {
 //--- Attributes
-  public : GALGAS_lbigint mAttribute_numToDelete ;
+  public : GALGAS_lbigint mProperty_numToDelete ;
 
 //--- Constructor
   public : cPtr_gtlBreakpointDeleteInstruction (const GALGAS_location & in_where,
@@ -1268,7 +1268,7 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlWatchpointDelete
 
 class cPtr_gtlWatchpointDeleteInstruction : public cPtr_gtlInstruction {
 //--- Attributes
-  public : GALGAS_lbigint mAttribute_numToDelete ;
+  public : GALGAS_lbigint mProperty_numToDelete ;
 
 //--- Constructor
   public : cPtr_gtlWatchpointDeleteInstruction (const GALGAS_location & in_where,
@@ -1438,7 +1438,7 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlListInstruction 
 
 class cPtr_gtlListInstruction : public cPtr_gtlInstruction {
 //--- Attributes
-  public : GALGAS_uint mAttribute_window ;
+  public : GALGAS_uint mProperty_window ;
 
 //--- Constructor
   public : cPtr_gtlListInstruction (const GALGAS_location & in_where,
@@ -1608,7 +1608,7 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlLoadInstruction 
 
 class cPtr_gtlLoadInstruction : public cPtr_gtlInstruction {
 //--- Attributes
-  public : GALGAS_string mAttribute_fileName ;
+  public : GALGAS_string mProperty_fileName ;
 
 //--- Constructor
   public : cPtr_gtlLoadInstruction (const GALGAS_location & in_where,
@@ -1822,7 +1822,7 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlDoNotInstruction
 
 class cPtr_gtlDoNotInstruction : public cPtr_gtlInstruction {
 //--- Attributes
-  public : GALGAS_lbigint mAttribute_numToDelete ;
+  public : GALGAS_lbigint mProperty_numToDelete ;
 
 //--- Constructor
   public : cPtr_gtlDoNotInstruction (const GALGAS_location & in_where,
@@ -1910,7 +1910,7 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlLetUnconstructed
 
 class cPtr_gtlLetUnconstructedInstruction : public cPtr_gtlInstruction {
 //--- Attributes
-  public : GALGAS_gtlVarPath mAttribute_lValue ;
+  public : GALGAS_gtlVarPath mProperty_lValue ;
 
 //--- Constructor
   public : cPtr_gtlLetUnconstructedInstruction (const GALGAS_location & in_where,
@@ -1989,7 +1989,7 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlAssignInstructio
 
 class cPtr_gtlAssignInstruction : public cPtr_gtlLetUnconstructedInstruction {
 //--- Attributes
-  public : GALGAS_gtlExpression mAttribute_rValue ;
+  public : GALGAS_gtlExpression mProperty_rValue ;
 
 //--- Constructor
   public : cPtr_gtlAssignInstruction (const GALGAS_location & in_where,
@@ -2988,8 +2988,8 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlPrintStatementIn
 
 class cPtr_gtlPrintStatementInstruction : public cPtr_gtlInstruction {
 //--- Attributes
-  public : GALGAS_bool mAttribute_carriageReturn ;
-  public : GALGAS_gtlExpression mAttribute_messageToPrint ;
+  public : GALGAS_bool mProperty_carriageReturn ;
+  public : GALGAS_gtlExpression mProperty_messageToPrint ;
 
 //--- Constructor
   public : cPtr_gtlPrintStatementInstruction (const GALGAS_location & in_where,
@@ -3160,7 +3160,7 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlWatchpointInstru
 
 class cPtr_gtlWatchpointInstruction : public cPtr_gtlInstruction {
 //--- Attributes
-  public : GALGAS_gtlExpression mAttribute_watchExpression ;
+  public : GALGAS_gtlExpression mProperty_watchExpression ;
 
 //--- Constructor
   public : cPtr_gtlWatchpointInstruction (const GALGAS_location & in_where,
@@ -3351,7 +3351,7 @@ class GALGAS_gtlGetter callExtensionGetter_getGetter (const cPtr_library * inObj
 
 class cPtr_gtlGetter : public cPtr_gtlFunction {
 //--- Attributes
-  public : GALGAS_type mAttribute_targetType ;
+  public : GALGAS_type mProperty_targetType ;
 
 //--- Constructor
   public : cPtr_gtlGetter (const GALGAS_location & in_where,
@@ -3460,7 +3460,7 @@ class GALGAS_gtlSetter callExtensionGetter_getSetter (const cPtr_library * inObj
 
 class cPtr_gtlSetter : public cPtr_gtlExecutableEntity {
 //--- Attributes
-  public : GALGAS_type mAttribute_targetType ;
+  public : GALGAS_type mProperty_targetType ;
 
 //--- Constructor
   public : cPtr_gtlSetter (const GALGAS_location & in_where,
@@ -4169,6 +4169,7 @@ void callExtensionSetter_performSetter (class cPtr_gtlData * inObject,
 typedef void (*extensionMethodSignature_gtlData_structField) (const class cPtr_gtlData * inObject,
                                                               const class GALGAS_lstring constinArgument0,
                                                               class GALGAS_gtlData & outArgument1,
+                                                              class GALGAS_bool & outArgument2,
                                                               class C_Compiler * inCompiler
                                                               COMMA_LOCATION_ARGS) ;
 
@@ -4182,6 +4183,7 @@ void enterExtensionMethod_structField (const int32_t inClassIndex,
 void callExtensionMethod_structField (const class cPtr_gtlData * inObject,
                                       const GALGAS_lstring constin_name,
                                       GALGAS_gtlData & out_result,
+                                      GALGAS_bool & out_found,
                                       C_Compiler * inCompiler
                                       COMMA_LOCATION_ARGS) ;
 

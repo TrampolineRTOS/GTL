@@ -142,6 +142,10 @@ class AC_GALGAS_uniqueMapProxy : public AC_GALGAS_root {
                                                        const GALGAS_lstring & inKey
                                                        COMMA_LOCATION_ARGS) ;
 
+  protected : VIRTUAL_IN_DEBUG void internalMakeOptionalProxy (AC_GALGAS_uniqueMap & ioMap,
+                                                               const GALGAS_lstring & inKey
+                                                               COMMA_LOCATION_ARGS) ;
+
   protected : VIRTUAL_IN_DEBUG void internalMakeProxyFromString (AC_GALGAS_uniqueMap & ioMap,
                                                                  const GALGAS_string & inKey
                                                                  COMMA_LOCATION_ARGS) ;
@@ -304,8 +308,7 @@ class AC_GALGAS_uniqueMap : public AC_GALGAS_root {
   public : typeComparisonResult objectCompare (const AC_GALGAS_uniqueMap & inOperand) const ;
 
 //--------------------------------- Internal methods for enumeration
-  protected : VIRTUAL_IN_DEBUG void populateEnumerationArray (capCollectionElementArray & inEnumerationArray,
-                                                              const typeEnumerationOrder inEnumerationOrder) const ;
+  protected : VIRTUAL_IN_DEBUG void populateEnumerationArray (capCollectionElementArray & inEnumerationArray) const ;
 
 //--------------------------------- Internal methods for inserting proxy
   protected : VIRTUAL_IN_DEBUG cUniqueMapNode * performInsertProxy (const C_String & inKey,

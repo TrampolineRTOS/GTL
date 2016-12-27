@@ -50,3 +50,6 @@ let set1 := [aList setBy: "a"]
 let set2 := [aList setBy: "b"]
 display set1
 display set2
+
+let elem := [aSet elementNamed: 1]
+error elem : "1 should not be part of this set"

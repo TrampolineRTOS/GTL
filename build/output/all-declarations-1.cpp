@@ -28,14 +28,14 @@ void extensionMethod_loadCommandFile (const GALGAS_string inObject,
     const GALGAS_string temp_3 = inObject ;
     GALGAS_stringlist var_commands_2683 = GALGAS_string::constructor_stringWithContentsOfFile (temp_3, inCompiler  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 72)).getter_componentsSeparatedByString (GALGAS_string ("\n") COMMA_SOURCE_FILE ("gtl_debugger.galgas", 73)) ;
     GALGAS_string var_whatInFile_2793 = GALGAS_string::makeEmptyString () ;
-    cEnumerator_stringlist enumerator_2826 (var_commands_2683, kEnumeration_up) ;
+    cEnumerator_stringlist enumerator_2826 (var_commands_2683, kENUMERATION_UP) ;
     while (enumerator_2826.hasCurrentObject ()) {
       var_whatInFile_2793.plusAssign_operation(enumerator_2826.current_mValue (HERE).getter_stringByTrimmingWhiteSpaces (SOURCE_FILE ("gtl_debugger.galgas", 77)), inCompiler  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 77)) ;
       enumerator_2826.gotoNextObject () ;
     }
     const enumGalgasBool test_4 = GALGAS_bool (kIsNotEqual, var_whatInFile_2793.objectCompare (GALGAS_string::makeEmptyString ())).boolEnum () ;
     if (kBoolTrue == test_4) {
-      cEnumerator_stringlist enumerator_2959 (var_commands_2683, kEnumeration_up) ;
+      cEnumerator_stringlist enumerator_2959 (var_commands_2683, kENUMERATION_UP) ;
       while (enumerator_2959.hasCurrentObject ()) {
         const enumGalgasBool test_5 = GALGAS_bool (kIsNotEqual, enumerator_2959.current_mValue (HERE).getter_stringByTrimmingWhiteSpaces (SOURCE_FILE ("gtl_debugger.galgas", 82)).objectCompare (GALGAS_string::makeEmptyString ())).boolEnum () ;
         if (kBoolTrue == test_5) {
@@ -103,7 +103,7 @@ bool cCollectionElement_gtlBreakpointList::isValid (void) const {
 
 cCollectionElement * cCollectionElement_gtlBreakpointList::copy (void) {
   cCollectionElement * result = NULL ;
-  macroMyNew (result, cCollectionElement_gtlBreakpointList (mObject.mAttribute_breakpoint COMMA_HERE)) ;
+  macroMyNew (result, cCollectionElement_gtlBreakpointList (mObject.mProperty_breakpoint COMMA_HERE)) ;
   return result ;
 }
 
@@ -113,7 +113,7 @@ void cCollectionElement_gtlBreakpointList::description (C_String & ioString, con
   ioString << "\n" ;
   ioString.writeStringMultiple ("| ", inIndentation) ;
   ioString << "breakpoint" ":" ;
-  mObject.mAttribute_breakpoint.description (ioString, inIndentation) ;
+  mObject.mProperty_breakpoint.description (ioString, inIndentation) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -132,19 +132,14 @@ AC_GALGAS_list () {
 
 //---------------------------------------------------------------------------------------------------------------------*
 
-GALGAS_gtlBreakpointList::GALGAS_gtlBreakpointList (cSharedList * inSharedListPtr) :
-AC_GALGAS_list (inSharedListPtr) {
-  if (NULL == inSharedListPtr) {
-    createNewEmptyList (HERE) ;
-  }
+GALGAS_gtlBreakpointList::GALGAS_gtlBreakpointList (const capCollectionElementArray & inSharedArray) :
+AC_GALGAS_list (inSharedArray) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
-GALGAS_gtlBreakpointList GALGAS_gtlBreakpointList::constructor_emptyList (LOCATION_ARGS) {
-  GALGAS_gtlBreakpointList result ;
-  result.createNewEmptyList (THERE) ;
-  return result ;
+GALGAS_gtlBreakpointList GALGAS_gtlBreakpointList::constructor_emptyList (UNUSED_LOCATION_ARGS) {
+  return GALGAS_gtlBreakpointList  (capCollectionElementArray ()) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -153,10 +148,10 @@ GALGAS_gtlBreakpointList GALGAS_gtlBreakpointList::constructor_listWithValue (co
                                                                               COMMA_LOCATION_ARGS) {
   GALGAS_gtlBreakpointList result ;
   if (inOperand0.isValid ()) {
-    result.createNewEmptyList (THERE) ;
+    result = GALGAS_gtlBreakpointList (capCollectionElementArray ()) ;
     capCollectionElement attributes ;
     GALGAS_gtlBreakpointList::makeAttributesFromObjects (attributes, inOperand0 COMMA_THERE) ;
-    result.addObject (attributes) ;
+    result.appendObject (attributes) ;
   }
   return result ;
 }
@@ -182,7 +177,7 @@ void GALGAS_gtlBreakpointList::addAssign_operation (const GALGAS_gtlBreakpoint &
     capCollectionElement attributes ;
     attributes.setPointer (p) ;
     macroDetachSharedObject (p) ;
-    addObject (attributes) ;
+    appendObject (attributes) ;
   }
 }
 
@@ -198,7 +193,7 @@ void GALGAS_gtlBreakpointList::setter_insertAtIndex (const GALGAS_gtlBreakpoint 
     capCollectionElement attributes ;
     attributes.setPointer (p) ;
     macroDetachSharedObject (p) ;
-    addObjectAtIndex (attributes, inInsertionIndex.uintValue (), inCompiler COMMA_THERE) ;
+    insertObjectAtIndex (attributes, inInsertionIndex.uintValue (), inCompiler COMMA_THERE) ;
   }
 }
 
@@ -216,7 +211,7 @@ void GALGAS_gtlBreakpointList::setter_removeAtIndex (GALGAS_gtlBreakpoint & outO
       outOperand0.drop () ;
     }else{
       macroValidSharedObject (p, cCollectionElement_gtlBreakpointList) ;
-      outOperand0 = p->mObject.mAttribute_breakpoint ;
+      outOperand0 = p->mObject.mProperty_breakpoint ;
     }
   }
 }
@@ -233,7 +228,7 @@ void GALGAS_gtlBreakpointList::setter_popFirst (GALGAS_gtlBreakpoint & outOperan
     outOperand0.drop () ;
   }else{
     macroValidSharedObject (p, cCollectionElement_gtlBreakpointList) ;
-    outOperand0 = p->mObject.mAttribute_breakpoint ;
+    outOperand0 = p->mObject.mProperty_breakpoint ;
   }
 }
 
@@ -249,7 +244,7 @@ void GALGAS_gtlBreakpointList::setter_popLast (GALGAS_gtlBreakpoint & outOperand
     outOperand0.drop () ;
   }else{
     macroValidSharedObject (p, cCollectionElement_gtlBreakpointList) ;
-    outOperand0 = p->mObject.mAttribute_breakpoint ;
+    outOperand0 = p->mObject.mProperty_breakpoint ;
   }
 }
 
@@ -265,7 +260,7 @@ void GALGAS_gtlBreakpointList::method_first (GALGAS_gtlBreakpoint & outOperand0,
     outOperand0.drop () ;
   }else{
     macroValidSharedObject (p, cCollectionElement_gtlBreakpointList) ;
-    outOperand0 = p->mObject.mAttribute_breakpoint ;
+    outOperand0 = p->mObject.mProperty_breakpoint ;
   }
 }
 
@@ -281,7 +276,7 @@ void GALGAS_gtlBreakpointList::method_last (GALGAS_gtlBreakpoint & outOperand0,
     outOperand0.drop () ;
   }else{
     macroValidSharedObject (p, cCollectionElement_gtlBreakpointList) ;
-    outOperand0 = p->mObject.mAttribute_breakpoint ;
+    outOperand0 = p->mObject.mProperty_breakpoint ;
   }
 }
 
@@ -346,7 +341,7 @@ GALGAS_gtlBreakpoint GALGAS_gtlBreakpointList::getter_breakpointAtIndex (const G
   GALGAS_gtlBreakpoint result ;
   if (NULL != p) {
     macroValidSharedObject (p, cCollectionElement_gtlBreakpointList) ;
-    result = p->mObject.mAttribute_breakpoint ;
+    result = p->mObject.mProperty_breakpoint ;
   }
   return result ;
 }
@@ -357,8 +352,8 @@ GALGAS_gtlBreakpoint GALGAS_gtlBreakpointList::getter_breakpointAtIndex (const G
 
 cEnumerator_gtlBreakpointList::cEnumerator_gtlBreakpointList (const GALGAS_gtlBreakpointList & inEnumeratedObject,
                                                               const typeEnumerationOrder inOrder) :
-cGenericAbstractEnumerator () {
-  inEnumeratedObject.populateEnumerationArray (mEnumerationArray, inOrder) ;
+cGenericAbstractEnumerator (inOrder) {
+  inEnumeratedObject.populateEnumerationArray (mEnumerationArray) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -375,7 +370,7 @@ GALGAS_gtlBreakpointList_2D_element cEnumerator_gtlBreakpointList::current (LOCA
 GALGAS_gtlBreakpoint cEnumerator_gtlBreakpointList::current_breakpoint (LOCATION_ARGS) const {
   const cCollectionElement_gtlBreakpointList * p = (const cCollectionElement_gtlBreakpointList *) currentObjectPtr (THERE) ;
   macroValidSharedObject (p, cCollectionElement_gtlBreakpointList) ;
-  return p->mObject.mAttribute_breakpoint ;
+  return p->mObject.mProperty_breakpoint ;
 }
 
 
@@ -470,7 +465,7 @@ bool cCollectionElement_gtlInstructionListContextStack::isValid (void) const {
 
 cCollectionElement * cCollectionElement_gtlInstructionListContextStack::copy (void) {
   cCollectionElement * result = NULL ;
-  macroMyNew (result, cCollectionElement_gtlInstructionListContextStack (mObject.mAttribute_nextInstructionIndex, mObject.mAttribute_instructionList COMMA_HERE)) ;
+  macroMyNew (result, cCollectionElement_gtlInstructionListContextStack (mObject.mProperty_nextInstructionIndex, mObject.mProperty_instructionList COMMA_HERE)) ;
   return result ;
 }
 
@@ -480,11 +475,11 @@ void cCollectionElement_gtlInstructionListContextStack::description (C_String & 
   ioString << "\n" ;
   ioString.writeStringMultiple ("| ", inIndentation) ;
   ioString << "nextInstructionIndex" ":" ;
-  mObject.mAttribute_nextInstructionIndex.description (ioString, inIndentation) ;
+  mObject.mProperty_nextInstructionIndex.description (ioString, inIndentation) ;
   ioString << "\n" ;
   ioString.writeStringMultiple ("| ", inIndentation) ;
   ioString << "instructionList" ":" ;
-  mObject.mAttribute_instructionList.description (ioString, inIndentation) ;
+  mObject.mProperty_instructionList.description (ioString, inIndentation) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -503,19 +498,14 @@ AC_GALGAS_list () {
 
 //---------------------------------------------------------------------------------------------------------------------*
 
-GALGAS_gtlInstructionListContextStack::GALGAS_gtlInstructionListContextStack (cSharedList * inSharedListPtr) :
-AC_GALGAS_list (inSharedListPtr) {
-  if (NULL == inSharedListPtr) {
-    createNewEmptyList (HERE) ;
-  }
+GALGAS_gtlInstructionListContextStack::GALGAS_gtlInstructionListContextStack (const capCollectionElementArray & inSharedArray) :
+AC_GALGAS_list (inSharedArray) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
-GALGAS_gtlInstructionListContextStack GALGAS_gtlInstructionListContextStack::constructor_emptyList (LOCATION_ARGS) {
-  GALGAS_gtlInstructionListContextStack result ;
-  result.createNewEmptyList (THERE) ;
-  return result ;
+GALGAS_gtlInstructionListContextStack GALGAS_gtlInstructionListContextStack::constructor_emptyList (UNUSED_LOCATION_ARGS) {
+  return GALGAS_gtlInstructionListContextStack  (capCollectionElementArray ()) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -525,10 +515,10 @@ GALGAS_gtlInstructionListContextStack GALGAS_gtlInstructionListContextStack::con
                                                                                                         COMMA_LOCATION_ARGS) {
   GALGAS_gtlInstructionListContextStack result ;
   if (inOperand0.isValid () && inOperand1.isValid ()) {
-    result.createNewEmptyList (THERE) ;
+    result = GALGAS_gtlInstructionListContextStack (capCollectionElementArray ()) ;
     capCollectionElement attributes ;
     GALGAS_gtlInstructionListContextStack::makeAttributesFromObjects (attributes, inOperand0, inOperand1 COMMA_THERE) ;
-    result.addObject (attributes) ;
+    result.appendObject (attributes) ;
   }
   return result ;
 }
@@ -557,7 +547,7 @@ void GALGAS_gtlInstructionListContextStack::addAssign_operation (const GALGAS_ui
     capCollectionElement attributes ;
     attributes.setPointer (p) ;
     macroDetachSharedObject (p) ;
-    addObject (attributes) ;
+    appendObject (attributes) ;
   }
 }
 
@@ -574,7 +564,7 @@ void GALGAS_gtlInstructionListContextStack::setter_insertAtIndex (const GALGAS_u
     capCollectionElement attributes ;
     attributes.setPointer (p) ;
     macroDetachSharedObject (p) ;
-    addObjectAtIndex (attributes, inInsertionIndex.uintValue (), inCompiler COMMA_THERE) ;
+    insertObjectAtIndex (attributes, inInsertionIndex.uintValue (), inCompiler COMMA_THERE) ;
   }
 }
 
@@ -594,8 +584,8 @@ void GALGAS_gtlInstructionListContextStack::setter_removeAtIndex (GALGAS_uint & 
       outOperand1.drop () ;
     }else{
       macroValidSharedObject (p, cCollectionElement_gtlInstructionListContextStack) ;
-      outOperand0 = p->mObject.mAttribute_nextInstructionIndex ;
-      outOperand1 = p->mObject.mAttribute_instructionList ;
+      outOperand0 = p->mObject.mProperty_nextInstructionIndex ;
+      outOperand1 = p->mObject.mProperty_instructionList ;
     }
   }
 }
@@ -614,8 +604,8 @@ void GALGAS_gtlInstructionListContextStack::setter_popFirst (GALGAS_uint & outOp
     outOperand1.drop () ;
   }else{
     macroValidSharedObject (p, cCollectionElement_gtlInstructionListContextStack) ;
-    outOperand0 = p->mObject.mAttribute_nextInstructionIndex ;
-    outOperand1 = p->mObject.mAttribute_instructionList ;
+    outOperand0 = p->mObject.mProperty_nextInstructionIndex ;
+    outOperand1 = p->mObject.mProperty_instructionList ;
   }
 }
 
@@ -633,8 +623,8 @@ void GALGAS_gtlInstructionListContextStack::setter_popLast (GALGAS_uint & outOpe
     outOperand1.drop () ;
   }else{
     macroValidSharedObject (p, cCollectionElement_gtlInstructionListContextStack) ;
-    outOperand0 = p->mObject.mAttribute_nextInstructionIndex ;
-    outOperand1 = p->mObject.mAttribute_instructionList ;
+    outOperand0 = p->mObject.mProperty_nextInstructionIndex ;
+    outOperand1 = p->mObject.mProperty_instructionList ;
   }
 }
 
@@ -652,8 +642,8 @@ void GALGAS_gtlInstructionListContextStack::method_first (GALGAS_uint & outOpera
     outOperand1.drop () ;
   }else{
     macroValidSharedObject (p, cCollectionElement_gtlInstructionListContextStack) ;
-    outOperand0 = p->mObject.mAttribute_nextInstructionIndex ;
-    outOperand1 = p->mObject.mAttribute_instructionList ;
+    outOperand0 = p->mObject.mProperty_nextInstructionIndex ;
+    outOperand1 = p->mObject.mProperty_instructionList ;
   }
 }
 
@@ -671,8 +661,8 @@ void GALGAS_gtlInstructionListContextStack::method_last (GALGAS_uint & outOperan
     outOperand1.drop () ;
   }else{
     macroValidSharedObject (p, cCollectionElement_gtlInstructionListContextStack) ;
-    outOperand0 = p->mObject.mAttribute_nextInstructionIndex ;
-    outOperand1 = p->mObject.mAttribute_instructionList ;
+    outOperand0 = p->mObject.mProperty_nextInstructionIndex ;
+    outOperand1 = p->mObject.mProperty_instructionList ;
   }
 }
 
@@ -737,7 +727,7 @@ GALGAS_uint GALGAS_gtlInstructionListContextStack::getter_nextInstructionIndexAt
   GALGAS_uint result ;
   if (NULL != p) {
     macroValidSharedObject (p, cCollectionElement_gtlInstructionListContextStack) ;
-    result = p->mObject.mAttribute_nextInstructionIndex ;
+    result = p->mObject.mProperty_nextInstructionIndex ;
   }
   return result ;
 }
@@ -752,7 +742,7 @@ GALGAS_gtlInstructionList GALGAS_gtlInstructionListContextStack::getter_instruct
   GALGAS_gtlInstructionList result ;
   if (NULL != p) {
     macroValidSharedObject (p, cCollectionElement_gtlInstructionListContextStack) ;
-    result = p->mObject.mAttribute_instructionList ;
+    result = p->mObject.mProperty_instructionList ;
   }
   return result ;
 }
@@ -763,8 +753,8 @@ GALGAS_gtlInstructionList GALGAS_gtlInstructionListContextStack::getter_instruct
 
 cEnumerator_gtlInstructionListContextStack::cEnumerator_gtlInstructionListContextStack (const GALGAS_gtlInstructionListContextStack & inEnumeratedObject,
                                                                                         const typeEnumerationOrder inOrder) :
-cGenericAbstractEnumerator () {
-  inEnumeratedObject.populateEnumerationArray (mEnumerationArray, inOrder) ;
+cGenericAbstractEnumerator (inOrder) {
+  inEnumeratedObject.populateEnumerationArray (mEnumerationArray) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -781,7 +771,7 @@ GALGAS_gtlInstructionListContextStack_2D_element cEnumerator_gtlInstructionListC
 GALGAS_uint cEnumerator_gtlInstructionListContextStack::current_nextInstructionIndex (LOCATION_ARGS) const {
   const cCollectionElement_gtlInstructionListContextStack * p = (const cCollectionElement_gtlInstructionListContextStack *) currentObjectPtr (THERE) ;
   macroValidSharedObject (p, cCollectionElement_gtlInstructionListContextStack) ;
-  return p->mObject.mAttribute_nextInstructionIndex ;
+  return p->mObject.mProperty_nextInstructionIndex ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -789,7 +779,7 @@ GALGAS_uint cEnumerator_gtlInstructionListContextStack::current_nextInstructionI
 GALGAS_gtlInstructionList cEnumerator_gtlInstructionListContextStack::current_instructionList (LOCATION_ARGS) const {
   const cCollectionElement_gtlInstructionListContextStack * p = (const cCollectionElement_gtlInstructionListContextStack *) currentObjectPtr (THERE) ;
   macroValidSharedObject (p, cCollectionElement_gtlInstructionListContextStack) ;
-  return p->mObject.mAttribute_instructionList ;
+  return p->mObject.mProperty_instructionList ;
 }
 
 
@@ -847,7 +837,7 @@ typeComparisonResult cPtr_debugCommandInput::dynamicObjectCompare (const acPtr_c
   const cPtr_debugCommandInput * p = (const cPtr_debugCommandInput *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_debugCommandInput) ;
   if (kOperandEqual == result) {
-    result = mAttribute_history.objectCompare (p->mAttribute_history) ;
+    result = mProperty_history.objectCompare (p->mProperty_history) ;
   }
   return result ;
 }
@@ -909,7 +899,7 @@ GALGAS_stringlist GALGAS_debugCommandInput::getter_history (UNUSED_LOCATION_ARGS
   if (NULL != mObjectPtr) {
     const cPtr_debugCommandInput * p = (const cPtr_debugCommandInput *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debugCommandInput) ;
-    result = p->mAttribute_history ;
+    result = p->mProperty_history ;
   }
   return result ;
 }
@@ -917,7 +907,7 @@ GALGAS_stringlist GALGAS_debugCommandInput::getter_history (UNUSED_LOCATION_ARGS
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_stringlist cPtr_debugCommandInput::getter_history (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_history ;
+  return mProperty_history ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -927,7 +917,7 @@ GALGAS_stringlist cPtr_debugCommandInput::getter_history (UNUSED_LOCATION_ARGS) 
 cPtr_debugCommandInput::cPtr_debugCommandInput (const GALGAS_stringlist & in_history
                                                 COMMA_LOCATION_ARGS) :
 acPtr_class (THERE),
-mAttribute_history (in_history) {
+mProperty_history (in_history) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -939,7 +929,7 @@ const C_galgas_type_descriptor * cPtr_debugCommandInput::classDescriptor (void) 
 void cPtr_debugCommandInput::description (C_String & ioString,
                                           const int32_t inIndentation) const {
   ioString << "[@debugCommandInput:" ;
-  mAttribute_history.description (ioString, inIndentation+1) ;
+  mProperty_history.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -947,7 +937,7 @@ void cPtr_debugCommandInput::description (C_String & ioString,
 
 acPtr_class * cPtr_debugCommandInput::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_debugCommandInput (mAttribute_history COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_debugCommandInput (mProperty_history COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -1004,13 +994,13 @@ typeComparisonResult cPtr_gtlBreakpoint::dynamicObjectCompare (const acPtr_class
   const cPtr_gtlBreakpoint * p = (const cPtr_gtlBreakpoint *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlBreakpoint) ;
   if (kOperandEqual == result) {
-    result = mAttribute_fileName.objectCompare (p->mAttribute_fileName) ;
+    result = mProperty_fileName.objectCompare (p->mProperty_fileName) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_lineNum.objectCompare (p->mAttribute_lineNum) ;
+    result = mProperty_lineNum.objectCompare (p->mProperty_lineNum) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -1076,7 +1066,7 @@ GALGAS_string GALGAS_gtlBreakpoint::getter_fileName (UNUSED_LOCATION_ARGS) const
   if (NULL != mObjectPtr) {
     const cPtr_gtlBreakpoint * p = (const cPtr_gtlBreakpoint *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlBreakpoint) ;
-    result = p->mAttribute_fileName ;
+    result = p->mProperty_fileName ;
   }
   return result ;
 }
@@ -1084,7 +1074,7 @@ GALGAS_string GALGAS_gtlBreakpoint::getter_fileName (UNUSED_LOCATION_ARGS) const
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_gtlBreakpoint::getter_fileName (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_fileName ;
+  return mProperty_fileName ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1094,7 +1084,7 @@ GALGAS_uint GALGAS_gtlBreakpoint::getter_lineNum (UNUSED_LOCATION_ARGS) const {
   if (NULL != mObjectPtr) {
     const cPtr_gtlBreakpoint * p = (const cPtr_gtlBreakpoint *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlBreakpoint) ;
-    result = p->mAttribute_lineNum ;
+    result = p->mProperty_lineNum ;
   }
   return result ;
 }
@@ -1102,7 +1092,7 @@ GALGAS_uint GALGAS_gtlBreakpoint::getter_lineNum (UNUSED_LOCATION_ARGS) const {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_uint cPtr_gtlBreakpoint::getter_lineNum (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_lineNum ;
+  return mProperty_lineNum ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1112,7 +1102,7 @@ GALGAS_string GALGAS_gtlBreakpoint::getter_signature (UNUSED_LOCATION_ARGS) cons
   if (NULL != mObjectPtr) {
     const cPtr_gtlBreakpoint * p = (const cPtr_gtlBreakpoint *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlBreakpoint) ;
-    result = p->mAttribute_signature ;
+    result = p->mProperty_signature ;
   }
   return result ;
 }
@@ -1120,7 +1110,7 @@ GALGAS_string GALGAS_gtlBreakpoint::getter_signature (UNUSED_LOCATION_ARGS) cons
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_gtlBreakpoint::getter_signature (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_signature ;
+  return mProperty_signature ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1132,9 +1122,9 @@ cPtr_gtlBreakpoint::cPtr_gtlBreakpoint (const GALGAS_string & in_fileName,
                                         const GALGAS_string & in_signature
                                         COMMA_LOCATION_ARGS) :
 acPtr_class (THERE),
-mAttribute_fileName (in_fileName),
-mAttribute_lineNum (in_lineNum),
-mAttribute_signature (in_signature) {
+mProperty_fileName (in_fileName),
+mProperty_lineNum (in_lineNum),
+mProperty_signature (in_signature) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1146,11 +1136,11 @@ const C_galgas_type_descriptor * cPtr_gtlBreakpoint::classDescriptor (void) cons
 void cPtr_gtlBreakpoint::description (C_String & ioString,
                                       const int32_t inIndentation) const {
   ioString << "[@gtlBreakpoint:" ;
-  mAttribute_fileName.description (ioString, inIndentation+1) ;
+  mProperty_fileName.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_lineNum.description (ioString, inIndentation+1) ;
+  mProperty_lineNum.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -1158,7 +1148,7 @@ void cPtr_gtlBreakpoint::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlBreakpoint::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlBreakpoint (mAttribute_fileName, mAttribute_lineNum, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlBreakpoint (mProperty_fileName, mProperty_lineNum, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -1219,7 +1209,7 @@ GALGAS_string extensionGetter_stringRepresentation (const GALGAS_gtlVarPath & in
   const GALGAS_gtlVarPath temp_0 = inObject ;
   result_result = callExtensionGetter_stringRepresentation ((const cPtr_gtlVarItem *) temp_0.getter_itemAtIndex (GALGAS_uint ((uint32_t) 0U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 653)).ptr (), GALGAS_string::makeEmptyString (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 653)) ;
   const GALGAS_gtlVarPath temp_1 = inObject ;
-  cEnumerator_gtlVarPath enumerator_19938 (temp_1.getter_subListFromIndex (GALGAS_uint ((uint32_t) 1U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 654)), kEnumeration_up) ;
+  cEnumerator_gtlVarPath enumerator_19938 (temp_1.getter_subListFromIndex (GALGAS_uint ((uint32_t) 1U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 654)), kENUMERATION_UP) ;
   while (enumerator_19938.hasCurrentObject ()) {
     result_result.plusAssign_operation(callExtensionGetter_stringRepresentation ((const cPtr_gtlVarItem *) enumerator_19938.current_item (HERE).ptr (), GALGAS_string ("::"), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 655)), inCompiler  COMMA_SOURCE_FILE ("gtl_debugger.galgas", 655)) ;
     enumerator_19938.gotoNextObject () ;
@@ -1304,7 +1294,7 @@ GALGAS_string extensionGetter_stringRepresentation (const GALGAS_gtlExpressionLi
   GALGAS_string result_result ; // Returned variable
   result_result = GALGAS_string::makeEmptyString () ;
   const GALGAS_gtlExpressionList temp_0 = inObject ;
-  cEnumerator_gtlExpressionList enumerator_32477 (temp_0, kEnumeration_up) ;
+  cEnumerator_gtlExpressionList enumerator_32477 (temp_0, kENUMERATION_UP) ;
   while (enumerator_32477.hasCurrentObject ()) {
     result_result = result_result.add_operation (callExtensionGetter_stringRepresentation ((const cPtr_gtlExpression *) enumerator_32477.current_expression (HERE).ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1057)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1057)) ;
     if (enumerator_32477.hasNextObject ()) {
@@ -1331,7 +1321,7 @@ GALGAS_string extensionGetter_mapRepresentation (const GALGAS_gtlExpressionMap &
   GALGAS_string result_result ; // Returned variable
   result_result = GALGAS_string::makeEmptyString () ;
   const GALGAS_gtlExpressionMap temp_0 = inObject ;
-  cEnumerator_gtlExpressionMap enumerator_32771 (temp_0, kEnumeration_up) ;
+  cEnumerator_gtlExpressionMap enumerator_32771 (temp_0, kENUMERATION_UP) ;
   while (enumerator_32771.hasCurrentObject ()) {
     result_result = result_result.add_operation (GALGAS_string ("\""), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1069)).add_operation (enumerator_32771.current_lkey (HERE).getter_string (SOURCE_FILE ("gtl_debugger.galgas", 1069)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1069)).add_operation (GALGAS_string ("\": "), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1069)).add_operation (callExtensionGetter_stringRepresentation ((const cPtr_gtlExpression *) enumerator_32771.current_expression (HERE).ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1069)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1069)) ;
     if (enumerator_32771.hasNextObject ()) {
@@ -1358,7 +1348,7 @@ GALGAS_string extensionGetter_structRepresentation (const GALGAS_gtlExpressionMa
   GALGAS_string result_result ; // Returned variable
   result_result = GALGAS_string::makeEmptyString () ;
   const GALGAS_gtlExpressionMap temp_0 = inObject ;
-  cEnumerator_gtlExpressionMap enumerator_33090 (temp_0, kEnumeration_up) ;
+  cEnumerator_gtlExpressionMap enumerator_33090 (temp_0, kENUMERATION_UP) ;
   while (enumerator_33090.hasCurrentObject ()) {
     result_result = result_result.add_operation (enumerator_33090.current_lkey (HERE).getter_string (SOURCE_FILE ("gtl_debugger.galgas", 1081)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1081)).add_operation (GALGAS_string (": "), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1081)).add_operation (callExtensionGetter_stringRepresentation ((const cPtr_gtlExpression *) enumerator_33090.current_expression (HERE).ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1081)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1081)) ;
     if (enumerator_33090.hasNextObject ()) {
@@ -1385,7 +1375,7 @@ GALGAS_string extensionGetter_stringRepresentation (const GALGAS_gtlArgumentList
   GALGAS_string result_result ; // Returned variable
   result_result = GALGAS_string::makeEmptyString () ;
   const GALGAS_gtlArgumentList temp_0 = inObject ;
-  cEnumerator_gtlArgumentList enumerator_33400 (temp_0, kEnumeration_up) ;
+  cEnumerator_gtlArgumentList enumerator_33400 (temp_0, kENUMERATION_UP) ;
   while (enumerator_33400.hasCurrentObject ()) {
     result_result = result_result.add_operation (enumerator_33400.current_name (HERE).getter_string (SOURCE_FILE ("gtl_debugger.galgas", 1093)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1093)) ;
     const enumGalgasBool test_1 = enumerator_33400.current_typed (HERE).boolEnum () ;
@@ -1416,7 +1406,7 @@ GALGAS_string extensionGetter_stringRepresentation (const GALGAS_sortingKeyList 
   GALGAS_string result_result ; // Returned variable
   result_result = GALGAS_string::makeEmptyString () ;
   const GALGAS_sortingKeyList temp_0 = inObject ;
-  cEnumerator_sortingKeyList enumerator_33923 (temp_0, kEnumeration_up) ;
+  cEnumerator_sortingKeyList enumerator_33923 (temp_0, kENUMERATION_UP) ;
   while (enumerator_33923.hasCurrentObject ()) {
     result_result = result_result.add_operation (enumerator_33923.current_key (HERE).getter_string (SOURCE_FILE ("gtl_debugger.galgas", 1115)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1115)).add_operation (GALGAS_string (" "), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1115)).add_operation (extensionGetter_stringRepresentation (enumerator_33923.current_order (HERE), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1115)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1115)) ;
     if (enumerator_33923.hasNextObject ()) {
@@ -1488,7 +1478,7 @@ static GALGAS_string extensionGetter_gtlInstruction_shortLocation (const cPtr_gt
   GALGAS_string result_result ; // Returned variable
   const cPtr_gtlInstruction * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlInstruction) ;
-  result_result = object->mAttribute_where.getter_file (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1125)).getter_lastPathComponent (SOURCE_FILE ("gtl_debugger.galgas", 1125)).add_operation (GALGAS_string (":"), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1125)).add_operation (object->mAttribute_where.getter_line (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1125)).getter_string (SOURCE_FILE ("gtl_debugger.galgas", 1125)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1125)) ;
+  result_result = object->mProperty_where.getter_file (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1125)).getter_lastPathComponent (SOURCE_FILE ("gtl_debugger.galgas", 1125)).add_operation (GALGAS_string (":"), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1125)).add_operation (object->mProperty_where.getter_line (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1125)).getter_string (SOURCE_FILE ("gtl_debugger.galgas", 1125)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 1125)) ;
 //---
   return result_result ;
 }
@@ -1745,10 +1735,10 @@ typeComparisonResult cPtr_gtlStepInstruction::dynamicObjectCompare (const acPtr_
   const cPtr_gtlStepInstruction * p = (const cPtr_gtlStepInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlStepInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -1824,9 +1814,9 @@ const C_galgas_type_descriptor * cPtr_gtlStepInstruction::classDescriptor (void)
 void cPtr_gtlStepInstruction::description (C_String & ioString,
                                            const int32_t inIndentation) const {
   ioString << "[@gtlStepInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -1834,7 +1824,7 @@ void cPtr_gtlStepInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlStepInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlStepInstruction (mAttribute_where, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlStepInstruction (mProperty_where, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -1891,13 +1881,13 @@ typeComparisonResult cPtr_gtlDoInstInstruction::dynamicObjectCompare (const acPt
   const cPtr_gtlDoInstInstruction * p = (const cPtr_gtlDoInstInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlDoInstInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_instructionToDo.objectCompare (p->mAttribute_instructionToDo) ;
+    result = mProperty_instructionToDo.objectCompare (p->mProperty_instructionToDo) ;
   }
   return result ;
 }
@@ -1954,7 +1944,7 @@ GALGAS_gtlInstruction GALGAS_gtlDoInstInstruction::getter_instructionToDo (UNUSE
   if (NULL != mObjectPtr) {
     const cPtr_gtlDoInstInstruction * p = (const cPtr_gtlDoInstInstruction *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlDoInstInstruction) ;
-    result = p->mAttribute_instructionToDo ;
+    result = p->mProperty_instructionToDo ;
   }
   return result ;
 }
@@ -1962,7 +1952,7 @@ GALGAS_gtlInstruction GALGAS_gtlDoInstInstruction::getter_instructionToDo (UNUSE
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstruction cPtr_gtlDoInstInstruction::getter_instructionToDo (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_instructionToDo ;
+  return mProperty_instructionToDo ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1974,7 +1964,7 @@ cPtr_gtlDoInstInstruction::cPtr_gtlDoInstInstruction (const GALGAS_location & in
                                                       const GALGAS_gtlInstruction & in_instructionToDo
                                                       COMMA_LOCATION_ARGS) :
 cPtr_gtlInstruction (in_where, in_signature COMMA_THERE),
-mAttribute_instructionToDo (in_instructionToDo) {
+mProperty_instructionToDo (in_instructionToDo) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1986,11 +1976,11 @@ const C_galgas_type_descriptor * cPtr_gtlDoInstInstruction::classDescriptor (voi
 void cPtr_gtlDoInstInstruction::description (C_String & ioString,
                                              const int32_t inIndentation) const {
   ioString << "[@gtlDoInstInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_instructionToDo.description (ioString, inIndentation+1) ;
+  mProperty_instructionToDo.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -1998,7 +1988,7 @@ void cPtr_gtlDoInstInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlDoInstInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlDoInstInstruction (mAttribute_where, mAttribute_signature, mAttribute_instructionToDo COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlDoInstInstruction (mProperty_where, mProperty_signature, mProperty_instructionToDo COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -2055,10 +2045,10 @@ typeComparisonResult cPtr_gtlDoNotAllInstruction::dynamicObjectCompare (const ac
   const cPtr_gtlDoNotAllInstruction * p = (const cPtr_gtlDoNotAllInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlDoNotAllInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -2134,9 +2124,9 @@ const C_galgas_type_descriptor * cPtr_gtlDoNotAllInstruction::classDescriptor (v
 void cPtr_gtlDoNotAllInstruction::description (C_String & ioString,
                                                const int32_t inIndentation) const {
   ioString << "[@gtlDoNotAllInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -2144,7 +2134,7 @@ void cPtr_gtlDoNotAllInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlDoNotAllInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlDoNotAllInstruction (mAttribute_where, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlDoNotAllInstruction (mProperty_where, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -2201,10 +2191,10 @@ typeComparisonResult cPtr_gtlDoInstruction::dynamicObjectCompare (const acPtr_cl
   const cPtr_gtlDoInstruction * p = (const cPtr_gtlDoInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlDoInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -2280,9 +2270,9 @@ const C_galgas_type_descriptor * cPtr_gtlDoInstruction::classDescriptor (void) c
 void cPtr_gtlDoInstruction::description (C_String & ioString,
                                          const int32_t inIndentation) const {
   ioString << "[@gtlDoInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -2290,7 +2280,7 @@ void cPtr_gtlDoInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlDoInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlDoInstruction (mAttribute_where, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlDoInstruction (mProperty_where, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -2347,10 +2337,10 @@ typeComparisonResult cPtr_gtlContinueInstruction::dynamicObjectCompare (const ac
   const cPtr_gtlContinueInstruction * p = (const cPtr_gtlContinueInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlContinueInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -2426,9 +2416,9 @@ const C_galgas_type_descriptor * cPtr_gtlContinueInstruction::classDescriptor (v
 void cPtr_gtlContinueInstruction::description (C_String & ioString,
                                                const int32_t inIndentation) const {
   ioString << "[@gtlContinueInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -2436,7 +2426,7 @@ void cPtr_gtlContinueInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlContinueInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlContinueInstruction (mAttribute_where, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlContinueInstruction (mProperty_where, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -2493,16 +2483,16 @@ typeComparisonResult cPtr_gtlBreakpointInstruction::dynamicObjectCompare (const 
   const cPtr_gtlBreakpointInstruction * p = (const cPtr_gtlBreakpointInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlBreakpointInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_fileName.objectCompare (p->mAttribute_fileName) ;
+    result = mProperty_fileName.objectCompare (p->mProperty_fileName) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_lineNum.objectCompare (p->mAttribute_lineNum) ;
+    result = mProperty_lineNum.objectCompare (p->mProperty_lineNum) ;
   }
   return result ;
 }
@@ -2570,7 +2560,7 @@ GALGAS_string GALGAS_gtlBreakpointInstruction::getter_fileName (UNUSED_LOCATION_
   if (NULL != mObjectPtr) {
     const cPtr_gtlBreakpointInstruction * p = (const cPtr_gtlBreakpointInstruction *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlBreakpointInstruction) ;
-    result = p->mAttribute_fileName ;
+    result = p->mProperty_fileName ;
   }
   return result ;
 }
@@ -2578,7 +2568,7 @@ GALGAS_string GALGAS_gtlBreakpointInstruction::getter_fileName (UNUSED_LOCATION_
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_gtlBreakpointInstruction::getter_fileName (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_fileName ;
+  return mProperty_fileName ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -2588,7 +2578,7 @@ GALGAS_uint GALGAS_gtlBreakpointInstruction::getter_lineNum (UNUSED_LOCATION_ARG
   if (NULL != mObjectPtr) {
     const cPtr_gtlBreakpointInstruction * p = (const cPtr_gtlBreakpointInstruction *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlBreakpointInstruction) ;
-    result = p->mAttribute_lineNum ;
+    result = p->mProperty_lineNum ;
   }
   return result ;
 }
@@ -2596,7 +2586,7 @@ GALGAS_uint GALGAS_gtlBreakpointInstruction::getter_lineNum (UNUSED_LOCATION_ARG
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_uint cPtr_gtlBreakpointInstruction::getter_lineNum (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_lineNum ;
+  return mProperty_lineNum ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -2609,8 +2599,8 @@ cPtr_gtlBreakpointInstruction::cPtr_gtlBreakpointInstruction (const GALGAS_locat
                                                               const GALGAS_uint & in_lineNum
                                                               COMMA_LOCATION_ARGS) :
 cPtr_gtlInstruction (in_where, in_signature COMMA_THERE),
-mAttribute_fileName (in_fileName),
-mAttribute_lineNum (in_lineNum) {
+mProperty_fileName (in_fileName),
+mProperty_lineNum (in_lineNum) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -2622,13 +2612,13 @@ const C_galgas_type_descriptor * cPtr_gtlBreakpointInstruction::classDescriptor 
 void cPtr_gtlBreakpointInstruction::description (C_String & ioString,
                                                  const int32_t inIndentation) const {
   ioString << "[@gtlBreakpointInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_fileName.description (ioString, inIndentation+1) ;
+  mProperty_fileName.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_lineNum.description (ioString, inIndentation+1) ;
+  mProperty_lineNum.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -2636,7 +2626,7 @@ void cPtr_gtlBreakpointInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlBreakpointInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlBreakpointInstruction (mAttribute_where, mAttribute_signature, mAttribute_fileName, mAttribute_lineNum COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlBreakpointInstruction (mProperty_where, mProperty_signature, mProperty_fileName, mProperty_lineNum COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -2693,10 +2683,10 @@ typeComparisonResult cPtr_gtlBreakpointListInstruction::dynamicObjectCompare (co
   const cPtr_gtlBreakpointListInstruction * p = (const cPtr_gtlBreakpointListInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlBreakpointListInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -2772,9 +2762,9 @@ const C_galgas_type_descriptor * cPtr_gtlBreakpointListInstruction::classDescrip
 void cPtr_gtlBreakpointListInstruction::description (C_String & ioString,
                                                      const int32_t inIndentation) const {
   ioString << "[@gtlBreakpointListInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -2782,7 +2772,7 @@ void cPtr_gtlBreakpointListInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlBreakpointListInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlBreakpointListInstruction (mAttribute_where, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlBreakpointListInstruction (mProperty_where, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -2839,13 +2829,13 @@ typeComparisonResult cPtr_gtlBreakpointDeleteInstruction::dynamicObjectCompare (
   const cPtr_gtlBreakpointDeleteInstruction * p = (const cPtr_gtlBreakpointDeleteInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlBreakpointDeleteInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_numToDelete.objectCompare (p->mAttribute_numToDelete) ;
+    result = mProperty_numToDelete.objectCompare (p->mProperty_numToDelete) ;
   }
   return result ;
 }
@@ -2911,7 +2901,7 @@ GALGAS_lbigint GALGAS_gtlBreakpointDeleteInstruction::getter_numToDelete (UNUSED
   if (NULL != mObjectPtr) {
     const cPtr_gtlBreakpointDeleteInstruction * p = (const cPtr_gtlBreakpointDeleteInstruction *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlBreakpointDeleteInstruction) ;
-    result = p->mAttribute_numToDelete ;
+    result = p->mProperty_numToDelete ;
   }
   return result ;
 }
@@ -2919,7 +2909,7 @@ GALGAS_lbigint GALGAS_gtlBreakpointDeleteInstruction::getter_numToDelete (UNUSED
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_lbigint cPtr_gtlBreakpointDeleteInstruction::getter_numToDelete (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_numToDelete ;
+  return mProperty_numToDelete ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -2931,7 +2921,7 @@ cPtr_gtlBreakpointDeleteInstruction::cPtr_gtlBreakpointDeleteInstruction (const 
                                                                           const GALGAS_lbigint & in_numToDelete
                                                                           COMMA_LOCATION_ARGS) :
 cPtr_gtlInstruction (in_where, in_signature COMMA_THERE),
-mAttribute_numToDelete (in_numToDelete) {
+mProperty_numToDelete (in_numToDelete) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -2943,11 +2933,11 @@ const C_galgas_type_descriptor * cPtr_gtlBreakpointDeleteInstruction::classDescr
 void cPtr_gtlBreakpointDeleteInstruction::description (C_String & ioString,
                                                        const int32_t inIndentation) const {
   ioString << "[@gtlBreakpointDeleteInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_numToDelete.description (ioString, inIndentation+1) ;
+  mProperty_numToDelete.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -2955,7 +2945,7 @@ void cPtr_gtlBreakpointDeleteInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlBreakpointDeleteInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlBreakpointDeleteInstruction (mAttribute_where, mAttribute_signature, mAttribute_numToDelete COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlBreakpointDeleteInstruction (mProperty_where, mProperty_signature, mProperty_numToDelete COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -3012,10 +3002,10 @@ typeComparisonResult cPtr_gtlBreakpointDeleteAllInstruction::dynamicObjectCompar
   const cPtr_gtlBreakpointDeleteAllInstruction * p = (const cPtr_gtlBreakpointDeleteAllInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlBreakpointDeleteAllInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -3091,9 +3081,9 @@ const C_galgas_type_descriptor * cPtr_gtlBreakpointDeleteAllInstruction::classDe
 void cPtr_gtlBreakpointDeleteAllInstruction::description (C_String & ioString,
                                                           const int32_t inIndentation) const {
   ioString << "[@gtlBreakpointDeleteAllInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -3101,7 +3091,7 @@ void cPtr_gtlBreakpointDeleteAllInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlBreakpointDeleteAllInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlBreakpointDeleteAllInstruction (mAttribute_where, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlBreakpointDeleteAllInstruction (mProperty_where, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -3158,10 +3148,10 @@ typeComparisonResult cPtr_gtlWatchpointListInstruction::dynamicObjectCompare (co
   const cPtr_gtlWatchpointListInstruction * p = (const cPtr_gtlWatchpointListInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlWatchpointListInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -3237,9 +3227,9 @@ const C_galgas_type_descriptor * cPtr_gtlWatchpointListInstruction::classDescrip
 void cPtr_gtlWatchpointListInstruction::description (C_String & ioString,
                                                      const int32_t inIndentation) const {
   ioString << "[@gtlWatchpointListInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -3247,7 +3237,7 @@ void cPtr_gtlWatchpointListInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlWatchpointListInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlWatchpointListInstruction (mAttribute_where, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlWatchpointListInstruction (mProperty_where, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -3304,13 +3294,13 @@ typeComparisonResult cPtr_gtlWatchpointDeleteInstruction::dynamicObjectCompare (
   const cPtr_gtlWatchpointDeleteInstruction * p = (const cPtr_gtlWatchpointDeleteInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlWatchpointDeleteInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_numToDelete.objectCompare (p->mAttribute_numToDelete) ;
+    result = mProperty_numToDelete.objectCompare (p->mProperty_numToDelete) ;
   }
   return result ;
 }
@@ -3376,7 +3366,7 @@ GALGAS_lbigint GALGAS_gtlWatchpointDeleteInstruction::getter_numToDelete (UNUSED
   if (NULL != mObjectPtr) {
     const cPtr_gtlWatchpointDeleteInstruction * p = (const cPtr_gtlWatchpointDeleteInstruction *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlWatchpointDeleteInstruction) ;
-    result = p->mAttribute_numToDelete ;
+    result = p->mProperty_numToDelete ;
   }
   return result ;
 }
@@ -3384,7 +3374,7 @@ GALGAS_lbigint GALGAS_gtlWatchpointDeleteInstruction::getter_numToDelete (UNUSED
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_lbigint cPtr_gtlWatchpointDeleteInstruction::getter_numToDelete (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_numToDelete ;
+  return mProperty_numToDelete ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -3396,7 +3386,7 @@ cPtr_gtlWatchpointDeleteInstruction::cPtr_gtlWatchpointDeleteInstruction (const 
                                                                           const GALGAS_lbigint & in_numToDelete
                                                                           COMMA_LOCATION_ARGS) :
 cPtr_gtlInstruction (in_where, in_signature COMMA_THERE),
-mAttribute_numToDelete (in_numToDelete) {
+mProperty_numToDelete (in_numToDelete) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -3408,11 +3398,11 @@ const C_galgas_type_descriptor * cPtr_gtlWatchpointDeleteInstruction::classDescr
 void cPtr_gtlWatchpointDeleteInstruction::description (C_String & ioString,
                                                        const int32_t inIndentation) const {
   ioString << "[@gtlWatchpointDeleteInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_numToDelete.description (ioString, inIndentation+1) ;
+  mProperty_numToDelete.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -3420,7 +3410,7 @@ void cPtr_gtlWatchpointDeleteInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlWatchpointDeleteInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlWatchpointDeleteInstruction (mAttribute_where, mAttribute_signature, mAttribute_numToDelete COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlWatchpointDeleteInstruction (mProperty_where, mProperty_signature, mProperty_numToDelete COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -3477,10 +3467,10 @@ typeComparisonResult cPtr_gtlWatchpointDeleteAllInstruction::dynamicObjectCompar
   const cPtr_gtlWatchpointDeleteAllInstruction * p = (const cPtr_gtlWatchpointDeleteAllInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlWatchpointDeleteAllInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -3556,9 +3546,9 @@ const C_galgas_type_descriptor * cPtr_gtlWatchpointDeleteAllInstruction::classDe
 void cPtr_gtlWatchpointDeleteAllInstruction::description (C_String & ioString,
                                                           const int32_t inIndentation) const {
   ioString << "[@gtlWatchpointDeleteAllInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -3566,7 +3556,7 @@ void cPtr_gtlWatchpointDeleteAllInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlWatchpointDeleteAllInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlWatchpointDeleteAllInstruction (mAttribute_where, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlWatchpointDeleteAllInstruction (mProperty_where, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -3623,13 +3613,13 @@ typeComparisonResult cPtr_gtlListInstruction::dynamicObjectCompare (const acPtr_
   const cPtr_gtlListInstruction * p = (const cPtr_gtlListInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlListInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_window.objectCompare (p->mAttribute_window) ;
+    result = mProperty_window.objectCompare (p->mProperty_window) ;
   }
   return result ;
 }
@@ -3695,7 +3685,7 @@ GALGAS_uint GALGAS_gtlListInstruction::getter_window (UNUSED_LOCATION_ARGS) cons
   if (NULL != mObjectPtr) {
     const cPtr_gtlListInstruction * p = (const cPtr_gtlListInstruction *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlListInstruction) ;
-    result = p->mAttribute_window ;
+    result = p->mProperty_window ;
   }
   return result ;
 }
@@ -3703,7 +3693,7 @@ GALGAS_uint GALGAS_gtlListInstruction::getter_window (UNUSED_LOCATION_ARGS) cons
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_uint cPtr_gtlListInstruction::getter_window (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_window ;
+  return mProperty_window ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -3715,7 +3705,7 @@ cPtr_gtlListInstruction::cPtr_gtlListInstruction (const GALGAS_location & in_whe
                                                   const GALGAS_uint & in_window
                                                   COMMA_LOCATION_ARGS) :
 cPtr_gtlInstruction (in_where, in_signature COMMA_THERE),
-mAttribute_window (in_window) {
+mProperty_window (in_window) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -3727,11 +3717,11 @@ const C_galgas_type_descriptor * cPtr_gtlListInstruction::classDescriptor (void)
 void cPtr_gtlListInstruction::description (C_String & ioString,
                                            const int32_t inIndentation) const {
   ioString << "[@gtlListInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_window.description (ioString, inIndentation+1) ;
+  mProperty_window.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -3739,7 +3729,7 @@ void cPtr_gtlListInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlListInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlListInstruction (mAttribute_where, mAttribute_signature, mAttribute_window COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlListInstruction (mProperty_where, mProperty_signature, mProperty_window COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -3796,10 +3786,10 @@ typeComparisonResult cPtr_gtlHistoryInstruction::dynamicObjectCompare (const acP
   const cPtr_gtlHistoryInstruction * p = (const cPtr_gtlHistoryInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlHistoryInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -3875,9 +3865,9 @@ const C_galgas_type_descriptor * cPtr_gtlHistoryInstruction::classDescriptor (vo
 void cPtr_gtlHistoryInstruction::description (C_String & ioString,
                                               const int32_t inIndentation) const {
   ioString << "[@gtlHistoryInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -3885,7 +3875,7 @@ void cPtr_gtlHistoryInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlHistoryInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlHistoryInstruction (mAttribute_where, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlHistoryInstruction (mProperty_where, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -3942,13 +3932,13 @@ typeComparisonResult cPtr_gtlLoadInstruction::dynamicObjectCompare (const acPtr_
   const cPtr_gtlLoadInstruction * p = (const cPtr_gtlLoadInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlLoadInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_fileName.objectCompare (p->mAttribute_fileName) ;
+    result = mProperty_fileName.objectCompare (p->mProperty_fileName) ;
   }
   return result ;
 }
@@ -4014,7 +4004,7 @@ GALGAS_string GALGAS_gtlLoadInstruction::getter_fileName (UNUSED_LOCATION_ARGS) 
   if (NULL != mObjectPtr) {
     const cPtr_gtlLoadInstruction * p = (const cPtr_gtlLoadInstruction *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlLoadInstruction) ;
-    result = p->mAttribute_fileName ;
+    result = p->mProperty_fileName ;
   }
   return result ;
 }
@@ -4022,7 +4012,7 @@ GALGAS_string GALGAS_gtlLoadInstruction::getter_fileName (UNUSED_LOCATION_ARGS) 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_gtlLoadInstruction::getter_fileName (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_fileName ;
+  return mProperty_fileName ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -4034,7 +4024,7 @@ cPtr_gtlLoadInstruction::cPtr_gtlLoadInstruction (const GALGAS_location & in_whe
                                                   const GALGAS_string & in_fileName
                                                   COMMA_LOCATION_ARGS) :
 cPtr_gtlInstruction (in_where, in_signature COMMA_THERE),
-mAttribute_fileName (in_fileName) {
+mProperty_fileName (in_fileName) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -4046,11 +4036,11 @@ const C_galgas_type_descriptor * cPtr_gtlLoadInstruction::classDescriptor (void)
 void cPtr_gtlLoadInstruction::description (C_String & ioString,
                                            const int32_t inIndentation) const {
   ioString << "[@gtlLoadInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_fileName.description (ioString, inIndentation+1) ;
+  mProperty_fileName.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -4058,7 +4048,7 @@ void cPtr_gtlLoadInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlLoadInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlLoadInstruction (mAttribute_where, mAttribute_signature, mAttribute_fileName COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlLoadInstruction (mProperty_where, mProperty_signature, mProperty_fileName COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -4115,10 +4105,10 @@ typeComparisonResult cPtr_gtlHelpInstruction::dynamicObjectCompare (const acPtr_
   const cPtr_gtlHelpInstruction * p = (const cPtr_gtlHelpInstruction *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlHelpInstruction) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_signature.objectCompare (p->mAttribute_signature) ;
+    result = mProperty_signature.objectCompare (p->mProperty_signature) ;
   }
   return result ;
 }
@@ -4194,9 +4184,9 @@ const C_galgas_type_descriptor * cPtr_gtlHelpInstruction::classDescriptor (void)
 void cPtr_gtlHelpInstruction::description (C_String & ioString,
                                            const int32_t inIndentation) const {
   ioString << "[@gtlHelpInstruction:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_signature.description (ioString, inIndentation+1) ;
+  mProperty_signature.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -4204,7 +4194,7 @@ void cPtr_gtlHelpInstruction::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlHelpInstruction::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlHelpInstruction (mAttribute_where, mAttribute_signature COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlHelpInstruction (mProperty_where, mProperty_signature COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -4355,14 +4345,14 @@ static void extensionSetter_debugCommandInput_getCommand (cPtr_debugCommandInput
                   if (kBoolTrue == test_7) {
                     var_savedCommand_844 = outArgument_command ;
                   }
-                  const enumGalgasBool test_8 = GALGAS_bool (kIsStrictInf, var_historyIndex_870.objectCompare (object->mAttribute_history.getter_length (SOURCE_FILE ("gtl_debugger_input.galgas", 66)))).boolEnum () ;
+                  const enumGalgasBool test_8 = GALGAS_bool (kIsStrictInf, var_historyIndex_870.objectCompare (object->mProperty_history.getter_length (SOURCE_FILE ("gtl_debugger_input.galgas", 66)))).boolEnum () ;
                   if (kBoolTrue == test_8) {
                     const enumGalgasBool test_9 = GALGAS_bool (kIsStrictSup, var_cursorPos_917.objectCompare (GALGAS_uint ((uint32_t) 0U))).boolEnum () ;
                     if (kBoolTrue == test_9) {
                       inCompiler->printMessage (GALGAS_string ("\x1B""[").add_operation (var_cursorPos_917.getter_string (SOURCE_FILE ("gtl_debugger_input.galgas", 68)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 68)).add_operation (GALGAS_string ("D"), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 68))  COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 68)) ;
                     }
                     inCompiler->printMessage (GALGAS_string ("\x1B""[K")  COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 70)) ;
-                    outArgument_command = object->mAttribute_history.getter_mValueAtIndex (var_historyIndex_870, inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 71)) ;
+                    outArgument_command = object->mProperty_history.getter_mValueAtIndex (var_historyIndex_870, inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 71)) ;
                     inCompiler->printMessage (outArgument_command  COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 72)) ;
                     var_cursorPos_917 = outArgument_command.getter_length (SOURCE_FILE ("gtl_debugger_input.galgas", 73)) ;
                     var_historyIndex_870.increment_operation (inCompiler  COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 74)) ;
@@ -4382,7 +4372,7 @@ static void extensionSetter_debugCommandInput_getCommand (cPtr_debugCommandInput
                       if (kBoolTrue == test_13) {
                         outArgument_command = var_savedCommand_844 ;
                       }else if (kBoolFalse == test_13) {
-                        outArgument_command = object->mAttribute_history.getter_mValueAtIndex (var_historyIndex_870.substract_operation (GALGAS_uint ((uint32_t) 1U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 87)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 87)) ;
+                        outArgument_command = object->mProperty_history.getter_mValueAtIndex (var_historyIndex_870.substract_operation (GALGAS_uint ((uint32_t) 1U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 87)), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 87)) ;
                       }
                       inCompiler->printMessage (outArgument_command  COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 89)) ;
                       var_cursorPos_917 = outArgument_command.getter_length (SOURCE_FILE ("gtl_debugger_input.galgas", 90)) ;
@@ -4448,7 +4438,7 @@ static void extensionSetter_debugCommandInput_getCommand (cPtr_debugCommandInput
   const enumGalgasBool test_21 = GALGAS_bool (kIsNotEqual, outArgument_command.getter_stringByTrimmingWhiteSpaces (SOURCE_FILE ("gtl_debugger_input.galgas", 144)).objectCompare (GALGAS_string ("hist"))).boolEnum () ;
   if (kBoolTrue == test_21) {
     {
-    object->mAttribute_history.setter_insertAtIndex (outArgument_command, GALGAS_uint ((uint32_t) 0U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 145)) ;
+    object->mProperty_history.setter_insertAtIndex (outArgument_command, GALGAS_uint ((uint32_t) 0U), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 145)) ;
     }
   }
 }
@@ -4523,10 +4513,10 @@ static void extensionMethod_debugCommandInput_listHistory (const cPtr_debugComma
                                                            COMMA_UNUSED_LOCATION_ARGS) {
   const cPtr_debugCommandInput * object = inObject ;
   macroValidSharedObject (object, cPtr_debugCommandInput) ;
-  const enumGalgasBool test_0 = GALGAS_bool (kIsStrictSup, object->mAttribute_history.getter_length (SOURCE_FILE ("gtl_debugger_input.galgas", 151)).objectCompare (GALGAS_uint ((uint32_t) 0U))).boolEnum () ;
+  const enumGalgasBool test_0 = GALGAS_bool (kIsStrictSup, object->mProperty_history.getter_length (SOURCE_FILE ("gtl_debugger_input.galgas", 151)).objectCompare (GALGAS_uint ((uint32_t) 0U))).boolEnum () ;
   if (kBoolTrue == test_0) {
     inCompiler->printMessage (GALGAS_string ("Command history:\n")  COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 152)) ;
-    cEnumerator_stringlist enumerator_4332 (object->mAttribute_history, kEnumeration_up) ;
+    cEnumerator_stringlist enumerator_4332 (object->mProperty_history, kENUMERATION_UP) ;
     GALGAS_uint index_4314 ((uint32_t) 0) ;
     while (enumerator_4332.hasCurrentObject ()) {
       inCompiler->printMessage (index_4314.getter_string (SOURCE_FILE ("gtl_debugger_input.galgas", 154)).getter_stringByLeftPadding (GALGAS_uint ((uint32_t) 4U), GALGAS_char (TO_UNICODE (32)) COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 154)).add_operation (GALGAS_string (": "), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 154)).add_operation (enumerator_4332.current_mValue (HERE), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 154)).add_operation (GALGAS_string ("\n"), inCompiler COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 154))  COMMA_SOURCE_FILE ("gtl_debugger_input.galgas", 154)) ;
@@ -6717,7 +6707,7 @@ void cParser_gtl_5F_debugger_5F_expression_5F_parser::rule_gtl_5F_debugger_5F_ex
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlTypedArgumentList_2D_element::GALGAS_gtlTypedArgumentList_2D_element (void) :
-mAttribute_type () {
+mProperty_type () {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -6728,7 +6718,7 @@ GALGAS_gtlTypedArgumentList_2D_element::~ GALGAS_gtlTypedArgumentList_2D_element
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlTypedArgumentList_2D_element::GALGAS_gtlTypedArgumentList_2D_element (const GALGAS_type & inOperand0) :
-mAttribute_type (inOperand0) {
+mProperty_type (inOperand0) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -6747,7 +6737,7 @@ GALGAS_gtlTypedArgumentList_2D_element GALGAS_gtlTypedArgumentList_2D_element::c
 typeComparisonResult GALGAS_gtlTypedArgumentList_2D_element::objectCompare (const GALGAS_gtlTypedArgumentList_2D_element & inOperand) const {
    typeComparisonResult result = kOperandEqual ;
   if (result == kOperandEqual) {
-    result = mAttribute_type.objectCompare (inOperand.mAttribute_type) ;
+    result = mProperty_type.objectCompare (inOperand.mProperty_type) ;
   }
   return result ;
 }
@@ -6755,13 +6745,13 @@ typeComparisonResult GALGAS_gtlTypedArgumentList_2D_element::objectCompare (cons
 //---------------------------------------------------------------------------------------------------------------------*
 
 bool GALGAS_gtlTypedArgumentList_2D_element::isValid (void) const {
-  return mAttribute_type.isValid () ;
+  return mProperty_type.isValid () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_gtlTypedArgumentList_2D_element::drop (void) {
-  mAttribute_type.drop () ;
+  mProperty_type.drop () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -6772,7 +6762,7 @@ void GALGAS_gtlTypedArgumentList_2D_element::description (C_String & ioString,
   if (! isValid ()) {
     ioString << " not built" ;
   }else{
-    mAttribute_type.description (ioString, inIndentation+1) ;
+    mProperty_type.description (ioString, inIndentation+1) ;
   }
   ioString << ">" ;
 }
@@ -6780,7 +6770,7 @@ void GALGAS_gtlTypedArgumentList_2D_element::description (C_String & ioString,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_type GALGAS_gtlTypedArgumentList_2D_element::getter_type (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_type ;
+  return mProperty_type ;
 }
 
 
@@ -6831,7 +6821,7 @@ GALGAS_gtlTypedArgumentList_2D_element GALGAS_gtlTypedArgumentList_2D_element::e
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstructionList_2D_element::GALGAS_gtlInstructionList_2D_element (void) :
-mAttribute_instruction () {
+mProperty_instruction () {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -6842,7 +6832,7 @@ GALGAS_gtlInstructionList_2D_element::~ GALGAS_gtlInstructionList_2D_element (vo
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstructionList_2D_element::GALGAS_gtlInstructionList_2D_element (const GALGAS_gtlInstruction & inOperand0) :
-mAttribute_instruction (inOperand0) {
+mProperty_instruction (inOperand0) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -6861,7 +6851,7 @@ GALGAS_gtlInstructionList_2D_element GALGAS_gtlInstructionList_2D_element::const
 typeComparisonResult GALGAS_gtlInstructionList_2D_element::objectCompare (const GALGAS_gtlInstructionList_2D_element & inOperand) const {
    typeComparisonResult result = kOperandEqual ;
   if (result == kOperandEqual) {
-    result = mAttribute_instruction.objectCompare (inOperand.mAttribute_instruction) ;
+    result = mProperty_instruction.objectCompare (inOperand.mProperty_instruction) ;
   }
   return result ;
 }
@@ -6869,13 +6859,13 @@ typeComparisonResult GALGAS_gtlInstructionList_2D_element::objectCompare (const 
 //---------------------------------------------------------------------------------------------------------------------*
 
 bool GALGAS_gtlInstructionList_2D_element::isValid (void) const {
-  return mAttribute_instruction.isValid () ;
+  return mProperty_instruction.isValid () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_gtlInstructionList_2D_element::drop (void) {
-  mAttribute_instruction.drop () ;
+  mProperty_instruction.drop () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -6886,7 +6876,7 @@ void GALGAS_gtlInstructionList_2D_element::description (C_String & ioString,
   if (! isValid ()) {
     ioString << " not built" ;
   }else{
-    mAttribute_instruction.description (ioString, inIndentation+1) ;
+    mProperty_instruction.description (ioString, inIndentation+1) ;
   }
   ioString << ">" ;
 }
@@ -6894,7 +6884,7 @@ void GALGAS_gtlInstructionList_2D_element::description (C_String & ioString,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstruction GALGAS_gtlInstructionList_2D_element::getter_instruction (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_instruction ;
+  return mProperty_instruction ;
 }
 
 
@@ -6945,7 +6935,7 @@ GALGAS_gtlInstructionList_2D_element GALGAS_gtlInstructionList_2D_element::extra
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlVarPath_2D_element::GALGAS_gtlVarPath_2D_element (void) :
-mAttribute_item () {
+mProperty_item () {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -6956,7 +6946,7 @@ GALGAS_gtlVarPath_2D_element::~ GALGAS_gtlVarPath_2D_element (void) {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlVarPath_2D_element::GALGAS_gtlVarPath_2D_element (const GALGAS_gtlVarItem & inOperand0) :
-mAttribute_item (inOperand0) {
+mProperty_item (inOperand0) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -6975,7 +6965,7 @@ GALGAS_gtlVarPath_2D_element GALGAS_gtlVarPath_2D_element::constructor_new (cons
 typeComparisonResult GALGAS_gtlVarPath_2D_element::objectCompare (const GALGAS_gtlVarPath_2D_element & inOperand) const {
    typeComparisonResult result = kOperandEqual ;
   if (result == kOperandEqual) {
-    result = mAttribute_item.objectCompare (inOperand.mAttribute_item) ;
+    result = mProperty_item.objectCompare (inOperand.mProperty_item) ;
   }
   return result ;
 }
@@ -6983,13 +6973,13 @@ typeComparisonResult GALGAS_gtlVarPath_2D_element::objectCompare (const GALGAS_g
 //---------------------------------------------------------------------------------------------------------------------*
 
 bool GALGAS_gtlVarPath_2D_element::isValid (void) const {
-  return mAttribute_item.isValid () ;
+  return mProperty_item.isValid () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_gtlVarPath_2D_element::drop (void) {
-  mAttribute_item.drop () ;
+  mProperty_item.drop () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7000,7 +6990,7 @@ void GALGAS_gtlVarPath_2D_element::description (C_String & ioString,
   if (! isValid ()) {
     ioString << " not built" ;
   }else{
-    mAttribute_item.description (ioString, inIndentation+1) ;
+    mProperty_item.description (ioString, inIndentation+1) ;
   }
   ioString << ">" ;
 }
@@ -7008,7 +6998,7 @@ void GALGAS_gtlVarPath_2D_element::description (C_String & ioString,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlVarItem GALGAS_gtlVarPath_2D_element::getter_item (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_item ;
+  return mProperty_item ;
 }
 
 
@@ -7059,8 +7049,8 @@ GALGAS_gtlVarPath_2D_element GALGAS_gtlVarPath_2D_element::extractObject (const 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstructionListContextStack_2D_element::GALGAS_gtlInstructionListContextStack_2D_element (void) :
-mAttribute_nextInstructionIndex (),
-mAttribute_instructionList () {
+mProperty_nextInstructionIndex (),
+mProperty_instructionList () {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7072,8 +7062,8 @@ GALGAS_gtlInstructionListContextStack_2D_element::~ GALGAS_gtlInstructionListCon
 
 GALGAS_gtlInstructionListContextStack_2D_element::GALGAS_gtlInstructionListContextStack_2D_element (const GALGAS_uint & inOperand0,
                                                                                                     const GALGAS_gtlInstructionList & inOperand1) :
-mAttribute_nextInstructionIndex (inOperand0),
-mAttribute_instructionList (inOperand1) {
+mProperty_nextInstructionIndex (inOperand0),
+mProperty_instructionList (inOperand1) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7100,10 +7090,10 @@ GALGAS_gtlInstructionListContextStack_2D_element GALGAS_gtlInstructionListContex
 typeComparisonResult GALGAS_gtlInstructionListContextStack_2D_element::objectCompare (const GALGAS_gtlInstructionListContextStack_2D_element & inOperand) const {
    typeComparisonResult result = kOperandEqual ;
   if (result == kOperandEqual) {
-    result = mAttribute_nextInstructionIndex.objectCompare (inOperand.mAttribute_nextInstructionIndex) ;
+    result = mProperty_nextInstructionIndex.objectCompare (inOperand.mProperty_nextInstructionIndex) ;
   }
   if (result == kOperandEqual) {
-    result = mAttribute_instructionList.objectCompare (inOperand.mAttribute_instructionList) ;
+    result = mProperty_instructionList.objectCompare (inOperand.mProperty_instructionList) ;
   }
   return result ;
 }
@@ -7111,14 +7101,14 @@ typeComparisonResult GALGAS_gtlInstructionListContextStack_2D_element::objectCom
 //---------------------------------------------------------------------------------------------------------------------*
 
 bool GALGAS_gtlInstructionListContextStack_2D_element::isValid (void) const {
-  return mAttribute_nextInstructionIndex.isValid () && mAttribute_instructionList.isValid () ;
+  return mProperty_nextInstructionIndex.isValid () && mProperty_instructionList.isValid () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_gtlInstructionListContextStack_2D_element::drop (void) {
-  mAttribute_nextInstructionIndex.drop () ;
-  mAttribute_instructionList.drop () ;
+  mProperty_nextInstructionIndex.drop () ;
+  mProperty_instructionList.drop () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7129,9 +7119,9 @@ void GALGAS_gtlInstructionListContextStack_2D_element::description (C_String & i
   if (! isValid ()) {
     ioString << " not built" ;
   }else{
-    mAttribute_nextInstructionIndex.description (ioString, inIndentation+1) ;
+    mProperty_nextInstructionIndex.description (ioString, inIndentation+1) ;
     ioString << ", " ;
-    mAttribute_instructionList.description (ioString, inIndentation+1) ;
+    mProperty_instructionList.description (ioString, inIndentation+1) ;
   }
   ioString << ">" ;
 }
@@ -7139,13 +7129,13 @@ void GALGAS_gtlInstructionListContextStack_2D_element::description (C_String & i
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_uint GALGAS_gtlInstructionListContextStack_2D_element::getter_nextInstructionIndex (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_nextInstructionIndex ;
+  return mProperty_nextInstructionIndex ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstructionList GALGAS_gtlInstructionListContextStack_2D_element::getter_instructionList (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_instructionList ;
+  return mProperty_instructionList ;
 }
 
 
@@ -7196,7 +7186,7 @@ GALGAS_gtlInstructionListContextStack_2D_element GALGAS_gtlInstructionListContex
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlBreakpointList_2D_element::GALGAS_gtlBreakpointList_2D_element (void) :
-mAttribute_breakpoint () {
+mProperty_breakpoint () {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7207,7 +7197,7 @@ GALGAS_gtlBreakpointList_2D_element::~ GALGAS_gtlBreakpointList_2D_element (void
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlBreakpointList_2D_element::GALGAS_gtlBreakpointList_2D_element (const GALGAS_gtlBreakpoint & inOperand0) :
-mAttribute_breakpoint (inOperand0) {
+mProperty_breakpoint (inOperand0) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7232,7 +7222,7 @@ GALGAS_gtlBreakpointList_2D_element GALGAS_gtlBreakpointList_2D_element::constru
 typeComparisonResult GALGAS_gtlBreakpointList_2D_element::objectCompare (const GALGAS_gtlBreakpointList_2D_element & inOperand) const {
    typeComparisonResult result = kOperandEqual ;
   if (result == kOperandEqual) {
-    result = mAttribute_breakpoint.objectCompare (inOperand.mAttribute_breakpoint) ;
+    result = mProperty_breakpoint.objectCompare (inOperand.mProperty_breakpoint) ;
   }
   return result ;
 }
@@ -7240,13 +7230,13 @@ typeComparisonResult GALGAS_gtlBreakpointList_2D_element::objectCompare (const G
 //---------------------------------------------------------------------------------------------------------------------*
 
 bool GALGAS_gtlBreakpointList_2D_element::isValid (void) const {
-  return mAttribute_breakpoint.isValid () ;
+  return mProperty_breakpoint.isValid () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 void GALGAS_gtlBreakpointList_2D_element::drop (void) {
-  mAttribute_breakpoint.drop () ;
+  mProperty_breakpoint.drop () ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7257,7 +7247,7 @@ void GALGAS_gtlBreakpointList_2D_element::description (C_String & ioString,
   if (! isValid ()) {
     ioString << " not built" ;
   }else{
-    mAttribute_breakpoint.description (ioString, inIndentation+1) ;
+    mProperty_breakpoint.description (ioString, inIndentation+1) ;
   }
   ioString << ">" ;
 }
@@ -7265,7 +7255,7 @@ void GALGAS_gtlBreakpointList_2D_element::description (C_String & ioString,
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlBreakpoint GALGAS_gtlBreakpointList_2D_element::getter_breakpoint (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_breakpoint ;
+  return mProperty_breakpoint ;
 }
 
 
@@ -7322,61 +7312,61 @@ typeComparisonResult cPtr_debuggerContext::dynamicObjectCompare (const acPtr_cla
   const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_debuggerContext) ;
   if (kOperandEqual == result) {
-    result = mAttribute_debugActive.objectCompare (p->mAttribute_debugActive) ;
+    result = mProperty_debugActive.objectCompare (p->mProperty_debugActive) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_breakOnNext.objectCompare (p->mAttribute_breakOnNext) ;
+    result = mProperty_breakOnNext.objectCompare (p->mProperty_breakOnNext) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_loopOnCommand.objectCompare (p->mAttribute_loopOnCommand) ;
+    result = mProperty_loopOnCommand.objectCompare (p->mProperty_loopOnCommand) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_promptColor.objectCompare (p->mAttribute_promptColor) ;
+    result = mProperty_promptColor.objectCompare (p->mProperty_promptColor) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_promptFace.objectCompare (p->mAttribute_promptFace) ;
+    result = mProperty_promptFace.objectCompare (p->mProperty_promptFace) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_instructionColor.objectCompare (p->mAttribute_instructionColor) ;
+    result = mProperty_instructionColor.objectCompare (p->mProperty_instructionColor) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_instructionFace.objectCompare (p->mAttribute_instructionFace) ;
+    result = mProperty_instructionFace.objectCompare (p->mProperty_instructionFace) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_outputColor.objectCompare (p->mAttribute_outputColor) ;
+    result = mProperty_outputColor.objectCompare (p->mProperty_outputColor) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_outputFace.objectCompare (p->mAttribute_outputFace) ;
+    result = mProperty_outputFace.objectCompare (p->mProperty_outputFace) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_warningColor.objectCompare (p->mAttribute_warningColor) ;
+    result = mProperty_warningColor.objectCompare (p->mProperty_warningColor) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_warningFace.objectCompare (p->mAttribute_warningFace) ;
+    result = mProperty_warningFace.objectCompare (p->mProperty_warningFace) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_executeDebuggerCommand.objectCompare (p->mAttribute_executeDebuggerCommand) ;
+    result = mProperty_executeDebuggerCommand.objectCompare (p->mProperty_executeDebuggerCommand) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_doList.objectCompare (p->mAttribute_doList) ;
+    result = mProperty_doList.objectCompare (p->mProperty_doList) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_breakpoints.objectCompare (p->mAttribute_breakpoints) ;
+    result = mProperty_breakpoints.objectCompare (p->mProperty_breakpoints) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_watchpoints.objectCompare (p->mAttribute_watchpoints) ;
+    result = mProperty_watchpoints.objectCompare (p->mProperty_watchpoints) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_nextInstructionIndex.objectCompare (p->mAttribute_nextInstructionIndex) ;
+    result = mProperty_nextInstructionIndex.objectCompare (p->mProperty_nextInstructionIndex) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_instructionList.objectCompare (p->mAttribute_instructionList) ;
+    result = mProperty_instructionList.objectCompare (p->mProperty_instructionList) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_contextStack.objectCompare (p->mAttribute_contextStack) ;
+    result = mProperty_contextStack.objectCompare (p->mProperty_contextStack) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_commandInput.objectCompare (p->mAttribute_commandInput) ;
+    result = mProperty_commandInput.objectCompare (p->mProperty_commandInput) ;
   }
   return result ;
 }
@@ -7474,7 +7464,7 @@ GALGAS_bool GALGAS_debuggerContext::getter_debugActive (UNUSED_LOCATION_ARGS) co
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_debugActive ;
+    result = p->mProperty_debugActive ;
   }
   return result ;
 }
@@ -7482,7 +7472,7 @@ GALGAS_bool GALGAS_debuggerContext::getter_debugActive (UNUSED_LOCATION_ARGS) co
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool cPtr_debuggerContext::getter_debugActive (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_debugActive ;
+  return mProperty_debugActive ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7492,7 +7482,7 @@ GALGAS_bool GALGAS_debuggerContext::getter_breakOnNext (UNUSED_LOCATION_ARGS) co
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_breakOnNext ;
+    result = p->mProperty_breakOnNext ;
   }
   return result ;
 }
@@ -7500,7 +7490,7 @@ GALGAS_bool GALGAS_debuggerContext::getter_breakOnNext (UNUSED_LOCATION_ARGS) co
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool cPtr_debuggerContext::getter_breakOnNext (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_breakOnNext ;
+  return mProperty_breakOnNext ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7510,7 +7500,7 @@ GALGAS_bool GALGAS_debuggerContext::getter_loopOnCommand (UNUSED_LOCATION_ARGS) 
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_loopOnCommand ;
+    result = p->mProperty_loopOnCommand ;
   }
   return result ;
 }
@@ -7518,7 +7508,7 @@ GALGAS_bool GALGAS_debuggerContext::getter_loopOnCommand (UNUSED_LOCATION_ARGS) 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool cPtr_debuggerContext::getter_loopOnCommand (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_loopOnCommand ;
+  return mProperty_loopOnCommand ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7528,7 +7518,7 @@ GALGAS_string GALGAS_debuggerContext::getter_promptColor (UNUSED_LOCATION_ARGS) 
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_promptColor ;
+    result = p->mProperty_promptColor ;
   }
   return result ;
 }
@@ -7536,7 +7526,7 @@ GALGAS_string GALGAS_debuggerContext::getter_promptColor (UNUSED_LOCATION_ARGS) 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_debuggerContext::getter_promptColor (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_promptColor ;
+  return mProperty_promptColor ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7546,7 +7536,7 @@ GALGAS_string GALGAS_debuggerContext::getter_promptFace (UNUSED_LOCATION_ARGS) c
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_promptFace ;
+    result = p->mProperty_promptFace ;
   }
   return result ;
 }
@@ -7554,7 +7544,7 @@ GALGAS_string GALGAS_debuggerContext::getter_promptFace (UNUSED_LOCATION_ARGS) c
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_debuggerContext::getter_promptFace (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_promptFace ;
+  return mProperty_promptFace ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7564,7 +7554,7 @@ GALGAS_string GALGAS_debuggerContext::getter_instructionColor (UNUSED_LOCATION_A
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_instructionColor ;
+    result = p->mProperty_instructionColor ;
   }
   return result ;
 }
@@ -7572,7 +7562,7 @@ GALGAS_string GALGAS_debuggerContext::getter_instructionColor (UNUSED_LOCATION_A
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_debuggerContext::getter_instructionColor (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_instructionColor ;
+  return mProperty_instructionColor ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7582,7 +7572,7 @@ GALGAS_string GALGAS_debuggerContext::getter_instructionFace (UNUSED_LOCATION_AR
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_instructionFace ;
+    result = p->mProperty_instructionFace ;
   }
   return result ;
 }
@@ -7590,7 +7580,7 @@ GALGAS_string GALGAS_debuggerContext::getter_instructionFace (UNUSED_LOCATION_AR
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_debuggerContext::getter_instructionFace (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_instructionFace ;
+  return mProperty_instructionFace ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7600,7 +7590,7 @@ GALGAS_string GALGAS_debuggerContext::getter_outputColor (UNUSED_LOCATION_ARGS) 
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_outputColor ;
+    result = p->mProperty_outputColor ;
   }
   return result ;
 }
@@ -7608,7 +7598,7 @@ GALGAS_string GALGAS_debuggerContext::getter_outputColor (UNUSED_LOCATION_ARGS) 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_debuggerContext::getter_outputColor (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_outputColor ;
+  return mProperty_outputColor ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7618,7 +7608,7 @@ GALGAS_string GALGAS_debuggerContext::getter_outputFace (UNUSED_LOCATION_ARGS) c
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_outputFace ;
+    result = p->mProperty_outputFace ;
   }
   return result ;
 }
@@ -7626,7 +7616,7 @@ GALGAS_string GALGAS_debuggerContext::getter_outputFace (UNUSED_LOCATION_ARGS) c
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_debuggerContext::getter_outputFace (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_outputFace ;
+  return mProperty_outputFace ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7636,7 +7626,7 @@ GALGAS_string GALGAS_debuggerContext::getter_warningColor (UNUSED_LOCATION_ARGS)
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_warningColor ;
+    result = p->mProperty_warningColor ;
   }
   return result ;
 }
@@ -7644,7 +7634,7 @@ GALGAS_string GALGAS_debuggerContext::getter_warningColor (UNUSED_LOCATION_ARGS)
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_debuggerContext::getter_warningColor (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_warningColor ;
+  return mProperty_warningColor ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7654,7 +7644,7 @@ GALGAS_string GALGAS_debuggerContext::getter_warningFace (UNUSED_LOCATION_ARGS) 
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_warningFace ;
+    result = p->mProperty_warningFace ;
   }
   return result ;
 }
@@ -7662,7 +7652,7 @@ GALGAS_string GALGAS_debuggerContext::getter_warningFace (UNUSED_LOCATION_ARGS) 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_debuggerContext::getter_warningFace (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_warningFace ;
+  return mProperty_warningFace ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7672,7 +7662,7 @@ GALGAS_bool GALGAS_debuggerContext::getter_executeDebuggerCommand (UNUSED_LOCATI
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_executeDebuggerCommand ;
+    result = p->mProperty_executeDebuggerCommand ;
   }
   return result ;
 }
@@ -7680,7 +7670,7 @@ GALGAS_bool GALGAS_debuggerContext::getter_executeDebuggerCommand (UNUSED_LOCATI
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_bool cPtr_debuggerContext::getter_executeDebuggerCommand (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_executeDebuggerCommand ;
+  return mProperty_executeDebuggerCommand ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7690,7 +7680,7 @@ GALGAS_gtlInstructionList GALGAS_debuggerContext::getter_doList (UNUSED_LOCATION
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_doList ;
+    result = p->mProperty_doList ;
   }
   return result ;
 }
@@ -7698,7 +7688,7 @@ GALGAS_gtlInstructionList GALGAS_debuggerContext::getter_doList (UNUSED_LOCATION
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstructionList cPtr_debuggerContext::getter_doList (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_doList ;
+  return mProperty_doList ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7708,7 +7698,7 @@ GALGAS_gtlBreakpointList GALGAS_debuggerContext::getter_breakpoints (UNUSED_LOCA
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_breakpoints ;
+    result = p->mProperty_breakpoints ;
   }
   return result ;
 }
@@ -7716,7 +7706,7 @@ GALGAS_gtlBreakpointList GALGAS_debuggerContext::getter_breakpoints (UNUSED_LOCA
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlBreakpointList cPtr_debuggerContext::getter_breakpoints (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_breakpoints ;
+  return mProperty_breakpoints ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7726,7 +7716,7 @@ GALGAS_gtlExpressionList GALGAS_debuggerContext::getter_watchpoints (UNUSED_LOCA
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_watchpoints ;
+    result = p->mProperty_watchpoints ;
   }
   return result ;
 }
@@ -7734,7 +7724,7 @@ GALGAS_gtlExpressionList GALGAS_debuggerContext::getter_watchpoints (UNUSED_LOCA
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlExpressionList cPtr_debuggerContext::getter_watchpoints (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_watchpoints ;
+  return mProperty_watchpoints ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7744,7 +7734,7 @@ GALGAS_uint GALGAS_debuggerContext::getter_nextInstructionIndex (UNUSED_LOCATION
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_nextInstructionIndex ;
+    result = p->mProperty_nextInstructionIndex ;
   }
   return result ;
 }
@@ -7752,7 +7742,7 @@ GALGAS_uint GALGAS_debuggerContext::getter_nextInstructionIndex (UNUSED_LOCATION
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_uint cPtr_debuggerContext::getter_nextInstructionIndex (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_nextInstructionIndex ;
+  return mProperty_nextInstructionIndex ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7762,7 +7752,7 @@ GALGAS_gtlInstructionList GALGAS_debuggerContext::getter_instructionList (UNUSED
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_instructionList ;
+    result = p->mProperty_instructionList ;
   }
   return result ;
 }
@@ -7770,7 +7760,7 @@ GALGAS_gtlInstructionList GALGAS_debuggerContext::getter_instructionList (UNUSED
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstructionList cPtr_debuggerContext::getter_instructionList (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_instructionList ;
+  return mProperty_instructionList ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7780,7 +7770,7 @@ GALGAS_gtlInstructionListContextStack GALGAS_debuggerContext::getter_contextStac
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_contextStack ;
+    result = p->mProperty_contextStack ;
   }
   return result ;
 }
@@ -7788,7 +7778,7 @@ GALGAS_gtlInstructionListContextStack GALGAS_debuggerContext::getter_contextStac
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstructionListContextStack cPtr_debuggerContext::getter_contextStack (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_contextStack ;
+  return mProperty_contextStack ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7798,7 +7788,7 @@ GALGAS_debugCommandInput GALGAS_debuggerContext::getter_commandInput (UNUSED_LOC
   if (NULL != mObjectPtr) {
     const cPtr_debuggerContext * p = (const cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    result = p->mAttribute_commandInput ;
+    result = p->mProperty_commandInput ;
   }
   return result ;
 }
@@ -7806,7 +7796,7 @@ GALGAS_debugCommandInput GALGAS_debuggerContext::getter_commandInput (UNUSED_LOC
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_debugCommandInput cPtr_debuggerContext::getter_commandInput (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_commandInput ;
+  return mProperty_commandInput ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7817,7 +7807,7 @@ void GALGAS_debuggerContext::setter_setDebugActive (GALGAS_bool inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_debugActive = inValue ;
+    p->mProperty_debugActive = inValue ;
   }
 }
 
@@ -7825,7 +7815,7 @@ void GALGAS_debuggerContext::setter_setDebugActive (GALGAS_bool inValue
 
 void cPtr_debuggerContext::setter_setDebugActive (GALGAS_bool inValue
                                                   COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_debugActive = inValue ;
+  mProperty_debugActive = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7836,7 +7826,7 @@ void GALGAS_debuggerContext::setter_setBreakOnNext (GALGAS_bool inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_breakOnNext = inValue ;
+    p->mProperty_breakOnNext = inValue ;
   }
 }
 
@@ -7844,7 +7834,7 @@ void GALGAS_debuggerContext::setter_setBreakOnNext (GALGAS_bool inValue
 
 void cPtr_debuggerContext::setter_setBreakOnNext (GALGAS_bool inValue
                                                   COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_breakOnNext = inValue ;
+  mProperty_breakOnNext = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7855,7 +7845,7 @@ void GALGAS_debuggerContext::setter_setLoopOnCommand (GALGAS_bool inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_loopOnCommand = inValue ;
+    p->mProperty_loopOnCommand = inValue ;
   }
 }
 
@@ -7863,7 +7853,7 @@ void GALGAS_debuggerContext::setter_setLoopOnCommand (GALGAS_bool inValue
 
 void cPtr_debuggerContext::setter_setLoopOnCommand (GALGAS_bool inValue
                                                     COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_loopOnCommand = inValue ;
+  mProperty_loopOnCommand = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7874,7 +7864,7 @@ void GALGAS_debuggerContext::setter_setPromptColor (GALGAS_string inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_promptColor = inValue ;
+    p->mProperty_promptColor = inValue ;
   }
 }
 
@@ -7882,7 +7872,7 @@ void GALGAS_debuggerContext::setter_setPromptColor (GALGAS_string inValue
 
 void cPtr_debuggerContext::setter_setPromptColor (GALGAS_string inValue
                                                   COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_promptColor = inValue ;
+  mProperty_promptColor = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7893,7 +7883,7 @@ void GALGAS_debuggerContext::setter_setPromptFace (GALGAS_string inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_promptFace = inValue ;
+    p->mProperty_promptFace = inValue ;
   }
 }
 
@@ -7901,7 +7891,7 @@ void GALGAS_debuggerContext::setter_setPromptFace (GALGAS_string inValue
 
 void cPtr_debuggerContext::setter_setPromptFace (GALGAS_string inValue
                                                  COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_promptFace = inValue ;
+  mProperty_promptFace = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7912,7 +7902,7 @@ void GALGAS_debuggerContext::setter_setInstructionColor (GALGAS_string inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_instructionColor = inValue ;
+    p->mProperty_instructionColor = inValue ;
   }
 }
 
@@ -7920,7 +7910,7 @@ void GALGAS_debuggerContext::setter_setInstructionColor (GALGAS_string inValue
 
 void cPtr_debuggerContext::setter_setInstructionColor (GALGAS_string inValue
                                                        COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_instructionColor = inValue ;
+  mProperty_instructionColor = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7931,7 +7921,7 @@ void GALGAS_debuggerContext::setter_setInstructionFace (GALGAS_string inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_instructionFace = inValue ;
+    p->mProperty_instructionFace = inValue ;
   }
 }
 
@@ -7939,7 +7929,7 @@ void GALGAS_debuggerContext::setter_setInstructionFace (GALGAS_string inValue
 
 void cPtr_debuggerContext::setter_setInstructionFace (GALGAS_string inValue
                                                       COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_instructionFace = inValue ;
+  mProperty_instructionFace = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7950,7 +7940,7 @@ void GALGAS_debuggerContext::setter_setOutputColor (GALGAS_string inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_outputColor = inValue ;
+    p->mProperty_outputColor = inValue ;
   }
 }
 
@@ -7958,7 +7948,7 @@ void GALGAS_debuggerContext::setter_setOutputColor (GALGAS_string inValue
 
 void cPtr_debuggerContext::setter_setOutputColor (GALGAS_string inValue
                                                   COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_outputColor = inValue ;
+  mProperty_outputColor = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7969,7 +7959,7 @@ void GALGAS_debuggerContext::setter_setOutputFace (GALGAS_string inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_outputFace = inValue ;
+    p->mProperty_outputFace = inValue ;
   }
 }
 
@@ -7977,7 +7967,7 @@ void GALGAS_debuggerContext::setter_setOutputFace (GALGAS_string inValue
 
 void cPtr_debuggerContext::setter_setOutputFace (GALGAS_string inValue
                                                  COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_outputFace = inValue ;
+  mProperty_outputFace = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7988,7 +7978,7 @@ void GALGAS_debuggerContext::setter_setWarningColor (GALGAS_string inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_warningColor = inValue ;
+    p->mProperty_warningColor = inValue ;
   }
 }
 
@@ -7996,7 +7986,7 @@ void GALGAS_debuggerContext::setter_setWarningColor (GALGAS_string inValue
 
 void cPtr_debuggerContext::setter_setWarningColor (GALGAS_string inValue
                                                    COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_warningColor = inValue ;
+  mProperty_warningColor = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8007,7 +7997,7 @@ void GALGAS_debuggerContext::setter_setWarningFace (GALGAS_string inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_warningFace = inValue ;
+    p->mProperty_warningFace = inValue ;
   }
 }
 
@@ -8015,7 +8005,7 @@ void GALGAS_debuggerContext::setter_setWarningFace (GALGAS_string inValue
 
 void cPtr_debuggerContext::setter_setWarningFace (GALGAS_string inValue
                                                   COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_warningFace = inValue ;
+  mProperty_warningFace = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8026,7 +8016,7 @@ void GALGAS_debuggerContext::setter_setExecuteDebuggerCommand (GALGAS_bool inVal
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_executeDebuggerCommand = inValue ;
+    p->mProperty_executeDebuggerCommand = inValue ;
   }
 }
 
@@ -8034,7 +8024,7 @@ void GALGAS_debuggerContext::setter_setExecuteDebuggerCommand (GALGAS_bool inVal
 
 void cPtr_debuggerContext::setter_setExecuteDebuggerCommand (GALGAS_bool inValue
                                                              COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_executeDebuggerCommand = inValue ;
+  mProperty_executeDebuggerCommand = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8045,7 +8035,7 @@ void GALGAS_debuggerContext::setter_setNextInstructionIndex (GALGAS_uint inValue
     insulate (THERE) ;
     cPtr_debuggerContext * p = (cPtr_debuggerContext *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_debuggerContext) ;
-    p->mAttribute_nextInstructionIndex = inValue ;
+    p->mProperty_nextInstructionIndex = inValue ;
   }
 }
 
@@ -8053,7 +8043,7 @@ void GALGAS_debuggerContext::setter_setNextInstructionIndex (GALGAS_uint inValue
 
 void cPtr_debuggerContext::setter_setNextInstructionIndex (GALGAS_uint inValue
                                                            COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_nextInstructionIndex = inValue ;
+  mProperty_nextInstructionIndex = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8081,25 +8071,25 @@ cPtr_debuggerContext::cPtr_debuggerContext (const GALGAS_bool & in_debugActive,
                                             const GALGAS_debugCommandInput & in_commandInput
                                             COMMA_LOCATION_ARGS) :
 acPtr_class (THERE),
-mAttribute_debugActive (in_debugActive),
-mAttribute_breakOnNext (in_breakOnNext),
-mAttribute_loopOnCommand (in_loopOnCommand),
-mAttribute_promptColor (in_promptColor),
-mAttribute_promptFace (in_promptFace),
-mAttribute_instructionColor (in_instructionColor),
-mAttribute_instructionFace (in_instructionFace),
-mAttribute_outputColor (in_outputColor),
-mAttribute_outputFace (in_outputFace),
-mAttribute_warningColor (in_warningColor),
-mAttribute_warningFace (in_warningFace),
-mAttribute_executeDebuggerCommand (in_executeDebuggerCommand),
-mAttribute_doList (in_doList),
-mAttribute_breakpoints (in_breakpoints),
-mAttribute_watchpoints (in_watchpoints),
-mAttribute_nextInstructionIndex (in_nextInstructionIndex),
-mAttribute_instructionList (in_instructionList),
-mAttribute_contextStack (in_contextStack),
-mAttribute_commandInput (in_commandInput) {
+mProperty_debugActive (in_debugActive),
+mProperty_breakOnNext (in_breakOnNext),
+mProperty_loopOnCommand (in_loopOnCommand),
+mProperty_promptColor (in_promptColor),
+mProperty_promptFace (in_promptFace),
+mProperty_instructionColor (in_instructionColor),
+mProperty_instructionFace (in_instructionFace),
+mProperty_outputColor (in_outputColor),
+mProperty_outputFace (in_outputFace),
+mProperty_warningColor (in_warningColor),
+mProperty_warningFace (in_warningFace),
+mProperty_executeDebuggerCommand (in_executeDebuggerCommand),
+mProperty_doList (in_doList),
+mProperty_breakpoints (in_breakpoints),
+mProperty_watchpoints (in_watchpoints),
+mProperty_nextInstructionIndex (in_nextInstructionIndex),
+mProperty_instructionList (in_instructionList),
+mProperty_contextStack (in_contextStack),
+mProperty_commandInput (in_commandInput) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8111,43 +8101,43 @@ const C_galgas_type_descriptor * cPtr_debuggerContext::classDescriptor (void) co
 void cPtr_debuggerContext::description (C_String & ioString,
                                         const int32_t inIndentation) const {
   ioString << "[@debuggerContext:" ;
-  mAttribute_debugActive.description (ioString, inIndentation+1) ;
+  mProperty_debugActive.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_breakOnNext.description (ioString, inIndentation+1) ;
+  mProperty_breakOnNext.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_loopOnCommand.description (ioString, inIndentation+1) ;
+  mProperty_loopOnCommand.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_promptColor.description (ioString, inIndentation+1) ;
+  mProperty_promptColor.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_promptFace.description (ioString, inIndentation+1) ;
+  mProperty_promptFace.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_instructionColor.description (ioString, inIndentation+1) ;
+  mProperty_instructionColor.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_instructionFace.description (ioString, inIndentation+1) ;
+  mProperty_instructionFace.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_outputColor.description (ioString, inIndentation+1) ;
+  mProperty_outputColor.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_outputFace.description (ioString, inIndentation+1) ;
+  mProperty_outputFace.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_warningColor.description (ioString, inIndentation+1) ;
+  mProperty_warningColor.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_warningFace.description (ioString, inIndentation+1) ;
+  mProperty_warningFace.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_executeDebuggerCommand.description (ioString, inIndentation+1) ;
+  mProperty_executeDebuggerCommand.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_doList.description (ioString, inIndentation+1) ;
+  mProperty_doList.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_breakpoints.description (ioString, inIndentation+1) ;
+  mProperty_breakpoints.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_watchpoints.description (ioString, inIndentation+1) ;
+  mProperty_watchpoints.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_nextInstructionIndex.description (ioString, inIndentation+1) ;
+  mProperty_nextInstructionIndex.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_instructionList.description (ioString, inIndentation+1) ;
+  mProperty_instructionList.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_contextStack.description (ioString, inIndentation+1) ;
+  mProperty_contextStack.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_commandInput.description (ioString, inIndentation+1) ;
+  mProperty_commandInput.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -8155,7 +8145,7 @@ void cPtr_debuggerContext::description (C_String & ioString,
 
 acPtr_class * cPtr_debuggerContext::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_debuggerContext (mAttribute_debugActive, mAttribute_breakOnNext, mAttribute_loopOnCommand, mAttribute_promptColor, mAttribute_promptFace, mAttribute_instructionColor, mAttribute_instructionFace, mAttribute_outputColor, mAttribute_outputFace, mAttribute_warningColor, mAttribute_warningFace, mAttribute_executeDebuggerCommand, mAttribute_doList, mAttribute_breakpoints, mAttribute_watchpoints, mAttribute_nextInstructionIndex, mAttribute_instructionList, mAttribute_contextStack, mAttribute_commandInput COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_debuggerContext (mProperty_debugActive, mProperty_breakOnNext, mProperty_loopOnCommand, mProperty_promptColor, mProperty_promptFace, mProperty_instructionColor, mProperty_instructionFace, mProperty_outputColor, mProperty_outputFace, mProperty_warningColor, mProperty_warningFace, mProperty_executeDebuggerCommand, mProperty_doList, mProperty_breakpoints, mProperty_watchpoints, mProperty_nextInstructionIndex, mProperty_instructionList, mProperty_contextStack, mProperty_commandInput COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -8245,7 +8235,7 @@ GALGAS_location GALGAS_gtlData::getter_where (UNUSED_LOCATION_ARGS) const {
   if (NULL != mObjectPtr) {
     const cPtr_gtlData * p = (const cPtr_gtlData *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlData) ;
-    result = p->mAttribute_where ;
+    result = p->mProperty_where ;
   }
   return result ;
 }
@@ -8253,7 +8243,7 @@ GALGAS_location GALGAS_gtlData::getter_where (UNUSED_LOCATION_ARGS) const {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_location cPtr_gtlData::getter_where (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_where ;
+  return mProperty_where ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8263,7 +8253,7 @@ GALGAS_lstring GALGAS_gtlData::getter_meta (UNUSED_LOCATION_ARGS) const {
   if (NULL != mObjectPtr) {
     const cPtr_gtlData * p = (const cPtr_gtlData *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlData) ;
-    result = p->mAttribute_meta ;
+    result = p->mProperty_meta ;
   }
   return result ;
 }
@@ -8271,7 +8261,7 @@ GALGAS_lstring GALGAS_gtlData::getter_meta (UNUSED_LOCATION_ARGS) const {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_lstring cPtr_gtlData::getter_meta (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_meta ;
+  return mProperty_meta ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8282,7 +8272,7 @@ void GALGAS_gtlData::setter_setWhere (GALGAS_location inValue
     insulate (THERE) ;
     cPtr_gtlData * p = (cPtr_gtlData *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlData) ;
-    p->mAttribute_where = inValue ;
+    p->mProperty_where = inValue ;
   }
 }
 
@@ -8290,7 +8280,7 @@ void GALGAS_gtlData::setter_setWhere (GALGAS_location inValue
 
 void cPtr_gtlData::setter_setWhere (GALGAS_location inValue
                                     COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_where = inValue ;
+  mProperty_where = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8301,7 +8291,7 @@ void GALGAS_gtlData::setter_setMeta (GALGAS_lstring inValue
     insulate (THERE) ;
     cPtr_gtlData * p = (cPtr_gtlData *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlData) ;
-    p->mAttribute_meta = inValue ;
+    p->mProperty_meta = inValue ;
   }
 }
 
@@ -8309,7 +8299,7 @@ void GALGAS_gtlData::setter_setMeta (GALGAS_lstring inValue
 
 void cPtr_gtlData::setter_setMeta (GALGAS_lstring inValue
                                    COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_meta = inValue ;
+  mProperty_meta = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8320,8 +8310,8 @@ cPtr_gtlData::cPtr_gtlData (const GALGAS_location & in_where,
                             const GALGAS_lstring & in_meta
                             COMMA_LOCATION_ARGS) :
 acPtr_class (THERE),
-mAttribute_where (in_where),
-mAttribute_meta (in_meta) {
+mProperty_where (in_where),
+mProperty_meta (in_meta) {
 }
 
 
@@ -8410,7 +8400,7 @@ GALGAS_location GALGAS_gtlExpression::getter_where (UNUSED_LOCATION_ARGS) const 
   if (NULL != mObjectPtr) {
     const cPtr_gtlExpression * p = (const cPtr_gtlExpression *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlExpression) ;
-    result = p->mAttribute_where ;
+    result = p->mProperty_where ;
   }
   return result ;
 }
@@ -8418,7 +8408,7 @@ GALGAS_location GALGAS_gtlExpression::getter_where (UNUSED_LOCATION_ARGS) const 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_location cPtr_gtlExpression::getter_where (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_where ;
+  return mProperty_where ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8428,7 +8418,7 @@ GALGAS_location cPtr_gtlExpression::getter_where (UNUSED_LOCATION_ARGS) const {
 cPtr_gtlExpression::cPtr_gtlExpression (const GALGAS_location & in_where
                                         COMMA_LOCATION_ARGS) :
 acPtr_class (THERE),
-mAttribute_where (in_where) {
+mProperty_where (in_where) {
 }
 
 
@@ -8484,10 +8474,10 @@ typeComparisonResult cPtr_gtlTemplate::dynamicObjectCompare (const acPtr_class *
   const cPtr_gtlTemplate * p = (const cPtr_gtlTemplate *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlTemplate) ;
   if (kOperandEqual == result) {
-    result = mAttribute_path.objectCompare (p->mAttribute_path) ;
+    result = mProperty_path.objectCompare (p->mProperty_path) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_program.objectCompare (p->mAttribute_program) ;
+    result = mProperty_program.objectCompare (p->mProperty_program) ;
   }
   return result ;
 }
@@ -8551,7 +8541,7 @@ GALGAS_string GALGAS_gtlTemplate::getter_path (UNUSED_LOCATION_ARGS) const {
   if (NULL != mObjectPtr) {
     const cPtr_gtlTemplate * p = (const cPtr_gtlTemplate *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlTemplate) ;
-    result = p->mAttribute_path ;
+    result = p->mProperty_path ;
   }
   return result ;
 }
@@ -8559,7 +8549,7 @@ GALGAS_string GALGAS_gtlTemplate::getter_path (UNUSED_LOCATION_ARGS) const {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_gtlTemplate::getter_path (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_path ;
+  return mProperty_path ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8569,7 +8559,7 @@ GALGAS_gtlInstructionList GALGAS_gtlTemplate::getter_program (UNUSED_LOCATION_AR
   if (NULL != mObjectPtr) {
     const cPtr_gtlTemplate * p = (const cPtr_gtlTemplate *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlTemplate) ;
-    result = p->mAttribute_program ;
+    result = p->mProperty_program ;
   }
   return result ;
 }
@@ -8577,7 +8567,7 @@ GALGAS_gtlInstructionList GALGAS_gtlTemplate::getter_program (UNUSED_LOCATION_AR
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstructionList cPtr_gtlTemplate::getter_program (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_program ;
+  return mProperty_program ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8588,8 +8578,8 @@ cPtr_gtlTemplate::cPtr_gtlTemplate (const GALGAS_string & in_path,
                                     const GALGAS_gtlInstructionList & in_program
                                     COMMA_LOCATION_ARGS) :
 acPtr_class (THERE),
-mAttribute_path (in_path),
-mAttribute_program (in_program) {
+mProperty_path (in_path),
+mProperty_program (in_program) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8601,9 +8591,9 @@ const C_galgas_type_descriptor * cPtr_gtlTemplate::classDescriptor (void) const 
 void cPtr_gtlTemplate::description (C_String & ioString,
                                     const int32_t inIndentation) const {
   ioString << "[@gtlTemplate:" ;
-  mAttribute_path.description (ioString, inIndentation+1) ;
+  mProperty_path.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_program.description (ioString, inIndentation+1) ;
+  mProperty_program.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -8611,7 +8601,7 @@ void cPtr_gtlTemplate::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlTemplate::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlTemplate (mAttribute_path, mAttribute_program COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlTemplate (mProperty_path, mProperty_program COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -8720,7 +8710,7 @@ static void extensionMethod_gtlTemplate_execute (const cPtr_gtlTemplate * inObje
                                                  COMMA_UNUSED_LOCATION_ARGS) {
   const cPtr_gtlTemplate * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlTemplate) ;
-  extensionMethod_execute (object->mAttribute_program, ioArgument_context, ioArgument_vars, ioArgument_lib, ioArgument_outputString, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 225)) ;
+  extensionMethod_execute (object->mProperty_program, ioArgument_context, ioArgument_vars, ioArgument_lib, ioArgument_outputString, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 227)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -8749,19 +8739,19 @@ typeComparisonResult cPtr_library::dynamicObjectCompare (const acPtr_class * inO
   const cPtr_library * p = (const cPtr_library *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_library) ;
   if (kOperandEqual == result) {
-    result = mAttribute_funcMap.objectCompare (p->mAttribute_funcMap) ;
+    result = mProperty_funcMap.objectCompare (p->mProperty_funcMap) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_getterMap.objectCompare (p->mAttribute_getterMap) ;
+    result = mProperty_getterMap.objectCompare (p->mProperty_getterMap) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_setterMap.objectCompare (p->mAttribute_setterMap) ;
+    result = mProperty_setterMap.objectCompare (p->mProperty_setterMap) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_templateMap.objectCompare (p->mAttribute_templateMap) ;
+    result = mProperty_templateMap.objectCompare (p->mProperty_templateMap) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_doneImports.objectCompare (p->mAttribute_doneImports) ;
+    result = mProperty_doneImports.objectCompare (p->mProperty_doneImports) ;
   }
   return result ;
 }
@@ -8831,7 +8821,7 @@ GALGAS_gtlFuncMap GALGAS_library::getter_funcMap (UNUSED_LOCATION_ARGS) const {
   if (NULL != mObjectPtr) {
     const cPtr_library * p = (const cPtr_library *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_library) ;
-    result = p->mAttribute_funcMap ;
+    result = p->mProperty_funcMap ;
   }
   return result ;
 }
@@ -8839,7 +8829,7 @@ GALGAS_gtlFuncMap GALGAS_library::getter_funcMap (UNUSED_LOCATION_ARGS) const {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlFuncMap cPtr_library::getter_funcMap (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_funcMap ;
+  return mProperty_funcMap ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8849,7 +8839,7 @@ GALGAS_gtlGetterMap GALGAS_library::getter_getterMap (UNUSED_LOCATION_ARGS) cons
   if (NULL != mObjectPtr) {
     const cPtr_library * p = (const cPtr_library *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_library) ;
-    result = p->mAttribute_getterMap ;
+    result = p->mProperty_getterMap ;
   }
   return result ;
 }
@@ -8857,7 +8847,7 @@ GALGAS_gtlGetterMap GALGAS_library::getter_getterMap (UNUSED_LOCATION_ARGS) cons
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlGetterMap cPtr_library::getter_getterMap (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_getterMap ;
+  return mProperty_getterMap ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8867,7 +8857,7 @@ GALGAS_gtlSetterMap GALGAS_library::getter_setterMap (UNUSED_LOCATION_ARGS) cons
   if (NULL != mObjectPtr) {
     const cPtr_library * p = (const cPtr_library *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_library) ;
-    result = p->mAttribute_setterMap ;
+    result = p->mProperty_setterMap ;
   }
   return result ;
 }
@@ -8875,7 +8865,7 @@ GALGAS_gtlSetterMap GALGAS_library::getter_setterMap (UNUSED_LOCATION_ARGS) cons
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlSetterMap cPtr_library::getter_setterMap (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_setterMap ;
+  return mProperty_setterMap ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8885,7 +8875,7 @@ GALGAS_gtlTemplateMap GALGAS_library::getter_templateMap (UNUSED_LOCATION_ARGS) 
   if (NULL != mObjectPtr) {
     const cPtr_library * p = (const cPtr_library *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_library) ;
-    result = p->mAttribute_templateMap ;
+    result = p->mProperty_templateMap ;
   }
   return result ;
 }
@@ -8893,7 +8883,7 @@ GALGAS_gtlTemplateMap GALGAS_library::getter_templateMap (UNUSED_LOCATION_ARGS) 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlTemplateMap cPtr_library::getter_templateMap (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_templateMap ;
+  return mProperty_templateMap ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8903,7 +8893,7 @@ GALGAS_stringset GALGAS_library::getter_doneImports (UNUSED_LOCATION_ARGS) const
   if (NULL != mObjectPtr) {
     const cPtr_library * p = (const cPtr_library *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_library) ;
-    result = p->mAttribute_doneImports ;
+    result = p->mProperty_doneImports ;
   }
   return result ;
 }
@@ -8911,7 +8901,7 @@ GALGAS_stringset GALGAS_library::getter_doneImports (UNUSED_LOCATION_ARGS) const
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_stringset cPtr_library::getter_doneImports (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_doneImports ;
+  return mProperty_doneImports ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8925,11 +8915,11 @@ cPtr_library::cPtr_library (const GALGAS_gtlFuncMap & in_funcMap,
                             const GALGAS_stringset & in_doneImports
                             COMMA_LOCATION_ARGS) :
 acPtr_class (THERE),
-mAttribute_funcMap (in_funcMap),
-mAttribute_getterMap (in_getterMap),
-mAttribute_setterMap (in_setterMap),
-mAttribute_templateMap (in_templateMap),
-mAttribute_doneImports (in_doneImports) {
+mProperty_funcMap (in_funcMap),
+mProperty_getterMap (in_getterMap),
+mProperty_setterMap (in_setterMap),
+mProperty_templateMap (in_templateMap),
+mProperty_doneImports (in_doneImports) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8941,15 +8931,15 @@ const C_galgas_type_descriptor * cPtr_library::classDescriptor (void) const {
 void cPtr_library::description (C_String & ioString,
                                 const int32_t inIndentation) const {
   ioString << "[@library:" ;
-  mAttribute_funcMap.description (ioString, inIndentation+1) ;
+  mProperty_funcMap.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_getterMap.description (ioString, inIndentation+1) ;
+  mProperty_getterMap.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_setterMap.description (ioString, inIndentation+1) ;
+  mProperty_setterMap.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_templateMap.description (ioString, inIndentation+1) ;
+  mProperty_templateMap.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_doneImports.description (ioString, inIndentation+1) ;
+  mProperty_doneImports.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -8957,7 +8947,7 @@ void cPtr_library::description (C_String & ioString,
 
 acPtr_class * cPtr_library::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_library (mAttribute_funcMap, mAttribute_getterMap, mAttribute_setterMap, mAttribute_templateMap, mAttribute_doneImports COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_library (mProperty_funcMap, mProperty_getterMap, mProperty_setterMap, mProperty_templateMap, mProperty_doneImports COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -9064,7 +9054,7 @@ static GALGAS_bool extensionGetter_library_functionExists (const cPtr_library * 
   GALGAS_bool result_exists ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  result_exists = object->mAttribute_funcMap.getter_hasKey (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 286)) COMMA_SOURCE_FILE ("gtl_types.galgas", 286)) ;
+  result_exists = object->mProperty_funcMap.getter_hasKey (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 288)) COMMA_SOURCE_FILE ("gtl_types.galgas", 288)) ;
 //---
   return result_exists ;
 }
@@ -9147,7 +9137,7 @@ static GALGAS_gtlFunction extensionGetter_library_getFunction (const cPtr_librar
   GALGAS_gtlFunction result_aFunction ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  object->mAttribute_funcMap.method_get (constinArgument_name, result_aFunction, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 293)) ;
+  object->mProperty_funcMap.method_get (constinArgument_name, result_aFunction, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 295)) ;
 //---
   return result_aFunction ;
 }
@@ -9227,7 +9217,7 @@ static void extensionSetter_library_putFunction (cPtr_library * inObject,
   cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
   {
-  object->mAttribute_funcMap.setter_put (constinArgument_name, constinArgument_aFunction, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 300)) ;
+  object->mProperty_funcMap.setter_put (constinArgument_name, constinArgument_aFunction, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 302)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9309,7 +9299,7 @@ static GALGAS_bool extensionGetter_library_getterExists (const cPtr_library * in
   GALGAS_bool result_exists ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  result_exists = object->mAttribute_getterMap.getter_hasKey (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 308)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 308)) COMMA_SOURCE_FILE ("gtl_types.galgas", 308)) ;
+  result_exists = object->mProperty_getterMap.getter_hasKey (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 310)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 310)) COMMA_SOURCE_FILE ("gtl_types.galgas", 310)) ;
 //---
   return result_exists ;
 }
@@ -9394,7 +9384,7 @@ static GALGAS_gtlGetter extensionGetter_library_getGetter (const cPtr_library * 
   GALGAS_gtlGetter result_aGetter ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  object->mAttribute_getterMap.method_get (GALGAS_lstring::constructor_new (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 316)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 316)), constinArgument_name.getter_location (SOURCE_FILE ("gtl_types.galgas", 316))  COMMA_SOURCE_FILE ("gtl_types.galgas", 316)), result_aGetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 316)) ;
+  object->mProperty_getterMap.method_get (GALGAS_lstring::constructor_new (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 318)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 318)), constinArgument_name.getter_location (SOURCE_FILE ("gtl_types.galgas", 318))  COMMA_SOURCE_FILE ("gtl_types.galgas", 318)), result_aGetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 318)) ;
 //---
   return result_aGetter ;
 }
@@ -9474,7 +9464,7 @@ static void extensionSetter_library_putGetter (cPtr_library * inObject,
   cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
   {
-  object->mAttribute_getterMap.setter_put (constinArgument_name, constinArgument_aGetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 323)) ;
+  object->mProperty_getterMap.setter_put (constinArgument_name, constinArgument_aGetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 325)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9556,7 +9546,7 @@ static GALGAS_bool extensionGetter_library_setterExists (const cPtr_library * in
   GALGAS_bool result_exists ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  result_exists = object->mAttribute_setterMap.getter_hasKey (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 331)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 331)) COMMA_SOURCE_FILE ("gtl_types.galgas", 331)) ;
+  result_exists = object->mProperty_setterMap.getter_hasKey (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 333)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 333)) COMMA_SOURCE_FILE ("gtl_types.galgas", 333)) ;
 //---
   return result_exists ;
 }
@@ -9641,7 +9631,7 @@ static GALGAS_gtlSetter extensionGetter_library_getSetter (const cPtr_library * 
   GALGAS_gtlSetter result_aSetter ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  object->mAttribute_setterMap.method_get (GALGAS_lstring::constructor_new (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 339)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 339)), constinArgument_name.getter_location (SOURCE_FILE ("gtl_types.galgas", 339))  COMMA_SOURCE_FILE ("gtl_types.galgas", 339)), result_aSetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 339)) ;
+  object->mProperty_setterMap.method_get (GALGAS_lstring::constructor_new (constinArgument_type.add_operation (constinArgument_name.getter_string (SOURCE_FILE ("gtl_types.galgas", 341)), inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 341)), constinArgument_name.getter_location (SOURCE_FILE ("gtl_types.galgas", 341))  COMMA_SOURCE_FILE ("gtl_types.galgas", 341)), result_aSetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 341)) ;
 //---
   return result_aSetter ;
 }
@@ -9721,7 +9711,7 @@ static void extensionSetter_library_putSetter (cPtr_library * inObject,
   cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
   {
-  object->mAttribute_setterMap.setter_put (constinArgument_name, constinArgument_aSetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 346)) ;
+  object->mProperty_setterMap.setter_put (constinArgument_name, constinArgument_aSetter, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 348)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9801,7 +9791,7 @@ static GALGAS_bool extensionGetter_library_hasImport (const cPtr_library * inObj
   GALGAS_bool result_result ; // Returned variable
   const cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  result_result = object->mAttribute_doneImports.getter_hasKey (constinArgument_importPath COMMA_SOURCE_FILE ("gtl_types.galgas", 353)) ;
+  result_result = object->mProperty_doneImports.getter_hasKey (constinArgument_importPath COMMA_SOURCE_FILE ("gtl_types.galgas", 355)) ;
 //---
   return result_result ;
 }
@@ -9878,7 +9868,7 @@ static void extensionSetter_library_doImport (cPtr_library * inObject,
                                               COMMA_UNUSED_LOCATION_ARGS) {
   cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
-  object->mAttribute_doneImports.addAssign_operation (constinArgument_importPath  COMMA_SOURCE_FILE ("gtl_types.galgas", 359)) ;
+  object->mProperty_doneImports.addAssign_operation (constinArgument_importPath  COMMA_SOURCE_FILE ("gtl_types.galgas", 361)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -9964,7 +9954,7 @@ static void extensionSetter_library_getTemplate (cPtr_library * inObject,
   cPtr_library * object = inObject ;
   macroValidSharedObject (object, cPtr_library) ;
   {
-  extensionSetter_getTemplate (object->mAttribute_templateMap, constinArgument_context, inArgument_path, inArgument_ifExists, ioArgument_lib, outArgument_found, outArgument_result, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 371)) ;
+  extensionSetter_getTemplate (object->mProperty_templateMap, constinArgument_context, inArgument_path, inArgument_ifExists, ioArgument_lib, outArgument_found, outArgument_result, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 373)) ;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -10136,7 +10126,7 @@ GALGAS_type extensionGetter_gtlType (const GALGAS_lstring & inObject,
                           result_type = GALGAS_type (& kTypeDescriptor_GALGAS_gtlUnconstructed) ;
                         }else if (kBoolFalse == test_12) {
                           TC_Array <C_FixItDescription> fixItArray13 ;
-                          inCompiler->emitSemanticError (inObject.mAttribute_location, GALGAS_string ("unknown type"), fixItArray13  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 80)) ;
+                          inCompiler->emitSemanticError (inObject.mProperty_location, GALGAS_string ("unknown type"), fixItArray13  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 80)) ;
                           result_type.drop () ; // Release error dropped variable
                         }
                       }
@@ -10214,7 +10204,7 @@ static GALGAS_location extensionGetter_gtlData_location (const cPtr_gtlData * in
   GALGAS_location result_result ; // Returned variable
   const cPtr_gtlData * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlData) ;
-  result_result = object->mAttribute_where ;
+  result_result = object->mProperty_where ;
 //---
   return result_result ;
 }
@@ -12018,9 +12008,11 @@ void enterExtensionMethod_structField (const int32_t inClassIndex,
 void callExtensionMethod_structField (const cPtr_gtlData * inObject,
                                       const GALGAS_lstring constin_name,
                                       GALGAS_gtlData & out_result,
+                                      GALGAS_bool & out_found,
                                       C_Compiler * inCompiler
                                       COMMA_LOCATION_ARGS) {
   out_result.drop () ;
+  out_found.drop () ;
   if (NULL != inObject) {
     macroValidSharedObject (inObject, cPtr_gtlData) ;
     const C_galgas_type_descriptor * info = inObject->classDescriptor () ;
@@ -12042,7 +12034,7 @@ void callExtensionMethod_structField (const cPtr_gtlData * inObject,
     if (NULL == f) {
       fatalError ("FATAL CATEGORY METHOD CALL ERROR", __FILE__, __LINE__) ;
     }else{
-      f (inObject, constin_name, out_result, inCompiler COMMA_THERE) ;
+      f (inObject, constin_name, out_result, out_found, inCompiler COMMA_THERE) ;
     }
   }
 }
@@ -12052,14 +12044,16 @@ void callExtensionMethod_structField (const cPtr_gtlData * inObject,
 static void extensionMethod_gtlData_structField (const cPtr_gtlData * inObject,
                                                  const GALGAS_lstring constinArgument_name,
                                                  GALGAS_gtlData & outArgument_result,
+                                                 GALGAS_bool & outArgument_found,
                                                  C_Compiler * inCompiler
                                                  COMMA_UNUSED_LOCATION_ARGS) {
   const cPtr_gtlData * object = inObject ;
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 240)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 240)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 240)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 240)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 240)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 240)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 241)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 241)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 241)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 241)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 241)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 241)) ;
   outArgument_result.drop () ; // Release error dropped variable
+  outArgument_found.drop () ; // Release error dropped variable
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -12140,7 +12134,7 @@ static GALGAS_gtlData extensionGetter_gtlData_resultField (const cPtr_gtlData * 
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 247)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 247)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 247)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 247)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 247)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 247)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 248)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 248)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 248)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 248)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 248)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 248)) ;
   result_result.drop () ; // Release error dropped variable
 //---
   return result_result ;
@@ -12222,7 +12216,7 @@ static void extensionSetter_gtlData_setStructField (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 255)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 255)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 255)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 255)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 255)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 255)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 256)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 256)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 256)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 256)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 256)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 256)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -12301,7 +12295,7 @@ static void extensionSetter_gtlData_setStructFieldAtLevel (cPtr_gtlData * inObje
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 264)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 264)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 264)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 264)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 264)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 264)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 265)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 265)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 265)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 265)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 265)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 265)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -12376,7 +12370,7 @@ static void extensionSetter_gtlData_deleteStructField (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 270)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 270)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 270)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 270)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 270)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 270)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 271)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 271)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 271)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 271)).add_operation (GALGAS_string (" is not a struct"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 271)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 271)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -12536,7 +12530,7 @@ static GALGAS_gtlStruct extensionGetter_gtlData_overrideMap (const cPtr_gtlData 
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) temp_0.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 283)), GALGAS_string ("INTERNAL ERROR : a variable map should be a @gtlStruct"), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 283)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) temp_0.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 284)), GALGAS_string ("INTERNAL ERROR : a variable map should be a @gtlStruct"), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 284)) ;
   result_mapOverriden.drop () ; // Release error dropped variable
 //---
   return result_mapOverriden ;
@@ -12620,7 +12614,7 @@ static GALGAS_gtlStruct extensionGetter_gtlData_overriddenMap (const cPtr_gtlDat
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) temp_0.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 289)), GALGAS_string ("INTERNAL ERROR : a variable map should be a @gtlStruct"), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 289)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) temp_0.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 290)), GALGAS_string ("INTERNAL ERROR : a variable map should be a @gtlStruct"), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 290)) ;
   result_overriddenMap.drop () ; // Release error dropped variable
 //---
   return result_overriddenMap ;
@@ -12705,7 +12699,7 @@ static void extensionMethod_gtlData_mapItem (const cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 296)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 296)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 296)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 296)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 296)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 296)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 297)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 297)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 297)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 297)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 297)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 297)) ;
   outArgument_result.drop () ; // Release error dropped variable
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -12864,7 +12858,7 @@ static void extensionSetter_gtlData_setMapItem (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 310)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 310)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 310)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 310)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 310)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 310)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 311)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 311)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 311)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 311)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 311)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 311)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -12939,7 +12933,7 @@ static void extensionSetter_gtlData_deleteMapItem (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 316)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 316)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 316)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 316)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 316)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 316)) ;
+  inCompiler->emitSemanticError (constinArgument_name.getter_location (SOURCE_FILE ("gtl_data_types.galgas", 317)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 317)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 317)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 317)).add_operation (GALGAS_string (" is not a map"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 317)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 317)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -13019,7 +13013,7 @@ static void extensionMethod_gtlData_itemAtIndex (const cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 323)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 323)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 323)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 323)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 323)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 323)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 324)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 324)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 324)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 324)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 324)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 324)) ;
   outArgument_result.drop () ; // Release error dropped variable
 }
 //---------------------------------------------------------------------------------------------------------------------*
@@ -13178,7 +13172,7 @@ static void extensionSetter_gtlData_setItemAtIndex (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 337)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 337)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 337)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 337)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 337)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 337)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 338)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 338)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 338)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 338)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 338)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 338)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -13253,7 +13247,7 @@ static void extensionSetter_gtlData_deleteItemAtIndex (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 343)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 343)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 343)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 343)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 343)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 343)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlInt *) constinArgument_index.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 344)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 344)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 344)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 344)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 344)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 344)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -13328,7 +13322,7 @@ static void extensionSetter_gtlData_appendItem (cPtr_gtlData * inObject,
   macroValidSharedObject (object, cPtr_gtlData) ;
   const GALGAS_gtlData temp_0 = object ;
   TC_Array <C_FixItDescription> fixItArray1 ;
-  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) constinArgument_item.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 349)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 349)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 349)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 349)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 349)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 349)) ;
+  inCompiler->emitSemanticError (callExtensionGetter_location ((const cPtr_gtlData *) constinArgument_item.ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 350)), GALGAS_string ("a ").add_operation (extensionGetter_typeName (temp_0.getter_dynamicType (SOURCE_FILE ("gtl_data_types.galgas", 350)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 350)), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 350)).add_operation (GALGAS_string (" is not a list"), inCompiler COMMA_SOURCE_FILE ("gtl_data_types.galgas", 350)), fixItArray1  COMMA_SOURCE_FILE ("gtl_data_types.galgas", 350)) ;
 }
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -13357,10 +13351,10 @@ typeComparisonResult cPtr_gtlUnconstructed::dynamicObjectCompare (const acPtr_cl
   const cPtr_gtlUnconstructed * p = (const cPtr_gtlUnconstructed *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlUnconstructed) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_meta.objectCompare (p->mAttribute_meta) ;
+    result = mProperty_meta.objectCompare (p->mProperty_meta) ;
   }
   return result ;
 }
@@ -13436,9 +13430,9 @@ const C_galgas_type_descriptor * cPtr_gtlUnconstructed::classDescriptor (void) c
 void cPtr_gtlUnconstructed::description (C_String & ioString,
                                          const int32_t inIndentation) const {
   ioString << "[@gtlUnconstructed:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_meta.description (ioString, inIndentation+1) ;
+  mProperty_meta.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -13446,7 +13440,7 @@ void cPtr_gtlUnconstructed::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlUnconstructed::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlUnconstructed (mAttribute_where, mAttribute_meta COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlUnconstructed (mProperty_where, mProperty_meta COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -13503,13 +13497,13 @@ typeComparisonResult cPtr_gtlType::dynamicObjectCompare (const acPtr_class * inO
   const cPtr_gtlType * p = (const cPtr_gtlType *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlType) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_meta.objectCompare (p->mAttribute_meta) ;
+    result = mProperty_meta.objectCompare (p->mProperty_meta) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_type.objectCompare (p->mAttribute_type) ;
+    result = mProperty_type.objectCompare (p->mProperty_type) ;
   }
   return result ;
 }
@@ -13566,7 +13560,7 @@ GALGAS_type GALGAS_gtlType::getter_type (UNUSED_LOCATION_ARGS) const {
   if (NULL != mObjectPtr) {
     const cPtr_gtlType * p = (const cPtr_gtlType *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlType) ;
-    result = p->mAttribute_type ;
+    result = p->mProperty_type ;
   }
   return result ;
 }
@@ -13574,7 +13568,7 @@ GALGAS_type GALGAS_gtlType::getter_type (UNUSED_LOCATION_ARGS) const {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_type cPtr_gtlType::getter_type (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_type ;
+  return mProperty_type ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -13586,7 +13580,7 @@ cPtr_gtlType::cPtr_gtlType (const GALGAS_location & in_where,
                             const GALGAS_type & in_type
                             COMMA_LOCATION_ARGS) :
 cPtr_gtlData (in_where, in_meta COMMA_THERE),
-mAttribute_type (in_type) {
+mProperty_type (in_type) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -13598,11 +13592,11 @@ const C_galgas_type_descriptor * cPtr_gtlType::classDescriptor (void) const {
 void cPtr_gtlType::description (C_String & ioString,
                                 const int32_t inIndentation) const {
   ioString << "[@gtlType:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_meta.description (ioString, inIndentation+1) ;
+  mProperty_meta.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_type.description (ioString, inIndentation+1) ;
+  mProperty_type.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -13610,7 +13604,7 @@ void cPtr_gtlType::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlType::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlType (mAttribute_where, mAttribute_meta, mAttribute_type COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlType (mProperty_where, mProperty_meta, mProperty_type COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -13667,13 +13661,13 @@ typeComparisonResult cPtr_gtlEnum::dynamicObjectCompare (const acPtr_class * inO
   const cPtr_gtlEnum * p = (const cPtr_gtlEnum *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlEnum) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_meta.objectCompare (p->mAttribute_meta) ;
+    result = mProperty_meta.objectCompare (p->mProperty_meta) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_value.objectCompare (p->mAttribute_value) ;
+    result = mProperty_value.objectCompare (p->mProperty_value) ;
   }
   return result ;
 }
@@ -13739,7 +13733,7 @@ GALGAS_string GALGAS_gtlEnum::getter_value (UNUSED_LOCATION_ARGS) const {
   if (NULL != mObjectPtr) {
     const cPtr_gtlEnum * p = (const cPtr_gtlEnum *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlEnum) ;
-    result = p->mAttribute_value ;
+    result = p->mProperty_value ;
   }
   return result ;
 }
@@ -13747,7 +13741,7 @@ GALGAS_string GALGAS_gtlEnum::getter_value (UNUSED_LOCATION_ARGS) const {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_string cPtr_gtlEnum::getter_value (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_value ;
+  return mProperty_value ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -13759,7 +13753,7 @@ cPtr_gtlEnum::cPtr_gtlEnum (const GALGAS_location & in_where,
                             const GALGAS_string & in_value
                             COMMA_LOCATION_ARGS) :
 cPtr_gtlData (in_where, in_meta COMMA_THERE),
-mAttribute_value (in_value) {
+mProperty_value (in_value) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -13771,11 +13765,11 @@ const C_galgas_type_descriptor * cPtr_gtlEnum::classDescriptor (void) const {
 void cPtr_gtlEnum::description (C_String & ioString,
                                 const int32_t inIndentation) const {
   ioString << "[@gtlEnum:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_meta.description (ioString, inIndentation+1) ;
+  mProperty_meta.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_value.description (ioString, inIndentation+1) ;
+  mProperty_value.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -13783,7 +13777,7 @@ void cPtr_gtlEnum::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlEnum::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlEnum (mAttribute_where, mAttribute_meta, mAttribute_value COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlEnum (mProperty_where, mProperty_meta, mProperty_value COMMA_THERE)) ;
   return ptr ;
 }
 
@@ -13840,13 +13834,13 @@ typeComparisonResult cPtr_gtlChar::dynamicObjectCompare (const acPtr_class * inO
   const cPtr_gtlChar * p = (const cPtr_gtlChar *) inOperandPtr ;
   macroValidSharedObject (p, cPtr_gtlChar) ;
   if (kOperandEqual == result) {
-    result = mAttribute_where.objectCompare (p->mAttribute_where) ;
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_meta.objectCompare (p->mAttribute_meta) ;
+    result = mProperty_meta.objectCompare (p->mProperty_meta) ;
   }
   if (kOperandEqual == result) {
-    result = mAttribute_value.objectCompare (p->mAttribute_value) ;
+    result = mProperty_value.objectCompare (p->mProperty_value) ;
   }
   return result ;
 }
@@ -13912,7 +13906,7 @@ GALGAS_char GALGAS_gtlChar::getter_value (UNUSED_LOCATION_ARGS) const {
   if (NULL != mObjectPtr) {
     const cPtr_gtlChar * p = (const cPtr_gtlChar *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlChar) ;
-    result = p->mAttribute_value ;
+    result = p->mProperty_value ;
   }
   return result ;
 }
@@ -13920,7 +13914,7 @@ GALGAS_char GALGAS_gtlChar::getter_value (UNUSED_LOCATION_ARGS) const {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_char cPtr_gtlChar::getter_value (UNUSED_LOCATION_ARGS) const {
-  return mAttribute_value ;
+  return mProperty_value ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -13931,7 +13925,7 @@ void GALGAS_gtlChar::setter_setValue (GALGAS_char inValue
     insulate (THERE) ;
     cPtr_gtlChar * p = (cPtr_gtlChar *) mObjectPtr ;
     macroValidSharedObject (p, cPtr_gtlChar) ;
-    p->mAttribute_value = inValue ;
+    p->mProperty_value = inValue ;
   }
 }
 
@@ -13939,7 +13933,7 @@ void GALGAS_gtlChar::setter_setValue (GALGAS_char inValue
 
 void cPtr_gtlChar::setter_setValue (GALGAS_char inValue
                                     COMMA_UNUSED_LOCATION_ARGS) {
-  mAttribute_value = inValue ;
+  mProperty_value = inValue ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -13951,7 +13945,7 @@ cPtr_gtlChar::cPtr_gtlChar (const GALGAS_location & in_where,
                             const GALGAS_char & in_value
                             COMMA_LOCATION_ARGS) :
 cPtr_gtlData (in_where, in_meta COMMA_THERE),
-mAttribute_value (in_value) {
+mProperty_value (in_value) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -13963,11 +13957,11 @@ const C_galgas_type_descriptor * cPtr_gtlChar::classDescriptor (void) const {
 void cPtr_gtlChar::description (C_String & ioString,
                                 const int32_t inIndentation) const {
   ioString << "[@gtlChar:" ;
-  mAttribute_where.description (ioString, inIndentation+1) ;
+  mProperty_where.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_meta.description (ioString, inIndentation+1) ;
+  mProperty_meta.description (ioString, inIndentation+1) ;
   ioString << ", " ;
-  mAttribute_value.description (ioString, inIndentation+1) ;
+  mProperty_value.description (ioString, inIndentation+1) ;
   ioString << "]" ;
 }
 
@@ -13975,7 +13969,7 @@ void cPtr_gtlChar::description (C_String & ioString,
 
 acPtr_class * cPtr_gtlChar::duplicate (LOCATION_ARGS) const {
   acPtr_class * ptr = NULL ;
-  macroMyNew (ptr, cPtr_gtlChar (mAttribute_where, mAttribute_meta, mAttribute_value COMMA_THERE)) ;
+  macroMyNew (ptr, cPtr_gtlChar (mProperty_where, mProperty_meta, mProperty_value COMMA_THERE)) ;
   return ptr ;
 }
 
