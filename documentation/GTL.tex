@@ -2491,11 +2491,13 @@ aList from file '/Users/jlb/Develop/GTL/examples/dummy.gtl', line 32:7
 If the elements of the list are \gtltype{struct}, a second form exists:
 
 \begin{gtl}
-sort var by identifier < # descending order
+sort var by identifier > # descending order
 sort var by identifier < # ascending order
 \end{gtl}
 
 In this case, the field \gtlinline{identifier} of the list item is used as sorting key.
+
+If the field \gtlinline{identifier} does not exist in one of the element of the list, a runtime error occurs.
 
 \example
 \begin{gtl}
