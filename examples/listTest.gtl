@@ -113,3 +113,8 @@ let myList := @(
 
 let mySet := [myList setBy: "height"]
 display mySet
+
+let myList := @( 1, 3, "Hello", 4, "World" )
+let myString := [myList componentsJoinedByString: ", "]
+println myString
+

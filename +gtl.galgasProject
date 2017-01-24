@@ -24,7 +24,17 @@
 #
 #-----------------------------------------------------------------------------*
 
-project (3:0:9) -> "gtl" {
+project (3:0:12) -> "gtl" {
+
+#-----------------------------------------------------------------------------*
+#                                  CHANGELOG
+#-----------------------------------------------------------------------------*
+# 3.0.12   Added a user template directory
+# 3.0.11   Added expression data type, where listn map getter and
+#          elementAtIndex list getter
+# 3.0.10   Added componentsJoinedByString getter to lists
+#-----------------------------------------------------------------------------*
+
 #--- Targets
   %makefile-macosx
   %makefile-unix
@@ -32,7 +42,7 @@ project (3:0:9) -> "gtl" {
   %makefile-x86linux64-on-macosx
   %makefile-win32-on-macosx
   %LatestMacOS
-  %applicationBundleBase : "fr.ls2n"
+  %applicationBundleBase : "fr.ls2n.str"
   %codeblocks-windows
   %codeblocks-linux32
   %codeblocks-linux64
