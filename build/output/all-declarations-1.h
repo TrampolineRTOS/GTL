@@ -146,9 +146,8 @@ class cPtr_gtlBreakpoint : public acPtr_class {
 //---------------------------------------------------------------------------------------------------------------------*
 
 class GALGAS_gtlBreakpointList_2D_element : public AC_GALGAS_root {
-//--------------------------------- Public data members
+//--------------------------------- Properties
   public : GALGAS_gtlBreakpoint mProperty_breakpoint ;
-
 
 //--------------------------------- Accessors
   public : VIRTUAL_IN_DEBUG bool isValid (void) const ;
@@ -212,10 +211,10 @@ extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlBreakpointList_2
 //---------------------------------------------------------------------------------------------------------------------*
 
 class GALGAS_gtlInstructionListContextStack_2D_element : public AC_GALGAS_root {
-//--------------------------------- Public data members
+//--------------------------------- Properties
   public : GALGAS_uint mProperty_nextInstructionIndex ;
-  public : GALGAS_gtlInstructionList mProperty_instructionList ;
 
+  public : GALGAS_gtlInstructionList mProperty_instructionList ;
 
 //--------------------------------- Accessors
   public : VIRTUAL_IN_DEBUG bool isValid (void) const ;

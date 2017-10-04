@@ -7404,7 +7404,7 @@ typeComparisonResult GALGAS_gtlExecutableEntity::objectCompare (const GALGAS_gtl
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlExecutableEntity::GALGAS_gtlExecutableEntity (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7420,7 +7420,7 @@ GALGAS_gtlExecutableEntity GALGAS_gtlExecutableEntity::constructor_default (LOCA
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlExecutableEntity::GALGAS_gtlExecutableEntity (const cPtr_gtlExecutableEntity * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlExecutableEntity) ;
 }
 
@@ -9047,7 +9047,7 @@ typeComparisonResult GALGAS_gtlModule::objectCompare (const GALGAS_gtlModule & i
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlModule::GALGAS_gtlModule (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -9062,7 +9062,7 @@ GALGAS_gtlModule GALGAS_gtlModule::constructor_default (LOCATION_ARGS) {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlModule::GALGAS_gtlModule (const cPtr_gtlModule * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlModule) ;
 }
 

@@ -136,7 +136,7 @@ static void extensionSetter_debuggerContext_deleteStepDoInstruction (cPtr_debugg
   macroValidSharedObject (object, cPtr_debuggerContext) ;
   const enumGalgasBool test_0 = GALGAS_bool (kIsInfOrEqual, constinArgument_numToDelete.getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 137)).objectCompare (GALGAS_uint::constructor_max (SOURCE_FILE ("gtl_debugger.galgas", 137)).getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 137)))).boolEnum () ;
   if (kBoolTrue == test_0) {
-    GALGAS_uint var_numToDeleteUInt_5322 = constinArgument_numToDelete.mProperty_bigint.getter_uint (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 138)) ;
+    GALGAS_uint var_numToDeleteUInt_5322 = constinArgument_numToDelete.getter_bigint (HERE).getter_uint (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 138)) ;
     const enumGalgasBool test_1 = GALGAS_bool (kIsStrictInf, var_numToDeleteUInt_5322.objectCompare (object->mProperty_doList.getter_length (SOURCE_FILE ("gtl_debugger.galgas", 139)))).boolEnum () ;
     if (kBoolTrue == test_1) {
       GALGAS_gtlInstruction var_instruction_5448 ;
@@ -567,7 +567,7 @@ static void extensionSetter_debuggerContext_deleteBreakpoint (cPtr_debuggerConte
   macroValidSharedObject (object, cPtr_debuggerContext) ;
   const enumGalgasBool test_0 = GALGAS_bool (kIsInfOrEqual, constinArgument_numToDelete.getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 217)).objectCompare (GALGAS_uint::constructor_max (SOURCE_FILE ("gtl_debugger.galgas", 217)).getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 217)))).boolEnum () ;
   if (kBoolTrue == test_0) {
-    GALGAS_uint var_numToDeleteUInt_7767 = constinArgument_numToDelete.mProperty_bigint.getter_uint (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 218)) ;
+    GALGAS_uint var_numToDeleteUInt_7767 = constinArgument_numToDelete.getter_bigint (HERE).getter_uint (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 218)) ;
     const enumGalgasBool test_1 = GALGAS_bool (kIsStrictInf, var_numToDeleteUInt_7767.objectCompare (object->mProperty_breakpoints.getter_length (SOURCE_FILE ("gtl_debugger.galgas", 219)))).boolEnum () ;
     if (kBoolTrue == test_1) {
       GALGAS_gtlBreakpoint var_bp_7893 ;
@@ -894,7 +894,7 @@ static void extensionSetter_debuggerContext_deleteWatchpoint (cPtr_debuggerConte
   macroValidSharedObject (object, cPtr_debuggerContext) ;
   const enumGalgasBool test_0 = GALGAS_bool (kIsInfOrEqual, constinArgument_numToDelete.getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 270)).objectCompare (GALGAS_uint::constructor_max (SOURCE_FILE ("gtl_debugger.galgas", 270)).getter_bigint (SOURCE_FILE ("gtl_debugger.galgas", 270)))).boolEnum () ;
   if (kBoolTrue == test_0) {
-    GALGAS_uint var_numToDeleteUInt_9443 = constinArgument_numToDelete.mProperty_bigint.getter_uint (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 271)) ;
+    GALGAS_uint var_numToDeleteUInt_9443 = constinArgument_numToDelete.getter_bigint (HERE).getter_uint (inCompiler COMMA_SOURCE_FILE ("gtl_debugger.galgas", 271)) ;
     const enumGalgasBool test_1 = GALGAS_bool (kIsStrictInf, var_numToDeleteUInt_9443.objectCompare (object->mProperty_watchpoints.getter_length (SOURCE_FILE ("gtl_debugger.galgas", 272)))).boolEnum () ;
     if (kBoolTrue == test_1) {
       GALGAS_gtlExpression var_wp_9569 ;
@@ -6102,7 +6102,7 @@ typeComparisonResult GALGAS_gtlContext::objectCompare (const GALGAS_gtlContext &
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlContext::GALGAS_gtlContext (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -6123,7 +6123,7 @@ GALGAS_gtlContext GALGAS_gtlContext::constructor_default (LOCATION_ARGS) {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlContext::GALGAS_gtlContext (const cPtr_gtlContext * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlContext) ;
 }
 

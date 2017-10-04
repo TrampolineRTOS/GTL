@@ -604,7 +604,7 @@ void GALGAS_gtlVarMap::setter_setValueForKey (GALGAS_gtlData inAttributeValue,
                                               GALGAS_string inKey,
                                               C_Compiler * inCompiler
                                               COMMA_LOCATION_ARGS) {
-  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, true, inCompiler COMMA_THERE) ;
   cMapElement_gtlVarMap * p = (cMapElement_gtlVarMap *) attributes ;
   if (NULL != p) {
     macroValidSharedObject (p, cMapElement_gtlVarMap) ;
@@ -617,7 +617,7 @@ void GALGAS_gtlVarMap::setter_setValueForKey (GALGAS_gtlData inAttributeValue,
 cMapElement_gtlVarMap * GALGAS_gtlVarMap::readWriteAccessForWithInstruction (C_Compiler * inCompiler,
                                                                              const GALGAS_string & inKey
                                                                              COMMA_LOCATION_ARGS) {
-  cMapElement_gtlVarMap * result = (cMapElement_gtlVarMap *) searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cMapElement_gtlVarMap * result = (cMapElement_gtlVarMap *) searchForReadWriteAttribute (inKey, false, inCompiler COMMA_THERE) ;
   macroNullOrValidSharedObject (result, cMapElement_gtlVarMap) ;
   return result ;
 }
@@ -931,7 +931,7 @@ void GALGAS_gtlExpressionMap::setter_setExpressionForKey (GALGAS_gtlExpression i
                                                           GALGAS_string inKey,
                                                           C_Compiler * inCompiler
                                                           COMMA_LOCATION_ARGS) {
-  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, true, inCompiler COMMA_THERE) ;
   cMapElement_gtlExpressionMap * p = (cMapElement_gtlExpressionMap *) attributes ;
   if (NULL != p) {
     macroValidSharedObject (p, cMapElement_gtlExpressionMap) ;
@@ -944,7 +944,7 @@ void GALGAS_gtlExpressionMap::setter_setExpressionForKey (GALGAS_gtlExpression i
 cMapElement_gtlExpressionMap * GALGAS_gtlExpressionMap::readWriteAccessForWithInstruction (C_Compiler * inCompiler,
                                                                                            const GALGAS_string & inKey
                                                                                            COMMA_LOCATION_ARGS) {
-  cMapElement_gtlExpressionMap * result = (cMapElement_gtlExpressionMap *) searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cMapElement_gtlExpressionMap * result = (cMapElement_gtlExpressionMap *) searchForReadWriteAttribute (inKey, false, inCompiler COMMA_THERE) ;
   macroNullOrValidSharedObject (result, cMapElement_gtlExpressionMap) ;
   return result ;
 }
@@ -1563,7 +1563,7 @@ void GALGAS_gtlTemplateMap::setter_setATemplateForKey (GALGAS_gtlTemplate inAttr
                                                        GALGAS_string inKey,
                                                        C_Compiler * inCompiler
                                                        COMMA_LOCATION_ARGS) {
-  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, true, inCompiler COMMA_THERE) ;
   cMapElement_gtlTemplateMap * p = (cMapElement_gtlTemplateMap *) attributes ;
   if (NULL != p) {
     macroValidSharedObject (p, cMapElement_gtlTemplateMap) ;
@@ -1576,7 +1576,7 @@ void GALGAS_gtlTemplateMap::setter_setATemplateForKey (GALGAS_gtlTemplate inAttr
 cMapElement_gtlTemplateMap * GALGAS_gtlTemplateMap::readWriteAccessForWithInstruction (C_Compiler * inCompiler,
                                                                                        const GALGAS_string & inKey
                                                                                        COMMA_LOCATION_ARGS) {
-  cMapElement_gtlTemplateMap * result = (cMapElement_gtlTemplateMap *) searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cMapElement_gtlTemplateMap * result = (cMapElement_gtlTemplateMap *) searchForReadWriteAttribute (inKey, false, inCompiler COMMA_THERE) ;
   macroNullOrValidSharedObject (result, cMapElement_gtlTemplateMap) ;
   return result ;
 }
@@ -1682,7 +1682,7 @@ void extensionSetter_getTemplate (GALGAS_gtlTemplateMap & ioObject,
     const GALGAS_gtlTemplateMap temp_2 = ioObject ;
     temp_2.method_get (inArgument_path, outArgument_result, inCompiler COMMA_SOURCE_FILE ("gtl_types.galgas", 288)) ;
   }else if (kBoolFalse == test_1) {
-    const enumGalgasBool test_3 = inArgument_path.mProperty_string.getter_fileExists (SOURCE_FILE ("gtl_types.galgas", 290)).boolEnum () ;
+    const enumGalgasBool test_3 = inArgument_path.getter_string (HERE).getter_fileExists (SOURCE_FILE ("gtl_types.galgas", 290)).boolEnum () ;
     if (kBoolTrue == test_3) {
       outArgument_found = GALGAS_bool (true) ;
       GALGAS_gtlInstructionList var_program_7907 ;
@@ -1870,7 +1870,7 @@ void GALGAS_gtlFuncMap::setter_setFunctionForKey (GALGAS_gtlFunction inAttribute
                                                   GALGAS_string inKey,
                                                   C_Compiler * inCompiler
                                                   COMMA_LOCATION_ARGS) {
-  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, true, inCompiler COMMA_THERE) ;
   cMapElement_gtlFuncMap * p = (cMapElement_gtlFuncMap *) attributes ;
   if (NULL != p) {
     macroValidSharedObject (p, cMapElement_gtlFuncMap) ;
@@ -1883,7 +1883,7 @@ void GALGAS_gtlFuncMap::setter_setFunctionForKey (GALGAS_gtlFunction inAttribute
 cMapElement_gtlFuncMap * GALGAS_gtlFuncMap::readWriteAccessForWithInstruction (C_Compiler * inCompiler,
                                                                                const GALGAS_string & inKey
                                                                                COMMA_LOCATION_ARGS) {
-  cMapElement_gtlFuncMap * result = (cMapElement_gtlFuncMap *) searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cMapElement_gtlFuncMap * result = (cMapElement_gtlFuncMap *) searchForReadWriteAttribute (inKey, false, inCompiler COMMA_THERE) ;
   macroNullOrValidSharedObject (result, cMapElement_gtlFuncMap) ;
   return result ;
 }
@@ -2128,7 +2128,7 @@ void GALGAS_gtlGetterMap::setter_setTheGetterForKey (GALGAS_gtlGetter inAttribut
                                                      GALGAS_string inKey,
                                                      C_Compiler * inCompiler
                                                      COMMA_LOCATION_ARGS) {
-  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, true, inCompiler COMMA_THERE) ;
   cMapElement_gtlGetterMap * p = (cMapElement_gtlGetterMap *) attributes ;
   if (NULL != p) {
     macroValidSharedObject (p, cMapElement_gtlGetterMap) ;
@@ -2141,7 +2141,7 @@ void GALGAS_gtlGetterMap::setter_setTheGetterForKey (GALGAS_gtlGetter inAttribut
 cMapElement_gtlGetterMap * GALGAS_gtlGetterMap::readWriteAccessForWithInstruction (C_Compiler * inCompiler,
                                                                                    const GALGAS_string & inKey
                                                                                    COMMA_LOCATION_ARGS) {
-  cMapElement_gtlGetterMap * result = (cMapElement_gtlGetterMap *) searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cMapElement_gtlGetterMap * result = (cMapElement_gtlGetterMap *) searchForReadWriteAttribute (inKey, false, inCompiler COMMA_THERE) ;
   macroNullOrValidSharedObject (result, cMapElement_gtlGetterMap) ;
   return result ;
 }
@@ -2386,7 +2386,7 @@ void GALGAS_gtlSetterMap::setter_setTheSetterForKey (GALGAS_gtlSetter inAttribut
                                                      GALGAS_string inKey,
                                                      C_Compiler * inCompiler
                                                      COMMA_LOCATION_ARGS) {
-  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, true, inCompiler COMMA_THERE) ;
   cMapElement_gtlSetterMap * p = (cMapElement_gtlSetterMap *) attributes ;
   if (NULL != p) {
     macroValidSharedObject (p, cMapElement_gtlSetterMap) ;
@@ -2399,7 +2399,7 @@ void GALGAS_gtlSetterMap::setter_setTheSetterForKey (GALGAS_gtlSetter inAttribut
 cMapElement_gtlSetterMap * GALGAS_gtlSetterMap::readWriteAccessForWithInstruction (C_Compiler * inCompiler,
                                                                                    const GALGAS_string & inKey
                                                                                    COMMA_LOCATION_ARGS) {
-  cMapElement_gtlSetterMap * result = (cMapElement_gtlSetterMap *) searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cMapElement_gtlSetterMap * result = (cMapElement_gtlSetterMap *) searchForReadWriteAttribute (inKey, false, inCompiler COMMA_THERE) ;
   macroNullOrValidSharedObject (result, cMapElement_gtlSetterMap) ;
   return result ;
 }
@@ -3456,7 +3456,7 @@ void GALGAS_lstringset::setter_del (GALGAS_lstring inKey,
 cMapElement_lstringset * GALGAS_lstringset::readWriteAccessForWithInstruction (C_Compiler * inCompiler,
                                                                                const GALGAS_string & inKey
                                                                                COMMA_LOCATION_ARGS) {
-  cMapElement_lstringset * result = (cMapElement_lstringset *) searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cMapElement_lstringset * result = (cMapElement_lstringset *) searchForReadWriteAttribute (inKey, false, inCompiler COMMA_THERE) ;
   macroNullOrValidSharedObject (result, cMapElement_lstringset) ;
   return result ;
 }
@@ -3555,13 +3555,13 @@ typeComparisonResult GALGAS_gtlInstruction::objectCompare (const GALGAS_gtlInstr
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstruction::GALGAS_gtlInstruction (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlInstruction::GALGAS_gtlInstruction (const cPtr_gtlInstruction * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlInstruction) ;
 }
 
@@ -8106,7 +8106,7 @@ void GALGAS_gtlProcMap::setter_setProcedureForKey (GALGAS_gtlProcedure inAttribu
                                                    GALGAS_string inKey,
                                                    C_Compiler * inCompiler
                                                    COMMA_LOCATION_ARGS) {
-  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cCollectionElement * attributes = searchForReadWriteAttribute (inKey, true, inCompiler COMMA_THERE) ;
   cMapElement_gtlProcMap * p = (cMapElement_gtlProcMap *) attributes ;
   if (NULL != p) {
     macroValidSharedObject (p, cMapElement_gtlProcMap) ;
@@ -8119,7 +8119,7 @@ void GALGAS_gtlProcMap::setter_setProcedureForKey (GALGAS_gtlProcedure inAttribu
 cMapElement_gtlProcMap * GALGAS_gtlProcMap::readWriteAccessForWithInstruction (C_Compiler * inCompiler,
                                                                                const GALGAS_string & inKey
                                                                                COMMA_LOCATION_ARGS) {
-  cMapElement_gtlProcMap * result = (cMapElement_gtlProcMap *) searchForReadWriteAttribute (inKey, inCompiler COMMA_THERE) ;
+  cMapElement_gtlProcMap * result = (cMapElement_gtlProcMap *) searchForReadWriteAttribute (inKey, false, inCompiler COMMA_THERE) ;
   macroNullOrValidSharedObject (result, cMapElement_gtlProcMap) ;
   return result ;
 }
@@ -8226,13 +8226,13 @@ typeComparisonResult GALGAS_gtlVarItem::objectCompare (const GALGAS_gtlVarItem &
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlVarItem::GALGAS_gtlVarItem (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlVarItem::GALGAS_gtlVarItem (const cPtr_gtlVarItem * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlVarItem) ;
 }
 
@@ -11238,7 +11238,10 @@ static const bool gtl_5F_scanner_kEndOfScriptInTemplateArray [114] = {
   false /* @? */
 } ;
 
-
+//---------------------------------------------------------------------------------------------------------------------*
+//            Unicode test functions                                                                                   *
+//---------------------------------------------------------------------------------------------------------------------*
+ 
 //---------------------------------------------------------------------------------------------------------------------*
 //               P A R S E    L E X I C A L    T O K E N                                                               *
 //---------------------------------------------------------------------------------------------------------------------*
@@ -15757,7 +15760,10 @@ C_String C_Lexique_gtl_5F_debugger_5F_scanner::getCurrentTokenString (const cTok
 //---------------------------------------------------------------------------------------------------------------------*
 
 
-
+//---------------------------------------------------------------------------------------------------------------------*
+//            Unicode test functions                                                                                   *
+//---------------------------------------------------------------------------------------------------------------------*
+ 
 //---------------------------------------------------------------------------------------------------------------------*
 //               P A R S E    L E X I C A L    T O K E N                                                               *
 //---------------------------------------------------------------------------------------------------------------------*

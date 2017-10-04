@@ -27,6 +27,6 @@ LIBPM_DIRECTORY_PATH = dictionary ["LIBPM_DIRECTORY_PATH"]
 sys.path.append (os.path.abspath (LIBPM_DIRECTORY_PATH + "/python-makefiles"))
 from unix_gcc_tools import buildForUnix
 #----------------------------------------------------------------- Build
-buildForUnix (dictionary, "gtl", goal, maxParallelJobs, maxParallelJobs == 1)
+buildForUnix (dictionary, jsonFilePath, "gtl", goal, maxParallelJobs, maxParallelJobs == 1)
 
 #----------------------------------------------------------------------------------------------------------------------*

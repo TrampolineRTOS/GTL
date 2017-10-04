@@ -864,7 +864,7 @@ typeComparisonResult GALGAS_debugCommandInput::objectCompare (const GALGAS_debug
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_debugCommandInput::GALGAS_debugCommandInput (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -877,7 +877,7 @@ GALGAS_debugCommandInput GALGAS_debugCommandInput::constructor_default (LOCATION
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_debugCommandInput::GALGAS_debugCommandInput (const cPtr_debugCommandInput * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_debugCommandInput) ;
 }
 
@@ -1027,7 +1027,7 @@ typeComparisonResult GALGAS_gtlBreakpoint::objectCompare (const GALGAS_gtlBreakp
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlBreakpoint::GALGAS_gtlBreakpoint (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1042,7 +1042,7 @@ GALGAS_gtlBreakpoint GALGAS_gtlBreakpoint::constructor_default (LOCATION_ARGS) {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlBreakpoint::GALGAS_gtlBreakpoint (const cPtr_gtlBreakpoint * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlBreakpoint) ;
 }
 
@@ -7393,7 +7393,7 @@ typeComparisonResult GALGAS_debuggerContext::objectCompare (const GALGAS_debugge
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_debuggerContext::GALGAS_debuggerContext (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -7424,7 +7424,7 @@ GALGAS_debuggerContext GALGAS_debuggerContext::constructor_default (LOCATION_ARG
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_debuggerContext::GALGAS_debuggerContext (const cPtr_debuggerContext * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_debuggerContext) ;
 }
 
@@ -8218,13 +8218,13 @@ typeComparisonResult GALGAS_gtlData::objectCompare (const GALGAS_gtlData & inOpe
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlData::GALGAS_gtlData (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlData::GALGAS_gtlData (const cPtr_gtlData * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlData) ;
 }
 
@@ -8383,13 +8383,13 @@ typeComparisonResult GALGAS_gtlExpression::objectCompare (const GALGAS_gtlExpres
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlExpression::GALGAS_gtlExpression (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlExpression::GALGAS_gtlExpression (const cPtr_gtlExpression * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlExpression) ;
 }
 
@@ -8504,7 +8504,7 @@ typeComparisonResult GALGAS_gtlTemplate::objectCompare (const GALGAS_gtlTemplate
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlTemplate::GALGAS_gtlTemplate (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8518,7 +8518,7 @@ GALGAS_gtlTemplate GALGAS_gtlTemplate::constructor_default (LOCATION_ARGS) {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_gtlTemplate::GALGAS_gtlTemplate (const cPtr_gtlTemplate * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlTemplate) ;
 }
 
@@ -8778,7 +8778,7 @@ typeComparisonResult GALGAS_library::objectCompare (const GALGAS_library & inOpe
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_library::GALGAS_library (void) :
-AC_GALGAS_class () {
+AC_GALGAS_class (false) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -8795,7 +8795,7 @@ GALGAS_library GALGAS_library::constructor_default (LOCATION_ARGS) {
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_library::GALGAS_library (const cPtr_library * inSourcePtr) :
-AC_GALGAS_class (inSourcePtr) {
+AC_GALGAS_class (inSourcePtr, false) {
   macroNullOrValidSharedObject (inSourcePtr, cPtr_library) ;
 }
 

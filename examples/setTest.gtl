@@ -33,6 +33,32 @@ let aSet := @! 1, 2, "yes", "no" !
 let len := [aSet length]
 display len
 
+let a := @! 1, 2, 3, 4 !
+let b := @! 2,3 !
+
+println "*****"
+println a < b
+println b < a 
+println a > b
+println b > a
+println "*****"
+
+let b := a
+
+println "*****"
+println a < b
+println b < a 
+println a > b
+println b > a
+println "*****"
+
+println "*****"
+println a <= b
+println b <= a 
+println a >= b
+println b >= a
+println "*****"
+
 let aSet := @! 1, "yes", 2, "no" !
 let aList := [aSet list]
 display aList
