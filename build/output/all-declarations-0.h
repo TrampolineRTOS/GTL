@@ -1,5 +1,4 @@
-#ifndef all_2D_declarations_2D__30__ENTITIES_DEFINED
-#define all_2D_declarations_2D__30__ENTITIES_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -3308,6 +3307,7 @@ class C_Lexique_gtl_5F_scanner : public C_Lexique {
    kToken_or,
    kToken_print,
    kToken_println,
+   kToken_seed,
    kToken_repeat,
    kToken_sort,
    kToken_step,
@@ -3421,7 +3421,7 @@ class C_Lexique_gtl_5F_scanner : public C_Lexique {
   protected : virtual C_String getMessageForTerminal (const int16_t inTerminalSymbol) const ;
 
 //--- Get terminal count
-  public : virtual int16_t terminalVocabularyCount (void) const { return 114 ; }
+  public : virtual int16_t terminalVocabularyCount (void) const { return 115 ; }
 
 //--- Get Token String
   public : virtual C_String getCurrentTokenString (const cToken * inTokenPtr) const ;
@@ -3846,16 +3846,21 @@ class cParser_gtl_5F_instruction_5F_parser {
 
   protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_simple_5F_instruction_i11_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
 
-  protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_sorting_5F_order_i12_ (GALGAS_lsint & outArgument0,
+  protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_simple_5F_instruction_i12_ (GALGAS_gtlInstruction & outArgument0,
+                                                                                        C_Lexique_gtl_5F_scanner * inLexique) ;
+
+  protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_simple_5F_instruction_i12_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
+
+  protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_sorting_5F_order_i13_ (GALGAS_lsint & outArgument0,
                                                                                    C_Lexique_gtl_5F_scanner * inLexique) ;
 
-  protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_sorting_5F_order_i12_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
+  protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_sorting_5F_order_i13_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
 
-  protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_import_i13_ (GALGAS_gtlContext inArgument0,
+  protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_import_i14_ (GALGAS_gtlContext inArgument0,
                                                                          GALGAS_library & ioArgument1,
                                                                          C_Lexique_gtl_5F_scanner * inLexique) ;
 
-  protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_import_i13_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
+  protected : void rule_gtl_5F_instruction_5F_parser_gtl_5F_import_i14_parse (C_Lexique_gtl_5F_scanner * inLexique) ;
 
 
 
@@ -3873,6 +3878,8 @@ class cParser_gtl_5F_instruction_5F_parser {
   protected : virtual int32_t select_gtl_5F_instruction_5F_parser_5 (C_Lexique_gtl_5F_scanner *) = 0 ;
 
   protected : virtual int32_t select_gtl_5F_instruction_5F_parser_6 (C_Lexique_gtl_5F_scanner *) = 0 ;
+
+  protected : virtual int32_t select_gtl_5F_instruction_5F_parser_7 (C_Lexique_gtl_5F_scanner *) = 0 ;
 
 
 } ;
@@ -4357,6 +4364,8 @@ class cGrammar_gtl_5F_grammar : public cParser_gtl_5F_parser,
   public : virtual int32_t select_gtl_5F_instruction_5F_parser_5 (C_Lexique_gtl_5F_scanner *) ;
 
   public : virtual int32_t select_gtl_5F_instruction_5F_parser_6 (C_Lexique_gtl_5F_scanner *) ;
+
+  public : virtual int32_t select_gtl_5F_instruction_5F_parser_7 (C_Lexique_gtl_5F_scanner *) ;
 } ;
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -13344,4 +13353,3 @@ extern C_BoolCommandLineOption gOption_gtl_5F_options_warnDeprecated ;
 
 //---------------------------------------------------------------------------------------------------------------------*
 
-#endif

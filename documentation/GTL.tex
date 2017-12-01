@@ -893,6 +893,10 @@ The following built-in functions return an int.
 
 \gtlinline{min64bitsSignedInt()} takes no argument and returns the minimum signed number that fits in 64 bits.
 
+\subsubsection{The function \texttt{random(min, max)}}
+
+\gtlinline{random(min, max)} returns a random number between \texttt{min} included and \texttt{max} excluded. \texttt{min} and \texttt{max} have to fit in an unsigned 32 bits integer.
+
 \section{The \texttt{char} data type}
 
 The \lstinline{char} data type supports unicode characters. A literal char is delimited by a pair of \gtlinline{'}:
@@ -3213,6 +3217,10 @@ e
 integer: 3
 ===============================================================================
 \end{console}
+
+\section{The \texttt{seed} instruction}
+
+\gtlinline{seed} sets the random seed of the random number generator. If given, its argument should evaluate to an integer and should be within $0$ and $2^{32}-1$. If not given the seed is set by summing the hours, minutes, seconds of the current date.
 
 \chapter{GTL modules}
 \label{chap:modules}

@@ -6,10 +6,9 @@
 //                                                                                                                     *
 //  Copyright (C) 1994, ..., 2012 Pierre Molinaro.                                                                     *
 //                                                                                                                     *
-//  e-mail : pierre.molinaro@irccyn.ec-nantes.fr                                                                       *
+//  e-mail : pierre.molinaro@ec-nantes.fr                                                                              *
 //                                                                                                                     *
-//  IRCCyN, Institut de Recherche en Communications et Cybern�tique de Nantes                                          *
-//  ECN, �cole Centrale de Nantes (France)                                                                             *
+//  LS2N, Laboratoire des Sciences du Num�rique de Nantes, ECN, �cole Centrale de Nantes (France)                      *
 //                                                                                                                     *
 //  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General  *
 //  Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option)  *
@@ -21,8 +20,7 @@
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
-#ifndef MEMORY_CONTROL_MACROS_AND_ROUTINES_DEFINED
-#define MEMORY_CONTROL_MACROS_AND_ROUTINES_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -257,6 +255,3 @@ void displayAllocatedBlocksInfo (void) ;
 #endif
 
 //---------------------------------------------------------------------------------------------------------------------*
-
-#endif
-

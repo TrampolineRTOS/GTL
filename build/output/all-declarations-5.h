@@ -1,5 +1,4 @@
-#ifndef all_2D_declarations_2D__35__ENTITIES_DEFINED
-#define all_2D_declarations_2D__35__ENTITIES_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -239,4 +238,14 @@ class GALGAS_bigint function_min_36__34_bitsSignedInt (class C_Compiler * inComp
 class GALGAS_double function_pi (class C_Compiler * inCompiler
                                  COMMA_LOCATION_ARGS) ;
 
-#endif
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                                  Function 'random'                                                  *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_bigint function_random (const class GALGAS_bigint & constinArgument0,
+                                     const class GALGAS_bigint & constinArgument1,
+                                     class C_Compiler * inCompiler
+                                     COMMA_LOCATION_ARGS) ;
+

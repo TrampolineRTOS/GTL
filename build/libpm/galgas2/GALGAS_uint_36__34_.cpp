@@ -6,9 +6,9 @@
 //                                                                                                                     *
 //  Copyright (C) 2006, ..., 2015 Pierre Molinaro.                                                                     *
 //                                                                                                                     *
-//  e-mail : pierre.molinaro@irccyn.ec-nantes.fr                                                                       *
+//  e-mail : pierre.molinaro@ec-nantes.fr                                                                              *
 //                                                                                                                     *
-//  IRCCyN, Institut de Recherche en Communications et Cybernétique de Nantes, ECN, École Centrale de Nantes (France)  *
+//  LS2N, Laboratoire des Sciences du Numérique de Nantes, ECN, École Centrale de Nantes (France)                      *
 //                                                                                                                     *
 //  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General  *
 //  Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option)  *
@@ -565,6 +565,21 @@ GALGAS_bigint GALGAS_uint_36__34_::getter_bigint (UNUSED_LOCATION_ARGS) const {
 
 GALGAS_double GALGAS_uint_36__34_::getter_double (UNUSED_LOCATION_ARGS) const {
   return GALGAS_double ((double) mUInt64Value) ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_string GALGAS_uint_36__34_::getter_alphaString (UNUSED_LOCATION_ARGS) const {
+  C_String s = "aaaaaaaaaaaaaa" ; // 2**64 values needs 14 characters (base 26) : n = 64 * log (2) / log (26)
+  uint64_t v = mUInt64Value ;
+  int32_t idx = 13 ;
+  while (v > 0) {
+    const utf32 c = TO_UNICODE ((uint32_t) ((v % 26) + 'a')) ;
+    s.setUnicodeCharacterAtIndex (c, idx COMMA_HERE) ;
+    idx -= 1 ;
+    v /= 26 ;
+  }
+  return GALGAS_string (s) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*

@@ -3,12 +3,11 @@
 //  galgas-developer
 //
 //  Created by Pierre Molinaro on 22/05/14.
-//  Copyright (c) 2014 IRCCyN. All rights reserved.
+//  LS2N, Laboratoire des Sciences du Numérique de Nantes, ECN, École Centrale de Nantes (France)                      *
 //
 //---------------------------------------------------------------------------------------------------------------------*
 
-#ifndef C_RELATION_CONFIGURATION_CLASS_DEFINED
-#define C_RELATION_CONFIGURATION_CLASS_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -71,6 +70,3 @@ class C_RelationConfiguration {
 } ;
 
 //---------------------------------------------------------------------------------------------------------------------*
-
-
-#endif

@@ -9086,6 +9086,9 @@ static const char * gSyntaxErrorMessage_gtl_5F_scanner_print = "the 'print' keyw
 //--- Syntax error message for terminal '$println$' :
 static const char * gSyntaxErrorMessage_gtl_5F_scanner_println = "the 'println' keyword" ;
 
+//--- Syntax error message for terminal '$seed$' :
+static const char * gSyntaxErrorMessage_gtl_5F_scanner_seed = "the 'seed' keyword" ;
+
 //--- Syntax error message for terminal '$repeat$' :
 static const char * gSyntaxErrorMessage_gtl_5F_scanner_repeat = "the 'repeat' keyword" ;
 
@@ -9298,7 +9301,7 @@ static const char * gSyntaxErrorMessage_gtl_5F_scanner__40__3F_ = "the '@\?' del
 //---------------------------------------------------------------------------------------------------------------------*
 
 C_String C_Lexique_gtl_5F_scanner::getMessageForTerminal (const int16_t inTerminalIndex) const {
-  static const char * syntaxErrorMessageArray [115] = {kEndOfSourceLexicalErrorMessage,
+  static const char * syntaxErrorMessageArray [116] = {kEndOfSourceLexicalErrorMessage,
     gSyntaxErrorMessage_gtl_5F_scanner_identifier,
     gSyntaxErrorMessage_gtl_5F_scanner_literal_5F_enum,
     gSyntaxErrorMessage_gtl_5F_scanner_literal_5F_double,
@@ -9344,6 +9347,7 @@ C_String C_Lexique_gtl_5F_scanner::getMessageForTerminal (const int16_t inTermin
     gSyntaxErrorMessage_gtl_5F_scanner_or,
     gSyntaxErrorMessage_gtl_5F_scanner_print,
     gSyntaxErrorMessage_gtl_5F_scanner_println,
+    gSyntaxErrorMessage_gtl_5F_scanner_seed,
     gSyntaxErrorMessage_gtl_5F_scanner_repeat,
     gSyntaxErrorMessage_gtl_5F_scanner_sort,
     gSyntaxErrorMessage_gtl_5F_scanner_step,
@@ -10178,6 +10182,15 @@ static const utf32 kUnicodeString_gtl_5F_scanner_repeat [] = {
   TO_UNICODE (0)
 } ;
 
+//--- Unicode string for '$seed$'
+static const utf32 kUnicodeString_gtl_5F_scanner_seed [] = {
+  TO_UNICODE ('s'),
+  TO_UNICODE ('e'),
+  TO_UNICODE ('e'),
+  TO_UNICODE ('d'),
+  TO_UNICODE (0)
+} ;
+
 //--- Unicode string for '$setter$'
 static const utf32 kUnicodeString_gtl_5F_scanner_setter [] = {
   TO_UNICODE ('s'),
@@ -10429,7 +10442,7 @@ int16_t C_Lexique_gtl_5F_scanner::search_into_galgasDelimitorsList (const C_Stri
 //             Key words table 'goilTemplateKeyWordList'                            *
 //---------------------------------------------------------------------------------------------------------------------*
 
-static const int32_t ktable_size_gtl_5F_scanner_goilTemplateKeyWordList = 57 ;
+static const int32_t ktable_size_gtl_5F_scanner_goilTemplateKeyWordList = 58 ;
 
 static const C_unicode_lexique_table_entry ktable_for_gtl_5F_scanner_goilTemplateKeyWordList [ktable_size_gtl_5F_scanner_goilTemplateKeyWordList] = {
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_scanner_by, 2, C_Lexique_gtl_5F_scanner::kToken_by),
@@ -10453,6 +10466,7 @@ static const C_unicode_lexique_table_entry ktable_for_gtl_5F_scanner_goilTemplat
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_scanner_func, 4, C_Lexique_gtl_5F_scanner::kToken_func),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_scanner_here, 4, C_Lexique_gtl_5F_scanner::kToken_here),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_scanner_loop, 4, C_Lexique_gtl_5F_scanner::kToken_loop),
+  C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_scanner_seed, 4, C_Lexique_gtl_5F_scanner::kToken_seed),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_scanner_sort, 4, C_Lexique_gtl_5F_scanner::kToken_sort),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_scanner_step, 4, C_Lexique_gtl_5F_scanner::kToken_step),
   C_unicode_lexique_table_entry (kUnicodeString_gtl_5F_scanner_then, 4, C_Lexique_gtl_5F_scanner::kToken_then),
@@ -10745,6 +10759,11 @@ C_String C_Lexique_gtl_5F_scanner::getCurrentTokenString (const cToken * inToken
     case kToken_println:
       s.appendUnicodeCharacter (TO_UNICODE ('$') COMMA_HERE) ;
       s.appendCString ("println") ;
+      s.appendUnicodeCharacter (TO_UNICODE ('$') COMMA_HERE) ;
+      break ;
+    case kToken_seed:
+      s.appendUnicodeCharacter (TO_UNICODE ('$') COMMA_HERE) ;
+      s.appendCString ("seed") ;
       s.appendUnicodeCharacter (TO_UNICODE ('$') COMMA_HERE) ;
       break ;
     case kToken_repeat:
@@ -11121,7 +11140,7 @@ static const cTemplateDelimiter gtl_5F_scanner_kTemplateReplacementArray [3] = {
 //            Terminal Symbols as end of script in template mark                                                       *
 //---------------------------------------------------------------------------------------------------------------------*
 
-static const bool gtl_5F_scanner_kEndOfScriptInTemplateArray [114] = {
+static const bool gtl_5F_scanner_kEndOfScriptInTemplateArray [115] = {
   false /* identifier */,
   false /* literal_enum */,
   false /* literal_double */,
@@ -11167,6 +11186,7 @@ static const bool gtl_5F_scanner_kEndOfScriptInTemplateArray [114] = {
   false /* or */,
   false /* print */,
   false /* println */,
+  false /* seed */,
   false /* repeat */,
   false /* sort */,
   false /* step */,
@@ -12046,6 +12066,7 @@ GALGAS_stringlist C_Lexique_gtl_5F_scanner::symbols (LOCATION_ARGS) {
   result.addAssign_operation (GALGAS_string ("or") COMMA_THERE) ;
   result.addAssign_operation (GALGAS_string ("print") COMMA_THERE) ;
   result.addAssign_operation (GALGAS_string ("println") COMMA_THERE) ;
+  result.addAssign_operation (GALGAS_string ("seed") COMMA_THERE) ;
   result.addAssign_operation (GALGAS_string ("repeat") COMMA_THERE) ;
   result.addAssign_operation (GALGAS_string ("sort") COMMA_THERE) ;
   result.addAssign_operation (GALGAS_string ("step") COMMA_THERE) ;
@@ -12203,6 +12224,7 @@ static void getKeywordsForIdentifier_gtl_5F_scanner (const C_String & inIdentifi
     ioList.appendObject ("func") ;
     ioList.appendObject ("here") ;
     ioList.appendObject ("loop") ;
+    ioList.appendObject ("seed") ;
     ioList.appendObject ("sort") ;
     ioList.appendObject ("step") ;
     ioList.appendObject ("then") ;
@@ -12254,7 +12276,7 @@ __attribute__ ((unused)) (getKeywordLists_gtl_5F_scanner, getKeywordsForIdentifi
 //---------------------------------------------------------------------------------------------------------------------*
 
 uint32_t C_Lexique_gtl_5F_scanner::styleIndexForTerminal (const int32_t inTerminalIndex) const {
-  static const uint32_t kTerminalSymbolStyles [115] = {0,
+  static const uint32_t kTerminalSymbolStyles [116] = {0,
     0 /* gtl_scanner_1_identifier */,
     0 /* gtl_scanner_1_literal_5F_enum */,
     5 /* gtl_scanner_1_literal_5F_double */,
@@ -12300,6 +12322,7 @@ uint32_t C_Lexique_gtl_5F_scanner::styleIndexForTerminal (const int32_t inTermin
     1 /* gtl_scanner_1_or */,
     1 /* gtl_scanner_1_print */,
     1 /* gtl_scanner_1_println */,
+    1 /* gtl_scanner_1_seed */,
     1 /* gtl_scanner_1_repeat */,
     1 /* gtl_scanner_1_sort */,
     1 /* gtl_scanner_1_step */,

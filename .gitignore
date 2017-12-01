@@ -5,7 +5,10 @@ documentation/*.log
 documentation/*.aux
 documentation/*.toc
 documentation/*.synctex.gz
+documentation/*.out
 */gtl
 */gtl-debug
 xcode-project/gtl.xcodeproj/project.xcworkspace
 xcode-project/gtl.xcodeproj/xcuserdata
+.DS_Store
+*~

@@ -6,9 +6,9 @@
 //                                                                                                                     *
 //  Copyright (C) 2008, ..., 2015 Pierre Molinaro.                                                                     *
 //                                                                                                                     *
-//  e-mail : pierre.molinaro@irccyn.ec-nantes.fr                                                                       *
+//  e-mail : pierre.molinaro@ec-nantes.fr                                                                              *
 //                                                                                                                     *
-//  IRCCyN, Institut de Recherche en Communications et Cybernétique de Nantes, ECN, École Centrale de Nantes (France)  *
+//  LS2N, Laboratoire des Sciences du Numérique de Nantes, ECN, École Centrale de Nantes (France)                      *
 //                                                                                                                     *
 //  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General  *
 //  Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option)  *
@@ -20,8 +20,7 @@
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
-#ifndef UNICODE_BASE_ROUTINES_DEFINED
-#define UNICODE_BASE_ROUTINES_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -94,6 +93,7 @@ bool isRestrictedUnicodeLetter (const utf32 inUnicodeCharacter) ;
 #ifdef __cplusplus
   utf32 unicodeCharacterFromHTMLSequence (const C_String & inString) ;
 #endif
+
 #ifdef __OBJC__
   utf32 unicodeCharacterFromHTMLSequence (NSString * inString) ;
 #endif
@@ -116,5 +116,3 @@ int32_t UTF8StringFromUTF32Character (const utf32 inUnicodeChar, char outSequenc
 #endif
 
 //---------------------------------------------------------------------------------------------------------------------*
-
-#endif

@@ -8,9 +8,9 @@
 //                                                                                                                     *
 //  Copyright (C) 1997, ..., 2016 Pierre Molinaro.                                                                     *
 //                                                                                                                     *
-//  e-mail : pierre.molinaro@irccyn.ec-nantes.fr                                                                       *
+//  e-mail : pierre.molinaro@ec-nantes.fr                                                                              *
 //                                                                                                                     *
-//  IRCCyN, Institut de Recherche en Communications et Cybernétique de Nantes, ECN, École Centrale de Nantes (France)  *
+//  LS2N, Laboratoire des Sciences du Numérique de Nantes, ECN, École Centrale de Nantes (France)                      *
 //                                                                                                                     *
 //  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General  *
 //  Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option)  *
@@ -22,8 +22,7 @@
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
-#ifndef UNIQUE_GENERIC_ARRAY_IS_DEFINED
-#define UNIQUE_GENERIC_ARRAY_IS_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -1644,5 +1643,3 @@ template <typename TYPE> void TC_UniqueArray <TYPE>::removeObjectFromOrderedArra
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
-
-#endif

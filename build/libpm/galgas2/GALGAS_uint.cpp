@@ -4,11 +4,11 @@
 //                                                                                                                     *
 //  This file is part of libpm library                                                                                 *
 //                                                                                                                     *
-//  Copyright (C) 2009, ..., 2015 Pierre Molinaro.                                                                     *
+//  Copyright (C) 2009, ..., 2017 Pierre Molinaro.                                                                     *
 //                                                                                                                     *
-//  e-mail : pierre.molinaro@irccyn.ec-nantes.fr                                                                       *
+//  e-mail : pierre.molinaro@ec-nantes.fr                                                                              *
 //                                                                                                                     *
-//  IRCCyN, Institut de Recherche en Communications et Cybernétique de Nantes, ECN, École Centrale de Nantes (France)  *
+//  LS2N, Laboratoire des Sciences du Numérique de Nantes, ECN, École Centrale de Nantes (France)                      *
 //                                                                                                                     *
 //  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General  *
 //  Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option)  *
@@ -25,6 +25,16 @@
 #include "galgas2/C_galgas_io.h"
 #include "strings/unicode_character_cpp.h"
 
+//---------------------------------------------------------------------------------------------------------------------*
+
+#ifdef PRAGMA_MARK_ALLOWED
+  #pragma mark C++ constructors
+#endif
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//       C++ Constructors                                                                                              *
+//                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
 GALGAS_uint::GALGAS_uint (void) :
@@ -50,6 +60,49 @@ mUIntValue (inValue) {
 GALGAS_uint::GALGAS_uint (const bool inValid, const uint32_t inValue) :
 mIsValid (inValid),
 mUIntValue (inValue) {
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+#ifdef PRAGMA_MARK_ALLOWED
+  #pragma mark GALGAS Class methods
+#endif
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//       Class methods                                                                                                 *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+void GALGAS_uint::class_method_setRandomSeed (class GALGAS_uint inSeed
+                                              COMMA_UNUSED_LOCATION_ARGS) {
+  if (inSeed.isValid  ()) {
+    #if COMPILE_FOR_WINDOWS == 1
+      srand (inSeed.uintValue ()) ;
+    #else
+      srandom (inSeed.uintValue ()) ;
+    #endif
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+#ifdef PRAGMA_MARK_ALLOWED
+  #pragma mark GALGAS constructors
+#endif
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//       GALGAS Constructors                                                                                           *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_uint GALGAS_uint::constructor_random (UNUSED_LOCATION_ARGS) {
+  #if COMPILE_FOR_WINDOWS == 1
+    return GALGAS_uint ((uint32_t) rand ()) ;
+  #else
+    return GALGAS_uint ((uint32_t) random ()) ;
+  #endif
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -219,6 +272,21 @@ GALGAS_uint_36__34_ GALGAS_uint::getter_uint_36__34_ (UNUSED_LOCATION_ARGS) cons
 
 GALGAS_double GALGAS_uint::getter_double (UNUSED_LOCATION_ARGS) const {
   return GALGAS_double (mUIntValue) ;
+}
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+GALGAS_string GALGAS_uint::getter_alphaString (UNUSED_LOCATION_ARGS) const {
+  C_String s = "aaaaaaa" ; // 2**32 values needs 7 characters (base 26) : n = 32 * log (2) / log (26)
+  uint32_t v = mUIntValue ;
+  int32_t idx = 6 ;
+  while (v > 0) {
+    const utf32 c = TO_UNICODE ((v % 26) + 'a') ;
+    s.setUnicodeCharacterAtIndex (c, idx COMMA_HERE) ;
+    idx -= 1 ;
+    v /= 26 ;
+  }
+  return GALGAS_string (s) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*

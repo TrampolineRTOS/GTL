@@ -884,6 +884,9 @@ abstract class @gtlExpression { @location where }
 
 getter @gtlExpression location -> @location result { result = where }
 
+class @gtlEmptyExpression : @gtlExpression {
+}
+
 abstract class @gtlUnaryExpression : @gtlExpression {
   @gtlExpression son
 }
@@ -897,6 +900,15 @@ abstract getter @gtlExpression eval
   ?let @gtlData    vars
   ?let @library    lib
   -> @gtlData
+
+override getter @gtlEmptyExpression eval
+  ?let @gtlContext unused context
+  ?let @gtlData    unused vars
+  ?let @library    unused lib
+  -> @gtlData result
+{
+  error where : "empty expression cannot be evalued" : result
+}
 
 #=============================================================================*
 # Expression list

@@ -95,7 +95,7 @@ static NSArray * kTemplateDefinitionArray_gtl_5F_scanner ;
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
-static const BOOL kEndOfScriptInTemplateArray_gtl_5F_scanner [114] = {
+static const BOOL kEndOfScriptInTemplateArray_gtl_5F_scanner [115] = {
   NO /* identifier */,
   NO /* literal_enum */,
   NO /* literal_double */,
@@ -141,6 +141,7 @@ static const BOOL kEndOfScriptInTemplateArray_gtl_5F_scanner [114] = {
   NO /* or */,
   NO /* print */,
   NO /* println */,
+  NO /* seed */,
   NO /* repeat */,
   NO /* sort */,
   NO /* step */,
@@ -219,7 +220,7 @@ static const BOOL kEndOfScriptInTemplateArray_gtl_5F_scanner [114] = {
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
-static const C_cocoa_lexique_table_entry ktable_for_gtl_5F_scanner_goilTemplateKeyWordList [57] = {
+static const C_cocoa_lexique_table_entry ktable_for_gtl_5F_scanner_goilTemplateKeyWordList [58] = {
   {"by", gtl_scanner_1_by},
   {"do", gtl_scanner_1_do},
   {"if", gtl_scanner_1_if},
@@ -241,6 +242,7 @@ static const C_cocoa_lexique_table_entry ktable_for_gtl_5F_scanner_goilTemplateK
   {"func", gtl_scanner_1_func},
   {"here", gtl_scanner_1_here},
   {"loop", gtl_scanner_1_loop},
+  {"seed", gtl_scanner_1_seed},
   {"sort", gtl_scanner_1_sort},
   {"step", gtl_scanner_1_step},
   {"then", gtl_scanner_1_then},
@@ -280,7 +282,7 @@ static const C_cocoa_lexique_table_entry ktable_for_gtl_5F_scanner_goilTemplateK
 } ;
 
 static NSInteger search_into_gtl_5F_scanner_goilTemplateKeyWordList (NSString * inSearchedString) {
-  return searchStringInTable (inSearchedString, ktable_for_gtl_5F_scanner_goilTemplateKeyWordList, 57) ;
+  return searchStringInTable (inSearchedString, ktable_for_gtl_5F_scanner_goilTemplateKeyWordList, 58) ;
 }
 
 
@@ -789,7 +791,7 @@ static NSInteger search_into_gtl_5F_scanner_goilTemplateKeyWordList (NSString * 
 //---------------------------------------------------------------------------------------------------------------------*
 
 - (NSUInteger) terminalVocabularyCount {
-  return 114 ;
+  return 115 ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
@@ -819,7 +821,7 @@ static NSInteger search_into_gtl_5F_scanner_goilTemplateKeyWordList (NSString * 
 //---------------------------------------------------------------------------------------------------------------------*
 
 - (NSUInteger) styleIndexForTerminal: (NSInteger) inTerminal {
-  static const NSUInteger kTerminalSymbolStyles [115] = {0,
+  static const NSUInteger kTerminalSymbolStyles [116] = {0,
     0 /* gtl_scanner_1_identifier */,
     0 /* gtl_scanner_1_literal_5F_enum */,
     5 /* gtl_scanner_1_literal_5F_double */,
@@ -865,6 +867,7 @@ static NSInteger search_into_gtl_5F_scanner_goilTemplateKeyWordList (NSString * 
     1 /* gtl_scanner_1_or */,
     1 /* gtl_scanner_1_print */,
     1 /* gtl_scanner_1_println */,
+    1 /* gtl_scanner_1_seed */,
     1 /* gtl_scanner_1_repeat */,
     1 /* gtl_scanner_1_sort */,
     1 /* gtl_scanner_1_step */,
@@ -945,7 +948,7 @@ static NSInteger search_into_gtl_5F_scanner_goilTemplateKeyWordList (NSString * 
 //---------------------------------------------------------------------------------------------------------------------*
 
 - (BOOL) atomicSelectionForToken: (NSUInteger) inTokenIndex {
-  static const BOOL kTerminalAtomicSelection [115] = {NO,
+  static const BOOL kTerminalAtomicSelection [116] = {NO,
     YES /* gtl_scanner_1_identifier */,
     YES /* gtl_scanner_1_literal_5F_enum */,
     YES /* gtl_scanner_1_literal_5F_double */,
@@ -991,6 +994,7 @@ static NSInteger search_into_gtl_5F_scanner_goilTemplateKeyWordList (NSString * 
     YES /* gtl_scanner_1_or */,
     YES /* gtl_scanner_1_print */,
     YES /* gtl_scanner_1_println */,
+    YES /* gtl_scanner_1_seed */,
     YES /* gtl_scanner_1_repeat */,
     YES /* gtl_scanner_1_sort */,
     YES /* gtl_scanner_1_step */,

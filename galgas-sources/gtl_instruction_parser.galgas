@@ -241,6 +241,29 @@ rule <gtl_simple_instruction>
 rule <gtl_simple_instruction>
   !@gtlInstruction instruction
 {
+  $seed$ @location where = .here
+  select
+    <gtl_expression> ?@gtlExpression expression
+    instruction = @gtlSetRandomSeedStatementInstruction.new {
+      !where
+      !signature(!where)
+      !true
+      !expression
+    }
+  or
+    instruction = @gtlSetRandomSeedStatementInstruction.new {
+      !where
+      !signature(!where)
+      !false
+      !@gtlEmptyExpression.new { !where }
+    }
+  end
+}
+
+#-----------------------------------------------------------------------------*
+rule <gtl_simple_instruction>
+  !@gtlInstruction instruction
+{
   $display$ @location where = .here
   
   <gtl_variable> ?@gtlVarPath variable

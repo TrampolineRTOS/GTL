@@ -3,8 +3,7 @@
 
 //--- END OF USER ZONE 1
 
-#ifndef GALGAS2_INCLUDED_DEFINITIONS
-#define GALGAS2_INCLUDED_DEFINITIONS
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -1559,6 +1558,8 @@ class GALGAS_uint : public AC_GALGAS_root {
 
   public : static class GALGAS_uint constructor_max (LOCATION_ARGS) ;
 
+  public : static class GALGAS_uint constructor_random (LOCATION_ARGS) ;
+
   public : static class GALGAS_uint constructor_valueWithMask (const class GALGAS_uint & inOperand0,
                                                                const class GALGAS_uint & inOperand1,
                                                                class C_Compiler * inCompiler
@@ -1667,8 +1668,13 @@ class GALGAS_uint : public AC_GALGAS_root {
 
 //--------------------------------- Instance Methods
 //--------------------------------- Class Methods
+  public : static void class_method_setRandomSeed (class GALGAS_uint constinArgument0
+                                                   COMMA_LOCATION_ARGS) ;
+
 
 //--------------------------------- Getters
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_alphaString (LOCATION_ARGS) const ;
+
   public : VIRTUAL_IN_DEBUG class GALGAS_bigint getter_bigint (LOCATION_ARGS) const ;
 
   public : VIRTUAL_IN_DEBUG class GALGAS_bool getter_canAdd (const class GALGAS_uint & constinOperand0
@@ -2981,6 +2987,8 @@ class GALGAS_uint_36__34_ : public AC_GALGAS_root
 //--------------------------------- Class Methods
 
 //--------------------------------- Getters
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_alphaString (LOCATION_ARGS) const ;
+
   public : VIRTUAL_IN_DEBUG class GALGAS_bigint getter_bigint (LOCATION_ARGS) const ;
 
   public : VIRTUAL_IN_DEBUG class GALGAS_bool getter_canAdd (const class GALGAS_uint_36__34_ & constinOperand0
@@ -6126,4 +6134,3 @@ class cMapElement : public cCollectionElement {
 
 
 //--- END OF USER ZONE 2
-#endif

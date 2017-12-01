@@ -6,9 +6,9 @@
 //                                                                                                                     *
 //  Copyright (C) 1997, ..., 2015 Pierre Molinaro.                                                                     *
 //                                                                                                                     *
-//  e-mail : pierre.molinaro@irccyn.ec-nantes.fr                                                                       *
+//  e-mail : pierre.molinaro@ec-nantes.fr                                                                              *
 //                                                                                                                     *
-//  IRCCyN, Institut de Recherche en Communications et Cybernétique de Nantes, ECN, École Centrale de Nantes (France)  *
+//  LS2N, Laboratoire des Sciences du Numérique de Nantes, ECN, École Centrale de Nantes (France)                      *
 //                                                                                                                     *
 //  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General  *
 //  Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option)  *
@@ -20,8 +20,7 @@
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
-#ifndef CLASS_OUTPUT_STREAM_DEFINED
-#define CLASS_OUTPUT_STREAM_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -181,5 +180,3 @@ C_String cStringWithUnicodeCharacter (const utf32 inValue) ;
 C_String cStringWithDouble (const double inValue) ;
 
 //---------------------------------------------------------------------------------------------------------------------*
-
-#endif

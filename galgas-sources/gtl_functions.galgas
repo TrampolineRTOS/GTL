@@ -270,3 +270,26 @@ func pi -> @double result
   result = @double.pi
 }
 
+#-----------------------------------------------------------------------------*
+# Returns a random number
+#-----------------------------------------------------------------------------*
+func random 
+  ?let @bigint min
+  ?let @bigint max
+  -> @bigint result
+{
+  if [min fitsInUInt] then
+    if [max fitsInUInt] then
+      if min <= max then
+        result = (@uint.random mod (max - min)) + min
+      else
+        error .here : "rand: min should be lower or equal" : result
+        error .here : "rand: than max" : result
+      end
+    else
+      error .here : "rand: max argument should be an unsigned 32 bits integer" : result
+    end
+  else
+    error .here : "rand: min argument should be an unsigned 32 bits integer" : result
+  end
+}

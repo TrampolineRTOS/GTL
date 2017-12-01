@@ -3,7 +3,7 @@
 //  galgas-developer
 //
 //  Created by Pierre Molinaro on 22/05/14.
-//  Copyright (c) 2014 IRCCyN. All rights reserved.
+//  LS2N, Laboratoire des Sciences du Numérique de Nantes, ECN, École Centrale de Nantes (France)                      *
 //
 //---------------------------------------------------------------------------------------------------------------------*
 

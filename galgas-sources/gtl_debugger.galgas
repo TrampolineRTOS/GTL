@@ -689,6 +689,12 @@ override getter @gtlVarItemCollection stringRepresentation
 abstract getter @gtlExpression stringRepresentation
   ->@string
 
+override getter @gtlEmptyExpression stringRepresentation
+  ->@string result
+{
+  error where : "an empty expression does not have string representation" : result
+}
+
 #-----------------------------------------------------------------------------*
 override getter @gtlAddExpression stringRepresentation
   ->@string result
@@ -1305,6 +1311,13 @@ override method @gtlPrintStatementInstruction display
   message "print"
     + if carriageReturn then "ln " else " " end
     + [messageToPrint stringRepresentation]
+}
+
+#-----------------------------------------------------------------------------*
+override method @gtlSetRandomSeedStatementInstruction display
+{
+  message "seed"
+    + if expressionProvided then " " + [seedNumber stringRepresentation] else "" end
 }
 
 #-----------------------------------------------------------------------------*

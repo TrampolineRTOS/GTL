@@ -469,7 +469,7 @@
 
 \nonTerminalSection{gtl\_import}{3}
 
-\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{368}
+\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{391}
 
 \begin{tikzpicture}
   \matrix[column sep=\ruleMatrixColumnSeparation, row sep=\ruleMatrixRowSeparation] {
@@ -698,6 +698,21 @@
 
 \begin{tikzpicture}
   \matrix[column sep=\ruleMatrixColumnSeparation, row sep=\ruleMatrixRowSeparation] {
+    & & & & \node (p1-4) [point] {}; & \\
+    \node (P0start) [firstPoint] {}; & & \node (p0-2) [terminal] {seed}; & \node (p0-3) [point] {}; & \node (p0-4) [nonterminal] {\nonTerminalSymbol{gtl\_expression}{0}}; & \node (p0-5) [point] {}; & \node (p0-6) [lastPoint] {}; & \\
+  };
+  \draw[->] (P0start) -- (p0-2) ;
+  \draw[->] (p0-2) -- (p0-4) ;
+  \draw (p0-3) |- (p1-4) ;
+  \draw (p0-4) -- (p0-5) ;
+  \draw[->] (p1-4) -| (p0-5) ;
+  \draw[->] (p0-5) -- (p0-6) ;
+\end{tikzpicture}
+
+\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{264}
+
+\begin{tikzpicture}
+  \matrix[column sep=\ruleMatrixColumnSeparation, row sep=\ruleMatrixRowSeparation] {
     \node (P0start) [firstPoint] {}; & & \node (p0-2) [terminal] {display}; & \node (p0-3) [nonterminal] {\nonTerminalSymbol{gtl\_variable}{1}}; & \node (p0-4) [lastPoint] {}; & \\
   };
   \draw[->] (P0start) -- (p0-2) ;
@@ -705,7 +720,7 @@
   \draw[->] (p0-3) -- (p0-4) ;
 \end{tikzpicture}
 
-\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{256}
+\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{279}
 
 \begin{tikzpicture}
   \matrix[column sep=\ruleMatrixColumnSeparation, row sep=\ruleMatrixRowSeparation] {
@@ -728,7 +743,7 @@
   \draw[->] (p0-12) -- (p0-13) ;
 \end{tikzpicture}
 
-\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{289}
+\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{312}
 
 \begin{tikzpicture}
   \matrix[column sep=\ruleMatrixColumnSeparation, row sep=\ruleMatrixRowSeparation] {
@@ -739,7 +754,7 @@
   \draw[->] (p0-3) -- (p0-4) ;
 \end{tikzpicture}
 
-\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{303}
+\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{326}
 
 \begin{tikzpicture}
   \matrix[column sep=\ruleMatrixColumnSeparation, row sep=\ruleMatrixRowSeparation] {
@@ -749,7 +764,7 @@
   \draw[->] (p0-2) -- (p0-3) ;
 \end{tikzpicture}
 
-\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{315}
+\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{338}
 
 \begin{tikzpicture}
   \matrix[column sep=\ruleMatrixColumnSeparation, row sep=\ruleMatrixRowSeparation] {
@@ -759,7 +774,7 @@
   \draw[->] (p0-2) -- (p0-3) ;
 \end{tikzpicture}
 
-\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{326}
+\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{349}
 
 \begin{tikzpicture}
   \matrix[column sep=\ruleMatrixColumnSeparation, row sep=\ruleMatrixRowSeparation] {
@@ -785,7 +800,7 @@
 
 \nonTerminalSection{gtl\_sorting\_order}{15}
 
-\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{355}
+\ruleSubsection{gtl\_instruction\_parser}{gtl\_instruction\_parser}{378}
 
 \begin{tikzpicture}
   \matrix[column sep=\ruleMatrixColumnSeparation, row sep=\ruleMatrixRowSeparation] {

@@ -1338,3 +1338,44 @@ override method @gtlInputStatementInstruction execute
     [!?vars setStructField !name !arg]
   end
 }
+
+#-----------------------------------------------------------------------------*
+# template instructions : setRandomSeed
+#-----------------------------------------------------------------------------*
+class @gtlSetRandomSeedStatementInstruction : @gtlInstruction {
+  @bool          expressionProvided
+  @gtlExpression seedNumber
+}
+
+override method @gtlSetRandomSeedStatementInstruction execute
+  ?!@gtlContext     context
+  ?!@gtlData        vars
+  ?!@library        lib
+  ?!@string  unused outputString
+{
+  if expressionProvided then
+    @gtlData seed = [seedNumber eval !context !vars !lib]
+    if seed is == @gtlInt then
+      @bigint seedValue = [seed as @gtlInt value]
+      if [seedValue fitsInUInt] then
+        [@uint setRandomSeed ![seedValue uint]]
+      else
+        error [seedNumber location] : "seed value should be a 32 bits unsigned integer"
+      end
+    else
+      error [seedNumber location] : "int expected"
+    end
+  else
+    # No expression provided, does a sum of hour min sec
+    for (str) in [@string.stringWithCurrentDateTime componentsSeparatedByString !" "] do
+      if [str containsCharacter !':'] then
+        @uint seed = 0
+        for (num) in [str componentsSeparatedByString !":"] do
+          seed += [num decimalUnsignedNumber]
+        end
+        [@uint setRandomSeed !seed]
+      end
+    end
+  end
+}
+

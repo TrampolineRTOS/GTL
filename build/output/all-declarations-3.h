@@ -1,5 +1,4 @@
-#ifndef all_2D_declarations_2D__33__ENTITIES_DEFINED
-#define all_2D_declarations_2D__33__ENTITIES_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -976,6 +975,8 @@ class cGrammar_gtl_5F_module_5F_grammar : public cParser_gtl_5F_module_5F_parser
 
   public : virtual int32_t select_gtl_5F_instruction_5F_parser_6 (C_Lexique_gtl_5F_scanner *) ;
 
+  public : virtual int32_t select_gtl_5F_instruction_5F_parser_7 (C_Lexique_gtl_5F_scanner *) ;
+
   public : virtual int32_t select_gtl_5F_expression_5F_parser_0 (C_Lexique_gtl_5F_scanner *) ;
 
   public : virtual int32_t select_gtl_5F_expression_5F_parser_1 (C_Lexique_gtl_5F_scanner *) ;
@@ -1346,4 +1347,3 @@ void callExtensionSetter_setExecuteDebuggerCommand (class cPtr_gtlContext * inOb
                                                     C_Compiler * inCompiler
                                                     COMMA_LOCATION_ARGS) ;
 
-#endif

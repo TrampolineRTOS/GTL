@@ -1,5 +1,4 @@
-#ifndef all_2D_declarations_2D__32__ENTITIES_DEFINED
-#define all_2D_declarations_2D__32__ENTITIES_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -1427,6 +1426,97 @@ class cPtr_gtlInputStatementInstruction : public cPtr_gtlInstruction {
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
+//                                     @gtlSetRandomSeedStatementInstruction class                                     *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_gtlSetRandomSeedStatementInstruction : public GALGAS_gtlInstruction {
+//--- Constructor
+  public : GALGAS_gtlSetRandomSeedStatementInstruction (void) ;
+
+//---
+  public : inline const class cPtr_gtlSetRandomSeedStatementInstruction * ptr (void) const { return (const cPtr_gtlSetRandomSeedStatementInstruction *) mObjectPtr ; }
+
+//--------------------------------- Constructor from pointer
+  public : GALGAS_gtlSetRandomSeedStatementInstruction (const cPtr_gtlSetRandomSeedStatementInstruction * inSourcePtr) ;
+
+//-- Start of generic part --*
+
+//--------------------------------- Object cloning
+  protected : virtual AC_GALGAS_root * clonedObject (void) const ;
+
+//--------------------------------- Object extraction
+  public : static GALGAS_gtlSetRandomSeedStatementInstruction extractObject (const GALGAS_object & inObject,
+                                                                             C_Compiler * inCompiler
+                                                                             COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- GALGAS constructors
+  public : static class GALGAS_gtlSetRandomSeedStatementInstruction constructor_new (const class GALGAS_location & inOperand0,
+                                                                                     const class GALGAS_string & inOperand1,
+                                                                                     const class GALGAS_bool & inOperand2,
+                                                                                     const class GALGAS_gtlExpression & inOperand3
+                                                                                     COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- Comparison
+  public : typeComparisonResult objectCompare (const GALGAS_gtlSetRandomSeedStatementInstruction & inOperand) const ;
+
+//--------------------------------- Setters
+
+//--------------------------------- Instance Methods
+//--------------------------------- Class Methods
+
+//--------------------------------- Getters
+  public : VIRTUAL_IN_DEBUG class GALGAS_bool getter_expressionProvided (LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG class GALGAS_gtlExpression getter_seedNumber (LOCATION_ARGS) const ;
+
+
+//--------------------------------- Introspection
+  public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
+ 
+} ; // End of GALGAS_gtlSetRandomSeedStatementInstruction class
+
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlSetRandomSeedStatementInstruction ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                            Pointer class for @gtlSetRandomSeedStatementInstruction class                            *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cPtr_gtlSetRandomSeedStatementInstruction : public cPtr_gtlInstruction {
+//--- Attributes
+  public : GALGAS_bool mProperty_expressionProvided ;
+  public : GALGAS_gtlExpression mProperty_seedNumber ;
+
+//--- Constructor
+  public : cPtr_gtlSetRandomSeedStatementInstruction (const GALGAS_location & in_where,
+                                                      const GALGAS_string & in_signature,
+                                                      const GALGAS_bool & in_expressionProvided,
+                                                      const GALGAS_gtlExpression & in_seedNumber
+                                                      COMMA_LOCATION_ARGS) ;
+
+//--- Duplication
+  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
+
+//--- Attribute accessors
+  public : VIRTUAL_IN_DEBUG GALGAS_bool getter_expressionProvided (LOCATION_ARGS) const ;
+  public : VIRTUAL_IN_DEBUG GALGAS_gtlExpression getter_seedNumber (LOCATION_ARGS) const ;
+//--- Description
+  public : virtual void description (C_String & ioString,
+                                     const int32_t inIndentation) const ;
+
+  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
+
+  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
+
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
 //                               Extension method '@gtlExecutableEntity checkArguments'                                *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1788,6 +1878,86 @@ class GALGAS_location callExtensionGetter_location (const cPtr_gtlExpression * i
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
+//                                              @gtlEmptyExpression class                                              *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class GALGAS_gtlEmptyExpression : public GALGAS_gtlExpression {
+//--- Constructor
+  public : GALGAS_gtlEmptyExpression (void) ;
+
+//--------------------------------- Default GALGAS constructor
+  public : static GALGAS_gtlEmptyExpression constructor_default (LOCATION_ARGS) ;
+
+//---
+  public : inline const class cPtr_gtlEmptyExpression * ptr (void) const { return (const cPtr_gtlEmptyExpression *) mObjectPtr ; }
+
+//--------------------------------- Constructor from pointer
+  public : GALGAS_gtlEmptyExpression (const cPtr_gtlEmptyExpression * inSourcePtr) ;
+
+//-- Start of generic part --*
+
+//--------------------------------- Object cloning
+  protected : virtual AC_GALGAS_root * clonedObject (void) const ;
+
+//--------------------------------- Object extraction
+  public : static GALGAS_gtlEmptyExpression extractObject (const GALGAS_object & inObject,
+                                                           C_Compiler * inCompiler
+                                                           COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- GALGAS constructors
+  public : static class GALGAS_gtlEmptyExpression constructor_new (const class GALGAS_location & inOperand0
+                                                                   COMMA_LOCATION_ARGS) ;
+
+//--------------------------------- Comparison
+  public : typeComparisonResult objectCompare (const GALGAS_gtlEmptyExpression & inOperand) const ;
+
+//--------------------------------- Setters
+
+//--------------------------------- Instance Methods
+//--------------------------------- Class Methods
+
+//--------------------------------- Getters
+
+//--------------------------------- Introspection
+  public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
+ 
+} ; // End of GALGAS_gtlEmptyExpression class
+
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_gtlEmptyExpression ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
+//                                     Pointer class for @gtlEmptyExpression class                                     *
+//                                                                                                                     *
+//---------------------------------------------------------------------------------------------------------------------*
+
+class cPtr_gtlEmptyExpression : public cPtr_gtlExpression {
+//--- Attributes
+
+//--- Constructor
+  public : cPtr_gtlEmptyExpression (const GALGAS_location & in_where
+                                    COMMA_LOCATION_ARGS) ;
+
+//--- Duplication
+  public : virtual acPtr_class * duplicate (LOCATION_ARGS) const ;
+
+//--- Attribute accessors
+//--- Description
+  public : virtual void description (C_String & ioString,
+                                     const int32_t inIndentation) const ;
+
+  public : virtual typeComparisonResult dynamicObjectCompare (const acPtr_class * inOperandPtr) const ;
+
+  public : virtual const C_galgas_type_descriptor * classDescriptor (void) const ;
+
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+//                                                                                                                     *
 //                                   Abstract extension getter '@gtlExpression eval'                                   *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
@@ -1813,4 +1983,3 @@ class GALGAS_gtlData callExtensionGetter_eval (const class cPtr_gtlExpression * 
                                                C_Compiler * inCompiler
                                                COMMA_LOCATION_ARGS) ;
 
-#endif

@@ -10613,88 +10613,78 @@ C_galgas_function_descriptor functionDescriptor_pi ("pi",
 
 //---------------------------------------------------------------------------------------------------------------------*
 //                                                                                                                     *
-//                        Overriding extension method '@gtlLetUnconstructedInstruction execute'                        *
+//                                                  Function 'random'                                                  *
 //                                                                                                                     *
 //---------------------------------------------------------------------------------------------------------------------*
 
-static void extensionMethod_gtlLetUnconstructedInstruction_execute (const cPtr_gtlInstruction * inObject,
-                                                                    GALGAS_gtlContext & ioArgument_context,
-                                                                    GALGAS_gtlData & ioArgument_vars,
-                                                                    GALGAS_library & ioArgument_lib,
-                                                                    GALGAS_string & /* ioArgument_outputString */,
-                                                                    C_Compiler * inCompiler
-                                                                    COMMA_UNUSED_LOCATION_ARGS) {
-  const cPtr_gtlLetUnconstructedInstruction * object = (const cPtr_gtlLetUnconstructedInstruction *) inObject ;
-  macroValidSharedObject (object, cPtr_gtlLetUnconstructedInstruction) ;
-  extensionMethod_set (object->mProperty_lValue, ioArgument_context, ioArgument_vars, ioArgument_lib, GALGAS_gtlUnconstructed::constructor_new (callExtensionGetter_location ((const cPtr_gtlVarItem *) object->mProperty_lValue.getter_itemAtIndex (GALGAS_uint ((uint32_t) 0U), inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 126)).ptr (), inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 126)), function_emptylstring (inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 126))  COMMA_SOURCE_FILE ("gtl_instructions.galgas", 125)), inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 125)) ;
+GALGAS_bigint function_random (const GALGAS_bigint & constinArgument_min,
+                               const GALGAS_bigint & constinArgument_max,
+                               C_Compiler * inCompiler
+                               COMMA_UNUSED_LOCATION_ARGS) {
+  GALGAS_bigint result_result ; // Returned variable
+  const enumGalgasBool test_0 = constinArgument_min.getter_fitsInUInt (SOURCE_FILE ("gtl_functions.galgas", 281)).boolEnum () ;
+  if (kBoolTrue == test_0) {
+    const enumGalgasBool test_1 = constinArgument_max.getter_fitsInUInt (SOURCE_FILE ("gtl_functions.galgas", 282)).boolEnum () ;
+    if (kBoolTrue == test_1) {
+      const enumGalgasBool test_2 = GALGAS_bool (kIsInfOrEqual, constinArgument_min.objectCompare (constinArgument_max)).boolEnum () ;
+      if (kBoolTrue == test_2) {
+        result_result = GALGAS_uint::constructor_random (SOURCE_FILE ("gtl_functions.galgas", 284)).modulo_operation (constinArgument_max.substract_operation (constinArgument_min, inCompiler COMMA_SOURCE_FILE ("gtl_functions.galgas", 284)).getter_uint (inCompiler COMMA_SOURCE_FILE ("gtl_functions.galgas", 284)), inCompiler COMMA_SOURCE_FILE ("gtl_functions.galgas", 284)).add_operation (constinArgument_min.getter_uint (inCompiler COMMA_SOURCE_FILE ("gtl_functions.galgas", 284)), inCompiler COMMA_SOURCE_FILE ("gtl_functions.galgas", 284)).getter_bigint (SOURCE_FILE ("gtl_functions.galgas", 284)) ;
+      }else if (kBoolFalse == test_2) {
+        TC_Array <C_FixItDescription> fixItArray3 ;
+        inCompiler->emitSemanticError (GALGAS_location::constructor_here (inCompiler  COMMA_SOURCE_FILE ("gtl_functions.galgas", 286)), GALGAS_string ("rand: min should be lower or equal"), fixItArray3  COMMA_SOURCE_FILE ("gtl_functions.galgas", 286)) ;
+        result_result.drop () ; // Release error dropped variable
+        TC_Array <C_FixItDescription> fixItArray4 ;
+        inCompiler->emitSemanticError (GALGAS_location::constructor_here (inCompiler  COMMA_SOURCE_FILE ("gtl_functions.galgas", 287)), GALGAS_string ("rand: than max"), fixItArray4  COMMA_SOURCE_FILE ("gtl_functions.galgas", 287)) ;
+        result_result.drop () ; // Release error dropped variable
+      }
+    }else if (kBoolFalse == test_1) {
+      TC_Array <C_FixItDescription> fixItArray5 ;
+      inCompiler->emitSemanticError (GALGAS_location::constructor_here (inCompiler  COMMA_SOURCE_FILE ("gtl_functions.galgas", 290)), GALGAS_string ("rand: max argument should be an unsigned 32 bits integer"), fixItArray5  COMMA_SOURCE_FILE ("gtl_functions.galgas", 290)) ;
+      result_result.drop () ; // Release error dropped variable
+    }
+  }else if (kBoolFalse == test_0) {
+    TC_Array <C_FixItDescription> fixItArray6 ;
+    inCompiler->emitSemanticError (GALGAS_location::constructor_here (inCompiler  COMMA_SOURCE_FILE ("gtl_functions.galgas", 293)), GALGAS_string ("rand: min argument should be an unsigned 32 bits integer"), fixItArray6  COMMA_SOURCE_FILE ("gtl_functions.galgas", 293)) ;
+    result_result.drop () ; // Release error dropped variable
+  }
+//---
+  return result_result ;
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------*
+//  Function introspection                                                                                             *
+//---------------------------------------------------------------------------------------------------------------------*
+
+static const C_galgas_type_descriptor * functionArgs_random [3] = {
+  & kTypeDescriptor_GALGAS_bigint,
+  & kTypeDescriptor_GALGAS_bigint,
+  NULL
+} ;
+
+//---------------------------------------------------------------------------------------------------------------------*
+
+static GALGAS_object functionWithGenericHeader_random (C_Compiler * inCompiler,
+                                                       const cObjectArray & inEffectiveParameterArray,
+                                                       const GALGAS_location & /* inErrorLocation */
+                                                       COMMA_LOCATION_ARGS) {
+  const GALGAS_bigint operand0 = GALGAS_bigint::extractObject (inEffectiveParameterArray.objectAtIndex (0 COMMA_HERE),
+                                                               inCompiler
+                                                               COMMA_THERE) ;
+  const GALGAS_bigint operand1 = GALGAS_bigint::extractObject (inEffectiveParameterArray.objectAtIndex (1 COMMA_HERE),
+                                                               inCompiler
+                                                               COMMA_THERE) ;
+  return function_random (operand0,
+                          operand1,
+                          inCompiler
+                          COMMA_THERE).getter_object (THERE) ;
 }
 
 //---------------------------------------------------------------------------------------------------------------------*
 
-static void defineExtensionMethod_gtlLetUnconstructedInstruction_execute (void) {
-  enterExtensionMethod_execute (kTypeDescriptor_GALGAS_gtlLetUnconstructedInstruction.mSlotID,
-                                extensionMethod_gtlLetUnconstructedInstruction_execute) ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-C_PrologueEpilogue gMethod_gtlLetUnconstructedInstruction_execute (defineExtensionMethod_gtlLetUnconstructedInstruction_execute, NULL) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                              Overriding extension method '@gtlLetInstruction execute'                               *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-static void extensionMethod_gtlLetInstruction_execute (const cPtr_gtlInstruction * inObject,
-                                                       GALGAS_gtlContext & ioArgument_context,
-                                                       GALGAS_gtlData & ioArgument_vars,
-                                                       GALGAS_library & ioArgument_lib,
-                                                       GALGAS_string & /* ioArgument_outputString */,
-                                                       C_Compiler * inCompiler
-                                                       COMMA_UNUSED_LOCATION_ARGS) {
-  const cPtr_gtlLetInstruction * object = (const cPtr_gtlLetInstruction *) inObject ;
-  macroValidSharedObject (object, cPtr_gtlLetInstruction) ;
-  extensionMethod_set (object->mProperty_lValue, ioArgument_context, ioArgument_vars, ioArgument_lib, callExtensionGetter_eval ((const cPtr_gtlExpression *) object->mProperty_rValue.ptr (), ioArgument_context, ioArgument_vars, ioArgument_lib, inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 149)), inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 149)) ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-static void defineExtensionMethod_gtlLetInstruction_execute (void) {
-  enterExtensionMethod_execute (kTypeDescriptor_GALGAS_gtlLetInstruction.mSlotID,
-                                extensionMethod_gtlLetInstruction_execute) ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-C_PrologueEpilogue gMethod_gtlLetInstruction_execute (defineExtensionMethod_gtlLetInstruction_execute, NULL) ;
-
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                             Overriding extension method '@gtlLetAddInstruction execute'                             *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
-
-static void extensionMethod_gtlLetAddInstruction_execute (const cPtr_gtlInstruction * inObject,
-                                                          GALGAS_gtlContext & ioArgument_context,
-                                                          GALGAS_gtlData & ioArgument_vars,
-                                                          GALGAS_library & ioArgument_lib,
-                                                          GALGAS_string & /* ioArgument_outputString */,
-                                                          C_Compiler * inCompiler
-                                                          COMMA_UNUSED_LOCATION_ARGS) {
-  const cPtr_gtlLetAddInstruction * object = (const cPtr_gtlLetAddInstruction *) inObject ;
-  macroValidSharedObject (object, cPtr_gtlLetAddInstruction) ;
-  extensionMethod_set (object->mProperty_lValue, ioArgument_context, ioArgument_vars, ioArgument_lib, callExtensionGetter_addOp ((const cPtr_gtlData *) extensionGetter_get (object->mProperty_lValue, ioArgument_context, ioArgument_vars, ioArgument_lib, inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 167)).ptr (), callExtensionGetter_eval ((const cPtr_gtlExpression *) object->mProperty_rValue.ptr (), ioArgument_context, ioArgument_vars, ioArgument_lib, inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 168)), inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 167)), inCompiler COMMA_SOURCE_FILE ("gtl_instructions.galgas", 163)) ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-static void defineExtensionMethod_gtlLetAddInstruction_execute (void) {
-  enterExtensionMethod_execute (kTypeDescriptor_GALGAS_gtlLetAddInstruction.mSlotID,
-                                extensionMethod_gtlLetAddInstruction_execute) ;
-}
-
-//---------------------------------------------------------------------------------------------------------------------*
-
-C_PrologueEpilogue gMethod_gtlLetAddInstruction_execute (defineExtensionMethod_gtlLetAddInstruction_execute, NULL) ;
+C_galgas_function_descriptor functionDescriptor_random ("random",
+                                                        functionWithGenericHeader_random,
+                                                        & kTypeDescriptor_GALGAS_bigint,
+                                                        2,
+                                                        functionArgs_random) ;
 

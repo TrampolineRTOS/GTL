@@ -1,5 +1,4 @@
-#ifndef all_2D_declarations_2D__36__ENTITIES_DEFINED
-#define all_2D_declarations_2D__36__ENTITIES_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -198,4 +197,3 @@ class GALGAS_string function_darkcyan (class C_Compiler * inCompiler
 class GALGAS_string function_white (class C_Compiler * inCompiler
                                     COMMA_LOCATION_ARGS) ;
 
-#endif

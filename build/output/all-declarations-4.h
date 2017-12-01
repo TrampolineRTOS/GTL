@@ -1,5 +1,4 @@
-#ifndef all_2D_declarations_2D__34__ENTITIES_DEFINED
-#define all_2D_declarations_2D__34__ENTITIES_DEFINED
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------*
 
@@ -225,4 +224,3 @@ class GALGAS_lstring function_lstring (class GALGAS_string inArgument0,
                                        class C_Compiler * inCompiler
                                        COMMA_LOCATION_ARGS) ;
 
-#endif

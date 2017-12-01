@@ -41,8 +41,9 @@ see https://www.gnu.org/licenses/.  */
 
 // http://nadeausoftware.com/articles/2011/12/c_c_tip_how_list_compiler_predefined_macros
 
-#ifndef __GMP_IMPL_H__
-#define __GMP_IMPL_H__
+#pragma once
+//#ifndef __GMP_IMPL_H__
+//#define __GMP_IMPL_H__
 
 #if defined (__clang_major__) && (__clang_major__ > 3)
   #pragma GCC diagnostic ignored "-Wsign-conversion"
@@ -5265,4 +5266,4 @@ extern const struct doprnt_funs_t  __gmp_asprintf_funs_noformat;
 
 #endif /* __cplusplus */
 
-#endif /* __GMP_IMPL_H__ */
+//#endif /* __GMP_IMPL_H__ */

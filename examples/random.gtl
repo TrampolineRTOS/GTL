@@ -1,0 +1,7 @@
+%
+
+seed 3
+
+loop i from 1 to 100 do
+  println random(3,1000)
+end loop
