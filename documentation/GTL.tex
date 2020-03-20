@@ -1247,6 +1247,10 @@ The \gtltype{string} data type supports the following operators:
 
 \subsection{The \texttt{string} getters}
 
+\subsubsection{The \texttt{unsigned} getter}
+
+\gtlinline{unsigned} interprets the content of the \gtlinline{string} as an unsigned integer and returns it. 
+
 \subsubsection{The \texttt{charAtIndex} getter}
 
 \gtlinline{charAtIndex} takes one int argument, the \gtlarg{index}. It returns a char, the character at index \gtlarg{index}. The first char is at index 0, the last char is at index length of the string minus 1. If \gtlarg{index} is greater or equal than the length of the target, a run time error occurs.
