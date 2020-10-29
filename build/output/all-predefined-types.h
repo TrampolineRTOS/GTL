@@ -5,7 +5,7 @@
 
 #pragma once
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 #include "strings/C_String.h"
 #include "time/C_Timer.h"
@@ -29,7 +29,7 @@
 #include "utilities/C_PrologueEpilogue.h"
 #include "utilities/C_BigInt.h"
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 class C_Compiler ;
 class GALGAS_string ;
@@ -52,24 +52,23 @@ class GALGAS_sint ;
 class GALGAS_timer ;
 class GALGAS_uint64 ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @string type                                                     *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @string type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 AC_OutputStream & operator << (AC_OutputStream & inStream,
                                const GALGAS_string & inString) ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 AC_OutputStream & operator << (AC_OutputStream & inStream,
                                const GALGAS_lstring & inString) ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
-class GALGAS_string : public AC_GALGAS_root
- {
+class GALGAS_string : public AC_GALGAS_root {
 //--------------------------------- Private data members
   private : bool mIsValid ;
   private : C_String mString ;
@@ -125,6 +124,13 @@ class GALGAS_string : public AC_GALGAS_root
 
   public : static class GALGAS_string constructor_retrieveAndResetTemplateString (C_Compiler * inCompiler
                                                                                   COMMA_LOCATION_ARGS) ;
+
+  public : static class GALGAS_string constructor_separatorString (C_Compiler * inCompiler
+                                                                   COMMA_LOCATION_ARGS) ;
+
+  public : static class GALGAS_string constructor_stringByRepeatingString (const class GALGAS_string & inOperand0,
+                                                                           const class GALGAS_uint & inOperand1
+                                                                           COMMA_LOCATION_ARGS) ;
 
   public : static class GALGAS_string constructor_stringWithContentsOfFile (const class GALGAS_string & inOperand0,
                                                                             class C_Compiler * inCompiler
@@ -278,6 +284,8 @@ class GALGAS_string : public AC_GALGAS_root
                                                                              COMMA_LOCATION_ARGS) const ;
 
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_assemblerRepresentation (LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_cStringRepresentation (LOCATION_ARGS) const ;
 
   public : VIRTUAL_IN_DEBUG class GALGAS_uint getter_capacity (LOCATION_ARGS) const ;
 
@@ -449,8 +457,15 @@ class GALGAS_string : public AC_GALGAS_root
 
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_utf_38_Representation (LOCATION_ARGS) const ;
 
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_utf_38_RepresentationEnclosedWithin (const class GALGAS_char & constinOperand0
+                                                                                            COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_utf_38_RepresentationWithUnicodeEscaping (LOCATION_ARGS) const ;
+
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_utf_38_RepresentationWithoutDelimiters (LOCATION_ARGS) const ;
 
+
+//--------------------------------- Optional Methods
 
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
@@ -458,19 +473,19 @@ class GALGAS_string : public AC_GALGAS_root
 } ; // End of GALGAS_string class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_string ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                     @bool type                                                      *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//@bool type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 typedef enum {kBoolNotValid, kBoolFalse, kBoolTrue} enumGalgasBool ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_bool : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -552,21 +567,23 @@ class GALGAS_bool : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_uint_36__34_ getter_uint_36__34_ (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_bool class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_bool ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                   @stringset type                                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @stringset type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_stringset : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -580,7 +597,7 @@ class GALGAS_stringset : public AC_GALGAS_root {
   public : GALGAS_stringset (void) ;
 
 //--------------------------------- Destructor (virtual in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_stringset (void) ;
+  public : virtual ~ GALGAS_stringset (void) ;
 
 //--------------------------------- In debug mode : check method
   protected : void checkStringset (LOCATION_ARGS) const ;
@@ -661,6 +678,8 @@ class GALGAS_stringset : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_stringlist getter_stringList (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Enumeration helper methods
@@ -672,9 +691,9 @@ class GALGAS_stringset : public AC_GALGAS_root {
  
 } ; // End of GALGAS_stringset class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_stringset : public cGenericAbstractEnumerator {
   public : cEnumerator_stringset (const GALGAS_stringset & inEnumeratedObject,
@@ -686,18 +705,17 @@ class cEnumerator_stringset : public cGenericAbstractEnumerator {
   public : class GALGAS_string current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_stringset ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                     @type type                                                      *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @type type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
-class GALGAS_type : public AC_GALGAS_root
- {
+class GALGAS_type : public AC_GALGAS_root {
 //--------------------------------- Private data members
   private : const C_galgas_type_descriptor * mTypeDescriptor ;
 
@@ -710,7 +728,7 @@ class GALGAS_type : public AC_GALGAS_root
   public : GALGAS_type (void) ;
 
 //--------------------------------- Destructor (virtual in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_type (void) ;
+  public : virtual ~ GALGAS_type (void) ;
 
 //--------------------------------- Handle copy
   public : GALGAS_type (const GALGAS_type & inSource) ;
@@ -752,26 +770,28 @@ class GALGAS_type : public AC_GALGAS_root
                                                                  COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_type class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_type ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                   @location type                                                    *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @location type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 #include "galgas2/C_LocationInSource.h"
 #include "galgas2/C_SourceTextInString.h"
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_location : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -810,6 +830,13 @@ class GALGAS_location : public AC_GALGAS_root {
   public : static class GALGAS_location constructor_here (C_Compiler * inCompiler
                                                           COMMA_LOCATION_ARGS) ;
 
+  public : static class GALGAS_location constructor_location (const class GALGAS_string & inOperand0,
+                                                              const class GALGAS_uint & inOperand1,
+                                                              const class GALGAS_uint & inOperand2,
+                                                              const class GALGAS_uint & inOperand3,
+                                                              class C_Compiler * inCompiler
+                                                              COMMA_LOCATION_ARGS) ;
+
   public : static class GALGAS_location constructor_next (C_Compiler * inCompiler
                                                           COMMA_LOCATION_ARGS) ;
 
@@ -845,21 +872,23 @@ class GALGAS_location : public AC_GALGAS_root {
                                                                        COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_location class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_location ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                     @char type                                                      *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @char type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_char : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -951,6 +980,10 @@ class GALGAS_char : public AC_GALGAS_root {
 
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_utf_33__32_CharConstantRepresentation (LOCATION_ARGS) const ;
 
+  public : VIRTUAL_IN_DEBUG class GALGAS_uint getter_utf_38_Length (LOCATION_ARGS) const ;
+
+
+//--------------------------------- Optional Methods
 
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
@@ -958,15 +991,15 @@ class GALGAS_char : public AC_GALGAS_root {
 } ; // End of GALGAS_char class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_char ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @bigint type                                                     *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @bigint type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_bigint : public AC_GALGAS_root {
 //--------------------------------- Private properties
@@ -975,6 +1008,7 @@ class GALGAS_bigint : public AC_GALGAS_root {
 
 //--------------------------------- Accessors
   public : inline bool isValid (void) const { return mIsValid ; }
+  public : inline C_BigInt bigintValue (void) const { return mValue ; }
   public : VIRTUAL_IN_DEBUG void drop (void) ;
 
 //--------------------------------- Default constructor
@@ -1001,10 +1035,20 @@ class GALGAS_bigint : public AC_GALGAS_root {
   public : static class GALGAS_bigint constructor_zero (LOCATION_ARGS) ;
 
 //--------------------------------- << and >> shift operators
-  public : VIRTUAL_IN_DEBUG GALGAS_bigint left_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_bigint left_shift_operation (const GALGAS_uint inShiftOperand,
+                                                                class C_Compiler * inCompiler
                                                                 COMMA_LOCATION_ARGS) const ;
 
-  public : VIRTUAL_IN_DEBUG GALGAS_bigint right_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_bigint left_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                                class C_Compiler * inCompiler
+                                                                COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_bigint right_shift_operation (const GALGAS_uint inShiftOperand,
+                                                                 class C_Compiler * inCompiler
+                                                                 COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_bigint right_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                                 class C_Compiler * inCompiler
                                                                  COMMA_LOCATION_ARGS) const ;
 
 //--------------------------------- & operator
@@ -1126,6 +1170,11 @@ class GALGAS_bigint : public AC_GALGAS_root {
 
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_hexString (LOCATION_ARGS) const ;
 
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_hexStringSeparatedBy (const class GALGAS_char & constinOperand0,
+                                                                             const class GALGAS_uint & constinOperand1,
+                                                                             C_Compiler * inCompiler
+                                                                             COMMA_LOCATION_ARGS) const ;
+
   public : VIRTUAL_IN_DEBUG class GALGAS_bool getter_isZero (LOCATION_ARGS) const ;
 
   public : VIRTUAL_IN_DEBUG class GALGAS_sint getter_sign (LOCATION_ARGS) const ;
@@ -1150,21 +1199,23 @@ class GALGAS_bigint : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_xString (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_bigint class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_bigint ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @double type                                                     *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//  @double type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_double : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -1312,21 +1363,23 @@ class GALGAS_double : public AC_GALGAS_root {
                                                                            COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_double class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_double ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @sint64 type                                                     *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @sint64 type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_sint_36__34_ : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -1363,10 +1416,20 @@ class GALGAS_sint_36__34_ : public AC_GALGAS_root {
   public : static class GALGAS_sint_36__34_ constructor_min (LOCATION_ARGS) ;
 
 //--------------------------------- << and >> shift operators
-  public : VIRTUAL_IN_DEBUG GALGAS_sint_36__34_ left_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_sint_36__34_ left_shift_operation (const GALGAS_uint inShiftOperand,
+                                                                      class C_Compiler * inCompiler
                                                                       COMMA_LOCATION_ARGS) const ;
 
-  public : VIRTUAL_IN_DEBUG GALGAS_sint_36__34_ right_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_sint_36__34_ left_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                                      class C_Compiler * inCompiler
+                                                                      COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_sint_36__34_ right_shift_operation (const GALGAS_uint inShiftOperand,
+                                                                       class C_Compiler * inCompiler
+                                                                       COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_sint_36__34_ right_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                                       class C_Compiler * inCompiler
                                                                        COMMA_LOCATION_ARGS) const ;
 
 //--------------------------------- += operator (with expression)
@@ -1490,6 +1553,11 @@ class GALGAS_sint_36__34_ : public AC_GALGAS_root {
 
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_hexString (LOCATION_ARGS) const ;
 
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_hexStringSeparatedBy (const class GALGAS_char & constinOperand0,
+                                                                             const class GALGAS_uint & constinOperand1,
+                                                                             C_Compiler * inCompiler
+                                                                             COMMA_LOCATION_ARGS) const ;
+
   public : VIRTUAL_IN_DEBUG class GALGAS_sint getter_sint (C_Compiler * inCompiler
                                                            COMMA_LOCATION_ARGS) const ;
 
@@ -1504,21 +1572,23 @@ class GALGAS_sint_36__34_ : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_xString (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_sint_36__34_ class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_sint_36__34_ ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                     @uint type                                                      *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @uint type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_uint : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -1568,10 +1638,20 @@ class GALGAS_uint : public AC_GALGAS_root {
   public : static class GALGAS_uint constructor_warningCount (LOCATION_ARGS) ;
 
 //--------------------------------- << and >> shift operators
-  public : VIRTUAL_IN_DEBUG GALGAS_uint left_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_uint left_shift_operation (const GALGAS_uint inShiftOperand,
+                                                              class C_Compiler * inCompiler
                                                               COMMA_LOCATION_ARGS) const ;
 
-  public : VIRTUAL_IN_DEBUG GALGAS_uint right_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_uint left_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                              class C_Compiler * inCompiler
+                                                              COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_uint right_shift_operation (const GALGAS_uint inShiftOperand,
+                                                               class C_Compiler * inCompiler
+                                                               COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_uint right_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                               class C_Compiler * inCompiler
                                                                COMMA_LOCATION_ARGS) const ;
 
 //--------------------------------- += operator (with expression)
@@ -1693,6 +1773,11 @@ class GALGAS_uint : public AC_GALGAS_root {
 
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_hexString (LOCATION_ARGS) const ;
 
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_hexStringSeparatedBy (const class GALGAS_char & constinOperand0,
+                                                                             const class GALGAS_uint & constinOperand1,
+                                                                             C_Compiler * inCompiler
+                                                                             COMMA_LOCATION_ARGS) const ;
+
   public : VIRTUAL_IN_DEBUG class GALGAS_bool getter_isInRange (const class GALGAS_range & constinOperand0
                                                                 COMMA_LOCATION_ARGS) const ;
 
@@ -1717,21 +1802,23 @@ class GALGAS_uint : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_xString (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_uint class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_uint ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                  @application type                                                  *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//@application type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_application : public AC_GALGAS_root {
 //--------------------------------- Accessors
@@ -1742,7 +1829,7 @@ class GALGAS_application : public AC_GALGAS_root {
   public : GALGAS_application (void) ;
 
 //--------------------------------- Destructor (virtual in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_application (void) ;
+  public : virtual ~ GALGAS_application (void) ;
 
 //--------------------------------- Handle copy
   public : GALGAS_application (const GALGAS_application & inSource) ;
@@ -1773,6 +1860,10 @@ class GALGAS_application : public AC_GALGAS_root {
 
   public : static class GALGAS__32_stringlist constructor_boolOptionNameList (LOCATION_ARGS) ;
 
+  public : static class GALGAS_bool constructor_boolOptionValue (const class GALGAS_string & inOperand0,
+                                                                 const class GALGAS_string & inOperand1
+                                                                 COMMA_LOCATION_ARGS) ;
+
   public : static class GALGAS_string constructor_commandLineArgumentAtIndex (const class GALGAS_uint & inOperand0,
                                                                               class C_Compiler * inCompiler
                                                                               COMMA_LOCATION_ARGS) ;
@@ -1802,6 +1893,10 @@ class GALGAS_application : public AC_GALGAS_root {
 
   public : static class GALGAS__32_stringlist constructor_stringOptionNameList (LOCATION_ARGS) ;
 
+  public : static class GALGAS_string constructor_stringOptionValue (const class GALGAS_string & inOperand0,
+                                                                     const class GALGAS_string & inOperand1
+                                                                     COMMA_LOCATION_ARGS) ;
+
   public : static class GALGAS_string constructor_system (LOCATION_ARGS) ;
 
   public : static class GALGAS_string constructor_uintOptionCommentString (const class GALGAS_string & inOperand0,
@@ -1818,6 +1913,10 @@ class GALGAS_application : public AC_GALGAS_root {
 
   public : static class GALGAS__32_stringlist constructor_uintOptionNameList (LOCATION_ARGS) ;
 
+  public : static class GALGAS_uint constructor_uintOptionValue (const class GALGAS_string & inOperand0,
+                                                                 const class GALGAS_string & inOperand1
+                                                                 COMMA_LOCATION_ARGS) ;
+
   public : static class GALGAS_bool constructor_verboseOutput (LOCATION_ARGS) ;
 
 //--------------------------------- Implementation of getter 'description'
@@ -1830,8 +1929,25 @@ class GALGAS_application : public AC_GALGAS_root {
 
 //--------------------------------- Instance Methods
 //--------------------------------- Class Methods
+  public : static void class_method_setBoolOptionValue (class GALGAS_string constinArgument0,
+                                                        class GALGAS_string constinArgument1,
+                                                        class GALGAS_bool constinArgument2
+                                                        COMMA_LOCATION_ARGS) ;
+
+  public : static void class_method_setStringOptionValue (class GALGAS_string constinArgument0,
+                                                          class GALGAS_string constinArgument1,
+                                                          class GALGAS_string constinArgument2
+                                                          COMMA_LOCATION_ARGS) ;
+
+  public : static void class_method_setUIntOptionValue (class GALGAS_string constinArgument0,
+                                                        class GALGAS_string constinArgument1,
+                                                        class GALGAS_uint constinArgument2
+                                                        COMMA_LOCATION_ARGS) ;
+
 
 //--------------------------------- Getters
+
+//--------------------------------- Optional Methods
 
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
@@ -1839,19 +1955,19 @@ class GALGAS_application : public AC_GALGAS_root {
 } ; // End of GALGAS_application class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_application ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                   @binaryset type                                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// @binaryset type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 #include "bdd/C_BDD.h"
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_binaryset : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -1965,10 +2081,20 @@ class GALGAS_binaryset : public AC_GALGAS_root {
   public : static class GALGAS_binaryset constructor_fullBinarySet (LOCATION_ARGS) ;
 
 //--------------------------------- << and >> shift operators
-  public : VIRTUAL_IN_DEBUG GALGAS_binaryset left_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_binaryset left_shift_operation (const GALGAS_uint inShiftOperand,
+                                                                   class C_Compiler * inCompiler
                                                                    COMMA_LOCATION_ARGS) const ;
 
-  public : VIRTUAL_IN_DEBUG GALGAS_binaryset right_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_binaryset left_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                                   class C_Compiler * inCompiler
+                                                                   COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_binaryset right_shift_operation (const GALGAS_uint inShiftOperand,
+                                                                    class C_Compiler * inCompiler
+                                                                    COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_binaryset right_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                                    class C_Compiler * inCompiler
                                                                     COMMA_LOCATION_ARGS) const ;
 
 //--------------------------------- & operator
@@ -2142,21 +2268,23 @@ class GALGAS_binaryset : public AC_GALGAS_root {
                                                                          COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_binaryset class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_binaryset ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                     @data type                                                      *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @data type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_data : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -2245,6 +2373,8 @@ class GALGAS_data : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_uint getter_length (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Enumeration helper methods
@@ -2256,9 +2386,9 @@ class GALGAS_data : public AC_GALGAS_root {
  
 } ; // End of GALGAS_data class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_data : public cGenericAbstractEnumerator {
   public : cEnumerator_data (const GALGAS_data & inEnumeratedObject,
@@ -2270,15 +2400,15 @@ class cEnumerator_data : public cGenericAbstractEnumerator {
   public : class GALGAS_uint current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_data ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                  @filewrapper type                                                  *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @filewrapper type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class cRegularFileWrapper {
   public : const char * mName ;
@@ -2299,7 +2429,7 @@ class cRegularFileWrapper {
   private : cRegularFileWrapper & operator = (const cRegularFileWrapper &) ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 class cDirectoryWrapper {
   public : const char * mDirectoryName ;
@@ -2320,7 +2450,7 @@ class cDirectoryWrapper {
   private : cDirectoryWrapper & operator = (const cDirectoryWrapper &) ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_filewrapper : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -2411,25 +2541,27 @@ class GALGAS_filewrapper : public AC_GALGAS_root {
                                                                             COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_filewrapper class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_filewrapper ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                   @function type                                                    *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @function type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class C_galgas_function_descriptor ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_function : public AC_GALGAS_root {
 //--------------------------------- Private data member
@@ -2444,7 +2576,7 @@ class GALGAS_function : public AC_GALGAS_root {
   public : GALGAS_function (void) ;
 
 //--------------------------------- Destructor (virtual in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_function (void) ;
+  public : virtual ~ GALGAS_function (void) ;
 
 //--------------------------------- Handle copy
   public : GALGAS_function (const GALGAS_function & inSource) ;
@@ -2496,25 +2628,27 @@ class GALGAS_function : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_type getter_resultType (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_function class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_function ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @object type                                                     *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @object type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class cPtr_object ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_object : public AC_GALGAS_root {
 //--------------------------------- Private data member
@@ -2532,7 +2666,7 @@ class GALGAS_object : public AC_GALGAS_root {
                           COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Destructor (virtual in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_object (void) ;
+  public : virtual ~ GALGAS_object (void) ;
 
 //--------------------------------- Handle copy
   public : GALGAS_object (const GALGAS_object & inSource) ;
@@ -2568,21 +2702,23 @@ class GALGAS_object : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_type getter_objectStaticType (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_object class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_object ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                     @sint type                                                      *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @sint type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_sint : public AC_GALGAS_root {
 //--------------------------------- Private data members
@@ -2619,10 +2755,20 @@ class GALGAS_sint : public AC_GALGAS_root {
   public : static class GALGAS_sint constructor_min (LOCATION_ARGS) ;
 
 //--------------------------------- << and >> shift operators
-  public : VIRTUAL_IN_DEBUG GALGAS_sint left_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_sint left_shift_operation (const GALGAS_uint inShiftOperand,
+                                                              class C_Compiler * inCompiler
                                                               COMMA_LOCATION_ARGS) const ;
 
-  public : VIRTUAL_IN_DEBUG GALGAS_sint right_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_sint left_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                              class C_Compiler * inCompiler
+                                                              COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_sint right_shift_operation (const GALGAS_uint inShiftOperand,
+                                                               class C_Compiler * inCompiler
+                                                               COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_sint right_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                               class C_Compiler * inCompiler
                                                                COMMA_LOCATION_ARGS) const ;
 
 //--------------------------------- += operator (with expression)
@@ -2746,6 +2892,11 @@ class GALGAS_sint : public AC_GALGAS_root {
 
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_hexString (LOCATION_ARGS) const ;
 
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_hexStringSeparatedBy (const class GALGAS_char & constinOperand0,
+                                                                             const class GALGAS_uint & constinOperand1,
+                                                                             C_Compiler * inCompiler
+                                                                             COMMA_LOCATION_ARGS) const ;
+
   public : VIRTUAL_IN_DEBUG class GALGAS_sint_36__34_ getter_sint_36__34_ (LOCATION_ARGS) const ;
 
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_string (LOCATION_ARGS) const ;
@@ -2759,21 +2910,23 @@ class GALGAS_sint : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_xString (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_sint class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_sint ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                     @timer type                                                     *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//   @timer type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_timer : public AC_GALGAS_root {
 //--------------------------------- Private properties
@@ -2823,24 +2976,25 @@ class GALGAS_timer : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_string (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_timer class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_timer ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @uint64 type                                                     *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+//  @uint64 type
+//
+//----------------------------------------------------------------------------------------------------------------------
 
-class GALGAS_uint_36__34_ : public AC_GALGAS_root
- {
+class GALGAS_uint_36__34_ : public AC_GALGAS_root {
 //--------------------------------- Private data members
   private : bool mIsValid ;
   private : uint64_t mUInt64Value ;
@@ -2885,10 +3039,20 @@ class GALGAS_uint_36__34_ : public AC_GALGAS_root
                                                                                    COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- << and >> shift operators
-  public : VIRTUAL_IN_DEBUG GALGAS_uint_36__34_ left_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_uint_36__34_ left_shift_operation (const GALGAS_uint inShiftOperand,
+                                                                      class C_Compiler * inCompiler
                                                                       COMMA_LOCATION_ARGS) const ;
 
-  public : VIRTUAL_IN_DEBUG GALGAS_uint_36__34_ right_shift_operation (const GALGAS_uint inShiftOperand
+  public : VIRTUAL_IN_DEBUG GALGAS_uint_36__34_ left_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                                      class C_Compiler * inCompiler
+                                                                      COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_uint_36__34_ right_shift_operation (const GALGAS_uint inShiftOperand,
+                                                                       class C_Compiler * inCompiler
+                                                                       COMMA_LOCATION_ARGS) const ;
+
+  public : VIRTUAL_IN_DEBUG GALGAS_uint_36__34_ right_shift_operation (const GALGAS_bigint inShiftOperand,
+                                                                       class C_Compiler * inCompiler
                                                                        COMMA_LOCATION_ARGS) const ;
 
 //--------------------------------- += operator (with expression)
@@ -3007,6 +3171,11 @@ class GALGAS_uint_36__34_ : public AC_GALGAS_root
 
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_hexString (LOCATION_ARGS) const ;
 
+  public : VIRTUAL_IN_DEBUG class GALGAS_string getter_hexStringSeparatedBy (const class GALGAS_char & constinOperand0,
+                                                                             const class GALGAS_uint & constinOperand1,
+                                                                             C_Compiler * inCompiler
+                                                                             COMMA_LOCATION_ARGS) const ;
+
   public : VIRTUAL_IN_DEBUG class GALGAS_sint getter_sint (C_Compiler * inCompiler
                                                            COMMA_LOCATION_ARGS) const ;
 
@@ -3026,21 +3195,23 @@ class GALGAS_uint_36__34_ : public AC_GALGAS_root
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_xString (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_uint_36__34_ class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_uint_36__34_ ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                  @stringlist list                                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @stringlist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_stringlist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -3085,6 +3256,10 @@ class GALGAS_stringlist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS_stringlist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_string constinArgument0,
                                                        class GALGAS_uint constinArgument1,
                                                        C_Compiler * inCompiler
@@ -3138,6 +3313,8 @@ class GALGAS_stringlist : public AC_GALGAS_list {
                                                                              COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -3146,9 +3323,9 @@ class GALGAS_stringlist : public AC_GALGAS_list {
  
 } ; // End of GALGAS_stringlist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_stringlist : public cGenericAbstractEnumerator {
   public : cEnumerator_stringlist (const GALGAS_stringlist & inEnumeratedObject,
@@ -3160,15 +3337,15 @@ class cEnumerator_stringlist : public cGenericAbstractEnumerator {
   public : class GALGAS_stringlist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_stringlist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                   @lbigint struct                                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @lbigint struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_lbigint : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -3187,7 +3364,7 @@ class GALGAS_lbigint : public AC_GALGAS_root {
   public : GALGAS_lbigint (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_lbigint (void) ;
+  public : virtual ~ GALGAS_lbigint (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_lbigint (const GALGAS_bigint & in_bigint,
@@ -3225,21 +3402,23 @@ class GALGAS_lbigint : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_location getter_location (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_lbigint class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_lbigint ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                 @functionlist list                                                  *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @functionlist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_functionlist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -3284,6 +3463,10 @@ class GALGAS_functionlist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS_functionlist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_function constinArgument0,
                                                        class GALGAS_uint constinArgument1,
                                                        C_Compiler * inCompiler
@@ -3337,6 +3520,8 @@ class GALGAS_functionlist : public AC_GALGAS_list {
                                                                                COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -3345,9 +3530,9 @@ class GALGAS_functionlist : public AC_GALGAS_list {
  
 } ; // End of GALGAS_functionlist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_functionlist : public cGenericAbstractEnumerator {
   public : cEnumerator_functionlist (const GALGAS_functionlist & inEnumeratedObject,
@@ -3359,15 +3544,15 @@ class cEnumerator_functionlist : public cGenericAbstractEnumerator {
   public : class GALGAS_functionlist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_functionlist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                   @luintlist list                                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @luintlist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_luintlist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -3412,6 +3597,10 @@ class GALGAS_luintlist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS_luintlist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_luint constinArgument0,
                                                        class GALGAS_uint constinArgument1,
                                                        C_Compiler * inCompiler
@@ -3465,6 +3654,8 @@ class GALGAS_luintlist : public AC_GALGAS_list {
                                                                             COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -3473,9 +3664,9 @@ class GALGAS_luintlist : public AC_GALGAS_list {
  
 } ; // End of GALGAS_luintlist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_luintlist : public cGenericAbstractEnumerator {
   public : cEnumerator_luintlist (const GALGAS_luintlist & inEnumeratedObject,
@@ -3487,15 +3678,15 @@ class cEnumerator_luintlist : public cGenericAbstractEnumerator {
   public : class GALGAS_luintlist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_luintlist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @luint struct                                                    *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @luint struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_luint : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -3514,7 +3705,7 @@ class GALGAS_luint : public AC_GALGAS_root {
   public : GALGAS_luint (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_luint (void) ;
+  public : virtual ~ GALGAS_luint (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_luint (const GALGAS_uint & in_uint,
@@ -3552,21 +3743,23 @@ class GALGAS_luint : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_uint getter_uint (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_luint class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_luint ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                  @lstringlist list                                                  *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @lstringlist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_lstringlist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -3611,6 +3804,10 @@ class GALGAS_lstringlist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS_lstringlist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_lstring constinArgument0,
                                                        class GALGAS_uint constinArgument1,
                                                        C_Compiler * inCompiler
@@ -3664,6 +3861,8 @@ class GALGAS_lstringlist : public AC_GALGAS_list {
                                                                               COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -3672,9 +3871,9 @@ class GALGAS_lstringlist : public AC_GALGAS_list {
  
 } ; // End of GALGAS_lstringlist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_lstringlist : public cGenericAbstractEnumerator {
   public : cEnumerator_lstringlist (const GALGAS_lstringlist & inEnumeratedObject,
@@ -3686,15 +3885,15 @@ class cEnumerator_lstringlist : public cGenericAbstractEnumerator {
   public : class GALGAS_lstringlist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_lstringlist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                  @objectlist list                                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @objectlist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_objectlist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -3739,6 +3938,10 @@ class GALGAS_objectlist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS_objectlist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_object constinArgument0,
                                                        class GALGAS_uint constinArgument1,
                                                        C_Compiler * inCompiler
@@ -3792,6 +3995,8 @@ class GALGAS_objectlist : public AC_GALGAS_list {
                                                                              COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -3800,9 +4005,9 @@ class GALGAS_objectlist : public AC_GALGAS_list {
  
 } ; // End of GALGAS_objectlist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_objectlist : public cGenericAbstractEnumerator {
   public : cEnumerator_objectlist (const GALGAS_objectlist & inEnumeratedObject,
@@ -3814,15 +4019,15 @@ class cEnumerator_objectlist : public cGenericAbstractEnumerator {
   public : class GALGAS_objectlist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_objectlist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                   @typelist list                                                    *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @typelist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_typelist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -3867,6 +4072,10 @@ class GALGAS_typelist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS_typelist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_type constinArgument0,
                                                        class GALGAS_uint constinArgument1,
                                                        C_Compiler * inCompiler
@@ -3920,6 +4129,8 @@ class GALGAS_typelist : public AC_GALGAS_list {
                                                                            COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -3928,9 +4139,9 @@ class GALGAS_typelist : public AC_GALGAS_list {
  
 } ; // End of GALGAS_typelist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_typelist : public cGenericAbstractEnumerator {
   public : cEnumerator_typelist (const GALGAS_typelist & inEnumeratedObject,
@@ -3942,15 +4153,15 @@ class cEnumerator_typelist : public cGenericAbstractEnumerator {
   public : class GALGAS_typelist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_typelist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                   @uintlist list                                                    *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @uintlist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_uintlist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -3995,6 +4206,10 @@ class GALGAS_uintlist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS_uintlist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_uint constinArgument0,
                                                        class GALGAS_uint constinArgument1,
                                                        C_Compiler * inCompiler
@@ -4048,6 +4263,8 @@ class GALGAS_uintlist : public AC_GALGAS_list {
                                                                            COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -4056,9 +4273,9 @@ class GALGAS_uintlist : public AC_GALGAS_list {
  
 } ; // End of GALGAS_uintlist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_uintlist : public cGenericAbstractEnumerator {
   public : cEnumerator_uintlist (const GALGAS_uintlist & inEnumeratedObject,
@@ -4070,15 +4287,15 @@ class cEnumerator_uintlist : public cGenericAbstractEnumerator {
   public : class GALGAS_uintlist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_uintlist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                  @uint64list list                                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @uint64list list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_uint_36__34_list : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -4123,6 +4340,10 @@ class GALGAS_uint_36__34_list : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS_uint_36__34_list_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_uint_36__34_ constinArgument0,
                                                        class GALGAS_uint constinArgument1,
                                                        C_Compiler * inCompiler
@@ -4176,6 +4397,8 @@ class GALGAS_uint_36__34_list : public AC_GALGAS_list {
                                                                                    COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -4184,9 +4407,9 @@ class GALGAS_uint_36__34_list : public AC_GALGAS_list {
  
 } ; // End of GALGAS_uint_36__34_list class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_uint_36__34_list : public cGenericAbstractEnumerator {
   public : cEnumerator_uint_36__34_list (const GALGAS_uint_36__34_list & inEnumeratedObject,
@@ -4198,15 +4421,15 @@ class cEnumerator_uint_36__34_list : public cGenericAbstractEnumerator {
   public : class GALGAS_uint_36__34_list_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_uint_36__34_list ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                  @bigintlist list                                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @bigintlist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_bigintlist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -4251,6 +4474,10 @@ class GALGAS_bigintlist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS_bigintlist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_bigint constinArgument0,
                                                        class GALGAS_uint constinArgument1,
                                                        C_Compiler * inCompiler
@@ -4304,6 +4531,8 @@ class GALGAS_bigintlist : public AC_GALGAS_list {
                                                                              COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -4312,9 +4541,9 @@ class GALGAS_bigintlist : public AC_GALGAS_list {
  
 } ; // End of GALGAS_bigintlist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_bigintlist : public cGenericAbstractEnumerator {
   public : cEnumerator_bigintlist (const GALGAS_bigintlist & inEnumeratedObject,
@@ -4326,15 +4555,15 @@ class cEnumerator_bigintlist : public cGenericAbstractEnumerator {
   public : class GALGAS_bigintlist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_bigintlist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                  @lbigintlist list                                                  *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @lbigintlist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_lbigintlist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -4379,6 +4608,10 @@ class GALGAS_lbigintlist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS_lbigintlist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_lbigint constinArgument0,
                                                        class GALGAS_uint constinArgument1,
                                                        C_Compiler * inCompiler
@@ -4432,6 +4665,8 @@ class GALGAS_lbigintlist : public AC_GALGAS_list {
                                                                               COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -4440,9 +4675,9 @@ class GALGAS_lbigintlist : public AC_GALGAS_list {
  
 } ; // End of GALGAS_lbigintlist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator_lbigintlist : public cGenericAbstractEnumerator {
   public : cEnumerator_lbigintlist (const GALGAS_lbigintlist & inEnumeratedObject,
@@ -4454,15 +4689,15 @@ class cEnumerator_lbigintlist : public cGenericAbstractEnumerator {
   public : class GALGAS_lbigintlist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_lbigintlist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @lbool struct                                                    *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @lbool struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_lbool : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -4481,7 +4716,7 @@ class GALGAS_lbool : public AC_GALGAS_root {
   public : GALGAS_lbool (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_lbool (void) ;
+  public : virtual ~ GALGAS_lbool (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_lbool (const GALGAS_bool & in_bool,
@@ -4519,21 +4754,23 @@ class GALGAS_lbool : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_location getter_location (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_lbool class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_lbool ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @lchar struct                                                    *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @lchar struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_lchar : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -4552,7 +4789,7 @@ class GALGAS_lchar : public AC_GALGAS_root {
   public : GALGAS_lchar (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_lchar (void) ;
+  public : virtual ~ GALGAS_lchar (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_lchar (const GALGAS_char & in_char,
@@ -4590,21 +4827,23 @@ class GALGAS_lchar : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_location getter_location (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_lchar class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_lchar ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                   @ldouble struct                                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @ldouble struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_ldouble : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -4623,7 +4862,7 @@ class GALGAS_ldouble : public AC_GALGAS_root {
   public : GALGAS_ldouble (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_ldouble (void) ;
+  public : virtual ~ GALGAS_ldouble (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_ldouble (const GALGAS_double & in_double,
@@ -4661,21 +4900,23 @@ class GALGAS_ldouble : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_location getter_location (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_ldouble class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_ldouble ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                @lsint_36__34_ struct                                                *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @lsint_36__34_ struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_lsint_36__34_ : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -4694,7 +4935,7 @@ class GALGAS_lsint_36__34_ : public AC_GALGAS_root {
   public : GALGAS_lsint_36__34_ (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_lsint_36__34_ (void) ;
+  public : virtual ~ GALGAS_lsint_36__34_ (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_lsint_36__34_ (const GALGAS_sint_36__34_ & in_sint_36__34_,
@@ -4732,21 +4973,23 @@ class GALGAS_lsint_36__34_ : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_sint_36__34_ getter_sint_36__34_ (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_lsint_36__34_ class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_lsint_36__34_ ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                @luint_36__34_ struct                                                *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @luint_36__34_ struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_luint_36__34_ : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -4765,7 +5008,7 @@ class GALGAS_luint_36__34_ : public AC_GALGAS_root {
   public : GALGAS_luint_36__34_ (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_luint_36__34_ (void) ;
+  public : virtual ~ GALGAS_luint_36__34_ (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_luint_36__34_ (const GALGAS_uint_36__34_ & in_uint_36__34_,
@@ -4803,21 +5046,23 @@ class GALGAS_luint_36__34_ : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_uint_36__34_ getter_uint_36__34_ (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_luint_36__34_ class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_luint_36__34_ ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                  @2stringlist list                                                  *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @2stringlist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS__32_stringlist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -4865,6 +5110,10 @@ class GALGAS__32_stringlist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS__32_stringlist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_string constinArgument0,
                                                        class GALGAS_string constinArgument1,
                                                        class GALGAS_uint constinArgument2,
@@ -4933,6 +5182,8 @@ class GALGAS__32_stringlist : public AC_GALGAS_list {
                                                                                  COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -4941,9 +5192,9 @@ class GALGAS__32_stringlist : public AC_GALGAS_list {
  
 } ; // End of GALGAS__32_stringlist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator__32_stringlist : public cGenericAbstractEnumerator {
   public : cEnumerator__32_stringlist (const GALGAS__32_stringlist & inEnumeratedObject,
@@ -4956,15 +5207,15 @@ class cEnumerator__32_stringlist : public cGenericAbstractEnumerator {
   public : class GALGAS__32_stringlist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS__32_stringlist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                 @2lstringlist list                                                  *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @2lstringlist list
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS__32_lstringlist : public AC_GALGAS_list {
 //--------------------------------- Default constructor
@@ -5012,6 +5263,10 @@ class GALGAS__32_lstringlist : public AC_GALGAS_list {
 
 
 //--------------------------------- Setters
+  public : VIRTUAL_IN_DEBUG void setter_append (class GALGAS__32_lstringlist_2D_element inArgument0,
+                                                C_Compiler * inCompiler
+                                                COMMA_LOCATION_ARGS) ;
+
   public : VIRTUAL_IN_DEBUG void setter_insertAtIndex (class GALGAS_lstring constinArgument0,
                                                        class GALGAS_lstring constinArgument1,
                                                        class GALGAS_uint constinArgument2,
@@ -5080,6 +5335,8 @@ class GALGAS__32_lstringlist : public AC_GALGAS_list {
                                                                                   COMMA_LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
 //--------------------------------- Friend
@@ -5088,9 +5345,9 @@ class GALGAS__32_lstringlist : public AC_GALGAS_list {
  
 } ; // End of GALGAS__32_lstringlist class
 
-//---------------------------------------------------------------------------------------------------------------------*
-//   Enumerator declaration                                                                                            *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//   Enumerator declaration                                                                      
+//----------------------------------------------------------------------------------------------------------------------
 
 class cEnumerator__32_lstringlist : public cGenericAbstractEnumerator {
   public : cEnumerator__32_lstringlist (const GALGAS__32_lstringlist & inEnumeratedObject,
@@ -5103,15 +5360,15 @@ class cEnumerator__32_lstringlist : public cGenericAbstractEnumerator {
   public : class GALGAS__32_lstringlist_2D_element current (LOCATION_ARGS) const ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS__32_lstringlist ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @range struct                                                    *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @range struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_range : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5130,7 +5387,7 @@ class GALGAS_range : public AC_GALGAS_root {
   public : GALGAS_range (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_range (void) ;
+  public : virtual ~ GALGAS_range (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_range (const GALGAS_uint & in_start,
@@ -5168,21 +5425,23 @@ class GALGAS_range : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_uint getter_start (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_range class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_range ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                           @functionlist_2D_element struct                                           *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @functionlist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_functionlist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5196,7 +5455,7 @@ class GALGAS_functionlist_2D_element : public AC_GALGAS_root {
   public : GALGAS_functionlist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_functionlist_2D_element (void) ;
+  public : virtual ~ GALGAS_functionlist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_functionlist_2D_element (const GALGAS_function & in_mValue) ;
@@ -5230,21 +5489,23 @@ class GALGAS_functionlist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_function getter_mValue (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_functionlist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_functionlist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                            @luintlist_2D_element struct                                             *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @luintlist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_luintlist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5261,7 +5522,7 @@ class GALGAS_luintlist_2D_element : public AC_GALGAS_root {
   public : GALGAS_luintlist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_luintlist_2D_element (void) ;
+  public : virtual ~ GALGAS_luintlist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_luintlist_2D_element (const GALGAS_luint & in_mValue) ;
@@ -5295,21 +5556,23 @@ class GALGAS_luintlist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_luint getter_mValue (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_luintlist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_luintlist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                            @objectlist_2D_element struct                                            *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @objectlist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_objectlist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5323,7 +5586,7 @@ class GALGAS_objectlist_2D_element : public AC_GALGAS_root {
   public : GALGAS_objectlist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_objectlist_2D_element (void) ;
+  public : virtual ~ GALGAS_objectlist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_objectlist_2D_element (const GALGAS_object & in_mValue) ;
@@ -5357,21 +5620,23 @@ class GALGAS_objectlist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_object getter_mValue (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_objectlist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_objectlist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                            @stringlist_2D_element struct                                            *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @stringlist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_stringlist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5388,7 +5653,7 @@ class GALGAS_stringlist_2D_element : public AC_GALGAS_root {
   public : GALGAS_stringlist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_stringlist_2D_element (void) ;
+  public : virtual ~ GALGAS_stringlist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_stringlist_2D_element (const GALGAS_string & in_mValue) ;
@@ -5422,21 +5687,23 @@ class GALGAS_stringlist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_mValue (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_stringlist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_stringlist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                             @typelist_2D_element struct                                             *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @typelist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_typelist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5450,7 +5717,7 @@ class GALGAS_typelist_2D_element : public AC_GALGAS_root {
   public : GALGAS_typelist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_typelist_2D_element (void) ;
+  public : virtual ~ GALGAS_typelist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_typelist_2D_element (const GALGAS_type & in_mValue) ;
@@ -5484,21 +5751,23 @@ class GALGAS_typelist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_type getter_mValue (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_typelist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_typelist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                             @uintlist_2D_element struct                                             *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @uintlist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_uintlist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5515,7 +5784,7 @@ class GALGAS_uintlist_2D_element : public AC_GALGAS_root {
   public : GALGAS_uintlist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_uintlist_2D_element (void) ;
+  public : virtual ~ GALGAS_uintlist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_uintlist_2D_element (const GALGAS_uint & in_mValue) ;
@@ -5549,21 +5818,23 @@ class GALGAS_uintlist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_uint getter_mValue (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_uintlist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_uintlist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                         @uint_36__34_list_2D_element struct                                         *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @uint_36__34_list_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_uint_36__34_list_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5580,7 +5851,7 @@ class GALGAS_uint_36__34_list_2D_element : public AC_GALGAS_root {
   public : GALGAS_uint_36__34_list_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_uint_36__34_list_2D_element (void) ;
+  public : virtual ~ GALGAS_uint_36__34_list_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_uint_36__34_list_2D_element (const GALGAS_uint_36__34_ & in_mValue) ;
@@ -5614,21 +5885,23 @@ class GALGAS_uint_36__34_list_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_uint_36__34_ getter_mValue (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_uint_36__34_list_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_uint_36__34_list_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                            @bigintlist_2D_element struct                                            *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @bigintlist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_bigintlist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5645,7 +5918,7 @@ class GALGAS_bigintlist_2D_element : public AC_GALGAS_root {
   public : GALGAS_bigintlist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_bigintlist_2D_element (void) ;
+  public : virtual ~ GALGAS_bigintlist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_bigintlist_2D_element (const GALGAS_bigint & in_mValue) ;
@@ -5679,21 +5952,23 @@ class GALGAS_bigintlist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_bigint getter_mValue (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_bigintlist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_bigintlist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                           @lbigintlist_2D_element struct                                            *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @lbigintlist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_lbigintlist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5710,7 +5985,7 @@ class GALGAS_lbigintlist_2D_element : public AC_GALGAS_root {
   public : GALGAS_lbigintlist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_lbigintlist_2D_element (void) ;
+  public : virtual ~ GALGAS_lbigintlist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_lbigintlist_2D_element (const GALGAS_lbigint & in_mValue) ;
@@ -5744,21 +6019,23 @@ class GALGAS_lbigintlist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_lbigint getter_mValue (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_lbigintlist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_lbigintlist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                          @_32_stringlist_2D_element struct                                          *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @_32_stringlist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS__32_stringlist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5777,7 +6054,7 @@ class GALGAS__32_stringlist_2D_element : public AC_GALGAS_root {
   public : GALGAS__32_stringlist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS__32_stringlist_2D_element (void) ;
+  public : virtual ~ GALGAS__32_stringlist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS__32_stringlist_2D_element (const GALGAS_string & in_mValue_30_,
@@ -5815,21 +6092,23 @@ class GALGAS__32_stringlist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_mValue_31_ (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS__32_stringlist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS__32_stringlist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                   @lstring struct                                                   *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @lstring struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_lstring : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5848,7 +6127,7 @@ class GALGAS_lstring : public AC_GALGAS_root {
   public : GALGAS_lstring (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_lstring (void) ;
+  public : virtual ~ GALGAS_lstring (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_lstring (const GALGAS_string & in_string,
@@ -5886,21 +6165,23 @@ class GALGAS_lstring : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_string getter_string (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_lstring class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_lstring ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                                    @lsint struct                                                    *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @lsint struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_lsint : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5919,7 +6200,7 @@ class GALGAS_lsint : public AC_GALGAS_root {
   public : GALGAS_lsint (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_lsint (void) ;
+  public : virtual ~ GALGAS_lsint (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_lsint (const GALGAS_sint & in_sint,
@@ -5957,21 +6238,23 @@ class GALGAS_lsint : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_sint getter_sint (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_lsint class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_lsint ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                           @lstringlist_2D_element struct                                            *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @lstringlist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS_lstringlist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -5988,7 +6271,7 @@ class GALGAS_lstringlist_2D_element : public AC_GALGAS_root {
   public : GALGAS_lstringlist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS_lstringlist_2D_element (void) ;
+  public : virtual ~ GALGAS_lstringlist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS_lstringlist_2D_element (const GALGAS_lstring & in_mValue) ;
@@ -6022,21 +6305,23 @@ class GALGAS_lstringlist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_lstring getter_mValue (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS_lstringlist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS_lstringlist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
-//                                                                                                                     *
-//                                         @_32_lstringlist_2D_element struct                                          *
-//                                                                                                                     *
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
+//
+// Phase 1: @_32_lstringlist_2D_element struct
+//
+//----------------------------------------------------------------------------------------------------------------------
 
 class GALGAS__32_lstringlist_2D_element : public AC_GALGAS_root {
 //--------------------------------- Properties
@@ -6055,7 +6340,7 @@ class GALGAS__32_lstringlist_2D_element : public AC_GALGAS_root {
   public : GALGAS__32_lstringlist_2D_element (void) ;
 
 //--------------------------------- Virtual destructor (in debug mode)
-  public : VIRTUAL_IN_DEBUG ~ GALGAS__32_lstringlist_2D_element (void) ;
+  public : virtual ~ GALGAS__32_lstringlist_2D_element (void) ;
 
 //--------------------------------- Native constructor
   public : GALGAS__32_lstringlist_2D_element (const GALGAS_lstring & in_mValue_30_,
@@ -6093,21 +6378,23 @@ class GALGAS__32_lstringlist_2D_element : public AC_GALGAS_root {
   public : VIRTUAL_IN_DEBUG class GALGAS_lstring getter_mValue_31_ (LOCATION_ARGS) const ;
 
 
+//--------------------------------- Optional Methods
+
 //--------------------------------- Introspection
   public : VIRTUAL_IN_DEBUG const C_galgas_type_descriptor * staticTypeDescriptor (void) const ;
  
 } ; // End of GALGAS__32_lstringlist_2D_element class
 
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 extern const C_galgas_type_descriptor kTypeDescriptor_GALGAS__32_lstringlist_2D_element ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 #include "galgas2/cCollectionElement.h"
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 class cMapElement : public cCollectionElement {
 //--- Attribut
@@ -6122,7 +6409,7 @@ class cMapElement : public cCollectionElement {
   private : cMapElement & operator = (const cMapElement &) ;
 } ;
 
-//---------------------------------------------------------------------------------------------------------------------*
+//----------------------------------------------------------------------------------------------------------------------
 
 #include "galgas2/cSortedListElement.h"
 #include "galgas2/capSortedListElement.h"
