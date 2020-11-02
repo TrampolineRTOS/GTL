@@ -24,11 +24,12 @@
 #
 #-----------------------------------------------------------------------------*
 
-project (3:0:12) -> "gtl" {
+project (3:0:13) -> "gtl" {
 
 #-----------------------------------------------------------------------------*
 #                                  CHANGELOG
 #-----------------------------------------------------------------------------*
+# 3.0.13   Added a fileList getter to string
 # 3.0.12   Added a user template directory
 # 3.0.11   Added expression data type, where listn map getter and
 #          elementAtIndex list getter

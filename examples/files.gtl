@@ -1,0 +1,5 @@
+%
+
+let fileList :=  ["/Users/jlb" files]
+
+display fileList

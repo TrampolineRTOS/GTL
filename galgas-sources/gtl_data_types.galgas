@@ -2441,6 +2441,19 @@ override getter @gtlString performGetter
     result = @gtlString.new {
       !meta !emptylstring() !meta
     }
+  elsif "files" == methodName then
+    argumentsCheck(!methodName !noArgument() !arguments)
+    @stringlist  fileList = [value regularFiles !false]
+    @gtlList resultList = @gtlList.new {
+      ![methodName location] !emptylstring() !.emptyList
+    }
+    @lstringset files = .emptyMap
+    for (file) in fileList do
+      [!?files put !@lstring.new { !file ![methodName location] } ]
+    end
+    result = @gtlSet.new {
+      ![methodName location] !emptylstring() !files
+    }
   elsif [lib getterExists !"string" !methodName] then
     result = [[lib getGetter !"string" !methodName] callGetter
       ![methodName location]
