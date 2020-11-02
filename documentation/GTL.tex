@@ -1321,6 +1321,10 @@ a from file '/Users/jlb/Develop/GTL/examples/testTypes.gtl', line 82:7
 
 \gtlinline{fileExists} returns a bool, \gtlinline{true} if a file exists at the target path, \gtlinline{false} otherwise.
 
+\subsubsection{The \texttt{files} getter}
+
+\gtlinline{files} returns a set, each element being a regular file in the directory specified by the string..
+
 
 \subsubsection{The \texttt{length} getter}
 
@@ -1540,6 +1544,12 @@ Wed Aug 17 15:16:20 2016
 
 \gtlinline{TRUEFALSE()} is deprecated and is replaced by the \texttt{TRUEOrFALSE} getter (see \ref{sec:TRUEOrFALSEGetter})  of the \texttt{bool} data type. This function takes one bool argument and returns \texttt{"TRUE"} or \texttt{"FALSE"} according to the argument.
 %\end{longtable}
+
+%----------------------------------------------------------------------
+\subsubsection{The \texttt{rootTemplatesDirectory()} function}
+
+This function is available in \texttt{goil}, the OIL compiler of Trampoline. \gtlinline{rootTemplatesDirectory()} takes no argument and return the full path of the templates directory as a string.
+
 
 
 \section{The \texttt{bool} data type}
