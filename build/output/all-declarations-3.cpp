@@ -11,6 +11,189 @@
 //   Object comparison                                                                           
 //----------------------------------------------------------------------------------------------------------------------
 
+typeComparisonResult cPtr_gtlMapOfListExpression::dynamicObjectCompare (const acPtr_class * inOperandPtr) const {
+  typeComparisonResult result = kOperandEqual ;
+  const cPtr_gtlMapOfListExpression * p = (const cPtr_gtlMapOfListExpression *) inOperandPtr ;
+  macroValidSharedObject (p, cPtr_gtlMapOfListExpression) ;
+  if (kOperandEqual == result) {
+    result = mProperty_where.objectCompare (p->mProperty_where) ;
+  }
+  if (kOperandEqual == result) {
+    result = mProperty_expression.objectCompare (p->mProperty_expression) ;
+  }
+  if (kOperandEqual == result) {
+    result = mProperty_key.objectCompare (p->mProperty_key) ;
+  }
+  return result ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+
+typeComparisonResult GALGAS_gtlMapOfListExpression::objectCompare (const GALGAS_gtlMapOfListExpression & inOperand) const {
+  typeComparisonResult result = kOperandNotValid ;
+  if (isValid () && inOperand.isValid ()) {
+    const int32_t mySlot = mObjectPtr->classDescriptor ()->mSlotID ;
+    const int32_t operandSlot = inOperand.mObjectPtr->classDescriptor ()->mSlotID ;
+    if (mySlot < operandSlot) {
+      result = kFirstOperandLowerThanSecond ;
+    }else if (mySlot > operandSlot) {
+      result = kFirstOperandGreaterThanSecond ;
+    }else{
+      result = mObjectPtr->dynamicObjectCompare (inOperand.mObjectPtr) ;
+    }
+  }
+  return result ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+GALGAS_gtlMapOfListExpression::GALGAS_gtlMapOfListExpression (void) :
+GALGAS_gtlMapOfStructExpression () {
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+GALGAS_gtlMapOfListExpression::GALGAS_gtlMapOfListExpression (const cPtr_gtlMapOfListExpression * inSourcePtr) :
+GALGAS_gtlMapOfStructExpression (inSourcePtr) {
+  macroNullOrValidSharedObject (inSourcePtr, cPtr_gtlMapOfListExpression) ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+GALGAS_gtlMapOfListExpression GALGAS_gtlMapOfListExpression::constructor_new (const GALGAS_location & inAttribute_where,
+                                                                              const GALGAS_gtlExpression & inAttribute_expression,
+                                                                              const GALGAS_lstring & inAttribute_key
+                                                                              COMMA_LOCATION_ARGS) {
+  GALGAS_gtlMapOfListExpression result ;
+  if (inAttribute_where.isValid () && inAttribute_expression.isValid () && inAttribute_key.isValid ()) {
+    macroMyNew (result.mObjectPtr, cPtr_gtlMapOfListExpression (inAttribute_where, inAttribute_expression, inAttribute_key COMMA_THERE)) ;
+  }
+  return result ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+GALGAS_lstring GALGAS_gtlMapOfListExpression::getter_key (UNUSED_LOCATION_ARGS) const {
+  GALGAS_lstring result ;
+  if (NULL != mObjectPtr) {
+    const cPtr_gtlMapOfListExpression * p = (const cPtr_gtlMapOfListExpression *) mObjectPtr ;
+    macroValidSharedObject (p, cPtr_gtlMapOfListExpression) ;
+    result = p->mProperty_key ;
+  }
+  return result ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+GALGAS_lstring cPtr_gtlMapOfListExpression::getter_key (UNUSED_LOCATION_ARGS) const {
+  return mProperty_key ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void GALGAS_gtlMapOfListExpression::setter_setKey (GALGAS_lstring inValue
+                                                   COMMA_LOCATION_ARGS) {
+  if (NULL != mObjectPtr) {
+    insulate (THERE) ;
+    cPtr_gtlMapOfListExpression * p = (cPtr_gtlMapOfListExpression *) mObjectPtr ;
+    macroValidSharedObject (p, cPtr_gtlMapOfListExpression) ;
+    p->mProperty_key = inValue ;
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void cPtr_gtlMapOfListExpression::setter_setKey (GALGAS_lstring inValue
+                                                 COMMA_UNUSED_LOCATION_ARGS) {
+  mProperty_key = inValue ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//Pointer class for @gtlMapOfListExpression class
+//----------------------------------------------------------------------------------------------------------------------
+
+cPtr_gtlMapOfListExpression::cPtr_gtlMapOfListExpression (const GALGAS_location & in_where,
+                                                          const GALGAS_gtlExpression & in_expression,
+                                                          const GALGAS_lstring & in_key
+                                                          COMMA_LOCATION_ARGS) :
+cPtr_gtlMapOfStructExpression (in_where, in_expression COMMA_THERE),
+mProperty_key (in_key) {
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+const C_galgas_type_descriptor * cPtr_gtlMapOfListExpression::classDescriptor (void) const {
+  return & kTypeDescriptor_GALGAS_gtlMapOfListExpression ;
+}
+
+void cPtr_gtlMapOfListExpression::description (C_String & ioString,
+                                               const int32_t inIndentation) const {
+  ioString << "[@gtlMapOfListExpression:" ;
+  mProperty_where.description (ioString, inIndentation+1) ;
+  ioString << ", " ;
+  mProperty_expression.description (ioString, inIndentation+1) ;
+  ioString << ", " ;
+  mProperty_key.description (ioString, inIndentation+1) ;
+  ioString << "]" ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+acPtr_class * cPtr_gtlMapOfListExpression::duplicate (LOCATION_ARGS) const {
+  acPtr_class * ptr = NULL ;
+  macroMyNew (ptr, cPtr_gtlMapOfListExpression (mProperty_where, mProperty_expression, mProperty_key COMMA_THERE)) ;
+  return ptr ;
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+//
+//@gtlMapOfListExpression type
+//
+//----------------------------------------------------------------------------------------------------------------------
+
+const C_galgas_type_descriptor
+kTypeDescriptor_GALGAS_gtlMapOfListExpression ("gtlMapOfListExpression",
+                                               & kTypeDescriptor_GALGAS_gtlMapOfStructExpression) ;
+
+//----------------------------------------------------------------------------------------------------------------------
+
+const C_galgas_type_descriptor * GALGAS_gtlMapOfListExpression::staticTypeDescriptor (void) const {
+  return & kTypeDescriptor_GALGAS_gtlMapOfListExpression ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+AC_GALGAS_root * GALGAS_gtlMapOfListExpression::clonedObject (void) const {
+  AC_GALGAS_root * result = NULL ;
+  if (isValid ()) {
+    macroMyNew (result, GALGAS_gtlMapOfListExpression (*this)) ;
+  }
+  return result ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+GALGAS_gtlMapOfListExpression GALGAS_gtlMapOfListExpression::extractObject (const GALGAS_object & inObject,
+                                                                            C_Compiler * inCompiler
+                                                                            COMMA_LOCATION_ARGS) {
+  GALGAS_gtlMapOfListExpression result ;
+  const GALGAS_gtlMapOfListExpression * p = (const GALGAS_gtlMapOfListExpression *) inObject.embeddedObject () ;
+  if (NULL != p) {
+    if (NULL != dynamic_cast <const GALGAS_gtlMapOfListExpression *> (p)) {
+      result = *p ;
+    }else{
+      inCompiler->castError ("gtlMapOfListExpression", p->dynamicTypeDescriptor () COMMA_THERE) ;
+    }  
+  }
+  return result ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//   Object comparison                                                                           
+//----------------------------------------------------------------------------------------------------------------------
+
 typeComparisonResult cPtr_gtlListOfExpression::dynamicObjectCompare (const acPtr_class * inOperandPtr) const {
   typeComparisonResult result = kOperandEqual ;
   const cPtr_gtlListOfExpression * p = (const cPtr_gtlListOfExpression *) inOperandPtr ;
