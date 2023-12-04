@@ -87,3 +87,7 @@ println aStr
 [!aStr insertCharAtIndex : 'e', 1]
 println aStr
 
+let a := "     Hello world!     "
+display a
+let a := [a trimWhiteSpaces]
+display a

@@ -191,7 +191,7 @@
 \draw[color=white] (0,0) -- (-2,0) {};
 \draw (0,0) -- (0,.99\textheight);
 \draw (.5,12) node[right] {\Huge\bfseries\thetitle};
-\draw (.5,10.5) node[right] {\huge Version 3.0.14};
+\draw (.5,10.5) node[right] {\huge Version 3.0.15};
 \draw (.5,7) node[right] {\Large\theauthor}; 
 \draw (.5,6.3) node[right] {\large\today}; 
 \end{tikzpicture}
@@ -1482,6 +1482,10 @@ How
 \subsubsection{The \texttt{varExists} getter}
 
 \gtlinline{varExists} returns a bool, \gtlinline{true} if target  variable exists, \gtlinline{false} otherwise.
+
+\subsubsection{The \texttt{trimWhiteSpaces} getter}
+
+\gtlinline{trimWhiteSpaces} returns the target string without the leading and trailing white spaces.
 
 \subsection{The \texttt{string} setters}
 
