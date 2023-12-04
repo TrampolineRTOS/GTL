@@ -24,11 +24,13 @@
 #
 #-----------------------------------------------------------------------------*
 
-project (3:0:14) -> "gtl" {
+project (3:0:15) -> "gtl" {
 
 #-----------------------------------------------------------------------------*
 #                                  CHANGELOG
 #-----------------------------------------------------------------------------*
+# 3.0.15   Added trimWhiteSpaces getter. Updated to galgas 3.6.3. Added 
+#          support for string getter extension (used by goil)
 # 3.0.14   Added var and varExists string getters
 # 3.0.13   Added a fileList getter to string
 # 3.0.12   Added a user template directory
