@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-//  'C_Compiler' : the compiler base class ;                                                     
+//  'C_Compiler' : the compiler base class ;
 //
-//  This file is part of libpm library                                                           
+//  This file is part of libpm library
 //
 //  Copyright (C) 2009, ..., 2015 Pierre Molinaro.
 //
@@ -30,7 +30,7 @@
 
 //----------------------------------------------------------------------------------------------------------------------
 //
-//        Syntax error message for 'end of source':                                              
+//        Syntax error message for 'end of source':
 //
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -57,14 +57,14 @@ bool C_Compiler::performLogFileRead (void) {
 
 //----------------------------------------------------------------------------------------------------------------------
 //
-//        Constructor and destructor                                                             
+//        Constructor and destructor
 //
 //----------------------------------------------------------------------------------------------------------------------
 
 C_Compiler::C_Compiler (C_Compiler * inCallerCompiler
                         COMMA_LOCATION_ARGS) :
 C_SharedObject (THERE),
-mCallerCompiler (NULL),
+mCallerCompiler (nullptr),
 mIssueArray (),
 mSentString (),
 mSentStringIsValid (true),
@@ -100,7 +100,7 @@ C_String C_Compiler::sourceFilePath (void) const {
 //----------------------------------------------------------------------------------------------------------------------
 
 void C_Compiler::appendIssue (const cIssueDescriptor & inIssue) {
-  if (NULL == mCallerCompiler) {
+  if (nullptr == mCallerCompiler) {
     mIssueArray.appendObject (inIssue) ;
   }else{
     mCallerCompiler->appendIssue (inIssue) ;
@@ -154,7 +154,6 @@ GALGAS_string C_Compiler::sentString (void) const {
 
 GALGAS_string C_Compiler::retrieveAndResetTemplateString (void) {
   const C_String s = mTemplateString ;
-  // printf ("TEMPLATE '%s'\n", s.cString (HERE)) ;
   mTemplateString.setLengthToZero () ;
   return GALGAS_string (s) ;
 }
@@ -376,7 +375,13 @@ void C_Compiler::semanticErrorWith_K_L_message (const GALGAS_lstring & inKey,
       if (UNICODE_VALUE (c) == 'K') {
         message << key ;
       }else if (UNICODE_VALUE (c) == 'L') {
-        message << inExistingKeyLocation.getter_locationString (this COMMA_THERE) ; // §§
+        if (!inExistingKeyLocation.isValid ()) {
+          message << "<<unknown>>" ;
+        }else if (inExistingKeyLocation.getter_isNowhere (HERE).boolEnum () == kBoolTrue) {
+          message << "<<unknown>>" ;
+        }else{
+          message << inExistingKeyLocation.getter_startLocationString (this COMMA_THERE) ;
+        }
       }
       perCentFound = false ;
     }else if (UNICODE_VALUE (c) == '%') {
@@ -408,7 +413,7 @@ void C_Compiler::semanticWarningWith_K_L_message (const GALGAS_lstring & inKey,
       if (UNICODE_VALUE (c) == 'K') {
         message << key ;
       }else if (UNICODE_VALUE (c) == 'L') {
-        message << inExistingKeyLocation.getter_locationString (this COMMA_THERE) ; // §§
+        message << inExistingKeyLocation.getter_startLocationString (this COMMA_THERE) ;
       }
       perCentFound = false ;
     }else if (UNICODE_VALUE (c) == '%') {
@@ -491,13 +496,17 @@ GALGAS_location C_Compiler::here (void) const {
   return GALGAS_location (mStartLocationForHere, mEndLocationForHere, mSourceText) ;
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+
+GALGAS_location C_Compiler::separator (void) const {
+  return GALGAS_location (mEndLocationForHere, mStartLocationForNext, mSourceText) ;
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 
 GALGAS_location C_Compiler::next (void) const {
   return GALGAS_location (mStartLocationForNext, mEndLocationForNext, mSourceText) ;
 }
-
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -507,7 +516,7 @@ GALGAS_location C_Compiler::next (void) const {
 
 //----------------------------------------------------------------------------------------------------------------------
 //
-//   C H E C K    A N D    G E N E R A T E   F I L E                                             
+//   C H E C K    A N D    G E N E R A T E   F I L E
 //
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -558,8 +567,6 @@ void C_Compiler::generateFileFromPathes (const C_String & inStartPath,
     C_String fileName = startPath ;
     fileName.appendString ("/") ;
     fileName.appendString (inFileName) ;
-    //printf ("inFileName '%s'\n", inFileName.cString (HERE)) ;
-    //printf ("fileName '%s'\n", fileName.cString (HERE)) ;
     const C_String directory = fileName.stringByDeletingLastPathComponent () ;
     C_FileManager::makeDirectoryIfDoesNotExist (directory) ;
     if (performGeneration ()) {
@@ -633,8 +640,6 @@ void C_Compiler::generateFileWithPatternFromPathes (
     C_String fileName = startPath ;
     fileName.appendString ("/") ;
     fileName.appendString (inFileName) ;
-    //printf ("inFileName '%s'\n", inFileName.cString (HERE)) ;
-    //printf ("fileName '%s'\n", fileName.cString (HERE)) ;
     const C_String directory = fileName.stringByDeletingLastPathComponent () ;
     C_FileManager::makeDirectoryIfDoesNotExist (directory) ;
     if (performGeneration ()) {
@@ -651,13 +656,12 @@ void C_Compiler::generateFileWithPatternFromPathes (
       if (verboseOptionOn) {
         ggs_printFileCreationSuccess (C_String ("Created '") + fileName + "'.\n") ;
       }
-      
+
       f.close () ;
       if (inMakeExecutable) {
         #if COMPILE_FOR_WINDOWS == 0
           struct stat fileStat ;
           ::stat (fileName.cString (HERE), & fileStat) ;
-            // printf ("FILE MODE 0x%X\n", fileStat.st_mode) ;
           ::chmod (fileName.cString (HERE), fileStat.st_mode | S_IXUSR | S_IXGRP | S_IXOTH) ;
         #endif
       }
@@ -721,7 +725,6 @@ void C_Compiler::generateFileWithPatternFromPathes (
         #if COMPILE_FOR_WINDOWS == 0
           struct stat fileStat ;
           ::stat (fullPathName.cString (HERE), & fileStat) ;
-            // printf ("FILE MODE 0x%X\n", fileStat.st_mode) ;
           ::chmod (fullPathName.cString (HERE), fileStat.st_mode | S_IXUSR | S_IXGRP | S_IXOTH) ;
         #endif
       }
@@ -730,6 +733,5 @@ void C_Compiler::generateFileWithPatternFromPathes (
     }
   }
 }
-
 
 //----------------------------------------------------------------------------------------------------------------------

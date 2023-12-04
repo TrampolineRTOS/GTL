@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-//  Lexique introspection                                                                        
+//  Lexique introspection
 //
-//  This file is part of libpm library                                                           
+//  This file is part of libpm library
 //
 //  Copyright (C) 2016, ..., 2016 Pierre Molinaro.
 //
@@ -25,7 +25,7 @@
 
 //----------------------------------------------------------------------------------------------------------------------
 
-static cLexiqueIntrospection * gLexiqueIntrospectionRoot = NULL ;
+static cLexiqueIntrospection * gLexiqueIntrospectionRoot = nullptr ;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -40,9 +40,9 @@ mGetKeywordsForIdentifier (getKeywordsForIdentifier) {
 //----------------------------------------------------------------------------------------------------------------------
 
 void cLexiqueIntrospection::getKeywordListNames (TC_UniqueArray <C_String> & outList) {
-  outList.setCountToZero () ;
+  outList.removeAllKeepingCapacity () ;
   cLexiqueIntrospection * p = gLexiqueIntrospectionRoot ;
-  while (NULL != p) {
+  while (nullptr != p) {
     p->mAppendKeywordListNames (outList) ;
     p = p->mNext ;
   }
@@ -54,9 +54,9 @@ void cLexiqueIntrospection::getKeywordListForIdentifier (const C_String & inIden
                                                          bool & outFound,
                                                          TC_UniqueArray <C_String> & outList) {
   outFound = false ;
-  outList.setCountToZero () ;
+  outList.removeAllKeepingCapacity () ;
   cLexiqueIntrospection * p = gLexiqueIntrospectionRoot ;
-  while ((NULL != p) && !outFound) {
+  while ((nullptr != p) && !outFound) {
     p->mGetKeywordsForIdentifier (inIdentifier, outFound, outList) ;
     p = p->mNext ;
   }
@@ -65,7 +65,7 @@ void cLexiqueIntrospection::getKeywordListForIdentifier (const C_String & inIden
 //----------------------------------------------------------------------------------------------------------------------
 
 void cLexiqueIntrospection::handleGetKeywordListOption (C_Compiler * inCompiler) {
-  const C_String option = gOption_galgas_5F_builtin_5F_options_outputKeywordList.getter_value () ;
+  const C_String option = gOption_galgas_5F_builtin_5F_options_outputKeywordList.readProperty_value () ;
   if (option != "") {
     const C_String optionFormat = "lexique_name:list_name:columns:prefix:postfix:path" ;
     co << "Option \"--" << gOption_galgas_5F_builtin_5F_options_outputKeywordList.mCommandString

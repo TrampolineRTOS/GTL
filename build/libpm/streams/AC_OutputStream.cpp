@@ -1,10 +1,10 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-//  AC_OutputStream : an abstract output stream class                                            
+//  AC_OutputStream : an abstract output stream class
 //
-//  This file is part of libpm library                                                           
+//  This file is part of libpm library
 //
-//  Copyright (C) 1997, ..., 2019 Pierre Molinaro.
+//  Copyright (C) 1997, ..., 2022 Pierre Molinaro.
 //
 //  e-mail : pierre@pcmolinaro.name
 //
@@ -51,7 +51,7 @@ void AC_OutputStream::flush (void) {
 //----------------------------------------------------------------------------------------------------------------------
 
 void AC_OutputStream::appendCString (const char * inCstring) {
-  if (inCstring != NULL) {
+  if (inCstring != nullptr) {
     genericCharArrayOutput (inCstring, (int32_t) (strlen (inCstring) & UINT32_MAX)) ;
   }
 }
@@ -196,34 +196,8 @@ void AC_OutputStream::appendDouble (const double inValue) {
 #endif
 
 //----------------------------------------------------------------------------------------------------------------------
-//
-//  WARNING: in gcc 3.x printf for 64-bit integer crashes!                                       
-//  So we use an auxiliary function printfUINT64 and only 32-bit printing                        
-//
-//----------------------------------------------------------------------------------------------------------------------
-
-//static void printfUINT64 (char ioString [],
-//                          const uint64_t inValue,
-//                          int32_t & ioLength) {
-//  const uint64_t quotient = inValue / 10UL ;
-//  if (quotient != 0) {
-//    printfUINT64 (ioString, quotient, ioLength) ;
-//  }
-//  const uint32_t v = (uint32_t) ((inValue % 10UL) & UINT32_MAX) ;
-//  ioString [ioLength] = (char) (('0' + v) & 255) ;
-//  ioLength ++ ;
-//}
-
-//----------------------------------------------------------------------------------------------------------------------
 
 void AC_OutputStream::appendUnsigned (const uint64_t inValue) {
-//  char s [30] = "" ;
-//  int32_t length = 0 ;
-//  printfUINT64 (s, inValue, length) ;
-//  s [length] = '\0' ;
-//  MF_Assert (length < 30, "C string overflow", 0, 0) ;
-//  genericCharArrayOutput (s, length) ;
-
   char s [32] ;
   snprintf (s, 31, "%" PRIu64, inValue) ;
   appendCString (s) ;
@@ -231,27 +205,7 @@ void AC_OutputStream::appendUnsigned (const uint64_t inValue) {
 
 //----------------------------------------------------------------------------------------------------------------------
 
-//static void printfUINT64Hex (char ioString [],
-//                             const uint64_t inValue,
-//                             int & ioLength) {
-//  const uint64_t quotient = inValue >> 4 ;
-//  if (quotient != 0) {
-//    printfUINT64Hex (ioString, quotient, ioLength) ;
-//  }
-//  const uint32_t v = (uint32_t) (inValue & 15UL) ;
-//  sprintf (& ioString [ioLength], "%X", v) ;
-//  ioLength ++ ;
-//}
-
-//----------------------------------------------------------------------------------------------------------------------
-
 void AC_OutputStream::appendUnsignedHex16 (const uint64_t inValue) {
-//  int length = 0 ;
-//  char s [32] ;
-//  printfUINT64Hex (s, (uint64_t) inValue, length) ;
-//  MF_Assert (length < 32, "C string overflow", 0, 0) ;
-//  genericCharArrayOutput (s, length) ;
-
   char s [32] ;
   snprintf (s, 31, "%016" PRIX64, inValue) ;
   appendCString (s) ;
@@ -266,22 +220,6 @@ void AC_OutputStream::appendUnsignedHex16 (const uint64_t inValue) {
 //----------------------------------------------------------------------------------------------------------------------
 
 void AC_OutputStream::appendSigned (const int64_t inValue) {
-//  int32_t length = 0 ;
-//  char s [30] = "" ;
-//  if (inValue >= 0) {
-//    printfUINT64 (s, (uint64_t) inValue, length) ;
-//  }else if (inValue == INT64_MIN) {
-//    s [0] = '-' ;
-//    length = 1 ;
-//    printfUINT64 (s, (uint64_t) INT64_MIN, length) ;
-//  }else{
-//    s [0] = '-' ;
-//    length = 1 ;
-//    printfUINT64 (s, (uint64_t) (- inValue), length) ;
-//  }
-//  s [length] = '\0' ;
-//  MF_Assert (length < 30, "C string overflow", 0, 0) ;
-//  genericCharArrayOutput (s, length) ;
   char s [32] ;
   snprintf (s, 31, "%" PRId64, inValue) ;
   appendCString (s) ;
@@ -379,7 +317,7 @@ void AC_OutputStream::writeStringMultiple (const C_String & inString, const int3
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-//                          Comments                                                             
+//                          Comments
 //----------------------------------------------------------------------------------------------------------------------
 
 static const int32_t kCommentMaxLength = 119 ;
@@ -418,7 +356,7 @@ void AC_OutputStream::appendCenterJustifiedComment (const C_String & inLineComme
                                                     const C_String & inCommentString) {
   const int32_t commentLength = inCommentString.length () ;
   const int32_t n = (kCommentMaxLength - 3 - commentLength) / 2 ;
-  
+
   *this << inLineCommentPrefix ;
   for (int32_t i=0 ; i<n ; i++) {
    *this << " " ;
@@ -449,7 +387,7 @@ void AC_OutputStream::appendCppHyphenLineComment (const C_String & inLineComment
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-//                          C Comments                                                           
+//                          C Comments
 //----------------------------------------------------------------------------------------------------------------------
 
 void AC_OutputStream::append_C_HyphenLineComment (void) {
@@ -471,7 +409,7 @@ void AC_OutputStream::append_C_SpaceLineComment (void) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-//                        C++ Comments                                                           
+//                        C++ Comments
 //----------------------------------------------------------------------------------------------------------------------
 
 void AC_OutputStream::appendCppHyphenLineCommentWithoutExtraBlankLine (void) {
@@ -562,9 +500,9 @@ static void internalWriteCstringConstantWithoutDelimiters (AC_OutputStream & ioS
     case '\"' :
       ioStream << "\\\"" ;
       break ;
-    case '\?' :
-      ioStream << "\\?" ;
-      break ;
+//    case '\?' :
+//      ioStream << "\\?" ;
+//      break ;
     default :
       if ((UNICODE_VALUE (c) >= ' ') && (UNICODE_VALUE (c) < 127)) {
         ioStream.appendUnicodeCharacter (c COMMA_HERE) ;
@@ -727,8 +665,9 @@ C_String cStringWithUnsigned (const uint64_t inValue) {
 //----------------------------------------------------------------------------------------------------------------------
 
 C_String cHexStringWithUnsigned (const uint64_t inValue) {
-  C_String result = "0x" ;
-  result.appendUnsignedHex16 (inValue) ;
+  char s [32] ;
+  snprintf (s, 32, "0x%" PRIx64, inValue) ;
+  C_String result = s ;
   return result ;
 }
 

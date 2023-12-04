@@ -1,14 +1,14 @@
-#! /usr/bin/env python
+#! /usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-#----------------------------------------------------------------------------------------------------------------------*
+#-----------------------------------------------------------------------------------------
 
 import sys, time, os
 import makefile, default_build_options
 
-#----------------------------------------------------------------------------------------------------------------------*
+#-----------------------------------------------------------------------------------------
 #   displayDurationFromStartTime
-#----------------------------------------------------------------------------------------------------------------------*
+#-----------------------------------------------------------------------------------------
 
 def displayDurationFromStartTime (startTime) :
   totalDurationInSeconds = int (time.time () - startTime)
@@ -23,12 +23,14 @@ def displayDurationFromStartTime (startTime) :
   s += str (durationInSecondes) + "s"
   print ("Done at +" + s)
 
-#----------------------------------------------------------------------------------------------------------------------*
+#-----------------------------------------------------------------------------------------
 
 class GenericGalgasMakefile :
   mJSONfilePath = ""
   mDictionary = {}
   mExecutable = ""
+  mExecutableDirectory = ""
+  mDeleteExecutableDirectoryOnClean = False
   mGoal = ""
   mMaxParallelJobs = 0
   mDisplayCommands = False
@@ -48,6 +50,7 @@ class GenericGalgasMakefile :
   m_ObjectiveC_CompilerOptions = []
   m_ObjectiveCpp_CompilerOptions = []
   mTargetName = ""
+  mBuildDirName = ""
   mLinkerOptions = []
   mExecutableSuffix = ""
   mCrossCompilation = ""
@@ -55,44 +58,33 @@ class GenericGalgasMakefile :
   def run (self) :
     startTime = time.time ()
   #--- Source file list
-    SOURCES = self.mDictionary ["SOURCES"]
+    SOURCES = self.mDictionary ["SOURCES"].copy ()
   #--- Linker options
-    self.mLinkerOptions += self.mDictionary ["USER_LINK_OPTIONS"]
+    self.mLinkerOptions += self.mDictionary ["USER_LINK_OPTIONS"].copy ()
   #--- LIBPM
     LIBPM_DIRECTORY_PATH = self.mDictionary ["LIBPM_DIRECTORY_PATH"]
-  #--------------------------------------------------------------------------- System
-    if self.mCrossCompilation == "":
-      (SYSTEM_NAME, MODE_NAME, SYSTEM_RELEASE, SYSTEM_VERSION, MACHINE) = os.uname ()
-      if SYSTEM_NAME == "Darwin":
-        MACHINE = "Intel"
-      SYSTEM_MACHINE = SYSTEM_NAME + "-" + MACHINE
-    else:
-      SYSTEM_MACHINE = self.mCrossCompilation
-  #--- GMP
-    GMP_DIRECTORY_PATH = LIBPM_DIRECTORY_PATH + "/gmp"
   #--- Source directory list
-    SOURCES_DIR = self.mDictionary ["SOURCES_DIR"]
-  #--------------------------------------------------------------------------- Include dirs
+    SOURCES_DIR = self.mDictionary ["SOURCES_DIR"].copy ()
     SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/bdd")
+    SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/big-integers")
     SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/command_line_interface")
     SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/files")
-    SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/galgas")
     SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/galgas2")
     SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/gmp")
     SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/streams")
     SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/time")
     SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/strings")
     SOURCES_DIR.append (LIBPM_DIRECTORY_PATH + "/utilities")
-    includeDirs = ["-I" + GMP_DIRECTORY_PATH]
+  #--------------------------------------------------------------------------- Include dirs
+    includeDirs = ["-I" + LIBPM_DIRECTORY_PATH + "/gmp"]
     for d in SOURCES_DIR:
       includeDirs.append ("-I" + d)
   #--- Make object
     make = makefile.Make (self.mGoal, self.mMaxParallelJobs == 1) # Display command utility tool path if sequential build
+    objectFileList = []
   #--------------------------------------------------------------------------- Add Compile rule for sources (release)
   #--- Object file directory
-    objectDirectory = "../build/cli-objects/makefile-" + self.mTargetName + "-objects"
-  #---
-    objectFileList = []
+    objectDirectory = "../" + self.mBuildDirName + "/cli-objects/makefile-" + self.mTargetName + "-objects"
     for source in SOURCES:
       objectFile = objectDirectory + "/" + source + ".o"
       objectFileList.append (objectFile)
@@ -116,10 +108,13 @@ class GenericGalgasMakefile :
         rule.mCommand += ["-MD", "-MP", "-MF", objectFile + ".dep"]
         make.addRule (rule) ;
   #--------------------------------------------------------------------------- Add EXECUTABLE link rule
-    EXECUTABLE = self.mExecutable + self.mExecutableSuffix
+    EXECUTABLE = self.mExecutableDirectory + self.mExecutable + self.mExecutableSuffix
     rule = makefile.Rule ([EXECUTABLE], self.mLinkingMessage + ": " + EXECUTABLE)
+    if self.mDeleteExecutableDirectoryOnClean :
+      rule.deleteTargetDirectoryOnClean ()
+    else:
+      rule.deleteTargetFileOnClean ()
     rule.mOnErrorDeleteTarget = True
-    rule.deleteTargetFileOnClean ()
     rule.mDependences += objectFileList
     rule.mDependences.append (self.mJSONfilePath)
     rule.mCommand += self.mLinkerTool
@@ -134,8 +129,7 @@ class GenericGalgasMakefile :
     make.addRule (rule) ;
   #--------------------------------------------------------------------------- Add Compile rule for sources (debug)
   #--- Object file directory
-    debugObjectDirectory = "../build/cli-objects/makefile-" + self.mTargetName + "-debug-objects"
-  #---
+    debugObjectDirectory = "../" + self.mBuildDirName + "/cli-objects/makefile-" + self.mTargetName + "-debug-objects"
     debugObjectFileList = []
     for source in SOURCES:
       objectFile = debugObjectDirectory + "/" + source + ".o"
@@ -160,10 +154,13 @@ class GenericGalgasMakefile :
         rule.mCommand += ["-MD", "-MP", "-MF", objectFile + ".dep"]
         make.addRule (rule) ;
   #--------------------------------------------------------------------------- Add EXECUTABLE_DEBUG link rule
-    EXECUTABLE_DEBUG = self.mExecutable + "-debug" + self.mExecutableSuffix
+    EXECUTABLE_DEBUG = self.mExecutableDirectory + self.mExecutable + "-debug" + self.mExecutableSuffix
     rule = makefile.Rule ([EXECUTABLE_DEBUG], self.mLinkingMessage + " (debug): " + EXECUTABLE_DEBUG)
+    if self.mDeleteExecutableDirectoryOnClean :
+      rule.deleteTargetDirectoryOnClean ()
+    else:
+      rule.deleteTargetFileOnClean ()
     rule.mOnErrorDeleteTarget = True
-    rule.deleteTargetFileOnClean ()
     rule.mDependences += debugObjectFileList
     rule.mDependences.append (self.mJSONfilePath)
     rule.mCommand += self.mLinkerTool
@@ -173,7 +170,7 @@ class GenericGalgasMakefile :
     make.addRule (rule) ;
   #--------------------------------------------------------------------------- Add Compile rule for sources (lto)
   #--- Object file directory
-    objectLTODirectory = "../build/cli-objects/makefile-" + self.mTargetName + "-objects-lto"
+    objectLTODirectory = "../" + self.mBuildDirName + "/cli-objects/makefile-" + self.mTargetName + "-objects-lto"
   #---
     ltoObjectFileList = []
     for source in SOURCES:
@@ -200,10 +197,13 @@ class GenericGalgasMakefile :
         rule.mCommand += ["-MD", "-MP", "-MF", objectFile + ".dep"]
         make.addRule (rule) ;
   #--------------------------------------------------------------------------- Add EXECUTABLE link rule
-    EXECUTABLE_LTO = self.mExecutable + "-lto" + self.mExecutableSuffix
+    EXECUTABLE_LTO = self.mExecutableDirectory + self.mExecutable + "-lto" + self.mExecutableSuffix
     rule = makefile.Rule ([EXECUTABLE_LTO], self.mLinkingMessage + ": " + EXECUTABLE_LTO)
+    if self.mDeleteExecutableDirectoryOnClean :
+      rule.deleteTargetDirectoryOnClean ()
+    else:
+      rule.deleteTargetFileOnClean ()
     rule.mOnErrorDeleteTarget = True
-    rule.deleteTargetFileOnClean ()
     rule.mDependences += ltoObjectFileList
     rule.mDependences.append (self.mJSONfilePath)
     rule.mCommand += self.mLinkerTool
@@ -258,4 +258,4 @@ class GenericGalgasMakefile :
     make.printErrorCountAndExitOnError ()
     displayDurationFromStartTime (startTime)
 
-#----------------------------------------------------------------------------------------------------------------------*
+#-----------------------------------------------------------------------------------------

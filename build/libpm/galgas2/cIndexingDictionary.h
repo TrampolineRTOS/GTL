@@ -4,7 +4,7 @@
 //
 //  This file is part of libpm library                                                           
 //
-//  Copyright (C) 2010, ..., 2010 Pierre Molinaro.
+//  Copyright (C) 2010, ..., 2023 Pierre Molinaro.
 //
 //  e-mail : pierre@pcmolinaro.name
 //
@@ -35,20 +35,20 @@ class cIndexEntryNode ;
 //
 //----------------------------------------------------------------------------------------------------------------------
 
-class cIndexingDictionary {
+class cIndexingDictionary final {
 
 //--- Constructor
-  public : cIndexingDictionary (void) ;
+  public: cIndexingDictionary (void) ;
 
 //--- Destructor
-  public : virtual ~ cIndexingDictionary (void) ;
+  public: ~ cIndexingDictionary (void) ;
 
 //--- No copy
-  private : cIndexingDictionary (const cIndexingDictionary &) ;
-  private : cIndexingDictionary & operator = (const cIndexingDictionary &) ;
+  private: cIndexingDictionary (const cIndexingDictionary &) ;
+  private: cIndexingDictionary & operator = (const cIndexingDictionary &) ;
 
 //--- Add indexed entry
-  public : void addIndexedKey (const uint32_t inIndexingKind,
+  public: void addIndexedKey (const uint32_t inIndexingKind,
                                const C_String & inIndexedKey,
                                const C_String & inSourceFilePath,
                                const uint32_t inTokenLineInSource,
@@ -56,15 +56,15 @@ class cIndexingDictionary {
                                const uint32_t inTokenLengthInSource) ;
 
 //--- Generate Index file (in a plist format)
-  public : void generateIndexFile (const C_String & inOutputIndexFilePath) const ;
+  public: void generateIndexFile (const C_String & inOutputIndexFilePath) const ;
 
 //--- Internal private method
-  private : cIndexEntryNode * findOrAddEntry (cIndexEntryNode * & ioRootPtr,
+  private: cIndexEntryNode * findOrAddEntry (cIndexEntryNode * & ioRootPtr,
                                               const C_String & inKey,
                                               bool & ioExtension) ;
 
 //--- Private attributes
-  private : cIndexEntryNode * mEntryRoot ;
+  private: cIndexEntryNode * mEntryRoot ;
 } ;
 
 //----------------------------------------------------------------------------------------------------------------------

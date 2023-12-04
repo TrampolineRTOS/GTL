@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-//  AC_GALGAS_sortedlist : base class for GALGAS sorted list                                     
+//  AC_GALGAS_sortedlist : base class for GALGAS sorted list
 //
-//  This file is part of libpm library                                                           
+//  This file is part of libpm library
 //
 //  Copyright (C) 2005, ..., 2010 Pierre Molinaro.
 //
@@ -40,72 +40,71 @@ class capCollectionElementArray ;
 
 class AC_GALGAS_sortedlist : public AC_GALGAS_root {
 //--------------------------------- Private data member
-  private : cSharedSortedListRoot * mSharedRoot ;
+  private: cSharedSortedListRoot * mSharedRoot ;
 
 //--------------------------------- Native constructor
-  public : AC_GALGAS_sortedlist (void) ;
+  public: AC_GALGAS_sortedlist (void) ;
 
 //--------------------------------- Virtual destructor
-  public : virtual ~ AC_GALGAS_sortedlist (void) ;
+  public: virtual ~ AC_GALGAS_sortedlist (void) ;
 
 //--------------------------------- Handle copy
-  public : AC_GALGAS_sortedlist (const AC_GALGAS_sortedlist &) ;
-  public : AC_GALGAS_sortedlist & operator = (const AC_GALGAS_sortedlist &) ;
+  public: AC_GALGAS_sortedlist (const AC_GALGAS_sortedlist &) ;
+  public: AC_GALGAS_sortedlist & operator = (const AC_GALGAS_sortedlist &) ;
 
 //--------------------------------- Is Valid
-  public : VIRTUAL_IN_DEBUG bool isValid (void) const { return NULL != mSharedRoot ; }
+  public: VIRTUAL_IN_DEBUG bool isValid (void) const override { return nullptr != mSharedRoot ; }
 
 //--- count
-  public : VIRTUAL_IN_DEBUG uint32_t count (void) const ;
+  public: VIRTUAL_IN_DEBUG uint32_t count (void) const ;
 
 //--------------------------------- Create a new sorted list
-  protected : VIRTUAL_IN_DEBUG void createNewEmptySortedList (LOCATION_ARGS) ;
+  protected: VIRTUAL_IN_DEBUG void createNewEmptySortedList (LOCATION_ARGS) ;
 
 //--------------------------------- Drop
-  public : VIRTUAL_IN_DEBUG void drop (void) ;
+  public: VIRTUAL_IN_DEBUG void drop (void) override ;
 
 //--------------------------------- Implementation of reader 'description'
-  public : virtual void description (C_String & ioString,
-                                     const int32_t inIndentation) const ;
+  public: virtual void description (C_String & ioString, const int32_t inIndentation) const override ;
 
 //--- Enumeration handling
-  protected : void populateEnumerationArray (capCollectionElementArray & inEnumerationArray) const ;
+  protected: void populateEnumerationArray (capCollectionElementArray & inEnumerationArray) const ;
 
 //--- Adding an object
-  protected : void appendObject (capSortedListElement & inAttributeList) ;
+  protected: void appendObject (capSortedListElement & inAttributeList) ;
 
 //--------------------------------- Append a list
-  protected : void appendSortedList (const AC_GALGAS_sortedlist & inList) ;
+  protected: void appendSortedList (const AC_GALGAS_sortedlist & inList) ;
 
 //--------------------------------- Method Implementation
-  protected : void smallestObjectAttributeList (capSortedListElement & outAttributeArray,
+  protected: void smallestObjectAttributeList (capSortedListElement & outAttributeArray,
                                                 C_Compiler * inCompiler
                                                 COMMA_LOCATION_ARGS) const ;
 
-  protected : void greatestObjectAttributeList (capSortedListElement & outAttributeArray,
+  protected: void greatestObjectAttributeList (capSortedListElement & outAttributeArray,
                                                 C_Compiler * inCompiler
                                                 COMMA_LOCATION_ARGS) const ;
 
 //--------------------------------- Insulate
-  private : void insulate (LOCATION_ARGS) ;
+  private: void insulate (LOCATION_ARGS) ;
 
 //--------------------------------- Modifier Implementation
-  protected : void removeSmallestObject (capSortedListElement & outAttributeArray,
+  protected: void removeSmallestObject (capSortedListElement & outAttributeArray,
                                          C_Compiler * inCompiler
                                          COMMA_LOCATION_ARGS) ;
 
-  protected : void removeGreatestObject (capSortedListElement & outAttributeArray,
+  protected: void removeGreatestObject (capSortedListElement & outAttributeArray,
                                          C_Compiler * inCompiler
                                          COMMA_LOCATION_ARGS) ;
 
 //--------------------------------- Compare
-  public : typeComparisonResult objectCompare (const AC_GALGAS_sortedlist & inOperand) const ;
+  public: typeComparisonResult objectCompare (const AC_GALGAS_sortedlist & inOperand) const ;
 
 //--------------------------------- Readers
-  public : VIRTUAL_IN_DEBUG GALGAS_uint getter_length (LOCATION_ARGS) const ;
+  public: VIRTUAL_IN_DEBUG GALGAS_uint getter_count (LOCATION_ARGS) const ;
 
 //--------------------------------- introspection
-  public : virtual const C_galgas_type_descriptor * staticTypeDescriptor (void) const  = 0;
+  public: virtual const C_galgas_type_descriptor * staticTypeDescriptor (void) const override = 0;
 
 } ;
 

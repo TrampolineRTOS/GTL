@@ -4,7 +4,7 @@
 //
 //  This file is part of libpm library                                                           
 //
-//  Copyright (C) 1997, ..., 2017 Pierre Molinaro.
+//  Copyright (C) 1997, ..., 2023 Pierre Molinaro.
 //
 //  e-mail : pierre@pcmolinaro.name
 //
@@ -38,12 +38,15 @@
 //   OS X Darwin (command line tools)                                                            
 // * __APPLE__and __NEXT_RUNTIME__ are both defined when compiling for                           
 //   OS X Cocoa (GUI applications)                                                               
-// * __MINGW32__ is defined when compiling by MinGW (for Windows)                                
-// * __linux is defined when compiling by GCC (for Linux)                                        
+// * __MINGW32__ is defined when compiling by MinGW (for Windows)
+// * __CYGWIN__ is defined when compiling by Cygwin (for Unix on Windows, https://gist.github.com/basman/587688)
+// * __linux is defined when compiling by GCC (for Linux)
 //
 //----------------------------------------------------------------------------------------------------------------------
 
-#ifdef __MINGW32__
+#if defined (__CYGWIN__)
+  #define COMPILE_FOR_WINDOWS (0)
+#elif defined (__MINGW32__)
   #define COMPILE_FOR_WINDOWS (1)
 #elif defined (WIN32)
   #define COMPILE_FOR_WINDOWS (1)
@@ -51,25 +54,11 @@
   #define COMPILE_FOR_WINDOWS (0)
 #elif defined (__linux)
   #define COMPILE_FOR_WINDOWS (0)
+#elif defined (__unix__)
+  #define COMPILE_FOR_WINDOWS (0)
 #else
   #error Undefined platform
 #endif
-
-//----------------------------------------------------------------------------------------------------------------------
-//
-//             M I N ,    M A X    F U N C T I O N S                                             
-//
-//----------------------------------------------------------------------------------------------------------------------
-
-static inline uint32_t uimin32 (const uint32_t inA, const uint32_t inB) {
-  return (inA < inB) ? inA : inB ;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-
-static inline uint32_t uimax32 (const uint32_t inA, const uint32_t inB) {
-  return (inA > inB) ? inA : inB ;
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 //
@@ -79,22 +68,22 @@ static inline uint32_t uimax32 (const uint32_t inA, const uint32_t inB) {
 
 #ifndef DO_NOT_GENERATE_CHECKINGS
   class utf32 {
-    private : uint32_t mCode ;
-    public : inline uint32_t value (void) const { return mCode ; }
-    public : inline utf32 (void) :
+    private: uint32_t mCode ;
+    public: inline uint32_t value (void) const { return mCode ; }
+    public: inline utf32 (void) :
     mCode (0) {
     }
-    public : inline utf32 (const uint32_t & inCode) :
+    public: inline utf32 (const uint32_t & inCode) :
     mCode (inCode) {
     }
-    public : inline utf32 (const utf32 & inOperand) :
+    public: inline utf32 (const utf32 & inOperand) :
     mCode (inOperand.mCode) {
     }
-    public : inline utf32 & operator = (const utf32 & inOperand) {
+    public: inline utf32 & operator = (const utf32 & inOperand) {
       mCode = inOperand.mCode ;
       return *this ;
     }
-    public : inline bool operator == (const utf32 inOperand) const {
+    public: inline bool operator == (const utf32 inOperand) const {
       return mCode == inOperand.mCode ;
     }
   } ;

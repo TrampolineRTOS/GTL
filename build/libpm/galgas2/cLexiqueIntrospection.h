@@ -4,7 +4,7 @@
 //
 //  This file is part of libpm library                                                           
 //
-//  Copyright (C) 2016, ..., 2016 Pierre Molinaro.
+//  Copyright (C) 2016, ..., 2023 Pierre Molinaro.
 //
 //  e-mail : pierre@pcmolinaro.name
 //
@@ -34,27 +34,27 @@ typedef void (* Type_getKeywordsForIdentifier) (const C_String & inIdentifier,
 
 //----------------------------------------------------------------------------------------------------------------------
 
-class cLexiqueIntrospection {
+class cLexiqueIntrospection final {
 //--- Constructor
-  public : cLexiqueIntrospection (Type_appendKeywordListNames appendKeywordListNames,
-                                  Type_getKeywordsForIdentifier getKeywordsForIdentifier) ;
+  public: cLexiqueIntrospection (Type_appendKeywordListNames appendKeywordListNames,
+                                 Type_getKeywordsForIdentifier getKeywordsForIdentifier) ;
 
 //--- Accessors
-  public : static void getKeywordListNames (TC_UniqueArray <C_String> & outList) ;
-  public : static void getKeywordListForIdentifier (const C_String & inIdentifier,
-                                                    bool & outFound,
-                                                    TC_UniqueArray <C_String> & outList) ;
+  public: static void getKeywordListNames (TC_UniqueArray <C_String> & outList) ;
+  public: static void getKeywordListForIdentifier (const C_String & inIdentifier,
+                                                   bool & outFound,
+                                                   TC_UniqueArray <C_String> & outList) ;
 
-  public : static void handleGetKeywordListOption (class C_Compiler * inCompiler) ;
+  public: static void handleGetKeywordListOption (class C_Compiler * inCompiler) ;
 
 //--- No copy
-  private : cLexiqueIntrospection (const cLexiqueIntrospection &) ;
-  private : cLexiqueIntrospection & operator = (const cLexiqueIntrospection &) ;
+  private: cLexiqueIntrospection (const cLexiqueIntrospection &) ;
+  private: cLexiqueIntrospection & operator = (const cLexiqueIntrospection &) ;
 
 //--- Private member
-  private : cLexiqueIntrospection * mNext ;
-  private : Type_appendKeywordListNames mAppendKeywordListNames ;
-  private : Type_getKeywordsForIdentifier mGetKeywordsForIdentifier ;
+  private: cLexiqueIntrospection * mNext ;
+  private: Type_appendKeywordListNames mAppendKeywordListNames ;
+  private: Type_getKeywordsForIdentifier mGetKeywordsForIdentifier ;
 } ;
 
 //----------------------------------------------------------------------------------------------------------------------

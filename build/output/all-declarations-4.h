@@ -204,6 +204,15 @@ class GALGAS_gtlTypedArgumentList function_expressionArgument (class C_Compiler 
 
 //----------------------------------------------------------------------------------------------------------------------
 //
+//Function 'setArgument'
+//
+//----------------------------------------------------------------------------------------------------------------------
+
+class GALGAS_gtlTypedArgumentList function_setArgument (class C_Compiler * inCompiler
+                                                        COMMA_LOCATION_ARGS) ;
+
+//----------------------------------------------------------------------------------------------------------------------
+//
 //Routine 'argumentsCheck'
 //
 //----------------------------------------------------------------------------------------------------------------------
@@ -223,4 +232,19 @@ void routine_argumentsCheck (const class GALGAS_lstring constinArgument0,
 class GALGAS_lstring function_lstring (class GALGAS_string inArgument0,
                                        class C_Compiler * inCompiler
                                        COMMA_LOCATION_ARGS) ;
+
+//----------------------------------------------------------------------------------------------------------------------
+//
+//Function 'customGtlStringGetter'
+//
+//----------------------------------------------------------------------------------------------------------------------
+
+class GALGAS_gtlData function_customGtlStringGetter (const class GALGAS_lstring & constinArgument0,
+                                                     const class GALGAS_gtlDataList & constinArgument1,
+                                                     const class GALGAS_gtlContext & constinArgument2,
+                                                     const class GALGAS_library & constinArgument3,
+                                                     const class GALGAS_string & constinArgument4,
+                                                     const class GALGAS_location & constinArgument5,
+                                                     class C_Compiler * inCompiler
+                                                     COMMA_LOCATION_ARGS) ;
 

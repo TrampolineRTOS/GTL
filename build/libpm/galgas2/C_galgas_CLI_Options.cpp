@@ -1,10 +1,10 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-//  Built-in GALGAS Command Line Interface Options                                               
+//  Built-in GALGAS Command Line Interface Options
 //
-//  This file is part of libpm library                                                           
+//  This file is part of libpm library
 //
-//  Copyright (C) 2006, ..., 2015 Pierre Molinaro.
+//  Copyright (C) 2006, ..., 2023 Pierre Molinaro.
 //
 //  e-mail : pierre@pcmolinaro.name
 //
@@ -19,7 +19,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "galgas2/C_galgas_CLI_Options.h"
-#include "streams/C_TCPSocketOut.h"
+#include "galgas2/C_galgas_CLI_Options.h"
+//#include "streams/C_TCPSocketOut.h"
 #include "utilities/C_PrologueEpilogue.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -97,12 +98,13 @@ C_StringCommandLineOption gOption_galgas_5F_builtin_5F_options_outputKeywordList
 
 //----------------------------------------------------------------------------------------------------------------------
 //
-//   EXECUTION MODE                                                                              
+//   EXECUTION MODE
 //
 //----------------------------------------------------------------------------------------------------------------------
 
 static EnumExecutionMode gExecutionMode = kExecutionModeNormal ;
 static C_String gModeLatexSuffixString ;
+static C_String gModeIndexingOutputFilePath ;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -116,8 +118,9 @@ void setExecutionMode (C_String & outErrorMessage) {
     gExecutionMode = kExecutionModeLexicalAnalysisOnly ;
   }else if (mode == "syntax-only") {
     gExecutionMode = kExecutionModeSyntaxAnalysisOnly ;
-  }else if (mode == "indexing") {
+  }else if ((modeComponents.count () == 2) && (modeComponents (0 COMMA_HERE) == "indexing")) {
     gExecutionMode = kExecutionModeIndexing ;
+    gModeIndexingOutputFilePath = modeComponents (1 COMMA_HERE) ;
   }else if ((modeComponents.count () == 2) && (modeComponents (0 COMMA_HERE) == "latex")) {
     gExecutionMode = kExecutionModeLatex ;
     gModeLatexSuffixString = modeComponents (1 COMMA_HERE) ;
@@ -179,13 +182,19 @@ C_String latexModeStyleSuffixString (void) {
 
 //----------------------------------------------------------------------------------------------------------------------
 
+C_String indexingModeOutputFilePath (void) {
+  return gModeIndexingOutputFilePath ;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
 static void epilogueAction (void) {
   gModeLatexSuffixString.releaseString () ;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_PrologueEpilogue prologueEpilogue (NULL, epilogueAction) ;
+C_PrologueEpilogue prologueEpilogue (nullptr, epilogueAction) ;
 
 //----------------------------------------------------------------------------------------------------------------------
 

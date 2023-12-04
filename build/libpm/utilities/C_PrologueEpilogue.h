@@ -26,20 +26,20 @@
 //
 //----------------------------------------------------------------------------------------------------------------------
 
-class C_PrologueEpilogue {
+class C_PrologueEpilogue final {
 //--- Constructor
-  public : C_PrologueEpilogue (void (* inPrologueAction) (void),
-                               void (* inEpilogueAction) (void)) ;
+  public: C_PrologueEpilogue (void (* inPrologueAction) (void),
+                              void (* inEpilogueAction) (void)) ;
 //--- No copy
-  private : C_PrologueEpilogue (C_PrologueEpilogue &) ;
-  private : C_PrologueEpilogue & operator = (C_PrologueEpilogue &) ;
+  private: C_PrologueEpilogue (C_PrologueEpilogue &) ;
+  private: C_PrologueEpilogue & operator = (C_PrologueEpilogue &) ;
 //--- Attributes
-  public : const C_PrologueEpilogue * mNextObjectLink ;
-  public : void (* mPrologueAction) (void) ;
-  public : void (* mEpilogueAction) (void) ;
+  public: const C_PrologueEpilogue * mNextObjectLink ;
+  public: void (* mPrologueAction) (void) ;
+  public: void (* mEpilogueAction) (void) ;
 //--- Running actions
-  private : static void runPrologueActions (void) ;
-  private : static void runEpilogueActions (void) ;
+  private: static void runPrologueActions (void) ;
+  private: static void runEpilogueActions (void) ;
 //--- Friend routine (runs runPrologueActions, runEpilogueActions)
   friend int main (int argc, const char * argv []) ;
 } ;

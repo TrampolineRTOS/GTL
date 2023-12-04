@@ -24,7 +24,7 @@
 
 #include "galgas2/C_LocationInSource.h"
 #include "strings/C_String.h"
-#include "collections/TC_Array.h"
+#include "generic-arraies/TC_Array.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -44,38 +44,38 @@ typedef enum {
 
 //----------------------------------------------------------------------------------------------------------------------
 
-class C_FixItDescription {
+class C_FixItDescription final {
 //--- Default constructor
-  public : C_FixItDescription (void) ;
+  public: C_FixItDescription (void) ;
 
 //--- Constructor
-  public : C_FixItDescription (const EnumFixItKind inKind,
+  public: C_FixItDescription (const EnumFixItKind inKind,
                                const C_String & inActionString) ;
 
 //--- Accessors
-  public : EnumFixItKind kind (void) const { return mKind ; }
-  public : C_String actionString (void) const { return mActionString ; }
+  public: EnumFixItKind kind (void) const { return mKind ; }
+  public: C_String actionString (void) const { return mActionString ; }
   
 //--- Private properties
-  private : EnumFixItKind mKind ;
-  private : C_String mActionString ;
+  private: EnumFixItKind mKind ;
+  private: C_String mActionString ;
 } ;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 class C_IssueWithFixIt {
 //--- Default constructor
-  public : C_IssueWithFixIt (void) ;
+  public: C_IssueWithFixIt (void) ;
 
 //--- Constructor
-  public : C_IssueWithFixIt (const C_LocationInSource & inStartLocation,
+  public: C_IssueWithFixIt (const C_LocationInSource & inStartLocation,
                              const C_LocationInSource & inEndLocation,
                              const TC_Array <C_FixItDescription> & inFixItArray) ;
 
 //--- Properties
-  public : const C_LocationInSource mStartLocation ;
-  public : const C_LocationInSource mEndLocation ;
-  public : const TC_Array <C_FixItDescription> mFixItArray ;
+  public: const C_LocationInSource mStartLocation ;
+  public: const C_LocationInSource mEndLocation ;
+  public: const TC_Array <C_FixItDescription> mFixItArray ;
 } ;
 
 //----------------------------------------------------------------------------------------------------------------------

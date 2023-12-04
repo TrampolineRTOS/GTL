@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/python3
 # -*- coding: UTF-8 -*-
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -25,8 +25,8 @@ with open (jsonFilePath) as f:
 LIBPM_DIRECTORY_PATH = dictionary ["LIBPM_DIRECTORY_PATH"]
 #----------------------------------------------------------------- Import builder
 sys.path.append (os.path.abspath (LIBPM_DIRECTORY_PATH + "/python-makefiles"))
-from macosx_gcc_tools import buildForMacOSX
+from macosx_gcc_tools import buildForMacOS
 #----------------------------------------------------------------- Build
-buildForMacOSX (dictionary, jsonFilePath, "gtl", goal, maxParallelJobs, maxParallelJobs == 1)
+buildForMacOS (dictionary, jsonFilePath, "gtl", "build", goal, maxParallelJobs, maxParallelJobs == 1)
 
 #-----------------------------------------------------------------------------------------------------------------------

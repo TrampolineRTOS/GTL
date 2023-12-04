@@ -4,7 +4,7 @@
 //
 //  This file is part of libpm library                                                           
 //
-//  Copyright (C) 2010, ..., 2010 Pierre Molinaro.
+//  Copyright (C) 2010, ..., 2023 Pierre Molinaro.
 //
 //  e-mail : pierre@pcmolinaro.name
 //
@@ -32,28 +32,28 @@ class C_Compiler ;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-class cObjectArray {
+class cObjectArray final {
 //--- Default constructor
-  public : cObjectArray (const GALGAS_objectlist & inObjectList,
-                         C_Compiler * inCompiler
-                         COMMA_LOCATION_ARGS) ;
+  public: cObjectArray (const GALGAS_objectlist & inObjectList,
+                        C_Compiler * inCompiler
+                        COMMA_LOCATION_ARGS) ;
 
 //--- Virtual destructor
-  public : virtual ~ cObjectArray (void) ;
+  public: virtual ~ cObjectArray (void) ;
 
 //--- No copy
-  private : cObjectArray (const cObjectArray & inSource) ;
-  private : cObjectArray & operator = (const cObjectArray & inSource) ;
+  private: cObjectArray (const cObjectArray & inSource) ;
+  private: cObjectArray & operator = (const cObjectArray & inSource) ;
 
 //--- Object count
-  public : inline uint32_t count (void) const { return mCount ; }
+  public: inline uint32_t count (void) const { return mCount ; }
 
 //--- Object at index
-  public : GALGAS_object objectAtIndex (const uint32_t inIndex COMMA_LOCATION_ARGS) const ;
+  public: GALGAS_object objectAtIndex (const uint32_t inIndex COMMA_LOCATION_ARGS) const ;
 
 //--- Attributes
-  private : GALGAS_object * mArray ;
-  private : uint32_t mCount ;
+  private: GALGAS_object * mArray ;
+  private: uint32_t mCount ;
 } ;
 
 //----------------------------------------------------------------------------------------------------------------------

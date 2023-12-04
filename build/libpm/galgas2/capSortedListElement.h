@@ -4,7 +4,7 @@
 //
 //  This file is part of libpm library                                                           
 //
-//  Copyright (C) 2010, ..., 2010 Pierre Molinaro.
+//  Copyright (C) 2010, ..., 2023 Pierre Molinaro.
 //
 //  e-mail : pierre@pcmolinaro.name
 //
@@ -32,47 +32,47 @@ class cSortedListElement ;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-class capSortedListElement {
+class capSortedListElement final {
 //--- Private pointer
-  private : cSortedListElement * mPtr ;
+  private: cSortedListElement * mPtr ;
 
 //--- Default constructor
-  public : capSortedListElement (void) ;
+  public: capSortedListElement (void) ;
 
 //--- Destructor
-  public : virtual ~ capSortedListElement (void) ;
+  public: ~ capSortedListElement (void) ;
 
 //--- Handle copy
-  public : capSortedListElement (const capSortedListElement & inSource) ;
-  public : capSortedListElement & operator = (const capSortedListElement & inSource) ;
+  public: capSortedListElement (const capSortedListElement & inSource) ;
+  public: capSortedListElement & operator = (const capSortedListElement & inSource) ;
 
 //--- set pointer
-  public : void setPointer (cSortedListElement * inObjectPointer) ;
+  public: void setPointer (cSortedListElement * inObjectPointer) ;
 
 //--- Method that checks that all attributes are valid
-  public : bool isValid (void) const ;
+  public: bool isValid (void) const ;
 
 //--- Method that ensures that pointer object is unique
-  public : void insulate (void) ;
+  public: void insulate (void) ;
 
 //--- Method that releases object
-  public : void drop (void) ;
+  public: void drop (void) ;
 
 //--- Get pointer (for temporary use)
-  public : inline cSortedListElement * ptr (void) { return mPtr ; }
-  public : inline const cSortedListElement * ptr (void) const { return mPtr ; }
+  public: inline cSortedListElement * ptr (void) { return mPtr ; }
+  public: inline const cSortedListElement * ptr (void) const { return mPtr ; }
 
 //--- Method for comparing elements
-  public : typeComparisonResult compare (capSortedListElement & inOperand) ;
+  public: typeComparisonResult compare (capSortedListElement & inOperand) ;
 
 //--- Method that returns a copy of current object
-  public : capSortedListElement copy (void) ;
+  public: capSortedListElement copy (void) ;
 
 //--- Description
- public : void description (C_String & ioString, const int32_t inIndentation) const ;
+ public: void description (C_String & ioString, const int32_t inIndentation) const ;
 
 //--- Virtual method that comparing element for sorting
-  public : typeComparisonResult compareForSorting (const capSortedListElement & inOperand) ;
+  public: typeComparisonResult compareForSorting (const capSortedListElement & inOperand) ;
 } ;
 
 //----------------------------------------------------------------------------------------------------------------------

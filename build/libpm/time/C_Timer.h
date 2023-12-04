@@ -4,7 +4,7 @@
 //
 //  This file is part of libpm library                                                           
 //
-//  Copyright (C) 1999, ..., 2013 Pierre Molinaro.
+//  Copyright (C) 1999, ..., 2023 Pierre Molinaro.
 //
 //  e-mail : pierre@pcmolinaro.name
 //
@@ -22,25 +22,9 @@
 
 //----------------------------------------------------------------------------------------------------------------------
 
-#include <stdio.h>
-
-//----------------------------------------------------------------------------------------------------------------------
-
-#include "utilities/M_machine.h"
-
-//----------------------------------------------------------------------------------------------------------------------
-
-#ifndef COMPILE_FOR_WINDOWS
-  #error COMPILE_FOR_WINDOWS is undefined
-#endif
-
-//----------------------------------------------------------------------------------------------------------------------
-
-#if COMPILE_FOR_WINDOWS == 1
-  #include <time.h>
-#else
-  #include <sys/time.h>
-#endif
+#include <iostream>
+#include <cstdint>
+#include <time.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -49,28 +33,23 @@ class C_String ;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-class C_Timer {
-  #if COMPILE_FOR_WINDOWS == 0
-    private : timeval mStart ;
-    private : timeval mEnd ;
-  #else
-    private : clock_t mStart ;
-    private : clock_t mEnd ;
-  #endif
+class C_Timer final {
+  private: clock_t mStart ;
+  private: clock_t mEnd ;
   
-  private : bool mRunning ;
+  private: bool mRunning ;
   
-  public : C_Timer (void) ;
+  public: C_Timer (void) ;
 
-  public : void stopTimer (void) ;
+  public: void stopTimer (void) ;
 
-  public : void startTimer (void) ;
+  public: void startTimer (void) ;
 
-  public : uint32_t msFromStart (void) const ;
+  public: uint32_t msFromStart (void) const ;
 
-  public : C_String timeString (void) const ;
+  public: C_String timeString (void) const ;
   
-  public : inline bool isRunning (void) const { return mRunning ; }
+  public: inline bool isRunning (void) const { return mRunning ; }
 
   friend AC_OutputStream & operator << (AC_OutputStream & inStream,
                                         const C_Timer & inTimer) ;

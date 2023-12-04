@@ -1,0 +1,12 @@
+func customGtlStringGetter
+  ?let @lstring     methodName
+  ?let @gtlDataList unused arguments
+  ?let @gtlContext  unused context
+  ?let @library     unused lib
+  ?let @string      unused value
+  ?let @location    unused where
+  ->@gtlData        result
+{
+  error methodName : "unknown getter '" + methodName +"' for string target"
+    : result
+}  

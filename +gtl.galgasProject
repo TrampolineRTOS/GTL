@@ -24,11 +24,12 @@
 #
 #-----------------------------------------------------------------------------*
 
-project (3:0:13) -> "gtl" {
+project (3:0:14) -> "gtl" {
 
 #-----------------------------------------------------------------------------*
 #                                  CHANGELOG
 #-----------------------------------------------------------------------------*
+# 3.0.14   Added var and varExists string getters
 # 3.0.13   Added a fileList getter to string
 # 3.0.12   Added a user template directory
 # 3.0.11   Added expression data type, where listn map getter and
@@ -42,12 +43,10 @@ project (3:0:13) -> "gtl" {
   %makefile-x86linux32-on-macosx
   %makefile-x86linux64-on-macosx
   %makefile-win32-on-macosx
-  %LatestMacOS
   %applicationBundleBase : "fr.ls2n.str"
   %codeblocks-windows
   %codeblocks-linux32
   %codeblocks-linux64
-  %codeblocks-mac
 
 #--- Source files
   "galgas-sources/gtl_cocoa.galgas"
@@ -73,5 +72,6 @@ project (3:0:13) -> "gtl" {
   "galgas-sources/gtl_debugger_input.galgas"
   "galgas-sources/gtl_debugger_expression_parser.galgas"
   "galgas-sources/gtl_debugger_grammar.galgas"
+  "galgas-sources/gtl_gtl_extension.galgas"
 }
 

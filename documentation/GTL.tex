@@ -191,7 +191,7 @@
 \draw[color=white] (0,0) -- (-2,0) {};
 \draw (0,0) -- (0,.99\textheight);
 \draw (.5,12) node[right] {\Huge\bfseries\thetitle};
-\draw (.5,10.5) node[right] {\huge version 3};
+\draw (.5,10.5) node[right] {\huge Version 3.0.14};
 \draw (.5,7) node[right] {\Large\theauthor}; 
 \draw (.5,6.3) node[right] {\large\today}; 
 \end{tikzpicture}
@@ -1475,7 +1475,15 @@ How
 
 \gtlinline{envVarExists} returns a bool, \gtlinline{true} if target environment variable exists, \gtlinline{false} otherwise.
 
-\subsection{The \texttt{string} setter}
+\subsubsection{The \texttt{var} getter}
+
+\gtlinline{var} returns the content of the variable whose name is in the string. If it does not exist, \gtlinline{var} trigger a runtime error.
+
+\subsubsection{The \texttt{varExists} getter}
+
+\gtlinline{varExists} returns a bool, \gtlinline{true} if target  variable exists, \gtlinline{false} otherwise.
+
+\subsection{The \texttt{string} setters}
 
 \subsubsection{The \texttt{setCharAtIndex} setter}
 

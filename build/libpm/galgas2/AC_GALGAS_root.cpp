@@ -4,7 +4,7 @@
 //
 //  This file is part of libpm library                                                           
 //
-//  Copyright (C) 2010, ..., 2011 Pierre Molinaro.
+//  Copyright (C) 2010, ..., 2023 Pierre Molinaro.
 //
 //  e-mail : pierre@pcmolinaro.name
 //
@@ -20,10 +20,6 @@
 
 #include "all-predefined-types.h"
 #include "galgas2/C_galgas_io.h"
-
-//----------------------------------------------------------------------------------------------------------------------
-
-// #include <stdio.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -81,4 +77,9 @@ GALGAS_object AC_GALGAS_root::getter_object (LOCATION_ARGS) const {
 
 //----------------------------------------------------------------------------------------------------------------------
 
+#ifndef DO_NOT_GENERATE_CHECKINGS
+  void AC_GALGAS_root::printNonNullClassInstanceProperties (const char * /* inPropertyName */) const {
+  }
+#endif
 
+//----------------------------------------------------------------------------------------------------------------------

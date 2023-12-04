@@ -33,16 +33,15 @@ message "a source text file with the .gtl extension"
 grammar gtl_grammar ?sourceFilePath:@lstring inSourceFile
 {
   @gtlContext context = emptyContext()
-  @library lib = emptyLib()
   
-  @string sourceFileDirectory =
+  let @string sourceFileDirectory =
     [[inSourceFile string] stringByDeletingLastPathComponent]
   
   [!?context addModulePath !sourceFileDirectory !"../modules"]
   
-  @gtlData vars = @gtlStruct.new { !.here !emptylstring() !.emptyMap }
+  let @gtlData vars = @gtlStruct.new { !.here !emptylstring() !.emptyMap }
 
-  @string result = invokeGTL(
+  let @string result = invokeGTL(
     !lstringToGtlString( !inSourceFile )
     !context
     !vars

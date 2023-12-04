@@ -92,9 +92,9 @@
 
 #ifdef USE_SMALL_BLOCK_FREE_LIST
  void * myAllocRoutine (const size_t inSizeInBytes) {
-  void * ptr = NULL ;
+  void * ptr = nullptr ;
   if (inSizeInBytes <= (sizeof (cBlock) - sizeof (int32_t))) {
-    if (gFreeList == NULL) {
+    if (gFreeList == nullptr) {
       cBlock * p = (cBlock *) ::malloc (sizeof (cBlock)) ;
       p->mTag = 0 ;
       ptr = & (p->mNext) ;
@@ -177,11 +177,11 @@ void myFreeRoutine (void * inPointer) {
 
 #ifdef GENERATE_BLOCK_SIZE_STATS
   typedef struct cAllocatedSizeDescriptorNode {
-    public : struct cAllocatedSizeDescriptorNode * mInfPtr ;
-    public : struct cAllocatedSizeDescriptorNode * mSupPtr ;
-    public : size_t mAllocatedSize ;
-    public : uint32_t mCount ;
-    public : int16_t mBalance ;    
+    public: struct cAllocatedSizeDescriptorNode * mInfPtr ;
+    public: struct cAllocatedSizeDescriptorNode * mSupPtr ;
+    public: size_t mAllocatedSize ;
+    public: uint32_t mCount ;
+    public: int16_t mBalance ;    
   } cAllocatedSizeDescriptorNode ; 
 #endif
 
@@ -237,10 +237,10 @@ void myFreeRoutine (void * inPointer) {
   static void internalNoteAllocatedSize (cAllocatedSizeDescriptorNode * & ioRoot,
                                          const size_t inAllocatedSize,
                                          bool & ioExtension) {
-    if (ioRoot == NULL) {
+    if (ioRoot == nullptr) {
       ioRoot = (cAllocatedSizeDescriptorNode *) ::malloc (sizeof (cAllocatedSizeDescriptorNode)) ;
-      ioRoot->mInfPtr = NULL ;
-      ioRoot->mSupPtr = NULL ;
+      ioRoot->mInfPtr = nullptr ;
+      ioRoot->mSupPtr = nullptr ;
       ioRoot->mAllocatedSize = inAllocatedSize ;
       ioRoot->mCount = 1 ;
       ioRoot->mBalance = 0 ;    
@@ -312,7 +312,7 @@ void myFreeRoutine (void * inPointer) {
 #ifdef GENERATE_BLOCK_SIZE_STATS
   static void internalVisitNode (cAllocatedSizeDescriptorNode * inRoot,
                                  uint32_t & ioNodeCount) {
-    if (inRoot != NULL) {
+    if (inRoot != nullptr) {
       internalVisitNode (inRoot->mInfPtr, ioNodeCount) ;
       printf ("|%11lu |%13u |\n", inRoot->mAllocatedSize, inRoot->mCount) ;
       internalVisitNode (inRoot->mSupPtr, ioNodeCount) ;
